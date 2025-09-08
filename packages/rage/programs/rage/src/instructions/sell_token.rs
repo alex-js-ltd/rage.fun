@@ -162,7 +162,7 @@ pub fn sell_token(ctx: Context<SellToken>, token_amount: u64) -> Result<()> {
 
     let current_supply = ctx.accounts.bonding_curve_state.current_supply - token_amount;
     let target_supply = ctx.accounts.bonding_curve_state.target_supply;
-    let current_reserve = get_account_balance(ctx.accounts.bonding_curve_auth.to_account_info())?;
+    let current_reserve = ctx.accounts.bonding_curve_state.current_reserve - lamports;
     let target_reserve = ctx.accounts.bonding_curve_state.target_reserve;
     let trading_fees = get_account_balance(ctx.accounts.trading_fee_auth.to_account_info())?;
 
@@ -186,7 +186,7 @@ pub fn sell_token(ctx: Context<SellToken>, token_amount: u64) -> Result<()> {
         ctx.accounts.signer.to_account_info(),
         ctx.accounts.token_0_mint.decimals,
         token_amount,
-        seller_amount,
+        lamports,
         rent_amount,
         SwapType::Sell,
     )?;
