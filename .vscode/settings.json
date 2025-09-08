@@ -1,0 +1,13 @@
+{
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
+
+  "rust-analyzer.linkedProjects": ["./packages/magicmint/Cargo.toml"],
+
+  "[rust]": {
+    "editor.defaultFormatter": "rust-lang.rust-analyzer",
+    "editor.formatOnSave": true
+  },
+
+  "terminal.integrated.defaultProfile.osx": "zsh"
+}

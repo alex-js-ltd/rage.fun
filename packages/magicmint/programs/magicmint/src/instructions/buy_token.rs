@@ -1,0 +1,278 @@
+use anchor_lang::prelude::*;
+
+use crate::states::{
+    calculate_airdrop_nonce, calculate_buy_amount, calculate_market_cap, calculate_progress,
+    get_swap_event, update_airdrop_state, update_bonding_curve_state, AirdropState,
+    BondingCurveState, SwapType,
+};
+use crate::utils::seed::{
+    AIRDROP_AUTH_SEED, AIRDROP_STATE_SEED, BONDING_CURVE_AUTH_SEED, BONDING_CURVE_STATE_SEED,
+    TRADING_FEE_AUTH_SEED,
+};
+use crate::utils::token::{
+    calculate_space_for_ata, get_account_balance, get_or_create_ata, token_mint_to,
+    transfer_sol_to_vault,
+};
+
+use crate::utils::fees::trading_fee;
+
+use anchor_spl::associated_token::AssociatedToken;
+
+use anchor_spl::token_interface::{
+    spl_token_2022::{self},
+    Mint, TokenAccount, TokenInterface,
+};
+
+use crate::error::ErrorCode;
+
+#[derive(Accounts)]
+pub struct BuyToken<'info> {
+    /// The payer of the transaction and the signer
+    #[account(mut)]
+    pub payer: Signer<'info>,
+
+    /// CHECK: pda to control meme_ata & lamports
+    #[account(mut,
+        seeds = [BONDING_CURVE_AUTH_SEED.as_bytes(), token_0_mint.key().as_ref()],
+        bump,
+  
+    )]
+    pub bonding_curve_auth: AccountInfo<'info>,
+
+    /// CHECK: pda to store current price
+    #[account(
+        mut,
+        seeds = [BONDING_CURVE_STATE_SEED.as_bytes(), token_0_mint.key().as_ref()],
+        bump,
+    
+    )]
+    pub bonding_curve_state: Account<'info, BondingCurveState>,
+
+    /// CHECK: pda to control reward pool
+    #[account(mut,
+            seeds = [TRADING_FEE_AUTH_SEED.as_bytes(), token_0_mint.key().as_ref()],
+            bump,
+     
+        )]
+    pub trading_fee_auth: AccountInfo<'info>,
+
+    /// CHECK: ATA for payer
+    #[account(mut)]
+    pub token_0_payer_ata: UncheckedAccount<'info>,
+
+    /// Mint associated with the meme coin
+    #[account(mut,
+        mint::token_program = token_0_program,
+        mint::authority = bonding_curve_auth,
+    )]
+    pub token_0_mint: Box<InterfaceAccount<'info, Mint>>,
+
+    /// CHECK: pda for airdrop state
+
+    #[account(
+        mut,
+        seeds = [
+            AIRDROP_STATE_SEED.as_bytes(),
+            token_0_mint.key().as_ref(),
+        ],
+        bump,
+    )]
+    pub airdrop_state: AccountLoader<'info, AirdropState>,
+
+    /// CHECK: pda to control vault_meme_ata & lamports
+    #[account(mut,
+            seeds = [AIRDROP_AUTH_SEED.as_bytes(), token_0_mint.key().as_ref()],
+            bump,
+        )]
+    pub airdrop_auth: AccountInfo<'info>,
+
+    /// Token account to which the tokens will be minted (created if needed)
+    #[account(
+                mut,
+                     associated_token::mint = token_0_mint,
+                     associated_token::authority = airdrop_auth,
+                     associated_token::token_program = token_0_program,
+                 )]
+    pub token_0_airdrop_ata: Box<InterfaceAccount<'info, TokenAccount>>,
+
+    /// SPL token program for the meme coin
+    pub token_0_program: Interface<'info, TokenInterface>,
+
+    /// System program
+    pub system_program: Program<'info, System>,
+
+    /// Associated token program
+    pub associated_token_program: Program<'info, AssociatedToken>,
+}
+
+pub fn buy_token(ctx: Context<BuyToken>, lamports: u64) -> Result<()> {
+    // check pda accounts
+    require_eq!(ctx.accounts.bonding_curve_auth.owner, &crate::id());
+    require_eq!(ctx.accounts.trading_fee_auth.owner, &crate::id());
+    require_eq!(ctx.accounts.airdrop_auth.owner, &crate::id());
+
+    if ctx.accounts.bonding_curve_state.progress >= 100.0 {
+        return Err(ErrorCode::BondingCurveComplete.into());
+    }
+
+    if ctx.accounts.payer.lamports() < lamports {
+        return Err(ErrorCode::InsufficientFunds.into());
+    }
+
+    if lamports < 100 {
+        return Err(ErrorCode::InsufficientBuyAmount.into());
+    }
+
+    let is_new_account = ctx.accounts.token_0_payer_ata.data_is_empty();
+
+    let rent_amount = if is_new_account {
+        let space = calculate_space_for_ata(&ctx.accounts.token_0_mint.to_account_info())?;
+        let rent = Rent::get()?.minimum_balance(space);
+        rent
+    } else {
+        0
+    };
+
+    if is_new_account {
+        get_or_create_ata(
+            ctx.accounts.payer.to_account_info(),
+            ctx.accounts.token_0_payer_ata.to_account_info(),
+            ctx.accounts.payer.to_account_info(),
+            ctx.accounts.token_0_mint.to_account_info(),
+            ctx.accounts.system_program.to_account_info(),
+            ctx.accounts.token_0_program.to_account_info(),
+            ctx.accounts.associated_token_program.to_account_info(),
+        )?;
+    }
+
+    let token_0_payer_ata = spl_token_2022::extension::StateWithExtensions::<
+        spl_token_2022::state::Account,
+    >::unpack(&ctx.accounts.token_0_payer_ata.data.borrow())?
+    .base;
+
+    require_eq!(ctx.accounts.payer.key(), token_0_payer_ata.owner);
+    require_eq!(ctx.accounts.token_0_mint.key(), token_0_payer_ata.mint);
+
+    // calculate trading fee
+    let trading_result = trading_fee(u128::from(lamports)).ok_or(ErrorCode::InvalidInput)?;
+    let trading_fee = u64::try_from(trading_result).unwrap();
+
+    // calculate max deposit
+    let max_deposit = ctx
+        .accounts
+        .bonding_curve_state
+        .target_reserve
+        .saturating_sub(ctx.accounts.bonding_curve_state.reserve_balance);
+
+    // apply fee first
+    let deposit_amount = lamports.saturating_sub(trading_fee);
+
+    let safe_deposit = if deposit_amount > max_deposit {
+        max_deposit
+    } else {
+        deposit_amount
+    };
+
+    let token_amount = calculate_buy_amount(
+        ctx.accounts.bonding_curve_state.total_supply,
+        safe_deposit,
+        ctx.accounts.bonding_curve_state.reserve_balance,
+        ctx.accounts.bonding_curve_state.decimals,
+        ctx.accounts.bonding_curve_state.connector_weight,
+    )?;
+
+    // calculate max mint
+    let max_mint = ctx
+        .accounts
+        .bonding_curve_state
+        .target_supply
+        .saturating_sub(ctx.accounts.bonding_curve_state.total_supply);
+
+    let payer_amount = if token_amount > max_mint {
+        max_mint
+    } else {
+        token_amount
+    };
+
+    // Mint to payer
+    token_mint_to(
+        ctx.accounts.bonding_curve_auth.to_account_info(),
+        ctx.accounts.token_0_program.to_account_info(),
+        ctx.accounts.token_0_mint.to_account_info(),
+        ctx.accounts.token_0_payer_ata.to_account_info(),
+        payer_amount,
+        &[&[
+            BONDING_CURVE_AUTH_SEED.as_bytes(),
+            ctx.accounts.token_0_mint.key().as_ref(),
+            &[ctx.bumps.bonding_curve_auth],
+        ]],
+    )?;
+
+    // Transfer SOL to bonding curve
+    transfer_sol_to_vault(
+        ctx.accounts.payer.to_account_info(),
+        ctx.accounts.bonding_curve_auth.to_account_info(),
+        ctx.accounts.system_program.to_account_info(),
+        safe_deposit,
+    )?;
+
+    // Transfer SOL to trading fee account
+    transfer_sol_to_vault(
+        ctx.accounts.payer.to_account_info(),
+        ctx.accounts.trading_fee_auth.to_account_info(),
+        ctx.accounts.system_program.to_account_info(),
+        trading_fee,
+    )?;
+
+    let total_supply = ctx.accounts.bonding_curve_state.total_supply + payer_amount;
+
+    let reserve_balance = get_account_balance(ctx.accounts.bonding_curve_auth.to_account_info())?;
+
+    let locked_supply =
+        ctx.accounts.bonding_curve_state.initial_supply + ctx.accounts.token_0_airdrop_ata.amount;
+
+    let progress = calculate_progress(
+        total_supply,
+        ctx.accounts.bonding_curve_state.target_supply,
+        locked_supply,
+        ctx.accounts.bonding_curve_state.decimals,
+    )?;
+
+    let market_cap = calculate_market_cap(
+        total_supply,
+        reserve_balance,
+        ctx.accounts.bonding_curve_state.decimals,
+        ctx.accounts.bonding_curve_state.connector_weight,
+    )?;
+
+    let trading_fees = get_account_balance(ctx.accounts.trading_fee_auth.to_account_info())?;
+
+    update_bonding_curve_state(
+        &mut ctx.accounts.bonding_curve_state,
+        total_supply,
+        reserve_balance,
+        progress,
+        market_cap,
+        trading_fees,
+    )?;
+
+    let airdrop_state = &mut ctx.accounts.airdrop_state.load_mut()?;
+
+    let nonce = calculate_airdrop_nonce(airdrop_state.count, progress)?;
+
+    update_airdrop_state(airdrop_state, airdrop_state.count, nonce)?;
+
+    let event = get_swap_event(
+        ctx.accounts.token_0_mint.to_account_info(),
+        ctx.accounts.payer.to_account_info(),
+        ctx.accounts.token_0_mint.decimals,
+        payer_amount,
+        safe_deposit + trading_fee,
+        rent_amount,
+        SwapType::Buy,
+    )?;
+
+    emit!(event);
+
+    Ok(())
+}

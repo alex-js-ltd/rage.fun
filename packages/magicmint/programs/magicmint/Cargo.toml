@@ -1,0 +1,31 @@
+[package]
+name = "magicmint"
+version = "0.1.0"
+description = "Created with Anchor"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib", "lib"]
+name = "magicmint"
+
+[features]
+no-entrypoint = []
+no-idl = []
+cpi = ["no-entrypoint"]
+default = []
+idl-build = ["anchor-lang/idl-build", "anchor-spl/idl-build"]
+client = []
+devnet = ["raydium-cpmm-cpi/devnet"]
+
+[dependencies]
+anchor-lang = { version = "0.30.1", features = ["init-if-needed"] }
+anchor-spl = { version = "=0.30.1", features = ["memo"] }
+spl-tlv-account-resolution = "0.6.3"
+spl-transfer-hook-interface = "0.6.3"
+spl-type-length-value = "0.4.3"
+spl-pod = "0.2.2"
+spl-math = { version = "0.3.0", features = ["no-entrypoint"] }
+raydium-cpmm-cpi = { git = "https://github.com/raydium-io/raydium-cpi", package = "raydium-cpmm-cpi", branch = "anchor-0.30.1" }
+bytemuck = { version = "1.4.0", features = ["derive", "min_const_generics"] }
+arrayref = { version = "0.3.6" }
+

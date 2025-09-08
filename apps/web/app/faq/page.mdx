@@ -1,0 +1,36 @@
+### What are the advantages of magicmint.fun?
+
+- **Bonding Curves That Actually Bond:** Create low-liquidity bonding curves that move fast and graduate to Raydium quickly.
+
+- **Creator Earnings:** Token creators earn 100% of all trading fees, giving creators real incentives to grow their communities.
+
+- **Automated Airdrop Pools:** Airdrops are automatically unlocked as mint milestones are reached—10%, 20%, 30%, and so on, up to 100% — rewarding active participants as the supply grows.
+
+- **Solana Blinks:** With the help of the Solana Foundation and other community members, [Dialect](https://dial.to/) maintains a public registry of blockchain links that have been verified as non-malicious as a public good for the Solana ecosystem. All tokens on magicmint.fun can also be purchased directly through Dialect's interface via Solana Blinks.
+
+### How does magicmint.fun work?
+
+magicmint.fun generates bonding curves to raise liquidity for token launches on Raydium.
+
+Each curve leverages a Rust implementation of the Bancor Formula—enabling built-in price discovery and a liquidity mechanism for newly created tokens. This system creates a positive feedback loop, where the price of tokens increases as the supply grows.
+
+When tokens are purchased, the payment is added to the reserve balance and, based on the calculated price, **new tokens are minted** to the buyer.
+
+Similarly, when tokens are sold, they are **removed from the supply** (burned), and based on the current price, reserve tokens (lamports) are transferred to the seller.
+
+The supply of each token **expands or contracts automatically based on market demand.**
+
+Every token on magicmint.fun has a max supply of 1 billion.
+
+### Does magicmint.fun have trading fees?
+
+Every buy and sell transaction includes a 1% trading fee.
+
+### What happens when the bonding curve is complete?
+
+Once users have minted a total of 888,888,888 tokens, the bonding curve is complete. At this point:
+
+- An additional 111,111,112 tokens are automatically minted to the Raydium vault, bringing the total supply to 1 billion.
+- Mint authority is revoked.
+- A Constant Product Pool is automatically deployed on Raydium with a ratio of 111,111,112 tokens and the SOL reserve amount chosen by the creator.
+- Token swaps will be available on Jupiter and Raydium.

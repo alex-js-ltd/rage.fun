@@ -1,0 +1,78 @@
+'use server'
+
+import { SubmissionResult } from '@conform-to/react'
+import { parseWithZod } from '@conform-to/zod'
+import { ReplySchema, CommentSchema } from '@/app/utils/schemas'
+import { auth } from '@/app/auth'
+import { prisma } from '@/app/utils/db'
+import { Prisma, SwapType } from '@prisma/client'
+
+import * as Ably from 'ably'
+import { getServerEnv } from '@/app/utils/env'
+import { sendCommentAlertToAbly } from '@/app/webhook/ably'
+
+const { ABLY_API_KEY, PROXY_PRIVATE_KEY } = getServerEnv()
+
+export type State = SubmissionResult<string[]> | {}
+
+export async function replyAction(_prevState: State, formData: FormData) {
+	const session = await auth()
+
+	if (!session) {
+		console.error('no user session')
+
+		return {}
+	}
+
+	const submission = parseWithZod(formData, {
+		schema: ReplySchema,
+	})
+
+	if (submission.status !== 'success') {
+		console.log('submission', submission)
+		return {
+			...submission.reply(),
+		}
+	}
+
+	const { content, mint, publicKey, parentCommentId } = submission.value
+
+	console.log('parent comment id', parentCommentId)
+
+	const parentComment = parentCommentId
+		? { connect: { id: parentCommentId } } // If it's a reply, connect to the parent comment
+		: undefined
+
+	const create = Prisma.validator<Prisma.CommentCreateInput>()({
+		content,
+		token: { connect: { id: mint.toBase58() } }, // ✅ Connect TokenMetadata
+		owner: {
+			connectOrCreate: {
+				where: { id: publicKey.toBase58() }, // ✅ Check if user exists
+				create: { id: publicKey.toBase58() }, // ✅ Create if not exists
+			},
+		},
+
+		parentComment,
+	})
+
+	const comment = await prisma.comment.create({ data: create })
+
+	const parse = CommentSchema.safeParse(comment)
+
+	if (parse.error) {
+		console.error(parse)
+
+		return {}
+	}
+
+	const client = new Ably.Rest(ABLY_API_KEY)
+
+	const commentChannel = client.channels.get('commentEvent')
+
+	await sendCommentAlertToAbly(commentChannel, parse.data)
+
+	console.log(parse)
+
+	return {}
+}

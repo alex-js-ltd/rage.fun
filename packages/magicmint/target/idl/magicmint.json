@@ -1,0 +1,2649 @@
+{
+  "address": "E6fmMvQjzN3bEhk9bVffSmK13yRezBp8xqPdpno5oXdV",
+  "metadata": {
+    "name": "magicmint",
+    "version": "0.1.0",
+    "spec": "0.1.0",
+    "description": "Created with Anchor"
+  },
+  "instructions": [
+    {
+      "name": "buy_token",
+      "discriminator": [
+        138,
+        127,
+        14,
+        91,
+        38,
+        87,
+        115,
+        105
+      ],
+      "accounts": [
+        {
+          "name": "payer",
+          "docs": [
+            "The payer of the transaction and the signer"
+          ],
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "bonding_curve_auth",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  98,
+                  111,
+                  110,
+                  100,
+                  105,
+                  110,
+                  103,
+                  95,
+                  99,
+                  117,
+                  114,
+                  118,
+                  101,
+                  95,
+                  97,
+                  117,
+                  116,
+                  104
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "token_0_mint"
+              }
+            ]
+          }
+        },
+        {
+          "name": "bonding_curve_state",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  98,
+                  111,
+                  110,
+                  100,
+                  105,
+                  110,
+                  103,
+                  95,
+                  99,
+                  117,
+                  114,
+                  118,
+                  101,
+                  95,
+                  115,
+                  116,
+                  97,
+                  116,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "token_0_mint"
+              }
+            ]
+          }
+        },
+        {
+          "name": "trading_fee_auth",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  116,
+                  114,
+                  97,
+                  100,
+                  105,
+                  110,
+                  103,
+                  95,
+                  102,
+                  101,
+                  101,
+                  95,
+                  97,
+                  117,
+                  116,
+                  104
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "token_0_mint"
+              }
+            ]
+          }
+        },
+        {
+          "name": "token_0_payer_ata",
+          "writable": true
+        },
+        {
+          "name": "token_0_mint",
+          "docs": [
+            "Mint associated with the meme coin"
+          ],
+          "writable": true
+        },
+        {
+          "name": "airdrop_state",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  97,
+                  105,
+                  114,
+                  100,
+                  114,
+                  111,
+                  112,
+                  95,
+                  115,
+                  116,
+                  97,
+                  116,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "token_0_mint"
+              }
+            ]
+          }
+        },
+        {
+          "name": "airdrop_auth",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  97,
+                  105,
+                  114,
+                  100,
+                  114,
+                  111,
+                  112,
+                  95,
+                  97,
+                  117,
+                  116,
+                  104
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "token_0_mint"
+              }
+            ]
+          }
+        },
+        {
+          "name": "token_0_airdrop_ata",
+          "docs": [
+            "Token account to which the tokens will be minted (created if needed)"
+          ],
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "airdrop_auth"
+              },
+              {
+                "kind": "account",
+                "path": "token_0_program"
+              },
+              {
+                "kind": "account",
+                "path": "token_0_mint"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140,
+                151,
+                37,
+                143,
+                78,
+                36,
+                137,
+                241,
+                187,
+                61,
+                16,
+                41,
+                20,
+                142,
+                13,
+                131,
+                11,
+                90,
+                19,
+                153,
+                218,
+                255,
+                16,
+                132,
+                4,
+                142,
+                123,
+                216,
+                219,
+                233,
+                248,
+                89
+              ]
+            }
+          }
+        },
+        {
+          "name": "token_0_program",
+          "docs": [
+            "SPL token program for the meme coin"
+          ]
+        },
+        {
+          "name": "system_program",
+          "docs": [
+            "System program"
+          ],
+          "address": "11111111111111111111111111111111"
+        },
+        {
+          "name": "associated_token_program",
+          "docs": [
+            "Associated token program"
+          ],
+          "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+        }
+      ],
+      "args": [
+        {
+          "name": "lamports",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "harvest_yield",
+      "discriminator": [
+        28,
+        200,
+        150,
+        200,
+        69,
+        56,
+        38,
+        133
+      ],
+      "accounts": [
+        {
+          "name": "signer",
+          "docs": [
+            "The payer of the transaction and the signer"
+          ],
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "bonding_curve_auth",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  98,
+                  111,
+                  110,
+                  100,
+                  105,
+                  110,
+                  103,
+                  95,
+                  99,
+                  117,
+                  114,
+                  118,
+                  101,
+                  95,
+                  97,
+                  117,
+                  116,
+                  104
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "token_0_mint"
+              }
+            ]
+          }
+        },
+        {
+          "name": "trading_fee_auth",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  116,
+                  114,
+                  97,
+                  100,
+                  105,
+                  110,
+                  103,
+                  95,
+                  102,
+                  101,
+                  101,
+                  95,
+                  97,
+                  117,
+                  116,
+                  104
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "token_0_mint"
+              }
+            ]
+          }
+        },
+        {
+          "name": "bonding_curve_state",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  98,
+                  111,
+                  110,
+                  100,
+                  105,
+                  110,
+                  103,
+                  95,
+                  99,
+                  117,
+                  114,
+                  118,
+                  101,
+                  95,
+                  115,
+                  116,
+                  97,
+                  116,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "token_0_mint"
+              }
+            ]
+          }
+        },
+        {
+          "name": "token_0_mint",
+          "docs": [
+            "Mint associated with the meme coin"
+          ],
+          "writable": true
+        },
+        {
+          "name": "token_0_program",
+          "docs": [
+            "SPL token program for the meme coin"
+          ]
+        },
+        {
+          "name": "system_program",
+          "docs": [
+            "System program"
+          ],
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "initialize",
+      "discriminator": [
+        175,
+        175,
+        109,
+        31,
+        13,
+        152,
+        155,
+        237
+      ],
+      "accounts": [
+        {
+          "name": "payer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "token_0_mint",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  109,
+                  97,
+                  103,
+                  105,
+                  99,
+                  95,
+                  109,
+                  105,
+                  110,
+                  116,
+                  95,
+                  116,
+                  111,
+                  107,
+                  101,
+                  110
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "args.symbol"
+              }
+            ]
+          }
+        },
+        {
+          "name": "extra_metas_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  101,
+                  120,
+                  116,
+                  114,
+                  97,
+                  45,
+                  97,
+                  99,
+                  99,
+                  111,
+                  117,
+                  110,
+                  116,
+                  45,
+                  109,
+                  101,
+                  116,
+                  97,
+                  115
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "token_0_mint"
+              }
+            ]
+          }
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        },
+        {
+          "name": "associated_token_program",
+          "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+        },
+        {
+          "name": "token_0_program",
+          "address": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb"
+        },
+        {
+          "name": "bonding_curve_auth",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  98,
+                  111,
+                  110,
+                  100,
+                  105,
+                  110,
+                  103,
+                  95,
+                  99,
+                  117,
+                  114,
+                  118,
+                  101,
+                  95,
+                  97,
+                  117,
+                  116,
+                  104
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "token_0_mint"
+              }
+            ]
+          }
+        },
+        {
+          "name": "airdrop_auth",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  97,
+                  105,
+                  114,
+                  100,
+                  114,
+                  111,
+                  112,
+                  95,
+                  97,
+                  117,
+                  116,
+                  104
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "token_0_mint"
+              }
+            ]
+          }
+        },
+        {
+          "name": "token_0_bonding_curve_ata",
+          "writable": true
+        },
+        {
+          "name": "token_0_airdrop_ata",
+          "writable": true
+        },
+        {
+          "name": "bonding_curve_state",
+          "docs": [
+            "pda to store bonding curve state"
+          ],
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  98,
+                  111,
+                  110,
+                  100,
+                  105,
+                  110,
+                  103,
+                  95,
+                  99,
+                  117,
+                  114,
+                  118,
+                  101,
+                  95,
+                  115,
+                  116,
+                  97,
+                  116,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "token_0_mint"
+              }
+            ]
+          }
+        },
+        {
+          "name": "airdrop_state",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  97,
+                  105,
+                  114,
+                  100,
+                  114,
+                  111,
+                  112,
+                  95,
+                  115,
+                  116,
+                  97,
+                  116,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "token_0_mint"
+              }
+            ]
+          }
+        },
+        {
+          "name": "trading_fee_auth",
+          "writable": true
+        },
+        {
+          "name": "update_authority",
+          "writable": true
+        }
+      ],
+      "args": [
+        {
+          "name": "token_decimals",
+          "type": "u8"
+        },
+        {
+          "name": "args",
+          "type": {
+            "defined": {
+              "name": "CreateMintAccountArgs"
+            }
+          }
+        },
+        {
+          "name": "target_reserve",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "migrate",
+      "discriminator": [
+        155,
+        234,
+        231,
+        146,
+        236,
+        158,
+        162,
+        30
+      ],
+      "accounts": [
+        {
+          "name": "payer",
+          "docs": [
+            "The payer for the transaction"
+          ],
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "token_0_mint",
+          "docs": [
+            "The token mint associated with the bonding curve"
+          ]
+        },
+        {
+          "name": "bonding_curve_auth",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  98,
+                  111,
+                  110,
+                  100,
+                  105,
+                  110,
+                  103,
+                  95,
+                  99,
+                  117,
+                  114,
+                  118,
+                  101,
+                  95,
+                  97,
+                  117,
+                  116,
+                  104
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "token_0_mint"
+              }
+            ]
+          }
+        },
+        {
+          "name": "bonding_curve_state",
+          "docs": [
+            "The bonding curve PDA to be updated"
+          ],
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  98,
+                  111,
+                  110,
+                  100,
+                  105,
+                  110,
+                  103,
+                  95,
+                  99,
+                  117,
+                  114,
+                  118,
+                  101,
+                  95,
+                  115,
+                  116,
+                  97,
+                  116,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "token_0_mint"
+              }
+            ]
+          }
+        },
+        {
+          "name": "trading_fee_auth",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  116,
+                  114,
+                  97,
+                  100,
+                  105,
+                  110,
+                  103,
+                  95,
+                  102,
+                  101,
+                  101,
+                  95,
+                  97,
+                  117,
+                  116,
+                  104
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "token_0_mint"
+              }
+            ]
+          }
+        },
+        {
+          "name": "token_0_program",
+          "docs": [
+            "SPL Token-2022 interface"
+          ]
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        },
+        {
+          "name": "associated_token_program",
+          "docs": [
+            "Associated token program"
+          ],
+          "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "proxy_initialize",
+      "discriminator": [
+        185,
+        41,
+        170,
+        16,
+        237,
+        245,
+        76,
+        134
+      ],
+      "accounts": [
+        {
+          "name": "signer",
+          "docs": [
+            "The payer for the transaction"
+          ],
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "cp_swap_program",
+          "address": "CPMMoo8L3F4NbTegBCKVNunggL7H1ZpdTHKxQB5qKP1C"
+        },
+        {
+          "name": "creator",
+          "docs": [
+            "Address paying to create the pool. Can be anyone"
+          ],
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  98,
+                  111,
+                  110,
+                  100,
+                  105,
+                  110,
+                  103,
+                  95,
+                  99,
+                  117,
+                  114,
+                  118,
+                  101,
+                  95,
+                  97,
+                  117,
+                  116,
+                  104
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "bonding_curve_mint"
+              }
+            ]
+          }
+        },
+        {
+          "name": "bonding_curve_state",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  98,
+                  111,
+                  110,
+                  100,
+                  105,
+                  110,
+                  103,
+                  95,
+                  99,
+                  117,
+                  114,
+                  118,
+                  101,
+                  95,
+                  115,
+                  116,
+                  97,
+                  116,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "bonding_curve_mint"
+              }
+            ]
+          }
+        },
+        {
+          "name": "amm_config",
+          "docs": [
+            "Which config the pool belongs to."
+          ]
+        },
+        {
+          "name": "authority",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  118,
+                  97,
+                  117,
+                  108,
+                  116,
+                  95,
+                  97,
+                  110,
+                  100,
+                  95,
+                  108,
+                  112,
+                  95,
+                  109,
+                  105,
+                  110,
+                  116,
+                  95,
+                  97,
+                  117,
+                  116,
+                  104,
+                  95,
+                  115,
+                  101,
+                  101,
+                  100
+                ]
+              }
+            ],
+            "program": {
+              "kind": "account",
+              "path": "cp_swap_program"
+            }
+          }
+        },
+        {
+          "name": "pool_state",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  111,
+                  111,
+                  108
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "amm_config"
+              },
+              {
+                "kind": "account",
+                "path": "token_0_mint"
+              },
+              {
+                "kind": "account",
+                "path": "token_1_mint"
+              }
+            ],
+            "program": {
+              "kind": "account",
+              "path": "cp_swap_program"
+            }
+          }
+        },
+        {
+          "name": "token_0_mint",
+          "docs": [
+            "Token_0 mint, the key must smaller then token_1 mint."
+          ]
+        },
+        {
+          "name": "token_1_mint",
+          "docs": [
+            "Token_1 mint, the key must grater then token_0 mint."
+          ]
+        },
+        {
+          "name": "bonding_curve_mint",
+          "writable": true
+        },
+        {
+          "name": "lp_mint",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  111,
+                  111,
+                  108,
+                  95,
+                  108,
+                  112,
+                  95,
+                  109,
+                  105,
+                  110,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "pool_state"
+              }
+            ],
+            "program": {
+              "kind": "account",
+              "path": "cp_swap_program"
+            }
+          }
+        },
+        {
+          "name": "creator_token_0",
+          "writable": true
+        },
+        {
+          "name": "creator_token_1",
+          "writable": true
+        },
+        {
+          "name": "creator_lp_token",
+          "writable": true
+        },
+        {
+          "name": "token_0_vault",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  111,
+                  111,
+                  108,
+                  95,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "pool_state"
+              },
+              {
+                "kind": "account",
+                "path": "token_0_mint"
+              }
+            ],
+            "program": {
+              "kind": "account",
+              "path": "cp_swap_program"
+            }
+          }
+        },
+        {
+          "name": "token_1_vault",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  111,
+                  111,
+                  108,
+                  95,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "pool_state"
+              },
+              {
+                "kind": "account",
+                "path": "token_1_mint"
+              }
+            ],
+            "program": {
+              "kind": "account",
+              "path": "cp_swap_program"
+            }
+          }
+        },
+        {
+          "name": "create_pool_fee",
+          "docs": [
+            "create pool fee account"
+          ],
+          "writable": true,
+          "address": "DNXgeM9EiiaAbaWvwjHj9fQQLAX5ZsfHyvmYUNRAdNC8"
+        },
+        {
+          "name": "observation_state",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  111,
+                  98,
+                  115,
+                  101,
+                  114,
+                  118,
+                  97,
+                  116,
+                  105,
+                  111,
+                  110
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "pool_state"
+              }
+            ],
+            "program": {
+              "kind": "account",
+              "path": "cp_swap_program"
+            }
+          }
+        },
+        {
+          "name": "token_program",
+          "docs": [
+            "Program to create mint account and mint tokens"
+          ],
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+        },
+        {
+          "name": "token_0_program",
+          "docs": [
+            "Spl token program or token program 2022"
+          ]
+        },
+        {
+          "name": "token_1_program",
+          "docs": [
+            "Spl token program or token program 2022"
+          ]
+        },
+        {
+          "name": "associated_token_program",
+          "docs": [
+            "Program to create an ATA for receiving position NFT"
+          ],
+          "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+        },
+        {
+          "name": "system_program",
+          "docs": [
+            "To create a new program account"
+          ],
+          "address": "11111111111111111111111111111111"
+        },
+        {
+          "name": "rent",
+          "docs": [
+            "Sysvar for program account"
+          ],
+          "address": "SysvarRent111111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "open_time",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "random_airdrop",
+      "discriminator": [
+        14,
+        239,
+        15,
+        201,
+        195,
+        200,
+        174,
+        86
+      ],
+      "accounts": [
+        {
+          "name": "payer",
+          "docs": [
+            "The payer of the transaction and the signer"
+          ],
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "bonding_curve_auth",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  98,
+                  111,
+                  110,
+                  100,
+                  105,
+                  110,
+                  103,
+                  95,
+                  99,
+                  117,
+                  114,
+                  118,
+                  101,
+                  95,
+                  97,
+                  117,
+                  116,
+                  104
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "token_0_mint"
+              }
+            ]
+          }
+        },
+        {
+          "name": "token_0_mint",
+          "docs": [
+            "Mint associated with the meme coin"
+          ],
+          "writable": true
+        },
+        {
+          "name": "token_0_payer_ata",
+          "docs": [
+            "Token account to which the tokens will be minted (created if needed)"
+          ],
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "payer"
+              },
+              {
+                "kind": "account",
+                "path": "token_0_program"
+              },
+              {
+                "kind": "account",
+                "path": "token_0_mint"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140,
+                151,
+                37,
+                143,
+                78,
+                36,
+                137,
+                241,
+                187,
+                61,
+                16,
+                41,
+                20,
+                142,
+                13,
+                131,
+                11,
+                90,
+                19,
+                153,
+                218,
+                255,
+                16,
+                132,
+                4,
+                142,
+                123,
+                216,
+                219,
+                233,
+                248,
+                89
+              ]
+            }
+          }
+        },
+        {
+          "name": "token_0_program",
+          "docs": [
+            "SPL token program for the meme coin"
+          ]
+        },
+        {
+          "name": "system_program",
+          "docs": [
+            "System program"
+          ],
+          "address": "11111111111111111111111111111111"
+        },
+        {
+          "name": "associated_token_program",
+          "docs": [
+            "Associated token program"
+          ],
+          "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+        }
+      ],
+      "args": [
+        {
+          "name": "amount",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "realloc",
+      "discriminator": [
+        138,
+        139,
+        3,
+        51,
+        58,
+        130,
+        86,
+        208
+      ],
+      "accounts": [
+        {
+          "name": "payer",
+          "docs": [
+            "The payer for the transaction"
+          ],
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "token_0_mint"
+        },
+        {
+          "name": "bonding_curve_state",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  98,
+                  111,
+                  110,
+                  100,
+                  105,
+                  110,
+                  103,
+                  95,
+                  99,
+                  117,
+                  114,
+                  118,
+                  101,
+                  95,
+                  115,
+                  116,
+                  97,
+                  116,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "token_0_mint"
+              }
+            ]
+          }
+        },
+        {
+          "name": "token_0_program",
+          "docs": [
+            "Spl token program for meme coin"
+          ]
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "sell_token",
+      "discriminator": [
+        109,
+        61,
+        40,
+        187,
+        230,
+        176,
+        135,
+        174
+      ],
+      "accounts": [
+        {
+          "name": "signer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "bonding_curve_auth",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  98,
+                  111,
+                  110,
+                  100,
+                  105,
+                  110,
+                  103,
+                  95,
+                  99,
+                  117,
+                  114,
+                  118,
+                  101,
+                  95,
+                  97,
+                  117,
+                  116,
+                  104
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "token_0_mint"
+              }
+            ]
+          }
+        },
+        {
+          "name": "bonding_curve_state",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  98,
+                  111,
+                  110,
+                  100,
+                  105,
+                  110,
+                  103,
+                  95,
+                  99,
+                  117,
+                  114,
+                  118,
+                  101,
+                  95,
+                  115,
+                  116,
+                  97,
+                  116,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "token_0_mint"
+              }
+            ]
+          }
+        },
+        {
+          "name": "trading_fee_auth",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  116,
+                  114,
+                  97,
+                  100,
+                  105,
+                  110,
+                  103,
+                  95,
+                  102,
+                  101,
+                  101,
+                  95,
+                  97,
+                  117,
+                  116,
+                  104
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "token_0_mint"
+              }
+            ]
+          }
+        },
+        {
+          "name": "token_0_mint",
+          "docs": [
+            "Mint associated with the meme coin"
+          ],
+          "writable": true
+        },
+        {
+          "name": "token_0_seller_ata",
+          "writable": true
+        },
+        {
+          "name": "airdrop_auth",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  97,
+                  105,
+                  114,
+                  100,
+                  114,
+                  111,
+                  112,
+                  95,
+                  97,
+                  117,
+                  116,
+                  104
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "token_0_mint"
+              }
+            ]
+          }
+        },
+        {
+          "name": "token_0_airdrop_ata",
+          "docs": [
+            "Token account to which the tokens will be minted (created if needed)"
+          ],
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "airdrop_auth"
+              },
+              {
+                "kind": "account",
+                "path": "token_0_program"
+              },
+              {
+                "kind": "account",
+                "path": "token_0_mint"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140,
+                151,
+                37,
+                143,
+                78,
+                36,
+                137,
+                241,
+                187,
+                61,
+                16,
+                41,
+                20,
+                142,
+                13,
+                131,
+                11,
+                90,
+                19,
+                153,
+                218,
+                255,
+                16,
+                132,
+                4,
+                142,
+                123,
+                216,
+                219,
+                233,
+                248,
+                89
+              ]
+            }
+          }
+        },
+        {
+          "name": "token_0_program",
+          "docs": [
+            "Token program"
+          ]
+        },
+        {
+          "name": "system_program",
+          "docs": [
+            "System program"
+          ],
+          "address": "11111111111111111111111111111111"
+        },
+        {
+          "name": "associated_token_program",
+          "docs": [
+            "Associated token program"
+          ],
+          "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+        }
+      ],
+      "args": [
+        {
+          "name": "amount",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "sync_bonding_curve",
+      "discriminator": [
+        66,
+        113,
+        236,
+        204,
+        104,
+        222,
+        235,
+        159
+      ],
+      "accounts": [
+        {
+          "name": "payer",
+          "docs": [
+            "The payer of the transaction and the signer",
+            "The payer for the transaction"
+          ],
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "bonding_curve_auth",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  98,
+                  111,
+                  110,
+                  100,
+                  105,
+                  110,
+                  103,
+                  95,
+                  99,
+                  117,
+                  114,
+                  118,
+                  101,
+                  95,
+                  97,
+                  117,
+                  116,
+                  104
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "token_0_mint"
+              }
+            ]
+          }
+        },
+        {
+          "name": "bonding_curve_state",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  98,
+                  111,
+                  110,
+                  100,
+                  105,
+                  110,
+                  103,
+                  95,
+                  99,
+                  117,
+                  114,
+                  118,
+                  101,
+                  95,
+                  115,
+                  116,
+                  97,
+                  116,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "token_0_mint"
+              }
+            ]
+          }
+        },
+        {
+          "name": "token_0_bonding_curve_ata",
+          "docs": [
+            "Token account to which the tokens will be minted (created if needed)"
+          ],
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "bonding_curve_auth"
+              },
+              {
+                "kind": "account",
+                "path": "token_0_program"
+              },
+              {
+                "kind": "account",
+                "path": "token_0_mint"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140,
+                151,
+                37,
+                143,
+                78,
+                36,
+                137,
+                241,
+                187,
+                61,
+                16,
+                41,
+                20,
+                142,
+                13,
+                131,
+                11,
+                90,
+                19,
+                153,
+                218,
+                255,
+                16,
+                132,
+                4,
+                142,
+                123,
+                216,
+                219,
+                233,
+                248,
+                89
+              ]
+            }
+          }
+        },
+        {
+          "name": "token_0_mint",
+          "docs": [
+            "Mint associated with the meme coin"
+          ],
+          "writable": true
+        },
+        {
+          "name": "token_0_program",
+          "docs": [
+            "SPL token program for the meme coin"
+          ]
+        },
+        {
+          "name": "system_program",
+          "docs": [
+            "System program"
+          ],
+          "address": "11111111111111111111111111111111"
+        },
+        {
+          "name": "associated_token_program",
+          "docs": [
+            "Associated token program"
+          ],
+          "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "unlock_airdrop",
+      "discriminator": [
+        77,
+        142,
+        240,
+        101,
+        229,
+        129,
+        52,
+        254
+      ],
+      "accounts": [
+        {
+          "name": "payer",
+          "docs": [
+            "The payer of the transaction and the signer"
+          ],
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "bonding_curve_auth",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  98,
+                  111,
+                  110,
+                  100,
+                  105,
+                  110,
+                  103,
+                  95,
+                  99,
+                  117,
+                  114,
+                  118,
+                  101,
+                  95,
+                  97,
+                  117,
+                  116,
+                  104
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "token_0_mint"
+              }
+            ]
+          }
+        },
+        {
+          "name": "token_0_bonding_curve_ata",
+          "writable": true
+        },
+        {
+          "name": "token_0_mint",
+          "docs": [
+            "Mint associated with the meme coin"
+          ],
+          "writable": true
+        },
+        {
+          "name": "airdrop_auth",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  97,
+                  105,
+                  114,
+                  100,
+                  114,
+                  111,
+                  112,
+                  95,
+                  97,
+                  117,
+                  116,
+                  104
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "token_0_mint"
+              }
+            ]
+          }
+        },
+        {
+          "name": "token_0_airdrop_ata",
+          "writable": true
+        },
+        {
+          "name": "airdrop_state",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  97,
+                  105,
+                  114,
+                  100,
+                  114,
+                  111,
+                  112,
+                  95,
+                  115,
+                  116,
+                  97,
+                  116,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "token_0_mint"
+              }
+            ]
+          }
+        },
+        {
+          "name": "token_0_program",
+          "docs": [
+            "SPL token program for the meme coin"
+          ]
+        },
+        {
+          "name": "system_program",
+          "docs": [
+            "System program"
+          ],
+          "address": "11111111111111111111111111111111"
+        },
+        {
+          "name": "associated_token_program",
+          "docs": [
+            "Associated token program"
+          ],
+          "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+        }
+      ],
+      "args": []
+    }
+  ],
+  "accounts": [
+    {
+      "name": "AirdropState",
+      "discriminator": [
+        1,
+        49,
+        110,
+        205,
+        185,
+        136,
+        198,
+        165
+      ]
+    },
+    {
+      "name": "AmmConfig",
+      "discriminator": [
+        218,
+        244,
+        33,
+        104,
+        203,
+        203,
+        43,
+        111
+      ]
+    },
+    {
+      "name": "BondingCurveState",
+      "discriminator": [
+        182,
+        185,
+        75,
+        193,
+        72,
+        40,
+        132,
+        153
+      ]
+    }
+  ],
+  "events": [
+    {
+      "name": "AirdropEvent",
+      "discriminator": [
+        152,
+        190,
+        100,
+        178,
+        216,
+        22,
+        44,
+        199
+      ]
+    },
+    {
+      "name": "CreateEvent",
+      "discriminator": [
+        27,
+        114,
+        169,
+        77,
+        222,
+        235,
+        99,
+        118
+      ]
+    },
+    {
+      "name": "HarvestEvent",
+      "discriminator": [
+        33,
+        112,
+        85,
+        175,
+        175,
+        39,
+        21,
+        88
+      ]
+    },
+    {
+      "name": "RaydiumEvent",
+      "discriminator": [
+        135,
+        34,
+        87,
+        103,
+        186,
+        165,
+        200,
+        118
+      ]
+    },
+    {
+      "name": "SwapEvent",
+      "discriminator": [
+        64,
+        198,
+        205,
+        232,
+        38,
+        8,
+        113,
+        226
+      ]
+    }
+  ],
+  "errors": [
+    {
+      "code": 6000,
+      "name": "InsufficientUserSupply",
+      "msg": "Insufficient token balance"
+    },
+    {
+      "code": 6001,
+      "name": "InsufficientFunds",
+      "msg": "Insufficient SOL balance"
+    },
+    {
+      "code": 6002,
+      "name": "AccountNotRentExempt",
+      "msg": "Account is not rent-exempt"
+    },
+    {
+      "code": 6003,
+      "name": "BondingCurveComplete",
+      "msg": "Bonding curve is complete"
+    },
+    {
+      "code": 6004,
+      "name": "BondingCurveNotComplete",
+      "msg": "Bonding curve is incomplete"
+    },
+    {
+      "code": 6005,
+      "name": "InsufficientBuyAmount",
+      "msg": "Min buy amount is 0.0000001 SOL"
+    },
+    {
+      "code": 6006,
+      "name": "InsufficientReserve",
+      "msg": "Insufficient reserve balance"
+    },
+    {
+      "code": 6007,
+      "name": "InvalidInput",
+      "msg": "Invalid input"
+    },
+    {
+      "code": 6008,
+      "name": "UnauthorizedSigner",
+      "msg": "Unauthorized signer"
+    },
+    {
+      "code": 6009,
+      "name": "InsufficientReward",
+      "msg": "Insufficient reward balance"
+    },
+    {
+      "code": 6010,
+      "name": "FirstAirdropAlreadyDispatched",
+      "msg": "First airdrop already dispatched"
+    },
+    {
+      "code": 6011,
+      "name": "NotApproved",
+      "msg": "Not approved"
+    },
+    {
+      "code": 6012,
+      "name": "InvalidAirdrop",
+      "msg": "Invalid airdrop amount"
+    },
+    {
+      "code": 6013,
+      "name": "NoPendingAirdrops",
+      "msg": "No pending airdrops: all airdrops for this milestone have been claimed"
+    },
+    {
+      "code": 6014,
+      "name": "CurveAlreadyInSync",
+      "msg": "Curve already in sync: no missing supply to mint"
+    },
+    {
+      "code": 6015,
+      "name": "TargetReserveTooLow",
+      "msg": "Target reserve must be ≥ 0.3 SOL"
+    },
+    {
+      "code": 6016,
+      "name": "TargetReserveTooHigh",
+      "msg": "Target reserve must be ≤ 80 SOL"
+    },
+    {
+      "code": 6017,
+      "name": "DontMigrate",
+      "msg": "Dont Migrate"
+    }
+  ],
+  "types": [
+    {
+      "name": "AirdropEvent",
+      "docs": [
+        "Emitted when new bonding curve is created"
+      ],
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "user",
+            "type": "pubkey"
+          },
+          {
+            "name": "mint",
+            "type": "pubkey"
+          },
+          {
+            "name": "amount",
+            "type": "u64"
+          },
+          {
+            "name": "time",
+            "type": "i64"
+          },
+          {
+            "name": "airdrop_type",
+            "type": {
+              "defined": {
+                "name": "AirdropType"
+              }
+            }
+          },
+          {
+            "name": "airdrop_id",
+            "type": {
+              "option": "u8"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "AirdropState",
+      "serialization": "bytemuckunsafe",
+      "repr": {
+        "kind": "rust",
+        "packed": true
+      },
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "count",
+            "type": "u8"
+          },
+          {
+            "name": "initial_supply",
+            "type": "u64"
+          },
+          {
+            "name": "nonce",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "AirdropType",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "Unlock"
+          },
+          {
+            "name": "Random"
+          }
+        ]
+      }
+    },
+    {
+      "name": "AmmConfig",
+      "docs": [
+        "Holds the current owner of the factory"
+      ],
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "bump",
+            "docs": [
+              "Bump to identify PDA"
+            ],
+            "type": "u8"
+          },
+          {
+            "name": "disable_create_pool",
+            "docs": [
+              "Status to control if new pool can be create"
+            ],
+            "type": "bool"
+          },
+          {
+            "name": "index",
+            "docs": [
+              "Config index"
+            ],
+            "type": "u16"
+          },
+          {
+            "name": "trade_fee_rate",
+            "docs": [
+              "The trade fee, denominated in hundredths of a bip (10^-6)"
+            ],
+            "type": "u64"
+          },
+          {
+            "name": "protocol_fee_rate",
+            "docs": [
+              "The protocol fee"
+            ],
+            "type": "u64"
+          },
+          {
+            "name": "fund_fee_rate",
+            "docs": [
+              "The fund fee, denominated in hundredths of a bip (10^-6)"
+            ],
+            "type": "u64"
+          },
+          {
+            "name": "create_pool_fee",
+            "docs": [
+              "Fee for create a new pool"
+            ],
+            "type": "u64"
+          },
+          {
+            "name": "protocol_owner",
+            "docs": [
+              "Address of the protocol fee owner"
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "fund_owner",
+            "docs": [
+              "Address of the fund fee owner"
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "padding",
+            "docs": [
+              "padding"
+            ],
+            "type": {
+              "array": [
+                "u64",
+                16
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "BondingCurveState",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "mint",
+            "type": "pubkey"
+          },
+          {
+            "name": "creator",
+            "type": "pubkey"
+          },
+          {
+            "name": "connector_weight",
+            "type": "f64"
+          },
+          {
+            "name": "total_supply",
+            "type": "u64"
+          },
+          {
+            "name": "initial_supply",
+            "type": "u64"
+          },
+          {
+            "name": "target_supply",
+            "type": "u64"
+          },
+          {
+            "name": "reserve_balance",
+            "type": "u64"
+          },
+          {
+            "name": "decimals",
+            "type": "u8"
+          },
+          {
+            "name": "progress",
+            "type": "f64"
+          },
+          {
+            "name": "market_cap",
+            "type": "f64"
+          },
+          {
+            "name": "open_time",
+            "type": "u64"
+          },
+          {
+            "name": "target_reserve",
+            "type": "u64"
+          },
+          {
+            "name": "trading_fees",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "CreateEvent",
+      "docs": [
+        "Emitted when new bonding curve is created"
+      ],
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "creator",
+            "type": "pubkey"
+          },
+          {
+            "name": "mint",
+            "type": "pubkey"
+          },
+          {
+            "name": "open_time",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "CreateMintAccountArgs",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "name",
+            "type": "string"
+          },
+          {
+            "name": "symbol",
+            "type": "string"
+          },
+          {
+            "name": "uri",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    {
+      "name": "HarvestEvent",
+      "docs": [
+        "Emitted when new bonding curve is created"
+      ],
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "signer",
+            "type": "pubkey"
+          },
+          {
+            "name": "mint",
+            "type": "pubkey"
+          },
+          {
+            "name": "lamports",
+            "type": "u64"
+          },
+          {
+            "name": "time",
+            "type": "i64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "RaydiumEvent",
+      "docs": [
+        "Emitted when a bonding curve reaches 100% and the token is deployed to raydium"
+      ],
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "mint",
+            "type": "pubkey"
+          },
+          {
+            "name": "open_time",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "SwapEvent",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "mint",
+            "type": "pubkey"
+          },
+          {
+            "name": "signer",
+            "type": "pubkey"
+          },
+          {
+            "name": "time",
+            "type": "i64"
+          },
+          {
+            "name": "price",
+            "type": "f64"
+          },
+          {
+            "name": "token_amount",
+            "type": "u64"
+          },
+          {
+            "name": "lamports",
+            "type": "u64"
+          },
+          {
+            "name": "rent_amount",
+            "type": "u64"
+          },
+          {
+            "name": "swap_type",
+            "type": {
+              "defined": {
+                "name": "SwapType"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "SwapType",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "Buy"
+          },
+          {
+            "name": "Sell"
+          }
+        ]
+      }
+    }
+  ]
+}

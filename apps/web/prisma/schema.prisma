@@ -1,0 +1,175 @@
+// This is your Prisma schema file.
+// Learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String          @id @default(cuid())
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+  tokenMetadata TokenMetadata[]
+  comment       Comment[]
+}
+
+model TokenMetadata {
+  id           String        @id @default(cuid())
+  name         String
+  symbol       String        @unique
+  description  String
+  image        String
+  thumbhash    Bytes
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  creator      User          @relation(fields: [creatorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  creatorId    String
+  bondingCurve BondingCurve?
+  swapEvents   SwapEvent[]
+
+  comments Comment[]
+
+  airdropSignatures AirdropSignature[]
+
+  nsfw Nsfw?
+
+  harvestEvents HarvestEvent[]
+
+  // non-unique foreign key
+  @@index([creatorId])
+  // This helps our order by in the user search a LOT
+  @@index([creatorId, createdAt])
+}
+
+model BondingCurve {
+  id              String  @id @default(cuid())
+  progress        Decimal
+  connectorWeight Decimal
+
+  decimals  Int
+  startTime BigInt
+
+  totalSupply    BigInt
+  reserveBalance BigInt
+  targetReserve  BigInt
+
+  volume    BigInt
+  marketCap Decimal
+
+  tradingFees BigInt
+
+  token   TokenMetadata @relation(fields: [tokenId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  tokenId String        @unique
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([tokenId])
+}
+
+enum SwapType {
+  BUY
+  SELL
+}
+
+model SwapEvent {
+  id         String   @id @default(cuid())
+  signer     String
+  time       BigInt
+  price      Decimal
+  amount     BigInt
+  swapType   SwapType
+  lamports   BigInt
+  rentAmount BigInt?
+
+  token   TokenMetadata @relation(fields: [tokenId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  tokenId String // Foreign key to TokenMetadata
+
+  @@index([tokenId])
+}
+
+model Comment {
+  id        String   @id @default(cuid())
+  content   String   @db.VarChar(280)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Self-referential relationship for nested comments
+  parentComment   Comment?  @relation("CommentToComment", fields: [parentCommentId], references: [id])
+  parentCommentId String?
+  childComments   Comment[] @relation("CommentToComment")
+
+  owner   User   @relation(fields: [ownerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  ownerId String
+
+  // Relation to the main entity being commented on (e.g., Post, TokenMetadata)
+  token   TokenMetadata @relation(fields: [tokenId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  tokenId String // Foreign key to TokenMetadata
+
+  @@index([tokenId])
+}
+
+model AirdropSignature {
+  id String @id @default(cuid())
+
+  airdropId Int?
+
+  airdropEvents AirdropEvent[]
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  token   TokenMetadata @relation(fields: [tokenId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  tokenId String // Foreign key to TokenMetadata
+
+  @@unique([id, tokenId]) // Ensures each signature is tied to one mint
+  @@index([tokenId])
+}
+
+model AirdropEvent {
+  id     String @id @default(cuid())
+  user   String
+  time   BigInt
+  amount BigInt
+
+  signature   AirdropSignature @relation(fields: [signatureId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  signatureId String // Foreign key to TokenMetadata
+
+  @@unique([user, signatureId]) // Ensures a user can only be rewarded once per signature
+}
+
+model Nsfw {
+  tokenId String  @id
+  isNsfw  Boolean @default(false)
+
+  token TokenMetadata @relation(fields: [tokenId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+}
+
+model HarvestEvent {
+  id       String @id @default(cuid())
+  signer   String
+  time     BigInt
+  lamports BigInt
+
+  token   TokenMetadata @relation(fields: [tokenId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  tokenId String // Foreign key to TokenMetadata
+
+  @@index([tokenId])
+}
+
+
+model BotWallet {
+  id       String @id @default(cuid())
+  secretKey Json
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

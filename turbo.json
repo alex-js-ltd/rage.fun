@@ -1,0 +1,47 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+
+  "tasks": {
+    "build": {
+      "env": [
+        "NEXT_PUBLIC_CLUSTER",
+        "NEXT_PUBLIC_ENDPOINT",
+        "BLOB_READ_WRITE_TOKEN",
+        "POSTGRES_URL",
+        "POSTGRES_PRISMA_URL",
+        "POSTGRES_URL_NO_SSL",
+        "POSTGRES_URL_NON_POOLING",
+        "POSTGRES_USER",
+        "POSTGRES_HOST",
+        "POSTGRES_PASSWORD",
+        "POSTGRES_DATABASE",
+        "KV_URL",
+        "KV_REST_API_READ_ONLY_TOKEN",
+        "KV_REST_API_TOKEN",
+        "KV_REST_API_URL",
+        "PROXY_PRIVATE_KEY"
+      ],
+      "inputs": ["$TURBO_DEFAULT$", ".env*"],
+      "dependsOn": ["^build"],
+      "outputs": ["build/**", ".vercel/**", "dist/**", ".next/**", "!.next/cache/**"]
+    },
+    "test": {
+      "outputs": ["coverage/**"],
+      "dependsOn": []
+    },
+    "lint": {
+      "dependsOn": ["^build"]
+    },
+    "typecheck": {
+      "dependsOn": ["^build"]
+    },
+    "dev": {
+      "dependsOn": ["^build"],
+      "cache": false,
+      "persistent": true
+    },
+    "clean": {
+      "cache": false
+    }
+  }
+}

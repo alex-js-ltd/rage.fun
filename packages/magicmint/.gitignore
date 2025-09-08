@@ -1,0 +1,12 @@
+# Ignore specific files and directories
+.anchor
+.DS_Store
+**/*.rs.bk
+node_modules
+test-ledger
+.yarn
+
+# Ignore all files in the target directory
+target/*
+!target/idl
+!target/types
