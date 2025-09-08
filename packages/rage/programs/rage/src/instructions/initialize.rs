@@ -20,12 +20,9 @@ use crate::utils::token::{
 use anchor_spl::token_interface::spl_token_2022::{self, amount_to_ui_amount, ui_amount_to_amount};
 
 use crate::states::{
-    calculate_airdrop_supply, calculate_deposit_amount, calculate_initial_supply,
-    calculate_market_cap, calculate_progress, initialize_airdrop_state,
-    initialize_bonding_curve_state, AirdropState, BondingCurveState, CreateEvent,
+    calculate_initial_supply, calculate_market_cap, calculate_progress,
+    initialize_bonding_curve_state, BondingCurveState, CreateEvent,
 };
-
-use crate::utils::account_load::AccountLoad;
 
 use spl_pod::optional_keys::OptionalNonZeroPubkey;
 
@@ -224,38 +221,15 @@ pub fn initialize(
         amount_to_ui_amount(initial_supply, ctx.accounts.token_0_mint.decimals)
     );
 
-    let airdrop_supply = calculate_airdrop_supply(target_supply)?;
-
-    let airdrop_deposit = create_airdrop_pool(
-        &ctx.accounts.payer.to_account_info(),
-        &ctx.accounts.token_0_mint.to_account_info(),
-        &ctx.accounts.airdrop_auth.to_account_info(),
-        &ctx.accounts.bonding_curve_auth.to_account_info(),
-        &ctx.accounts.token_0_airdrop_ata.to_account_info(),
-        &ctx.accounts.token_0_program.to_account_info(),
-        &ctx.accounts.system_program.to_account_info(),
-        &ctx.accounts.associated_token_program.to_account_info(),
-        airdrop_supply,
-        initial_supply,
-        initial_reserve,
-        connector_weight,
-        decimals,
-        &[&[
-            BONDING_CURVE_AUTH_SEED.as_bytes(),
-            ctx.accounts.token_0_mint.key().as_ref(),
-            &[ctx.bumps.bonding_curve_auth],
-        ]],
-    )?;
-
-    let total_supply = initial_supply + airdrop_supply;
+    let total_supply = initial_supply;
     let block_timestamp = Clock::get()?.unix_timestamp;
     let open_time = block_timestamp as u64;
 
     let reserve_balance = get_account_balance(ctx.accounts.bonding_curve_auth.to_account_info())?;
 
-    require_eq!(reserve_balance, initial_reserve + airdrop_deposit);
+    require_eq!(reserve_balance, initial_reserve);
 
-    let locked_supply = initial_supply + airdrop_supply;
+    let locked_supply = initial_supply;
 
     let progress = calculate_progress(total_supply, target_supply, locked_supply, decimals)?;
 
@@ -279,23 +253,6 @@ pub fn initialize(
     };
 
     initialize_bonding_curve_state(&mut ctx.accounts.bonding_curve_state, curve_payload)?;
-
-    let airdrop_state_loader = create_airdrop_state(
-        &ctx.accounts.payer.to_account_info(),
-        &ctx.accounts.airdrop_state.to_account_info(),
-        &ctx.accounts.token_0_mint.to_account_info(),
-        &ctx.accounts.system_program.to_account_info(),
-    )?;
-
-    let airdrop_state = &mut airdrop_state_loader.load_init()?;
-
-    let airdrop_payload = AirdropState {
-        count: 0,
-        initial_supply: airdrop_supply,
-        nonce: 0,
-    };
-
-    initialize_airdrop_state(airdrop_state, airdrop_payload)?;
 
     create_trading_fee_account(
         &ctx.accounts.payer.to_account_info(),
@@ -416,137 +373,6 @@ pub fn create_bonding_curve<'info>(
     require_eq!(token_0_mint.key(), token_account.mint);
 
     Ok(initial_supply)
-}
-
-pub fn create_airdrop_pool<'info>(
-    payer: &AccountInfo<'info>,
-    token_0_mint: &AccountInfo<'info>,
-    airdrop_auth: &AccountInfo<'info>,
-    bonding_curve_auth: &AccountInfo<'info>,
-    token_0_airdrop_ata: &AccountInfo<'info>,
-    token_0_program: &AccountInfo<'info>,
-    system_program: &AccountInfo<'info>,
-    assocaited_token_program: &AccountInfo<'info>,
-    airdrop_supply: u64,
-    initial_supply: u64,
-    initial_reserve: u64,
-    connector_weight: f64,
-    decimals: u8,
-
-    signer_seeds: &[&[&[u8]]],
-) -> Result<u64> {
-    if airdrop_auth.owner != &system_program::ID {
-        return err!(ErrorCode::NotApproved);
-    }
-
-    let (expected_pda_address, bump) = Pubkey::find_program_address(
-        &[AIRDROP_AUTH_SEED.as_bytes(), token_0_mint.key().as_ref()],
-        &crate::id(),
-    );
-
-    require_eq!(expected_pda_address, airdrop_auth.key());
-
-    create_or_allocate_account(
-        &crate::id(),
-        payer.to_account_info(),
-        system_program.to_account_info(),
-        airdrop_auth.clone(),
-        &[
-            AIRDROP_AUTH_SEED.as_bytes(),
-            token_0_mint.key().as_ref(),
-            &[bump],
-        ],
-        0, // or 8+ if you store struct
-    )?;
-
-    require_eq!(airdrop_auth.owner, &crate::id());
-
-    get_or_create_ata(
-        payer.to_account_info(),
-        token_0_airdrop_ata.to_account_info(),
-        airdrop_auth.to_account_info(),
-        token_0_mint.to_account_info(),
-        system_program.to_account_info(),
-        token_0_program.to_account_info(),
-        assocaited_token_program.to_account_info(),
-    )?;
-
-    let deposit_amount = calculate_deposit_amount(
-        initial_supply,
-        airdrop_supply,
-        initial_reserve,
-        decimals,
-        connector_weight,
-    )?;
-
-    // Transfer SOL to bonding curve vault pda
-    transfer_sol_to_vault(
-        payer.to_account_info(),
-        bonding_curve_auth.to_account_info(),
-        system_program.to_account_info(),
-        deposit_amount,
-    )?;
-
-    // add liquidity to token supply
-    token_mint_to(
-        bonding_curve_auth.to_account_info(),
-        token_0_program.to_account_info(),
-        token_0_mint.to_account_info(),
-        token_0_airdrop_ata.to_account_info(),
-        airdrop_supply,
-        signer_seeds,
-    )?;
-
-    let token_account = spl_token_2022::extension::StateWithExtensions::<
-        spl_token_2022::state::Account,
-    >::unpack(&token_0_airdrop_ata.data.borrow())?
-    .base;
-
-    require_eq!(airdrop_supply, token_account.amount);
-
-    require_eq!(airdrop_auth.key(), token_account.owner);
-
-    require_eq!(token_0_mint.key(), token_account.mint);
-
-    Ok(deposit_amount)
-}
-
-pub fn create_airdrop_state<'info>(
-    payer: &AccountInfo<'info>,
-    airdrop_state: &AccountInfo<'info>,
-    token_0_mint: &AccountInfo<'info>,
-    system_program: &AccountInfo<'info>,
-) -> Result<AccountLoad<'info, AirdropState>> {
-    if airdrop_state.owner != &system_program::ID {
-        return err!(ErrorCode::NotApproved);
-    }
-
-    let (expected_pda_address, bump) = Pubkey::find_program_address(
-        &[AIRDROP_STATE_SEED.as_bytes(), token_0_mint.key().as_ref()],
-        &crate::id(),
-    );
-
-    require_eq!(expected_pda_address, airdrop_state.key());
-
-    create_or_allocate_account(
-        &crate::id(),
-        payer.to_account_info(),
-        system_program.to_account_info(),
-        airdrop_state.clone(),
-        &[
-            AIRDROP_STATE_SEED.as_bytes(),
-            token_0_mint.key().as_ref(),
-            &[bump],
-        ],
-        8 + AirdropState::INIT_SPACE,
-    )?;
-
-    require_eq!(airdrop_state.owner, &crate::id());
-
-    Ok(AccountLoad::<AirdropState>::try_from_unchecked(
-        &crate::id(),
-        &airdrop_state,
-    )?)
 }
 
 pub fn create_trading_fee_account<'info>(

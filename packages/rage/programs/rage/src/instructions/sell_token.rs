@@ -5,7 +5,7 @@ use crate::states::{
 };
 use crate::utils::fees::trading_fee;
 use crate::utils::seed::{
-    AIRDROP_AUTH_SEED, BONDING_CURVE_AUTH_SEED, BONDING_CURVE_STATE_SEED, TRADING_FEE_AUTH_SEED,
+    BONDING_CURVE_AUTH_SEED, BONDING_CURVE_STATE_SEED, TRADING_FEE_AUTH_SEED,
 };
 use crate::utils::token::{
     calculate_space_for_ata, get_account_balance, token_approve_delegate, token_burn,
@@ -14,8 +14,8 @@ use crate::utils::token::{
 use anchor_lang::prelude::*;
 use anchor_spl::associated_token::AssociatedToken;
 use anchor_spl::token_interface::{
-    spl_token_2022::{self, amount_to_ui_amount},
-    Mint, TokenAccount, TokenInterface,
+    spl_token_2022::{self},
+    Mint, TokenInterface,
 };
 
 #[derive(Accounts)]
@@ -56,22 +56,6 @@ pub struct SellToken<'info> {
     #[account(mut)]
     pub token_0_seller_ata: UncheckedAccount<'info>,
 
-    /// CHECK: pda to control vault_meme_ata & lamports
-    #[account(mut,
-            seeds = [AIRDROP_AUTH_SEED.as_bytes(), token_0_mint.key().as_ref()],
-            bump,
-        )]
-    pub airdrop_auth: AccountInfo<'info>,
-
-    /// Token account to which the tokens will be minted (created if needed)
-    #[account(
-                mut,
-                     associated_token::mint = token_0_mint,
-                     associated_token::authority = airdrop_auth,
-                     associated_token::token_program = token_0_program,
-                 )]
-    pub token_0_airdrop_ata: Box<InterfaceAccount<'info, TokenAccount>>,
-
     /// Token program
     pub token_0_program: Interface<'info, TokenInterface>,
 
@@ -86,7 +70,6 @@ pub fn sell_token(ctx: Context<SellToken>, token_amount: u64) -> Result<()> {
     // check pda accounts
     require_eq!(ctx.accounts.bonding_curve_auth.owner, &crate::id());
     require_eq!(ctx.accounts.trading_fee_auth.owner, &crate::id());
-    require_eq!(ctx.accounts.airdrop_auth.owner, &crate::id());
 
     let token_0_seller_ata = spl_token_2022::extension::StateWithExtensions::<
         spl_token_2022::state::Account,
@@ -181,8 +164,7 @@ pub fn sell_token(ctx: Context<SellToken>, token_amount: u64) -> Result<()> {
 
     let total_supply = ctx.accounts.bonding_curve_state.total_supply - token_amount;
 
-    let locked_supply =
-        ctx.accounts.bonding_curve_state.initial_supply + ctx.accounts.token_0_airdrop_ata.amount;
+    let locked_supply = ctx.accounts.bonding_curve_state.initial_supply;
 
     let progress = calculate_progress(
         total_supply,
@@ -214,7 +196,7 @@ pub fn sell_token(ctx: Context<SellToken>, token_amount: u64) -> Result<()> {
         ctx.accounts.signer.to_account_info(),
         ctx.accounts.token_0_mint.decimals,
         token_amount,
-        lamports,
+        seller_amount,
         rent_amount,
         SwapType::Sell,
     )?;

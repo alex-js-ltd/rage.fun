@@ -1,12 +1,12 @@
 use anchor_lang::prelude::*;
 
 use crate::states::{
-    calculate_airdrop_nonce, calculate_buy_amount, calculate_market_cap, calculate_progress,
-    get_swap_event, update_airdrop_state, update_bonding_curve_state, AirdropState,
+    calculate_buy_amount, calculate_market_cap, calculate_progress,
+    get_swap_event,  update_bonding_curve_state, 
     BondingCurveState, SwapType,
 };
 use crate::utils::seed::{
-    AIRDROP_AUTH_SEED, AIRDROP_STATE_SEED, BONDING_CURVE_AUTH_SEED, BONDING_CURVE_STATE_SEED,
+   BONDING_CURVE_AUTH_SEED, BONDING_CURVE_STATE_SEED,
     TRADING_FEE_AUTH_SEED,
 };
 use crate::utils::token::{
@@ -20,7 +20,7 @@ use anchor_spl::associated_token::AssociatedToken;
 
 use anchor_spl::token_interface::{
     spl_token_2022::{self},
-    Mint, TokenAccount, TokenInterface,
+    Mint, TokenInterface,
 };
 
 use crate::error::ErrorCode;
@@ -67,33 +67,6 @@ pub struct BuyToken<'info> {
     )]
     pub token_0_mint: Box<InterfaceAccount<'info, Mint>>,
 
-    /// CHECK: pda for airdrop state
-
-    #[account(
-        mut,
-        seeds = [
-            AIRDROP_STATE_SEED.as_bytes(),
-            token_0_mint.key().as_ref(),
-        ],
-        bump,
-    )]
-    pub airdrop_state: AccountLoader<'info, AirdropState>,
-
-    /// CHECK: pda to control vault_meme_ata & lamports
-    #[account(mut,
-            seeds = [AIRDROP_AUTH_SEED.as_bytes(), token_0_mint.key().as_ref()],
-            bump,
-        )]
-    pub airdrop_auth: AccountInfo<'info>,
-
-    /// Token account to which the tokens will be minted (created if needed)
-    #[account(
-                mut,
-                     associated_token::mint = token_0_mint,
-                     associated_token::authority = airdrop_auth,
-                     associated_token::token_program = token_0_program,
-                 )]
-    pub token_0_airdrop_ata: Box<InterfaceAccount<'info, TokenAccount>>,
 
     /// SPL token program for the meme coin
     pub token_0_program: Interface<'info, TokenInterface>,
@@ -109,7 +82,7 @@ pub fn buy_token(ctx: Context<BuyToken>, lamports: u64) -> Result<()> {
     // check pda accounts
     require_eq!(ctx.accounts.bonding_curve_auth.owner, &crate::id());
     require_eq!(ctx.accounts.trading_fee_auth.owner, &crate::id());
-    require_eq!(ctx.accounts.airdrop_auth.owner, &crate::id());
+
 
     if ctx.accounts.bonding_curve_state.progress >= 100.0 {
         return Err(ErrorCode::BondingCurveComplete.into());
@@ -229,7 +202,7 @@ pub fn buy_token(ctx: Context<BuyToken>, lamports: u64) -> Result<()> {
     let reserve_balance = get_account_balance(ctx.accounts.bonding_curve_auth.to_account_info())?;
 
     let locked_supply =
-        ctx.accounts.bonding_curve_state.initial_supply + ctx.accounts.token_0_airdrop_ata.amount;
+        ctx.accounts.bonding_curve_state.initial_supply;
 
     let progress = calculate_progress(
         total_supply,
@@ -256,18 +229,12 @@ pub fn buy_token(ctx: Context<BuyToken>, lamports: u64) -> Result<()> {
         trading_fees,
     )?;
 
-    let airdrop_state = &mut ctx.accounts.airdrop_state.load_mut()?;
-
-    let nonce = calculate_airdrop_nonce(airdrop_state.count, progress)?;
-
-    update_airdrop_state(airdrop_state, airdrop_state.count, nonce)?;
-
     let event = get_swap_event(
         ctx.accounts.token_0_mint.to_account_info(),
         ctx.accounts.payer.to_account_info(),
         ctx.accounts.token_0_mint.decimals,
         payer_amount,
-        safe_deposit + trading_fee,
+        safe_deposit,
         rent_amount,
         SwapType::Buy,
     )?;

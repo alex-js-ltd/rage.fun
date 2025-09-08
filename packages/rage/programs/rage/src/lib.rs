@@ -34,21 +34,8 @@ pub mod rage {
         instructions::proxy_initialize(ctx, open_time)
     }
 
-    pub fn unlock_airdrop<'c: 'info, 'info>(
-        ctx: Context<'_, '_, 'c, 'info, UnlockAirdrop<'info>>,
-    ) -> Result<()> {
-        instructions::unlock_airdrop(ctx)
-    }
-
     pub fn harvest_yield(ctx: Context<HarvestYield>) -> Result<()> {
         instructions::harvest_yield(ctx)
-    }
-
-    pub fn random_airdrop<'c: 'info, 'info>(
-        ctx: Context<'_, '_, 'c, 'info, RandomAirdrop<'info>>,
-        amount: u64,
-    ) -> Result<()> {
-        instructions::random_airdrop(ctx, amount)
     }
 
     pub fn sync_bonding_curve(ctx: Context<SyncBondingCurve>) -> Result<()> {
@@ -57,11 +44,5 @@ pub mod rage {
 
     pub fn realloc(ctx: Context<Realloc>) -> Result<()> {
         instructions::realloc(ctx)
-    }
-
-    pub fn migrate<'c: 'info, 'info>(
-        ctx: Context<'_, '_, 'c, 'info, Migrate<'info>>,
-    ) -> Result<()> {
-        instructions::migrate(ctx)
     }
 }

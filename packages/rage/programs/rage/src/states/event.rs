@@ -57,27 +57,6 @@ pub fn calculate_price(token_amount: u64, lamports: u64, decimals: u8) -> Result
     Ok(price)
 }
 
-// Need to do this so the enum shows up in the IDL
-#[derive(AnchorSerialize, AnchorDeserialize, Debug, PartialEq, Eq)]
-pub enum AirdropType {
-    Unlock,
-    Random,
-}
-
-/// Emitted when new bonding curve is created
-#[event]
-#[cfg_attr(feature = "client", derive(Debug))]
-pub struct AirdropEvent {
-    #[index]
-    pub user: Pubkey,
-    pub mint: Pubkey,
-    pub amount: u64,
-    pub time: i64,
-
-    pub airdrop_type: AirdropType,
-    pub airdrop_id: Option<u8>,
-}
-
 /// Emitted when new bonding curve is created
 #[event]
 #[cfg_attr(feature = "client", derive(Debug))]
