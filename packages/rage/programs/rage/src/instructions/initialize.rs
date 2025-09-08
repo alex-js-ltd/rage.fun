@@ -17,7 +17,7 @@ use crate::utils::token::{
     update_account_lamports_to_minimum_balance,
 };
 
-use anchor_spl::token_interface::spl_token_2022::{self, amount_to_ui_amount, ui_amount_to_amount};
+use anchor_spl::token_interface::spl_token_2022::{self, ui_amount_to_amount};
 
 use crate::states::{
     calculate_initial_supply, initialize_bonding_curve_state, BondingCurveState, CreateEvent,
