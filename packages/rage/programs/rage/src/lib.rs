@@ -9,7 +9,7 @@ use instructions::*;
 declare_id!("E6fmMvQjzN3bEhk9bVffSmK13yRezBp8xqPdpno5oXdV");
 
 #[program]
-pub mod magicmint {
+pub mod rage {
 
     use super::*;
 

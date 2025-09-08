@@ -1,9 +1,9 @@
-import { Magicmint } from '../target/types/magicmint'
+import { Rage } from '../target/types/rage'
 import { Program, BN, utils } from '@coral-xyz/anchor'
 import { Connection, PublicKey } from '@solana/web3.js'
 import { getAccount } from '@solana/spl-token'
 
-export function getExtraMetas({ program, mint }: { program: Program<Magicmint>; mint: PublicKey }): PublicKey {
+export function getExtraMetas({ program, mint }: { program: Program<Rage>; mint: PublicKey }): PublicKey {
 	return PublicKey.findProgramAddressSync(
 		[utils.bytes.utf8.encode('extra-account-metas'), mint.toBuffer()],
 		program.programId,
@@ -11,38 +11,32 @@ export function getExtraMetas({ program, mint }: { program: Program<Magicmint>; 
 }
 
 // Auth
-export function getMagicMintToken({
-	program,
-	tokenSymbol,
-}: {
-	program: Program<Magicmint>
-	tokenSymbol: string
-}): PublicKey {
+export function getRageToken({ program, tokenSymbol }: { program: Program<Rage>; tokenSymbol: string }): PublicKey {
 	return PublicKey.findProgramAddressSync(
 		[Buffer.from('magic_mint_token'), Buffer.from(tokenSymbol)],
 		program.programId,
 	)[0]
 }
 // Auth
-export function getBondingCurveAuth({ program, mint }: { program: Program<Magicmint>; mint: PublicKey }): PublicKey {
+export function getBondingCurveAuth({ program, mint }: { program: Program<Rage>; mint: PublicKey }): PublicKey {
 	return PublicKey.findProgramAddressSync([Buffer.from('bonding_curve_auth'), mint.toBuffer()], program.programId)[0]
 }
 
-export function getAirdropAuth({ program, mint }: { program: Program<Magicmint>; mint: PublicKey }): PublicKey {
+export function getAirdropAuth({ program, mint }: { program: Program<Rage>; mint: PublicKey }): PublicKey {
 	return PublicKey.findProgramAddressSync([Buffer.from('airdrop_auth'), mint.toBuffer()], program.programId)[0]
 }
 
-export function getTradingFeeAuth({ program, mint }: { program: Program<Magicmint>; mint: PublicKey }): PublicKey {
+export function getTradingFeeAuth({ program, mint }: { program: Program<Rage>; mint: PublicKey }): PublicKey {
 	return PublicKey.findProgramAddressSync([Buffer.from('trading_fee_auth'), mint.toBuffer()], program.programId)[0]
 }
 
 // State
 
-export function getBondingCurveState({ program, mint }: { program: Program<Magicmint>; mint: PublicKey }): PublicKey {
+export function getBondingCurveState({ program, mint }: { program: Program<Rage>; mint: PublicKey }): PublicKey {
 	return PublicKey.findProgramAddressSync([Buffer.from('bonding_curve_state'), mint.toBuffer()], program.programId)[0]
 }
 
-export async function fetchBondingCurveState({ program, mint }: { program: Program<Magicmint>; mint: PublicKey }) {
+export async function fetchBondingCurveState({ program, mint }: { program: Program<Rage>; mint: PublicKey }) {
 	const pda = getBondingCurveState({ program, mint })
 
 	const data = await program.account.bondingCurveState.fetch(pda)
@@ -52,11 +46,11 @@ export async function fetchBondingCurveState({ program, mint }: { program: Progr
 
 export type BondingCurveState = Awaited<ReturnType<typeof fetchBondingCurveState>>
 
-export function getAirdropState({ program, mint }: { program: Program<Magicmint>; mint: PublicKey }): PublicKey {
+export function getAirdropState({ program, mint }: { program: Program<Rage>; mint: PublicKey }): PublicKey {
 	return PublicKey.findProgramAddressSync([Buffer.from('airdrop_state'), mint.toBuffer()], program.programId)[0]
 }
 
-export async function fetchAirdropState({ program, mint }: { program: Program<Magicmint>; mint: PublicKey }) {
+export async function fetchAirdropState({ program, mint }: { program: Program<Rage>; mint: PublicKey }) {
 	const pda = getAirdropState({ program, mint })
 
 	const data = await program.account.airdropState.fetch(pda)
@@ -69,7 +63,7 @@ export async function fetchTradingFeeYield({
 	mint,
 	connection,
 }: {
-	program: Program<Magicmint>
+	program: Program<Rage>
 	mint: PublicKey
 	connection: Connection
 }): Promise<BN> {

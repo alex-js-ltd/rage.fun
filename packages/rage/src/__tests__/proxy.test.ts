@@ -1,7 +1,7 @@
 import { Program, BN, web3, AnchorProvider, setProvider, workspace } from '@coral-xyz/anchor'
 import { type Connection, type PublicKey, Keypair } from '@solana/web3.js'
 import {
-	type Magicmint,
+	type Rage,
 	airDrop,
 	getInitializeIx,
 	buildTransaction,
@@ -22,7 +22,7 @@ describe('proxy test', () => {
 	const provider = AnchorProvider.env()
 	setProvider(provider)
 
-	const program = workspace.Magicmint as Program<Magicmint>
+	const program = workspace.Rage as Program<Rage>
 
 	const connection = provider.connection
 

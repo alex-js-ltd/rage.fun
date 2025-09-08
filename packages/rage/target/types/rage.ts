@@ -1,14 +1,20 @@
-{
+/**
+ * Program IDL in camelCase format in order to be used in JS/TS.
+ *
+ * Note that this is only a type helper and is not the actual IDL. The original
+ * IDL can be found at `target/idl/rage.json`.
+ */
+export type Rage = {
   "address": "E6fmMvQjzN3bEhk9bVffSmK13yRezBp8xqPdpno5oXdV",
   "metadata": {
-    "name": "magicmint",
+    "name": "rage",
     "version": "0.1.0",
     "spec": "0.1.0",
     "description": "Created with Anchor"
   },
   "instructions": [
     {
-      "name": "buy_token",
+      "name": "buyToken",
       "discriminator": [
         138,
         127,
@@ -29,7 +35,7 @@
           "signer": true
         },
         {
-          "name": "bonding_curve_auth",
+          "name": "bondingCurveAuth",
           "writable": true,
           "pda": {
             "seeds": [
@@ -58,13 +64,13 @@
               },
               {
                 "kind": "account",
-                "path": "token_0_mint"
+                "path": "token0Mint"
               }
             ]
           }
         },
         {
-          "name": "bonding_curve_state",
+          "name": "bondingCurveState",
           "writable": true,
           "pda": {
             "seeds": [
@@ -94,13 +100,13 @@
               },
               {
                 "kind": "account",
-                "path": "token_0_mint"
+                "path": "token0Mint"
               }
             ]
           }
         },
         {
-          "name": "trading_fee_auth",
+          "name": "tradingFeeAuth",
           "writable": true,
           "pda": {
             "seeds": [
@@ -127,24 +133,24 @@
               },
               {
                 "kind": "account",
-                "path": "token_0_mint"
+                "path": "token0Mint"
               }
             ]
           }
         },
         {
-          "name": "token_0_payer_ata",
+          "name": "token0PayerAta",
           "writable": true
         },
         {
-          "name": "token_0_mint",
+          "name": "token0Mint",
           "docs": [
             "Mint associated with the meme coin"
           ],
           "writable": true
         },
         {
-          "name": "airdrop_state",
+          "name": "airdropState",
           "writable": true,
           "pda": {
             "seeds": [
@@ -168,13 +174,13 @@
               },
               {
                 "kind": "account",
-                "path": "token_0_mint"
+                "path": "token0Mint"
               }
             ]
           }
         },
         {
-          "name": "airdrop_auth",
+          "name": "airdropAuth",
           "writable": true,
           "pda": {
             "seeds": [
@@ -197,13 +203,13 @@
               },
               {
                 "kind": "account",
-                "path": "token_0_mint"
+                "path": "token0Mint"
               }
             ]
           }
         },
         {
-          "name": "token_0_airdrop_ata",
+          "name": "token0AirdropAta",
           "docs": [
             "Token account to which the tokens will be minted (created if needed)"
           ],
@@ -212,15 +218,15 @@
             "seeds": [
               {
                 "kind": "account",
-                "path": "airdrop_auth"
+                "path": "airdropAuth"
               },
               {
                 "kind": "account",
-                "path": "token_0_program"
+                "path": "token0Program"
               },
               {
                 "kind": "account",
-                "path": "token_0_mint"
+                "path": "token0Mint"
               }
             ],
             "program": {
@@ -263,20 +269,20 @@
           }
         },
         {
-          "name": "token_0_program",
+          "name": "token0Program",
           "docs": [
             "SPL token program for the meme coin"
           ]
         },
         {
-          "name": "system_program",
+          "name": "systemProgram",
           "docs": [
             "System program"
           ],
           "address": "11111111111111111111111111111111"
         },
         {
-          "name": "associated_token_program",
+          "name": "associatedTokenProgram",
           "docs": [
             "Associated token program"
           ],
@@ -291,7 +297,7 @@
       ]
     },
     {
-      "name": "harvest_yield",
+      "name": "harvestYield",
       "discriminator": [
         28,
         200,
@@ -312,7 +318,7 @@
           "signer": true
         },
         {
-          "name": "bonding_curve_auth",
+          "name": "bondingCurveAuth",
           "writable": true,
           "pda": {
             "seeds": [
@@ -341,13 +347,13 @@
               },
               {
                 "kind": "account",
-                "path": "token_0_mint"
+                "path": "token0Mint"
               }
             ]
           }
         },
         {
-          "name": "trading_fee_auth",
+          "name": "tradingFeeAuth",
           "writable": true,
           "pda": {
             "seeds": [
@@ -374,13 +380,13 @@
               },
               {
                 "kind": "account",
-                "path": "token_0_mint"
+                "path": "token0Mint"
               }
             ]
           }
         },
         {
-          "name": "bonding_curve_state",
+          "name": "bondingCurveState",
           "writable": true,
           "pda": {
             "seeds": [
@@ -410,26 +416,26 @@
               },
               {
                 "kind": "account",
-                "path": "token_0_mint"
+                "path": "token0Mint"
               }
             ]
           }
         },
         {
-          "name": "token_0_mint",
+          "name": "token0Mint",
           "docs": [
             "Mint associated with the meme coin"
           ],
           "writable": true
         },
         {
-          "name": "token_0_program",
+          "name": "token0Program",
           "docs": [
             "SPL token program for the meme coin"
           ]
         },
         {
-          "name": "system_program",
+          "name": "systemProgram",
           "docs": [
             "System program"
           ],
@@ -457,7 +463,7 @@
           "signer": true
         },
         {
-          "name": "token_0_mint",
+          "name": "token0Mint",
           "writable": true,
           "pda": {
             "seeds": [
@@ -490,7 +496,7 @@
           }
         },
         {
-          "name": "extra_metas_account",
+          "name": "extraMetasAccount",
           "writable": true,
           "pda": {
             "seeds": [
@@ -520,25 +526,25 @@
               },
               {
                 "kind": "account",
-                "path": "token_0_mint"
+                "path": "token0Mint"
               }
             ]
           }
         },
         {
-          "name": "system_program",
+          "name": "systemProgram",
           "address": "11111111111111111111111111111111"
         },
         {
-          "name": "associated_token_program",
+          "name": "associatedTokenProgram",
           "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
         },
         {
-          "name": "token_0_program",
+          "name": "token0Program",
           "address": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb"
         },
         {
-          "name": "bonding_curve_auth",
+          "name": "bondingCurveAuth",
           "writable": true,
           "pda": {
             "seeds": [
@@ -567,13 +573,13 @@
               },
               {
                 "kind": "account",
-                "path": "token_0_mint"
+                "path": "token0Mint"
               }
             ]
           }
         },
         {
-          "name": "airdrop_auth",
+          "name": "airdropAuth",
           "writable": true,
           "pda": {
             "seeds": [
@@ -596,21 +602,21 @@
               },
               {
                 "kind": "account",
-                "path": "token_0_mint"
+                "path": "token0Mint"
               }
             ]
           }
         },
         {
-          "name": "token_0_bonding_curve_ata",
+          "name": "token0BondingCurveAta",
           "writable": true
         },
         {
-          "name": "token_0_airdrop_ata",
+          "name": "token0AirdropAta",
           "writable": true
         },
         {
-          "name": "bonding_curve_state",
+          "name": "bondingCurveState",
           "docs": [
             "pda to store bonding curve state"
           ],
@@ -643,13 +649,13 @@
               },
               {
                 "kind": "account",
-                "path": "token_0_mint"
+                "path": "token0Mint"
               }
             ]
           }
         },
         {
-          "name": "airdrop_state",
+          "name": "airdropState",
           "writable": true,
           "pda": {
             "seeds": [
@@ -673,35 +679,35 @@
               },
               {
                 "kind": "account",
-                "path": "token_0_mint"
+                "path": "token0Mint"
               }
             ]
           }
         },
         {
-          "name": "trading_fee_auth",
+          "name": "tradingFeeAuth",
           "writable": true
         },
         {
-          "name": "update_authority",
+          "name": "updateAuthority",
           "writable": true
         }
       ],
       "args": [
         {
-          "name": "token_decimals",
+          "name": "tokenDecimals",
           "type": "u8"
         },
         {
           "name": "args",
           "type": {
             "defined": {
-              "name": "CreateMintAccountArgs"
+              "name": "createMintAccountArgs"
             }
           }
         },
         {
-          "name": "target_reserve",
+          "name": "targetReserve",
           "type": "u64"
         }
       ]
@@ -728,13 +734,13 @@
           "signer": true
         },
         {
-          "name": "token_0_mint",
+          "name": "token0Mint",
           "docs": [
             "The token mint associated with the bonding curve"
           ]
         },
         {
-          "name": "bonding_curve_auth",
+          "name": "bondingCurveAuth",
           "writable": true,
           "pda": {
             "seeds": [
@@ -763,13 +769,13 @@
               },
               {
                 "kind": "account",
-                "path": "token_0_mint"
+                "path": "token0Mint"
               }
             ]
           }
         },
         {
-          "name": "bonding_curve_state",
+          "name": "bondingCurveState",
           "docs": [
             "The bonding curve PDA to be updated"
           ],
@@ -802,13 +808,13 @@
               },
               {
                 "kind": "account",
-                "path": "token_0_mint"
+                "path": "token0Mint"
               }
             ]
           }
         },
         {
-          "name": "trading_fee_auth",
+          "name": "tradingFeeAuth",
           "writable": true,
           "pda": {
             "seeds": [
@@ -835,23 +841,23 @@
               },
               {
                 "kind": "account",
-                "path": "token_0_mint"
+                "path": "token0Mint"
               }
             ]
           }
         },
         {
-          "name": "token_0_program",
+          "name": "token0Program",
           "docs": [
             "SPL Token-2022 interface"
           ]
         },
         {
-          "name": "system_program",
+          "name": "systemProgram",
           "address": "11111111111111111111111111111111"
         },
         {
-          "name": "associated_token_program",
+          "name": "associatedTokenProgram",
           "docs": [
             "Associated token program"
           ],
@@ -861,7 +867,7 @@
       "args": []
     },
     {
-      "name": "proxy_initialize",
+      "name": "proxyInitialize",
       "discriminator": [
         185,
         41,
@@ -882,7 +888,7 @@
           "signer": true
         },
         {
-          "name": "cp_swap_program",
+          "name": "cpSwapProgram",
           "address": "CPMMoo8L3F4NbTegBCKVNunggL7H1ZpdTHKxQB5qKP1C"
         },
         {
@@ -918,13 +924,13 @@
               },
               {
                 "kind": "account",
-                "path": "bonding_curve_mint"
+                "path": "bondingCurveMint"
               }
             ]
           }
         },
         {
-          "name": "bonding_curve_state",
+          "name": "bondingCurveState",
           "writable": true,
           "pda": {
             "seeds": [
@@ -954,13 +960,13 @@
               },
               {
                 "kind": "account",
-                "path": "bonding_curve_mint"
+                "path": "bondingCurveMint"
               }
             ]
           }
         },
         {
-          "name": "amm_config",
+          "name": "ammConfig",
           "docs": [
             "Which config the pool belongs to."
           ]
@@ -1004,12 +1010,12 @@
             ],
             "program": {
               "kind": "account",
-              "path": "cp_swap_program"
+              "path": "cpSwapProgram"
             }
           }
         },
         {
-          "name": "pool_state",
+          "name": "poolState",
           "writable": true,
           "pda": {
             "seeds": [
@@ -1024,41 +1030,41 @@
               },
               {
                 "kind": "account",
-                "path": "amm_config"
+                "path": "ammConfig"
               },
               {
                 "kind": "account",
-                "path": "token_0_mint"
+                "path": "token0Mint"
               },
               {
                 "kind": "account",
-                "path": "token_1_mint"
+                "path": "token1Mint"
               }
             ],
             "program": {
               "kind": "account",
-              "path": "cp_swap_program"
+              "path": "cpSwapProgram"
             }
           }
         },
         {
-          "name": "token_0_mint",
+          "name": "token0Mint",
           "docs": [
             "Token_0 mint, the key must smaller then token_1 mint."
           ]
         },
         {
-          "name": "token_1_mint",
+          "name": "token1Mint",
           "docs": [
             "Token_1 mint, the key must grater then token_0 mint."
           ]
         },
         {
-          "name": "bonding_curve_mint",
+          "name": "bondingCurveMint",
           "writable": true
         },
         {
-          "name": "lp_mint",
+          "name": "lpMint",
           "writable": true,
           "pda": {
             "seeds": [
@@ -1081,29 +1087,29 @@
               },
               {
                 "kind": "account",
-                "path": "pool_state"
+                "path": "poolState"
               }
             ],
             "program": {
               "kind": "account",
-              "path": "cp_swap_program"
+              "path": "cpSwapProgram"
             }
           }
         },
         {
-          "name": "creator_token_0",
+          "name": "creatorToken0",
           "writable": true
         },
         {
-          "name": "creator_token_1",
+          "name": "creatorToken1",
           "writable": true
         },
         {
-          "name": "creator_lp_token",
+          "name": "creatorLpToken",
           "writable": true
         },
         {
-          "name": "token_0_vault",
+          "name": "token0Vault",
           "writable": true,
           "pda": {
             "seeds": [
@@ -1124,21 +1130,21 @@
               },
               {
                 "kind": "account",
-                "path": "pool_state"
+                "path": "poolState"
               },
               {
                 "kind": "account",
-                "path": "token_0_mint"
+                "path": "token0Mint"
               }
             ],
             "program": {
               "kind": "account",
-              "path": "cp_swap_program"
+              "path": "cpSwapProgram"
             }
           }
         },
         {
-          "name": "token_1_vault",
+          "name": "token1Vault",
           "writable": true,
           "pda": {
             "seeds": [
@@ -1159,21 +1165,21 @@
               },
               {
                 "kind": "account",
-                "path": "pool_state"
+                "path": "poolState"
               },
               {
                 "kind": "account",
-                "path": "token_1_mint"
+                "path": "token1Mint"
               }
             ],
             "program": {
               "kind": "account",
-              "path": "cp_swap_program"
+              "path": "cpSwapProgram"
             }
           }
         },
         {
-          "name": "create_pool_fee",
+          "name": "createPoolFee",
           "docs": [
             "create pool fee account"
           ],
@@ -1181,7 +1187,7 @@
           "address": "DNXgeM9EiiaAbaWvwjHj9fQQLAX5ZsfHyvmYUNRAdNC8"
         },
         {
-          "name": "observation_state",
+          "name": "observationState",
           "writable": true,
           "pda": {
             "seeds": [
@@ -1203,43 +1209,43 @@
               },
               {
                 "kind": "account",
-                "path": "pool_state"
+                "path": "poolState"
               }
             ],
             "program": {
               "kind": "account",
-              "path": "cp_swap_program"
+              "path": "cpSwapProgram"
             }
           }
         },
         {
-          "name": "token_program",
+          "name": "tokenProgram",
           "docs": [
             "Program to create mint account and mint tokens"
           ],
           "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
         },
         {
-          "name": "token_0_program",
+          "name": "token0Program",
           "docs": [
             "Spl token program or token program 2022"
           ]
         },
         {
-          "name": "token_1_program",
+          "name": "token1Program",
           "docs": [
             "Spl token program or token program 2022"
           ]
         },
         {
-          "name": "associated_token_program",
+          "name": "associatedTokenProgram",
           "docs": [
             "Program to create an ATA for receiving position NFT"
           ],
           "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
         },
         {
-          "name": "system_program",
+          "name": "systemProgram",
           "docs": [
             "To create a new program account"
           ],
@@ -1255,13 +1261,13 @@
       ],
       "args": [
         {
-          "name": "open_time",
+          "name": "openTime",
           "type": "u64"
         }
       ]
     },
     {
-      "name": "random_airdrop",
+      "name": "randomAirdrop",
       "discriminator": [
         14,
         239,
@@ -1282,7 +1288,7 @@
           "signer": true
         },
         {
-          "name": "bonding_curve_auth",
+          "name": "bondingCurveAuth",
           "writable": true,
           "pda": {
             "seeds": [
@@ -1311,20 +1317,20 @@
               },
               {
                 "kind": "account",
-                "path": "token_0_mint"
+                "path": "token0Mint"
               }
             ]
           }
         },
         {
-          "name": "token_0_mint",
+          "name": "token0Mint",
           "docs": [
             "Mint associated with the meme coin"
           ],
           "writable": true
         },
         {
-          "name": "token_0_payer_ata",
+          "name": "token0PayerAta",
           "docs": [
             "Token account to which the tokens will be minted (created if needed)"
           ],
@@ -1337,11 +1343,11 @@
               },
               {
                 "kind": "account",
-                "path": "token_0_program"
+                "path": "token0Program"
               },
               {
                 "kind": "account",
-                "path": "token_0_mint"
+                "path": "token0Mint"
               }
             ],
             "program": {
@@ -1384,20 +1390,20 @@
           }
         },
         {
-          "name": "token_0_program",
+          "name": "token0Program",
           "docs": [
             "SPL token program for the meme coin"
           ]
         },
         {
-          "name": "system_program",
+          "name": "systemProgram",
           "docs": [
             "System program"
           ],
           "address": "11111111111111111111111111111111"
         },
         {
-          "name": "associated_token_program",
+          "name": "associatedTokenProgram",
           "docs": [
             "Associated token program"
           ],
@@ -1433,10 +1439,10 @@
           "signer": true
         },
         {
-          "name": "token_0_mint"
+          "name": "token0Mint"
         },
         {
-          "name": "bonding_curve_state",
+          "name": "bondingCurveState",
           "writable": true,
           "pda": {
             "seeds": [
@@ -1466,26 +1472,26 @@
               },
               {
                 "kind": "account",
-                "path": "token_0_mint"
+                "path": "token0Mint"
               }
             ]
           }
         },
         {
-          "name": "token_0_program",
+          "name": "token0Program",
           "docs": [
             "Spl token program for meme coin"
           ]
         },
         {
-          "name": "system_program",
+          "name": "systemProgram",
           "address": "11111111111111111111111111111111"
         }
       ],
       "args": []
     },
     {
-      "name": "sell_token",
+      "name": "sellToken",
       "discriminator": [
         109,
         61,
@@ -1503,7 +1509,7 @@
           "signer": true
         },
         {
-          "name": "bonding_curve_auth",
+          "name": "bondingCurveAuth",
           "writable": true,
           "pda": {
             "seeds": [
@@ -1532,13 +1538,13 @@
               },
               {
                 "kind": "account",
-                "path": "token_0_mint"
+                "path": "token0Mint"
               }
             ]
           }
         },
         {
-          "name": "bonding_curve_state",
+          "name": "bondingCurveState",
           "writable": true,
           "pda": {
             "seeds": [
@@ -1568,13 +1574,13 @@
               },
               {
                 "kind": "account",
-                "path": "token_0_mint"
+                "path": "token0Mint"
               }
             ]
           }
         },
         {
-          "name": "trading_fee_auth",
+          "name": "tradingFeeAuth",
           "writable": true,
           "pda": {
             "seeds": [
@@ -1601,24 +1607,24 @@
               },
               {
                 "kind": "account",
-                "path": "token_0_mint"
+                "path": "token0Mint"
               }
             ]
           }
         },
         {
-          "name": "token_0_mint",
+          "name": "token0Mint",
           "docs": [
             "Mint associated with the meme coin"
           ],
           "writable": true
         },
         {
-          "name": "token_0_seller_ata",
+          "name": "token0SellerAta",
           "writable": true
         },
         {
-          "name": "airdrop_auth",
+          "name": "airdropAuth",
           "writable": true,
           "pda": {
             "seeds": [
@@ -1641,13 +1647,13 @@
               },
               {
                 "kind": "account",
-                "path": "token_0_mint"
+                "path": "token0Mint"
               }
             ]
           }
         },
         {
-          "name": "token_0_airdrop_ata",
+          "name": "token0AirdropAta",
           "docs": [
             "Token account to which the tokens will be minted (created if needed)"
           ],
@@ -1656,15 +1662,15 @@
             "seeds": [
               {
                 "kind": "account",
-                "path": "airdrop_auth"
+                "path": "airdropAuth"
               },
               {
                 "kind": "account",
-                "path": "token_0_program"
+                "path": "token0Program"
               },
               {
                 "kind": "account",
-                "path": "token_0_mint"
+                "path": "token0Mint"
               }
             ],
             "program": {
@@ -1707,20 +1713,20 @@
           }
         },
         {
-          "name": "token_0_program",
+          "name": "token0Program",
           "docs": [
             "Token program"
           ]
         },
         {
-          "name": "system_program",
+          "name": "systemProgram",
           "docs": [
             "System program"
           ],
           "address": "11111111111111111111111111111111"
         },
         {
-          "name": "associated_token_program",
+          "name": "associatedTokenProgram",
           "docs": [
             "Associated token program"
           ],
@@ -1735,7 +1741,7 @@
       ]
     },
     {
-      "name": "sync_bonding_curve",
+      "name": "syncBondingCurve",
       "discriminator": [
         66,
         113,
@@ -1757,7 +1763,7 @@
           "signer": true
         },
         {
-          "name": "bonding_curve_auth",
+          "name": "bondingCurveAuth",
           "writable": true,
           "pda": {
             "seeds": [
@@ -1786,13 +1792,13 @@
               },
               {
                 "kind": "account",
-                "path": "token_0_mint"
+                "path": "token0Mint"
               }
             ]
           }
         },
         {
-          "name": "bonding_curve_state",
+          "name": "bondingCurveState",
           "writable": true,
           "pda": {
             "seeds": [
@@ -1822,13 +1828,13 @@
               },
               {
                 "kind": "account",
-                "path": "token_0_mint"
+                "path": "token0Mint"
               }
             ]
           }
         },
         {
-          "name": "token_0_bonding_curve_ata",
+          "name": "token0BondingCurveAta",
           "docs": [
             "Token account to which the tokens will be minted (created if needed)"
           ],
@@ -1837,15 +1843,15 @@
             "seeds": [
               {
                 "kind": "account",
-                "path": "bonding_curve_auth"
+                "path": "bondingCurveAuth"
               },
               {
                 "kind": "account",
-                "path": "token_0_program"
+                "path": "token0Program"
               },
               {
                 "kind": "account",
-                "path": "token_0_mint"
+                "path": "token0Mint"
               }
             ],
             "program": {
@@ -1888,27 +1894,27 @@
           }
         },
         {
-          "name": "token_0_mint",
+          "name": "token0Mint",
           "docs": [
             "Mint associated with the meme coin"
           ],
           "writable": true
         },
         {
-          "name": "token_0_program",
+          "name": "token0Program",
           "docs": [
             "SPL token program for the meme coin"
           ]
         },
         {
-          "name": "system_program",
+          "name": "systemProgram",
           "docs": [
             "System program"
           ],
           "address": "11111111111111111111111111111111"
         },
         {
-          "name": "associated_token_program",
+          "name": "associatedTokenProgram",
           "docs": [
             "Associated token program"
           ],
@@ -1918,7 +1924,7 @@
       "args": []
     },
     {
-      "name": "unlock_airdrop",
+      "name": "unlockAirdrop",
       "discriminator": [
         77,
         142,
@@ -1939,7 +1945,7 @@
           "signer": true
         },
         {
-          "name": "bonding_curve_auth",
+          "name": "bondingCurveAuth",
           "writable": true,
           "pda": {
             "seeds": [
@@ -1968,24 +1974,24 @@
               },
               {
                 "kind": "account",
-                "path": "token_0_mint"
+                "path": "token0Mint"
               }
             ]
           }
         },
         {
-          "name": "token_0_bonding_curve_ata",
+          "name": "token0BondingCurveAta",
           "writable": true
         },
         {
-          "name": "token_0_mint",
+          "name": "token0Mint",
           "docs": [
             "Mint associated with the meme coin"
           ],
           "writable": true
         },
         {
-          "name": "airdrop_auth",
+          "name": "airdropAuth",
           "writable": true,
           "pda": {
             "seeds": [
@@ -2008,17 +2014,17 @@
               },
               {
                 "kind": "account",
-                "path": "token_0_mint"
+                "path": "token0Mint"
               }
             ]
           }
         },
         {
-          "name": "token_0_airdrop_ata",
+          "name": "token0AirdropAta",
           "writable": true
         },
         {
-          "name": "airdrop_state",
+          "name": "airdropState",
           "writable": true,
           "pda": {
             "seeds": [
@@ -2042,26 +2048,26 @@
               },
               {
                 "kind": "account",
-                "path": "token_0_mint"
+                "path": "token0Mint"
               }
             ]
           }
         },
         {
-          "name": "token_0_program",
+          "name": "token0Program",
           "docs": [
             "SPL token program for the meme coin"
           ]
         },
         {
-          "name": "system_program",
+          "name": "systemProgram",
           "docs": [
             "System program"
           ],
           "address": "11111111111111111111111111111111"
         },
         {
-          "name": "associated_token_program",
+          "name": "associatedTokenProgram",
           "docs": [
             "Associated token program"
           ],
@@ -2073,7 +2079,7 @@
   ],
   "accounts": [
     {
-      "name": "AirdropState",
+      "name": "airdropState",
       "discriminator": [
         1,
         49,
@@ -2086,7 +2092,7 @@
       ]
     },
     {
-      "name": "AmmConfig",
+      "name": "ammConfig",
       "discriminator": [
         218,
         244,
@@ -2099,7 +2105,7 @@
       ]
     },
     {
-      "name": "BondingCurveState",
+      "name": "bondingCurveState",
       "discriminator": [
         182,
         185,
@@ -2114,7 +2120,7 @@
   ],
   "events": [
     {
-      "name": "AirdropEvent",
+      "name": "airdropEvent",
       "discriminator": [
         152,
         190,
@@ -2127,7 +2133,7 @@
       ]
     },
     {
-      "name": "CreateEvent",
+      "name": "createEvent",
       "discriminator": [
         27,
         114,
@@ -2140,7 +2146,7 @@
       ]
     },
     {
-      "name": "HarvestEvent",
+      "name": "harvestEvent",
       "discriminator": [
         33,
         112,
@@ -2153,7 +2159,7 @@
       ]
     },
     {
-      "name": "RaydiumEvent",
+      "name": "raydiumEvent",
       "discriminator": [
         135,
         34,
@@ -2166,7 +2172,7 @@
       ]
     },
     {
-      "name": "SwapEvent",
+      "name": "swapEvent",
       "discriminator": [
         64,
         198,
@@ -2182,98 +2188,98 @@
   "errors": [
     {
       "code": 6000,
-      "name": "InsufficientUserSupply",
+      "name": "insufficientUserSupply",
       "msg": "Insufficient token balance"
     },
     {
       "code": 6001,
-      "name": "InsufficientFunds",
+      "name": "insufficientFunds",
       "msg": "Insufficient SOL balance"
     },
     {
       "code": 6002,
-      "name": "AccountNotRentExempt",
+      "name": "accountNotRentExempt",
       "msg": "Account is not rent-exempt"
     },
     {
       "code": 6003,
-      "name": "BondingCurveComplete",
+      "name": "bondingCurveComplete",
       "msg": "Bonding curve is complete"
     },
     {
       "code": 6004,
-      "name": "BondingCurveNotComplete",
+      "name": "bondingCurveNotComplete",
       "msg": "Bonding curve is incomplete"
     },
     {
       "code": 6005,
-      "name": "InsufficientBuyAmount",
+      "name": "insufficientBuyAmount",
       "msg": "Min buy amount is 0.0000001 SOL"
     },
     {
       "code": 6006,
-      "name": "InsufficientReserve",
+      "name": "insufficientReserve",
       "msg": "Insufficient reserve balance"
     },
     {
       "code": 6007,
-      "name": "InvalidInput",
+      "name": "invalidInput",
       "msg": "Invalid input"
     },
     {
       "code": 6008,
-      "name": "UnauthorizedSigner",
+      "name": "unauthorizedSigner",
       "msg": "Unauthorized signer"
     },
     {
       "code": 6009,
-      "name": "InsufficientReward",
+      "name": "insufficientReward",
       "msg": "Insufficient reward balance"
     },
     {
       "code": 6010,
-      "name": "FirstAirdropAlreadyDispatched",
+      "name": "firstAirdropAlreadyDispatched",
       "msg": "First airdrop already dispatched"
     },
     {
       "code": 6011,
-      "name": "NotApproved",
+      "name": "notApproved",
       "msg": "Not approved"
     },
     {
       "code": 6012,
-      "name": "InvalidAirdrop",
+      "name": "invalidAirdrop",
       "msg": "Invalid airdrop amount"
     },
     {
       "code": 6013,
-      "name": "NoPendingAirdrops",
+      "name": "noPendingAirdrops",
       "msg": "No pending airdrops: all airdrops for this milestone have been claimed"
     },
     {
       "code": 6014,
-      "name": "CurveAlreadyInSync",
+      "name": "curveAlreadyInSync",
       "msg": "Curve already in sync: no missing supply to mint"
     },
     {
       "code": 6015,
-      "name": "TargetReserveTooLow",
+      "name": "targetReserveTooLow",
       "msg": "Target reserve must be ≥ 0.3 SOL"
     },
     {
       "code": 6016,
-      "name": "TargetReserveTooHigh",
+      "name": "targetReserveTooHigh",
       "msg": "Target reserve must be ≤ 80 SOL"
     },
     {
       "code": 6017,
-      "name": "DontMigrate",
+      "name": "dontMigrate",
       "msg": "Dont Migrate"
     }
   ],
   "types": [
     {
-      "name": "AirdropEvent",
+      "name": "airdropEvent",
       "docs": [
         "Emitted when new bonding curve is created"
       ],
@@ -2297,15 +2303,15 @@
             "type": "i64"
           },
           {
-            "name": "airdrop_type",
+            "name": "airdropType",
             "type": {
               "defined": {
-                "name": "AirdropType"
+                "name": "airdropType"
               }
             }
           },
           {
-            "name": "airdrop_id",
+            "name": "airdropId",
             "type": {
               "option": "u8"
             }
@@ -2314,7 +2320,7 @@
       }
     },
     {
-      "name": "AirdropState",
+      "name": "airdropState",
       "serialization": "bytemuckunsafe",
       "repr": {
         "kind": "rust",
@@ -2328,7 +2334,7 @@
             "type": "u8"
           },
           {
-            "name": "initial_supply",
+            "name": "initialSupply",
             "type": "u64"
           },
           {
@@ -2339,21 +2345,21 @@
       }
     },
     {
-      "name": "AirdropType",
+      "name": "airdropType",
       "type": {
         "kind": "enum",
         "variants": [
           {
-            "name": "Unlock"
+            "name": "unlock"
           },
           {
-            "name": "Random"
+            "name": "random"
           }
         ]
       }
     },
     {
-      "name": "AmmConfig",
+      "name": "ammConfig",
       "docs": [
         "Holds the current owner of the factory"
       ],
@@ -2368,7 +2374,7 @@
             "type": "u8"
           },
           {
-            "name": "disable_create_pool",
+            "name": "disableCreatePool",
             "docs": [
               "Status to control if new pool can be create"
             ],
@@ -2382,42 +2388,42 @@
             "type": "u16"
           },
           {
-            "name": "trade_fee_rate",
+            "name": "tradeFeeRate",
             "docs": [
               "The trade fee, denominated in hundredths of a bip (10^-6)"
             ],
             "type": "u64"
           },
           {
-            "name": "protocol_fee_rate",
+            "name": "protocolFeeRate",
             "docs": [
               "The protocol fee"
             ],
             "type": "u64"
           },
           {
-            "name": "fund_fee_rate",
+            "name": "fundFeeRate",
             "docs": [
               "The fund fee, denominated in hundredths of a bip (10^-6)"
             ],
             "type": "u64"
           },
           {
-            "name": "create_pool_fee",
+            "name": "createPoolFee",
             "docs": [
               "Fee for create a new pool"
             ],
             "type": "u64"
           },
           {
-            "name": "protocol_owner",
+            "name": "protocolOwner",
             "docs": [
               "Address of the protocol fee owner"
             ],
             "type": "pubkey"
           },
           {
-            "name": "fund_owner",
+            "name": "fundOwner",
             "docs": [
               "Address of the fund fee owner"
             ],
@@ -2439,7 +2445,7 @@
       }
     },
     {
-      "name": "BondingCurveState",
+      "name": "bondingCurveState",
       "type": {
         "kind": "struct",
         "fields": [
@@ -2452,23 +2458,23 @@
             "type": "pubkey"
           },
           {
-            "name": "connector_weight",
+            "name": "connectorWeight",
             "type": "f64"
           },
           {
-            "name": "total_supply",
+            "name": "totalSupply",
             "type": "u64"
           },
           {
-            "name": "initial_supply",
+            "name": "initialSupply",
             "type": "u64"
           },
           {
-            "name": "target_supply",
+            "name": "targetSupply",
             "type": "u64"
           },
           {
-            "name": "reserve_balance",
+            "name": "reserveBalance",
             "type": "u64"
           },
           {
@@ -2480,26 +2486,26 @@
             "type": "f64"
           },
           {
-            "name": "market_cap",
+            "name": "marketCap",
             "type": "f64"
           },
           {
-            "name": "open_time",
+            "name": "openTime",
             "type": "u64"
           },
           {
-            "name": "target_reserve",
+            "name": "targetReserve",
             "type": "u64"
           },
           {
-            "name": "trading_fees",
+            "name": "tradingFees",
             "type": "u64"
           }
         ]
       }
     },
     {
-      "name": "CreateEvent",
+      "name": "createEvent",
       "docs": [
         "Emitted when new bonding curve is created"
       ],
@@ -2515,14 +2521,14 @@
             "type": "pubkey"
           },
           {
-            "name": "open_time",
+            "name": "openTime",
             "type": "u64"
           }
         ]
       }
     },
     {
-      "name": "CreateMintAccountArgs",
+      "name": "createMintAccountArgs",
       "type": {
         "kind": "struct",
         "fields": [
@@ -2542,7 +2548,7 @@
       }
     },
     {
-      "name": "HarvestEvent",
+      "name": "harvestEvent",
       "docs": [
         "Emitted when new bonding curve is created"
       ],
@@ -2569,7 +2575,7 @@
       }
     },
     {
-      "name": "RaydiumEvent",
+      "name": "raydiumEvent",
       "docs": [
         "Emitted when a bonding curve reaches 100% and the token is deployed to raydium"
       ],
@@ -2581,14 +2587,14 @@
             "type": "pubkey"
           },
           {
-            "name": "open_time",
+            "name": "openTime",
             "type": "u64"
           }
         ]
       }
     },
     {
-      "name": "SwapEvent",
+      "name": "swapEvent",
       "type": {
         "kind": "struct",
         "fields": [
@@ -2609,7 +2615,7 @@
             "type": "f64"
           },
           {
-            "name": "token_amount",
+            "name": "tokenAmount",
             "type": "u64"
           },
           {
@@ -2617,14 +2623,14 @@
             "type": "u64"
           },
           {
-            "name": "rent_amount",
+            "name": "rentAmount",
             "type": "u64"
           },
           {
-            "name": "swap_type",
+            "name": "swapType",
             "type": {
               "defined": {
-                "name": "SwapType"
+                "name": "swapType"
               }
             }
           }
@@ -2632,18 +2638,18 @@
       }
     },
     {
-      "name": "SwapType",
+      "name": "swapType",
       "type": {
         "kind": "enum",
         "variants": [
           {
-            "name": "Buy"
+            "name": "buy"
           },
           {
-            "name": "Sell"
+            "name": "sell"
           }
         ]
       }
     }
   ]
-}
+};

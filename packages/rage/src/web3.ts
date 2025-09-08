@@ -1,4 +1,4 @@
-import { Magicmint } from '../target/types/magicmint'
+import { Rage } from '../target/types/rage'
 import {
 	type Signer,
 	type TransactionInstruction,

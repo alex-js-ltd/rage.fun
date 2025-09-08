@@ -1,4 +1,4 @@
-import { Magicmint } from '../target/types/magicmint'
+import { Rage } from '../target/types/rage'
 import { Program, BN, web3, EventParser, BorshCoder, IdlEvents } from '@coral-xyz/anchor'
 import { type Connection, PublicKey, ComputeBudgetProgram, Keypair } from '@solana/web3.js'
 import {
@@ -29,11 +29,11 @@ import {
 	getBondingCurveAuth,
 	getAirdropAuth,
 	getTradingFeeAuth,
-	getMagicMintToken,
+	getRageToken,
 } from './index'
 
 interface SwapTokenIxsParams {
-	program: Program<Magicmint>
+	program: Program<Rage>
 	payer: PublicKey
 	mint: PublicKey
 	uiAmount: string
@@ -129,7 +129,7 @@ export async function getSellTokenIx({ program, payer, mint, uiAmount, decimals 
 }
 
 export interface GetProxyInitIxsParams {
-	program: Program<Magicmint>
+	program: Program<Rage>
 	cluster: CLUSTER
 	mint: PublicKey
 	signer: PublicKey
@@ -246,7 +246,7 @@ export interface CreateMintAccountArgs {
 }
 
 interface GetinitializeIxParams {
-	program: Program<Magicmint>
+	program: Program<Rage>
 	payer: PublicKey
 	creator: PublicKey
 	decimals: number
@@ -255,7 +255,7 @@ interface GetinitializeIxParams {
 }
 
 export async function getInitializeIx({ program, payer, creator, decimals, args, ...rest }: GetinitializeIxParams) {
-	const mint = getMagicMintToken({ program, tokenSymbol: args.symbol })
+	const mint = getRageToken({ program, tokenSymbol: args.symbol })
 
 	const extraMetasAccount = getExtraMetas({ program, mint })
 
@@ -315,7 +315,7 @@ export async function getInitializeIx({ program, payer, creator, decimals, args,
 }
 
 export interface GetUnlockAirdropIxsParams {
-	program: Program<Magicmint>
+	program: Program<Rage>
 	mint: PublicKey
 	payer: PublicKey
 	users: Array<PublicKey>
@@ -367,7 +367,7 @@ export async function getUnlockAirdropIxs({ program, mint, payer, users }: GetUn
 }
 
 interface GetHarvestYieldIxParams {
-	program: Program<Magicmint>
+	program: Program<Rage>
 	creator: PublicKey
 	mint: PublicKey
 }
@@ -404,7 +404,7 @@ export async function getHarvestYieldIx({ program, creator, mint }: GetHarvestYi
 }
 
 export interface GetRandomAirdropIxsParams {
-	program: Program<Magicmint>
+	program: Program<Rage>
 	mint: PublicKey
 	payer: PublicKey
 	uiAmount: string
@@ -456,7 +456,7 @@ export async function getRandomAirdropIxs({
 }
 
 interface SyncBondingCurveIxsParams {
-	program: Program<Magicmint>
+	program: Program<Rage>
 	payer: PublicKey
 	mint: PublicKey
 }
@@ -493,7 +493,7 @@ export async function getSyncBondingCurveIx({ program, payer, mint }: SyncBondin
 }
 
 interface ReallocIxParams {
-	program: Program<Magicmint>
+	program: Program<Rage>
 	payer: PublicKey
 	mint: PublicKey
 }
@@ -522,7 +522,7 @@ export async function getReallocIx({ program, payer, mint }: ReallocIxParams) {
 }
 
 interface MigrateIxParams {
-	program: Program<Magicmint>
+	program: Program<Rage>
 	payer: PublicKey
 	mint: PublicKey
 }

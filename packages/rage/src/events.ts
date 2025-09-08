@@ -1,17 +1,14 @@
-import { Magicmint } from '../target/types/magicmint'
+import { Rage } from '../target/types/rage'
 import { Connection } from '@solana/web3.js'
 import { Program, EventParser, BorshCoder, IdlEvents } from '@coral-xyz/anchor'
-import pLimit from 'p-limit'
 
-export interface Event extends IdlEvents<Program<Magicmint>['idl']> {}
+export interface Event extends IdlEvents<Program<Rage>['idl']> {}
 
 interface FetchAllEventParams {
-	program: Program<Magicmint>
+	program: Program<Rage>
 	connection: Connection
 	signatureList: string[]
 }
-
-const limit = pLimit(4)
 
 export type EventData<E extends keyof Event> = {
 	name: E
@@ -55,7 +52,7 @@ export async function fetchAllEvents({ program, connection, signatureList }: Fet
 	}
 
 	const results = await Promise.all(
-		signatureList.map(sig => limit(() => processEvent(sig))), // set limit > 1
+		signatureList.map(sig => processEvent(sig)), // set limit > 1
 	)
 	return results.flat()
 }

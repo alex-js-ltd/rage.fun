@@ -1,5 +1,5 @@
 {
-  "name": "@repo/magicmint",
+  "name": "@repo/rage",
   "version": "0.0.0",
   "private": true,
   "module": "./dist/index.mjs",

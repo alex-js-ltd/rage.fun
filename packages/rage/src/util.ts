@@ -1,8 +1,8 @@
 import { NATIVE_MINT, TOKEN_PROGRAM_ID, TOKEN_2022_PROGRAM_ID } from '@solana/spl-token'
 import { PublicKey, Keypair } from '@solana/web3.js'
 import { type TokenMetadata } from '@solana/spl-token-metadata'
-import { getMagicMintToken } from './pda'
-import { Magicmint } from '../target/types/magicmint'
+import { getRageToken } from './pda'
+import { Rage } from '../target/types/rage'
 import { Program, BN, web3, EventParser, BorshCoder, IdlEvents } from '@coral-xyz/anchor'
 
 interface Token {
@@ -20,7 +20,7 @@ export const SOL: Pick<Token, 'mint' | 'program' | 'decimals'> = {
 }
 
 interface GenerateToken {
-	program: Program<Magicmint>
+	program: Program<Rage>
 }
 
 export function generateToken({ program }: GenerateToken) {
@@ -28,7 +28,7 @@ export function generateToken({ program }: GenerateToken) {
 	const symbol = 'OPS'
 	const uri = 'https://raw.githubusercontent.com/solana-developers/opos-asset/main/assets/DeveloperPortal/metadata.json'
 
-	const mint = getMagicMintToken({ program, tokenSymbol: symbol })
+	const mint = getRageToken({ program, tokenSymbol: symbol })
 
 	return { name, symbol, uri, mint, decimals: 9 }
 }
