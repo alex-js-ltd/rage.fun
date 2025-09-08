@@ -31,6 +31,8 @@ import {
 	getRageToken,
 } from './index'
 
+import Decimal from 'decimal.js'
+
 interface SwapTokenIxsParams {
 	program: Program<Rage>
 	payer: PublicKey
@@ -388,4 +390,26 @@ export async function getReallocIx({ program, payer, mint }: ReallocIxParams) {
 		.instruction()
 
 	return sync
+}
+
+interface CalculateProgressParams {
+	program: Program<Rage>
+	mint: PublicKey
+}
+
+export async function calculateProgress({ program, mint }: CalculateProgressParams) {
+	const { currentReserve, initialReserve, targetReserve } = await fetchBondingCurveState({ program, mint })
+
+	const cur = new Decimal(currentReserve.toString())
+	const init = new Decimal(initialReserve.toString())
+	const target = new Decimal(targetReserve.toString())
+
+	const denom = target.minus(init)
+	if (denom.lte(0)) return 0
+
+	const num = cur.minus(init)
+
+	const progress = num.div(denom).mul(100).toNumber()
+
+	return progress // % as a JS number
 }
