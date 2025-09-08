@@ -77,7 +77,6 @@ pub fn sell_token(ctx: Context<SellToken>, token_amount: u64) -> Result<()> {
     .base;
 
     require_eq!(ctx.accounts.signer.key(), token_0_seller_ata.owner);
-
     require_eq!(ctx.accounts.token_0_mint.key(), token_0_seller_ata.mint);
 
     if ctx.accounts.bonding_curve_state.status != Status::Funding {
@@ -186,7 +185,7 @@ pub fn sell_token(ctx: Context<SellToken>, token_amount: u64) -> Result<()> {
         ctx.accounts.signer.to_account_info(),
         ctx.accounts.token_0_mint.decimals,
         token_amount,
-        lamports,
+        seller_amount,
         rent_amount,
         SwapType::Sell,
     )?;
