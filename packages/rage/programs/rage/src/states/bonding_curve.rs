@@ -31,6 +31,7 @@ pub struct BondingCurveState {
     pub target_reserve: u64,
 
     pub trading_fees: u64,
+    pub open_time: u64,
 
     pub status: Status,
 }

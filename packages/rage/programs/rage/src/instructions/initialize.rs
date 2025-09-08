@@ -204,6 +204,7 @@ pub fn initialize(
     let curve_payload = BondingCurveState {
         mint: ctx.accounts.token_0_mint.key(),
         creator: creator.key(),
+
         connector_weight,
         decimals,
 
@@ -216,6 +217,7 @@ pub fn initialize(
         target_reserve,
 
         trading_fees,
+        open_time,
 
         status,
     };
