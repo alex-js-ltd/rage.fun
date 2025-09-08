@@ -20,8 +20,8 @@ use crate::utils::token::{
 use anchor_spl::token_interface::spl_token_2022::{self, amount_to_ui_amount, ui_amount_to_amount};
 
 use crate::states::{
-    calculate_initial_supply, calculate_market_cap, calculate_progress,
-    initialize_bonding_curve_state, BondingCurveState, CreateEvent,
+    calculate_initial_supply, calculate_progress, initialize_bonding_curve_state,
+    BondingCurveState, CreateEvent, Status,
 };
 
 use spl_pod::optional_keys::OptionalNonZeroPubkey;
@@ -103,23 +103,11 @@ pub struct Initialize<'info> {
     pub update_authority: UncheckedAccount<'info>,
 }
 
-const MIN_TARGET_RESERVE: u64 = 300_000_000; // 0.3 SOL
-const MAX_TARGET_RESERVE: u64 = 80_000_000_000; // 80 SOL
-
 pub fn initialize(
     ctx: Context<Initialize>,
     token_decimals: u8,
     args: CreateMintAccountArgs,
-    target_reserve: u64,
 ) -> Result<()> {
-    if target_reserve < MIN_TARGET_RESERVE {
-        return Err(ErrorCode::TargetReserveTooLow.into());
-    }
-
-    if target_reserve > MAX_TARGET_RESERVE {
-        return Err(ErrorCode::TargetReserveTooHigh.into());
-    }
-
     let creator = ctx.remaining_accounts.get(0).unwrap();
 
     create_token_metadata(
@@ -167,9 +155,11 @@ pub fn initialize(
         ctx.accounts.system_program.to_account_info(),
     )?;
 
-    let target_supply = ui_amount_to_amount(888_888_888.0, ctx.accounts.token_0_mint.decimals);
+    let target_supply = ui_amount_to_amount(800_000_000.0, ctx.accounts.token_0_mint.decimals);
+    let target_reserve = ui_amount_to_amount(80.0, 9);
+
     let initial_reserve = ui_amount_to_amount(0.000000001, 9);
-    let connector_weight = 0.15;
+    let connector_weight = 0.3;
     let decimals = ctx.accounts.token_0_mint.decimals;
 
     let initial_supply = create_bonding_curve(
@@ -199,35 +189,33 @@ pub fn initialize(
         amount_to_ui_amount(initial_supply, ctx.accounts.token_0_mint.decimals)
     );
 
-    let total_supply = initial_supply;
+    let current_supply = initial_supply;
     let block_timestamp = Clock::get()?.unix_timestamp;
     let open_time = block_timestamp as u64;
 
-    let reserve_balance = get_account_balance(ctx.accounts.bonding_curve_auth.to_account_info())?;
+    let current_reserve = get_account_balance(ctx.accounts.bonding_curve_auth.to_account_info())?;
 
-    require_eq!(reserve_balance, initial_reserve);
+    require_eq!(current_reserve, initial_reserve);
 
-    let locked_supply = initial_supply;
-
-    let progress = calculate_progress(total_supply, target_supply, locked_supply, decimals)?;
-
-    let market_cap =
-        calculate_market_cap(total_supply, reserve_balance, decimals, connector_weight)?;
+    let trading_fees = 0;
 
     let curve_payload = BondingCurveState {
         mint: ctx.accounts.token_0_mint.key(),
         creator: creator.key(),
         connector_weight,
-        total_supply,
-        initial_supply,
-        target_supply,
-        reserve_balance,
         decimals,
-        progress,
-        market_cap,
-        open_time,
+
+        initial_supply,
+        current_supply,
+        target_supply,
+
+        initial_reserve,
+        current_reserve,
         target_reserve,
-        trading_fees: 0,
+
+        trading_fees,
+
+        status: Status::Funding,
     };
 
     initialize_bonding_curve_state(&mut ctx.accounts.bonding_curve_state, curve_payload)?;

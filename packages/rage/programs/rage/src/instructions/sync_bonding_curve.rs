@@ -1,4 +1,4 @@
-use crate::states::{BondingCurveState};
+use crate::states::BondingCurveState;
 use crate::utils::admin::is_admin;
 use crate::utils::seed::{BONDING_CURVE_AUTH_SEED, BONDING_CURVE_STATE_SEED};
 use crate::utils::token::token_mint_to;

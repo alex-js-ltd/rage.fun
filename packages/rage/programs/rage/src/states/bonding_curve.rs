@@ -2,22 +2,37 @@ use anchor_lang::prelude::*;
 use anchor_spl::token_interface::spl_token_2022::amount_to_ui_amount;
 use anchor_spl::token_interface::spl_token_2022::ui_amount_to_amount;
 
+// Need to do this so the enum shows up in the IDL
+#[derive(AnchorSerialize, AnchorDeserialize, Clone, Debug, PartialEq, Eq, InitSpace)]
+pub enum Status {
+    ///
+    Funding,
+    ///
+    Complete,
+    ///
+    Migrated,
+}
+
 #[account]
 #[derive(InitSpace)]
 pub struct BondingCurveState {
     pub mint: Pubkey,
     pub creator: Pubkey,
+
     pub connector_weight: f64,
-    pub total_supply: u64,
-    pub initial_supply: u64,
-    pub target_supply: u64,
-    pub reserve_balance: u64,
     pub decimals: u8,
-    pub progress: f64,
-    pub market_cap: f64,
-    pub open_time: u64,
+
+    pub initial_supply: u64,
+    pub current_supply: u64,
+    pub target_supply: u64,
+
+    pub initial_reserve: u64,
+    pub current_reserve: u64,
     pub target_reserve: u64,
+
     pub trading_fees: u64,
+
+    pub status: Status,
 }
 
 pub fn calculate_buy_amount(
@@ -69,20 +84,17 @@ pub fn calculate_sell_price(
 }
 
 pub fn calculate_progress(
-    total_supply: u64,
-    target_supply: u64,
-    locked_supply: u64,
-    decimals: u8,
+    initial_reserve: u64,
+    current_reserve: u64,
+    target_reserve: u64,
 ) -> Result<f64> {
-    if total_supply == target_supply {
-        return Ok(100.0);
-    }
-    let total_supply = amount_to_ui_amount(total_supply, decimals);
-    let target_supply = amount_to_ui_amount(target_supply, decimals);
-    let locked_supply = amount_to_ui_amount(locked_supply, decimals);
+    let initial_reserve = amount_to_ui_amount(initial_reserve, 9);
+    let current_reserve = amount_to_ui_amount(current_reserve, 9);
+    let target_reserve = amount_to_ui_amount(target_reserve, 9);
 
     // Calculate the progress
-    let progress = ((total_supply - locked_supply) / (target_supply - locked_supply)) * 100.0;
+    let progress =
+        ((current_reserve - initial_reserve) / (target_reserve - initial_reserve)) * 100.0;
 
     Ok(progress.min(100.0))
 }
@@ -102,6 +114,19 @@ pub fn calculate_market_cap(
     let market_cap = price * total_supply;
 
     Ok(market_cap)
+}
+
+pub fn get_status(
+    current_supply: u64,
+    target_supply: u64,
+    current_reserve: u64,
+    target_reserve: u64,
+) -> Status {
+    if current_supply >= target_supply || current_reserve >= target_reserve {
+        Status::Complete
+    } else {
+        Status::Funding
+    }
 }
 
 pub fn calculate_initial_supply(
@@ -151,33 +176,32 @@ pub fn initialize_bonding_curve_state<'a>(
 ) -> Result<()> {
     curve.mint = payload.mint;
     curve.creator = payload.creator;
+
     curve.connector_weight = payload.connector_weight;
-    curve.total_supply = payload.total_supply;
-    curve.initial_supply = payload.initial_supply;
-    curve.target_supply = payload.target_supply;
-    curve.reserve_balance = payload.reserve_balance;
     curve.decimals = payload.decimals;
-    curve.progress = payload.progress;
-    curve.market_cap = payload.market_cap;
-    curve.open_time = payload.open_time;
+
+    curve.initial_supply = payload.initial_supply;
+    curve.current_supply = payload.current_supply;
+    curve.target_supply = payload.target_supply;
+
+    curve.initial_reserve = payload.initial_reserve;
+    curve.current_reserve = payload.current_reserve;
     curve.target_reserve = payload.target_reserve;
+
     curve.trading_fees = payload.trading_fees;
     Ok(())
 }
 
 pub fn update_bonding_curve_state<'a>(
     curve: &mut Account<BondingCurveState>,
-    total_supply: u64,
-    reserve_balance: u64,
-    progress: f64,
-    market_cap: f64,
+    current_supply: u64,
+    current_reserve: u64,
     trading_fees: u64,
+    status: Status,
 ) -> Result<()> {
-    curve.total_supply = total_supply;
-    curve.reserve_balance = reserve_balance;
-    curve.progress = progress;
-    curve.market_cap = market_cap;
+    curve.current_supply = current_supply;
+    curve.current_reserve = current_reserve;
     curve.trading_fees = trading_fees;
-
+    curve.status = status;
     Ok(())
 }

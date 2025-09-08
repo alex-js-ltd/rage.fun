@@ -1,7 +1,7 @@
 use crate::error::ErrorCode;
 use crate::states::{
-    calculate_market_cap, calculate_progress, calculate_sell_price, get_swap_event,
-    update_bonding_curve_state, BondingCurveState, SwapType,
+    calculate_sell_price, get_status, get_swap_event, update_bonding_curve_state,
+    BondingCurveState, Status, SwapType,
 };
 use crate::utils::fees::trading_fee;
 use crate::utils::seed::{
@@ -80,7 +80,7 @@ pub fn sell_token(ctx: Context<SellToken>, token_amount: u64) -> Result<()> {
 
     require_eq!(ctx.accounts.token_0_mint.key(), token_0_seller_ata.mint);
 
-    if ctx.accounts.bonding_curve_state.progress >= 100.0 {
+    if ctx.accounts.bonding_curve_state.status != Status::Funding {
         return Err(ErrorCode::BondingCurveComplete.into());
     }
 
@@ -89,14 +89,14 @@ pub fn sell_token(ctx: Context<SellToken>, token_amount: u64) -> Result<()> {
     }
 
     let lamports = calculate_sell_price(
-        ctx.accounts.bonding_curve_state.total_supply,
+        ctx.accounts.bonding_curve_state.current_supply,
         token_amount,
-        ctx.accounts.bonding_curve_state.reserve_balance,
+        ctx.accounts.bonding_curve_state.current_reserve,
         ctx.accounts.bonding_curve_state.decimals,
         ctx.accounts.bonding_curve_state.connector_weight,
     )?;
 
-    if lamports >= ctx.accounts.bonding_curve_state.reserve_balance {
+    if lamports >= ctx.accounts.bonding_curve_state.current_reserve {
         return Err(ErrorCode::InsufficientReserve.into());
     }
 
@@ -160,35 +160,25 @@ pub fn sell_token(ctx: Context<SellToken>, token_amount: u64) -> Result<()> {
     transfer_sol_from_pda(pda, seller, seller_amount)?;
     transfer_sol_from_pda(pda, trading_fee_account, trading_fee)?;
 
-    let reserve_balance = get_account_balance(ctx.accounts.bonding_curve_auth.to_account_info())?;
-
-    let total_supply = ctx.accounts.bonding_curve_state.total_supply - token_amount;
-
-    let locked_supply = ctx.accounts.bonding_curve_state.initial_supply;
-
-    let progress = calculate_progress(
-        total_supply,
-        ctx.accounts.bonding_curve_state.target_supply,
-        locked_supply,
-        ctx.accounts.bonding_curve_state.decimals,
-    )?;
-
-    let market_cap = calculate_market_cap(
-        total_supply,
-        reserve_balance,
-        ctx.accounts.bonding_curve_state.decimals,
-        ctx.accounts.bonding_curve_state.connector_weight,
-    )?;
-
+    let current_supply = ctx.accounts.bonding_curve_state.current_supply - token_amount;
+    let target_supply = ctx.accounts.bonding_curve_state.target_supply;
+    let current_reserve = get_account_balance(ctx.accounts.bonding_curve_auth.to_account_info())?;
+    let target_reserve = ctx.accounts.bonding_curve_state.target_reserve;
     let trading_fees = get_account_balance(ctx.accounts.trading_fee_auth.to_account_info())?;
+
+    let status = get_status(
+        current_supply,
+        target_supply,
+        current_reserve,
+        target_reserve,
+    );
 
     update_bonding_curve_state(
         &mut ctx.accounts.bonding_curve_state,
-        total_supply,
-        reserve_balance,
-        progress,
-        market_cap,
+        current_supply,
+        current_reserve,
         trading_fees,
+        status,
     )?;
 
     let event = get_swap_event(
