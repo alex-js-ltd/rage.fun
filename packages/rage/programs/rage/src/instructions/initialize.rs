@@ -199,6 +199,8 @@ pub fn initialize(
 
     let trading_fees = 0;
 
+    let status = Status::Funding;
+
     let curve_payload = BondingCurveState {
         mint: ctx.accounts.token_0_mint.key(),
         creator: creator.key(),
@@ -215,7 +217,7 @@ pub fn initialize(
 
         trading_fees,
 
-        status: Status::Funding,
+        status,
     };
 
     initialize_bonding_curve_state(&mut ctx.accounts.bonding_curve_state, curve_payload)?;
