@@ -4,24 +4,24 @@
 resolution = true
 skip-lint = false
 
-[programs.localnet]
-magicmint = "E6fmMvQjzN3bEhk9bVffSmK13yRezBp8xqPdpno5oXdV"
-
 [programs.devnet]
-magicmint = "E6fmMvQjzN3bEhk9bVffSmK13yRezBp8xqPdpno5oXdV"
+rage = "DUShtzhevyTnQLXQmQaT9EfjjjGhg26m6yXHav3vwe6Z"
+
+[programs.localnet]
+rage = "DUShtzhevyTnQLXQmQaT9EfjjjGhg26m6yXHav3vwe6Z"
 
 [programs.mainnet]
-magicmint = "E6fmMvQjzN3bEhk9bVffSmK13yRezBp8xqPdpno5oXdV"
+rage = "DUShtzhevyTnQLXQmQaT9EfjjjGhg26m6yXHav3vwe6Z"
 
 [registry]
 url = "https://api.apr.dev"
 
 [provider]
-cluster = "localnet"
+cluster = "Localnet"
 wallet = "~/.config/solana/id.json"
 
 [scripts]
-test = "pnpm run jest src/__tests__/proxy.test.ts"
+test = "pnpm run jest src/__tests__/initialize.test.ts"
 
 [test]
 startup_wait = 8000

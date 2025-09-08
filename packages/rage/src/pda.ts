@@ -46,18 +46,6 @@ export async function fetchBondingCurveState({ program, mint }: { program: Progr
 
 export type BondingCurveState = Awaited<ReturnType<typeof fetchBondingCurveState>>
 
-export function getAirdropState({ program, mint }: { program: Program<Rage>; mint: PublicKey }): PublicKey {
-	return PublicKey.findProgramAddressSync([Buffer.from('airdrop_state'), mint.toBuffer()], program.programId)[0]
-}
-
-export async function fetchAirdropState({ program, mint }: { program: Program<Rage>; mint: PublicKey }) {
-	const pda = getAirdropState({ program, mint })
-
-	const data = await program.account.airdropState.fetch(pda)
-
-	return data
-}
-
 export async function fetchTradingFeeYield({
 	program,
 	mint,

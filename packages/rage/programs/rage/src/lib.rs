@@ -6,7 +6,7 @@ pub mod utils;
 use anchor_lang::prelude::*;
 use instructions::*;
 
-declare_id!("E6fmMvQjzN3bEhk9bVffSmK13yRezBp8xqPdpno5oXdV");
+declare_id!("DUShtzhevyTnQLXQmQaT9EfjjjGhg26m6yXHav3vwe6Z");
 
 #[program]
 pub mod rage {

@@ -25,7 +25,6 @@ import {
 	getCPMMConfig,
 	fetchBondingCurveState,
 	isRentExempt,
-	getAirdropState,
 	getBondingCurveAuth,
 	getAirdropAuth,
 	getTradingFeeAuth,
@@ -47,8 +46,6 @@ export async function getBuyTokenIx({ program, payer, mint, uiAmount, decimals }
 
 	const amount = uiAmountToAmount(uiAmount, decimals)
 
-	const airdropState = getAirdropState({ program, mint })
-
 	const bondingCurveAuth = getBondingCurveAuth({ program, mint })
 
 	const bondingCurveState = getBondingCurveState({
@@ -56,9 +53,6 @@ export async function getBuyTokenIx({ program, payer, mint, uiAmount, decimals }
 		mint,
 	})
 
-	const airdropAuth = getAirdropAuth({ program, mint })
-
-	const token0AirdropAta = await getAssociatedTokenAddress(mint, airdropAuth, true, TOKEN_2022_PROGRAM_ID)
 	const buy = await program.methods
 		.buyToken(amount)
 		.accountsStrict({
@@ -75,10 +69,6 @@ export async function getBuyTokenIx({ program, payer, mint, uiAmount, decimals }
 			systemProgram: web3.SystemProgram.programId,
 			associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
 			token0Program: TOKEN_2022_PROGRAM_ID,
-
-			airdropAuth,
-			token0AirdropAta,
-			airdropState,
 		})
 		.instruction()
 
@@ -99,10 +89,6 @@ export async function getSellTokenIx({ program, payer, mint, uiAmount, decimals 
 		mint,
 	})
 
-	const airdropAuth = getAirdropAuth({ program, mint })
-
-	const token0AirdropAta = await getAssociatedTokenAddress(mint, airdropAuth, true, TOKEN_2022_PROGRAM_ID)
-
 	const sell = await program.methods
 		.sellToken(amount)
 		.accountsStrict({
@@ -119,9 +105,6 @@ export async function getSellTokenIx({ program, payer, mint, uiAmount, decimals 
 			systemProgram: web3.SystemProgram.programId,
 			associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
 			token0Program: TOKEN_2022_PROGRAM_ID,
-
-			airdropAuth,
-			token0AirdropAta,
 		})
 		.instruction()
 
@@ -266,10 +249,6 @@ export async function getInitializeIx({ program, payer, creator, decimals, args,
 		mint,
 	})
 
-	const airdropAuth = getAirdropAuth({ program, mint })
-	const token0AirdropAta = await getAssociatedTokenAddress(mint, airdropAuth, true, TOKEN_2022_PROGRAM_ID)
-	const airdropState = getAirdropState({ program, mint })
-
 	const tradingFeeAuth = getTradingFeeAuth({ program, mint })
 
 	const updateAuthority = new PublicKey('4GnStCzLnYzE1WLnXJnkbHBf64ZDdkpnPr2VFJnGJHCN')
@@ -292,10 +271,6 @@ export async function getInitializeIx({ program, payer, creator, decimals, args,
 			token0BondingCurveAta,
 			bondingCurveState,
 
-			airdropAuth,
-			token0AirdropAta,
-			airdropState,
-
 			tradingFeeAuth,
 
 			updateAuthority,
@@ -312,58 +287,6 @@ export async function getInitializeIx({ program, payer, creator, decimals, args,
 	})
 
 	return [modifyComputeUnits, init]
-}
-
-export interface GetUnlockAirdropIxsParams {
-	program: Program<Rage>
-	mint: PublicKey
-	payer: PublicKey
-	users: Array<PublicKey>
-}
-
-export async function getUnlockAirdropIxs({ program, mint, payer, users }: GetUnlockAirdropIxsParams) {
-	const computeUnitIx = ComputeBudgetProgram.setComputeUnitLimit({
-		units: 400000,
-	})
-
-	const bondingCurveAuth = getBondingCurveAuth({ program, mint })
-
-	const token0BondingCurveAta = await getAssociatedTokenAddress(mint, bondingCurveAuth, true, TOKEN_2022_PROGRAM_ID)
-
-	const airdropAuth = getAirdropAuth({ program, mint })
-
-	const token0AirdropAta = await getAssociatedTokenAddress(mint, airdropAuth, true, TOKEN_2022_PROGRAM_ID)
-
-	const airdropState = getAirdropState({ program, mint })
-
-	const airdrop = await program.methods
-		.unlockAirdrop()
-		.accountsStrict({
-			payer,
-			token0Mint: mint,
-
-			airdropAuth,
-			token0AirdropAta,
-			airdropState,
-
-			bondingCurveAuth,
-			token0BondingCurveAta,
-
-			systemProgram: web3.SystemProgram.programId,
-			associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
-			token0Program: TOKEN_2022_PROGRAM_ID,
-		})
-		.remainingAccounts(
-			users.map(pubkey => ({
-				pubkey,
-				isSigner: false,
-				isWritable: true,
-			})),
-		)
-
-		.instruction()
-
-	return [computeUnitIx, airdrop]
 }
 
 interface GetHarvestYieldIxParams {
@@ -401,58 +324,6 @@ export async function getHarvestYieldIx({ program, creator, mint }: GetHarvestYi
 		.instruction()
 
 	return init
-}
-
-export interface GetRandomAirdropIxsParams {
-	program: Program<Rage>
-	mint: PublicKey
-	payer: PublicKey
-	uiAmount: string
-	decimals: number
-	users: Array<PublicKey>
-}
-
-export async function getRandomAirdropIxs({
-	program,
-	mint,
-	payer,
-	uiAmount,
-	decimals,
-	users,
-}: GetRandomAirdropIxsParams) {
-	const computeUnitIx = ComputeBudgetProgram.setComputeUnitLimit({
-		units: 400000,
-	})
-
-	const bondingCurveAuth = getBondingCurveAuth({ program, mint })
-
-	const amount = uiAmountToAmount(uiAmount, decimals)
-
-	const token0PayerAta = await getAssociatedTokenAddress(mint, payer, true, TOKEN_2022_PROGRAM_ID)
-	const airdrop = await program.methods
-		.randomAirdrop(amount)
-		.accountsStrict({
-			payer,
-			token0Mint: mint,
-
-			bondingCurveAuth,
-			token0PayerAta,
-
-			systemProgram: web3.SystemProgram.programId,
-			associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
-			token0Program: TOKEN_2022_PROGRAM_ID,
-		})
-		.remainingAccounts(
-			users.map(pubkey => ({
-				pubkey,
-				isSigner: false,
-				isWritable: true,
-			})),
-		)
-
-		.instruction()
-
-	return [computeUnitIx, airdrop]
 }
 
 interface SyncBondingCurveIxsParams {
@@ -519,57 +390,4 @@ export async function getReallocIx({ program, payer, mint }: ReallocIxParams) {
 		.instruction()
 
 	return sync
-}
-
-interface MigrateIxParams {
-	program: Program<Rage>
-	payer: PublicKey
-	mint: PublicKey
-}
-
-export async function getMigrateIx({ program, payer, mint }: MigrateIxParams) {
-	const bondingCurveState = getBondingCurveState({
-		program,
-		mint,
-	})
-
-	const bondingCurveAuth = getBondingCurveAuth({ program, mint })
-
-	const token0BondingCurveAta = await getAssociatedTokenAddress(mint, bondingCurveAuth, true, TOKEN_2022_PROGRAM_ID)
-
-	const airdropAuth = getAirdropAuth({ program, mint })
-
-	const token0AirdropAta = await getAssociatedTokenAddress(mint, airdropAuth, true, TOKEN_2022_PROGRAM_ID)
-
-	const airdropState = getAirdropState({ program, mint })
-
-	const wallets = Array.from({ length: 1 }, () => Keypair.generate())
-
-	const accounts = wallets.map(w => w.publicKey)
-
-	const users = getAccountsToAirdrop({ accounts, mint })
-
-	const tradingFeeAuth = getTradingFeeAuth({ program, mint })
-
-	const mig = await program.methods
-		.migrate()
-		.accountsStrict({
-			payer,
-			token0Mint: mint,
-			bondingCurveAuth,
-			bondingCurveState,
-			tradingFeeAuth,
-			systemProgram: web3.SystemProgram.programId,
-
-			token0Program: TOKEN_2022_PROGRAM_ID,
-			associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
-		})
-
-		.instruction()
-
-	const computeUnitIx = ComputeBudgetProgram.setComputeUnitLimit({
-		units: 400000,
-	})
-
-	return [mig]
 }

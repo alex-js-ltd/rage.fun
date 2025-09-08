@@ -54,6 +54,12 @@ pub fn calculate_price(token_amount: u64, lamports: u64, decimals: u8) -> Result
     let sol = spl_token_2022::amount_to_ui_amount(lamports, 9);
     let price = sol / token_amount;
 
+    msg!("calculate_price:");
+
+    msg!("  sol = {}", sol);
+
+    msg!("  token amount = {}", token_amount);
+
     Ok(price)
 }
 

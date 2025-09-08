@@ -15,7 +15,6 @@ import {
 	getSyncBondingCurveIx,
 	getReallocIx,
 	getAccountsToAirdrop,
-	getUnlockAirdropIxs,
 } from '../index'
 
 describe('proxy test', () => {

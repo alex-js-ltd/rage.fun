@@ -1,5 +1,5 @@
 {
-  "address": "E6fmMvQjzN3bEhk9bVffSmK13yRezBp8xqPdpno5oXdV",
+  "address": "DUShtzhevyTnQLXQmQaT9EfjjjGhg26m6yXHav3vwe6Z",
   "metadata": {
     "name": "rage",
     "version": "0.1.0",
@@ -454,40 +454,7 @@
           }
         },
         {
-          "name": "airdrop_auth",
-          "writable": true,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "value": [
-                  97,
-                  105,
-                  114,
-                  100,
-                  114,
-                  111,
-                  112,
-                  95,
-                  97,
-                  117,
-                  116,
-                  104
-                ]
-              },
-              {
-                "kind": "account",
-                "path": "token_0_mint"
-              }
-            ]
-          }
-        },
-        {
           "name": "token_0_bonding_curve_ata",
-          "writable": true
-        },
-        {
-          "name": "token_0_airdrop_ata",
           "writable": true
         },
         {
@@ -514,36 +481,6 @@
                   114,
                   118,
                   101,
-                  95,
-                  115,
-                  116,
-                  97,
-                  116,
-                  101
-                ]
-              },
-              {
-                "kind": "account",
-                "path": "token_0_mint"
-              }
-            ]
-          }
-        },
-        {
-          "name": "airdrop_state",
-          "writable": true,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "value": [
-                  97,
-                  105,
-                  114,
-                  100,
-                  114,
-                  111,
-                  112,
                   95,
                   115,
                   116,

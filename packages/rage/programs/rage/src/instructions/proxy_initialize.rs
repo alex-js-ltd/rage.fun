@@ -16,10 +16,10 @@ use anchor_spl::token::spl_token::native_mint;
 
 use crate::states::{BondingCurveState, RaydiumEvent};
 
-use crate::utils::seed::{AIRDROP_AUTH_SEED, BONDING_CURVE_AUTH_SEED, BONDING_CURVE_STATE_SEED};
+use crate::utils::seed::{BONDING_CURVE_AUTH_SEED, BONDING_CURVE_STATE_SEED};
 use crate::utils::token::{
     assign_from_pda, create_or_allocate_account, create_wrapped_sol, get_account_balance,
-    get_or_create_ata, set_authority_with_signer, token_mint_to, transfer_from_pool_vault_to_user,
+    get_or_create_ata, set_authority_with_signer, token_mint_to,
 };
 
 use anchor_spl::token_interface::spl_token_2022::instruction::AuthorityType;

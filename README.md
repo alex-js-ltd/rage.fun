@@ -1,4 +1,4 @@
-# Turborepo magicmint.fun
+# Turborepo rage.fun
 
 solana-test-validator --reset \
 --clone CPMMoo8L3F4NbTegBCKVNunggL7H1ZpdTHKxQB5qKP1C \
@@ -28,4 +28,3 @@ solana program extend E6fmMvQjzN3bEhk9bVffSmK13yRezBp8xqPdpno5oXdV 200000
 
 solana program deploy --buffer recover.json target/deploy/magicmint.so --program-id
 E6fmMvQjzN3bEhk9bVffSmK13yRezBp8xqPdpno5oXdV
-# rage.fun

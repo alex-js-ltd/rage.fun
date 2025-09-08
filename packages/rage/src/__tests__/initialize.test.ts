@@ -15,14 +15,11 @@ import {
 	bigintToUiAmount,
 	getAccountsToAirdrop,
 	getInitializeIx,
-	fetchAirdropState,
-	getUnlockAirdropIxs,
 	getBondingCurveAuth,
 	getAirdropAuth,
 	getHarvestYieldIx,
 	getRageToken,
 	generateToken,
-	getRandomAirdropIxs,
 } from '../index'
 import { TOKEN_2022_PROGRAM_ID, getMint, getAssociatedTokenAddress, getAccount } from '@solana/spl-token'
 
@@ -46,11 +43,6 @@ describe('Launch', () => {
 	})
 
 	const bondingCurveState = getBondingCurveState({
-		program,
-		mint: token.mint,
-	})
-
-	const airdropAuth = getAirdropAuth({
 		program,
 		mint: token.mint,
 	})
@@ -110,10 +102,6 @@ describe('Launch', () => {
 		console.log('target_supply:', state.targetSupply.toString())
 
 		console.log('cw:', state.connectorWeight)
-
-		const airdropState = await fetchAirdropState({ program, mint: token.mint })
-
-		console.log('airdrop state:', airdropState)
 	})
 
 	it('check bonding curve mint authority is rent exempt', async () => {
@@ -174,180 +162,45 @@ describe('Launch', () => {
 			console.log('target_supply:', state.targetSupply.toString())
 
 			console.log('cw:', state.connectorWeight)
-
-			const airdropState = await fetchAirdropState({ program, mint: token.mint })
-
-			console.log('airdrop state:', airdropState)
 		}
 	}, 50000)
 
-	// it('test airdrop', async () => {
-	// 	const arr = [1, 2, 3]
+	// it('sell all tokens', async () => {
+	// 	const payerAta = await getAssociatedTokenAddress(token.mint, payer.publicKey, true, TOKEN_2022_PROGRAM_ID)
 
-	// 	for (const a of arr) {
-	// 		const wallets = newUsers.map(u => u.publicKey)
+	// 	const account = await getAccount(connection, payerAta, 'confirmed', TOKEN_2022_PROGRAM_ID)
 
-	// 		const users = getAccountsToAirdrop({ accounts: wallets, mint: token.mint })
+	// 	const uiAmount = bigintToUiAmount(account.amount, token.decimals)
 
-	// 		const ixs = await getUnlockAirdropIxs({
-	// 			program,
-	// 			payer: payer.publicKey,
-	// 			mint: token.mint,
-
-	// 			users,
-	// 		})
-
-	// 		const tx = await buildTransaction({
-	// 			connection: connection,
-	// 			payer: payer.publicKey,
-	// 			instructions: [...ixs],
-	// 			signers: [],
-	// 		})
-
-	// 		payer.signTransaction(tx)
-
-	// 		const res = await connection.simulateTransaction(tx)
-	// 		console.log(res.value.logs)
-	// 		await sendAndConfirm({ connection, tx })
-
-	// 		const airdropState = await fetchAirdropState({ program, mint: token.mint })
-
-	// 		console.log('airdrop state:', airdropState)
-
-	// 		const state = await fetchBondingCurveState({ program, mint: token.mint })
-	// 		console.log('total supply:', state.totalSupply.toString())
-	// 		console.log('reserve balance:', state.reserveBalance.toString())
-	// 		console.log('progress:', state.progress.toString())
-	// 	}
-
-	// 	const airdropAta = await getAssociatedTokenAddress(token.mint, airdropAuth, true, TOKEN_2022_PROGRAM_ID)
-
-	// 	const account = await getAccount(connection, airdropAta, 'confirmed', TOKEN_2022_PROGRAM_ID)
-
-	// 	console.log('airdrop account', account.amount.toString())
-	// }, 3000)
-
-	// it('welcome airdrop', async () => {
-	// 	const arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-
-	// 	for (const a of arr) {
-	// 		const wallets = newUsers.map(u => u.publicKey)
-
-	// 		const users = getAccountsToAirdrop({ accounts: wallets, mint: token.mint })
-
-	// 		const ixs = await getRandomAirdropIxs({
-	// 			program,
-	// 			payer: payer.publicKey,
-	// 			mint: token.mint,
-	// 			uiAmount: '2222222.22',
-	// 			decimals: token.decimals,
-	// 			users,
-	// 		})
-
-	// 		const tx = await buildTransaction({
-	// 			connection: connection,
-	// 			payer: payer.publicKey,
-	// 			instructions: [...ixs],
-	// 			signers: [],
-	// 		})
-
-	// 		payer.signTransaction(tx)
-
-	// 		const res = await connection.simulateTransaction(tx)
-	// 		console.log(res.value.logs)
-	// 		await sendAndConfirm({ connection, tx })
-
-	// 		const airdropState = await fetchAirdropState({ program, mint: token.mint })
-
-	// 		console.log('airdrop state:', airdropState)
-
-	// 		const state = await fetchBondingCurveState({ program, mint: token.mint })
-	// 		console.log('total supply:', state.totalSupply.toString())
-	// 		console.log('reserve balance:', state.reserveBalance.toString())
-	// 		console.log('progress:', state.progress.toString())
-	// 	}
-
-	// 	const airdropAta = await getAssociatedTokenAddress(token.mint, airdropAuth, true, TOKEN_2022_PROGRAM_ID)
-
-	// 	const account = await getAccount(connection, airdropAta, 'confirmed', TOKEN_2022_PROGRAM_ID)
-
-	// 	console.log('airdrop account', account.amount.toString())
-	// })
-
-	// it('migrate', async () => {
-	// 	const arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-
-	// 	const ixs = await getMigrateIxs({
+	// 	const ix = await getSellTokenIx({
 	// 		program,
 	// 		payer: payer.publicKey,
 	// 		mint: token.mint,
+	// 		uiAmount: uiAmount,
+	// 		decimals: token.decimals,
 	// 	})
 
 	// 	const tx = await buildTransaction({
 	// 		connection: connection,
 	// 		payer: payer.publicKey,
-	// 		instructions: [...ixs],
+	// 		instructions: [ix],
 	// 		signers: [],
 	// 	})
 
+	// 	// tx.sign([payer])
+
 	// 	payer.signTransaction(tx)
 
+	// 	// Simulate the transaction
 	// 	const res = await connection.simulateTransaction(tx)
 	// 	console.log(res.value.logs)
 	// 	await sendAndConfirm({ connection, tx })
 
-	// 	const airdropState = await fetchAirdropState({ program, mint: token.mint })
-
-	// 	console.log('airdrop state:', airdropState)
-
-	// 	const state = await fetchBondingCurveState({ program, mint: token.mint })
-	// 	console.log('total supply:', state.totalSupply.toString())
-	// 	console.log('reserve balance:', state.reserveBalance.toString())
-	// 	console.log('progress:', state.progress.toString())
-
-	// 	const airdropAta = await getAssociatedTokenAddress(token.mint, airdropAuth, true, TOKEN_2022_PROGRAM_ID)
-
-	// 	const account = await getAccount(connection, airdropAta, 'confirmed', TOKEN_2022_PROGRAM_ID)
-
-	// 	console.log('airdrop account', account.amount.toString())
+	// 	// const state = await fetchBondingCurveState({ program, mint: token.mint })
+	// 	// console.log('total supply:', state.totalSupply.toString())
+	// 	// console.log('reserve balance:', state.reserveBalance.toString())
+	// 	// console.log('progress:', state.progress.toString())
 	// })
-
-	it('sell all tokens', async () => {
-		const payerAta = await getAssociatedTokenAddress(token.mint, payer.publicKey, true, TOKEN_2022_PROGRAM_ID)
-
-		const account = await getAccount(connection, payerAta, 'confirmed', TOKEN_2022_PROGRAM_ID)
-
-		const uiAmount = bigintToUiAmount(account.amount, token.decimals)
-
-		const ix = await getSellTokenIx({
-			program,
-			payer: payer.publicKey,
-			mint: token.mint,
-			uiAmount: uiAmount,
-			decimals: token.decimals,
-		})
-
-		const tx = await buildTransaction({
-			connection: connection,
-			payer: payer.publicKey,
-			instructions: [ix],
-			signers: [],
-		})
-
-		// tx.sign([payer])
-
-		payer.signTransaction(tx)
-
-		// Simulate the transaction
-		const res = await connection.simulateTransaction(tx)
-		console.log(res.value.logs)
-		await sendAndConfirm({ connection, tx })
-
-		// const state = await fetchBondingCurveState({ program, mint: token.mint })
-		// console.log('total supply:', state.totalSupply.toString())
-		// console.log('reserve balance:', state.reserveBalance.toString())
-		// console.log('progress:', state.progress.toString())
-	})
 
 	// it('user should have 0 tokens', async () => {
 	// 	const payerAta = await getAssociatedTokenAddress(token.mint, payer.publicKey, true, TOKEN_2022_PROGRAM_ID)

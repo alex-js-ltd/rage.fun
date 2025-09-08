@@ -62,7 +62,7 @@ type GroupedEvents = {
 }
 
 export function groupEvents<E extends keyof Event>(data: Array<EventData<E>>) {
-	const start: GroupedEvents = { swapEvent: [], createEvent: [], airdropEvent: [], harvestEvent: [], raydiumEvent: [] }
+	const start: GroupedEvents = { swapEvent: [], createEvent: [], harvestEvent: [], raydiumEvent: [] }
 
 	return data.reduce((acc, curr) => {
 		const name = curr.name

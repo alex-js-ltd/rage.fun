@@ -27,8 +27,8 @@ use crate::states::{
 use spl_pod::optional_keys::OptionalNonZeroPubkey;
 
 use crate::utils::seed::{
-    AIRDROP_AUTH_SEED, AIRDROP_STATE_SEED, BONDING_CURVE_AUTH_SEED, BONDING_CURVE_STATE_SEED,
-    MAGIC_MINT_TOKEN_SEED, META_LIST_ACCOUNT_SEED, TRADING_FEE_AUTH_SEED,
+    BONDING_CURVE_AUTH_SEED, BONDING_CURVE_STATE_SEED, MAGIC_MINT_TOKEN_SEED,
+    META_LIST_ACCOUNT_SEED, TRADING_FEE_AUTH_SEED,
 };
 
 use crate::error::ErrorCode;
@@ -81,20 +81,9 @@ pub struct Initialize<'info> {
         )]
     pub bonding_curve_auth: UncheckedAccount<'info>,
 
-    /// CHECK: pda to control vault_meme_ata & lamports
-    #[account(mut,
-        seeds = [AIRDROP_AUTH_SEED.as_bytes(), token_0_mint.key().as_ref()],
-        bump,
-    )]
-    pub airdrop_auth: UncheckedAccount<'info>,
-
     /// CHECK: ATA for bonding curve vault (created manually to save stack space)
     #[account(mut)]
     pub token_0_bonding_curve_ata: UncheckedAccount<'info>,
-
-    /// CHECK: ATA for airdrop vault (created manually to save stack space)
-    #[account(mut)]
-    pub token_0_airdrop_ata: UncheckedAccount<'info>,
 
     /// pda to store bonding curve state
     #[account(init,
@@ -104,17 +93,6 @@ pub struct Initialize<'info> {
             space = 8 + BondingCurveState::INIT_SPACE
         )]
     pub bonding_curve_state: Account<'info, BondingCurveState>,
-
-    /// CHECK: pda for airdrop state
-    #[account(
-        mut,
-        seeds = [
-            AIRDROP_STATE_SEED.as_bytes(),
-            token_0_mint.key().as_ref(),
-        ],
-        bump,
-    )]
-    pub airdrop_state: UncheckedAccount<'info>,
 
     /// CHECK: pda to control reward pool
     #[account(mut)]

@@ -5,7 +5,7 @@
  * IDL can be found at `target/idl/rage.json`.
  */
 export type Rage = {
-  "address": "E6fmMvQjzN3bEhk9bVffSmK13yRezBp8xqPdpno5oXdV",
+  "address": "DUShtzhevyTnQLXQmQaT9EfjjjGhg26m6yXHav3vwe6Z",
   "metadata": {
     "name": "rage",
     "version": "0.1.0",
@@ -460,40 +460,7 @@ export type Rage = {
           }
         },
         {
-          "name": "airdropAuth",
-          "writable": true,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "value": [
-                  97,
-                  105,
-                  114,
-                  100,
-                  114,
-                  111,
-                  112,
-                  95,
-                  97,
-                  117,
-                  116,
-                  104
-                ]
-              },
-              {
-                "kind": "account",
-                "path": "token0Mint"
-              }
-            ]
-          }
-        },
-        {
           "name": "token0BondingCurveAta",
-          "writable": true
-        },
-        {
-          "name": "token0AirdropAta",
           "writable": true
         },
         {
@@ -520,36 +487,6 @@ export type Rage = {
                   114,
                   118,
                   101,
-                  95,
-                  115,
-                  116,
-                  97,
-                  116,
-                  101
-                ]
-              },
-              {
-                "kind": "account",
-                "path": "token0Mint"
-              }
-            ]
-          }
-        },
-        {
-          "name": "airdropState",
-          "writable": true,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "value": [
-                  97,
-                  105,
-                  114,
-                  100,
-                  114,
-                  111,
-                  112,
                   95,
                   115,
                   116,
