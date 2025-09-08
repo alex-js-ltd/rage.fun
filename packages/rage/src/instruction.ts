@@ -253,11 +253,9 @@ export async function getInitializeIx({ program, payer, creator, decimals, args,
 
 	const updateAuthority = new PublicKey('4GnStCzLnYzE1WLnXJnkbHBf64ZDdkpnPr2VFJnGJHCN')
 
-	const targetReserve = uiAmountToAmount(rest.targetReserve, 9)
-
 	const init = await program.methods
 
-		.initialize(decimals, args, targetReserve)
+		.initialize(decimals, args)
 		.accountsStrict({
 			payer: payer,
 			token0Mint: mint,

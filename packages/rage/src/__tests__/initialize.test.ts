@@ -91,15 +91,11 @@ describe('Launch', () => {
 		console.log('Transaction size in bytes:', txSize)
 
 		const state = await fetchBondingCurveState({ program, mint: token.mint })
-
-		console.log('total supply:', amountToUiAmount(state.totalSupply, token.decimals))
 		console.log('initial supply:', amountToUiAmount(state.initialSupply, token.decimals))
-
-		console.log('reserve balance:', state.reserveBalance.toString())
-		console.log('progress:', state.progress.toString())
-		console.log('market cap:', state.marketCap.toString())
-
+		console.log('current supply:', amountToUiAmount(state.currentSupply, token.decimals))
 		console.log('target_supply:', state.targetSupply.toString())
+
+		console.log('current reserve:', state.currentReserve.toString())
 
 		console.log('cw:', state.connectorWeight)
 	})
@@ -152,14 +148,11 @@ describe('Launch', () => {
 
 			const state = await fetchBondingCurveState({ program, mint: token.mint })
 
-			console.log('total supply:', amountToUiAmount(state.totalSupply, token.decimals))
 			console.log('initial supply:', amountToUiAmount(state.initialSupply, token.decimals))
-
-			console.log('reserve balance:', state.reserveBalance.toString())
-			console.log('progress:', state.progress.toString())
-			console.log('market cap:', state.marketCap.toString())
-
+			console.log('current supply:', amountToUiAmount(state.currentSupply, token.decimals))
 			console.log('target_supply:', state.targetSupply.toString())
+
+			console.log('current reserve:', state.currentReserve.toString())
 
 			console.log('cw:', state.connectorWeight)
 		}
