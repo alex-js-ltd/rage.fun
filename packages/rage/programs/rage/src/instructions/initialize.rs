@@ -20,8 +20,8 @@ use crate::utils::token::{
 use anchor_spl::token_interface::spl_token_2022::{self, amount_to_ui_amount, ui_amount_to_amount};
 
 use crate::states::{
-    calculate_initial_supply, calculate_progress, initialize_bonding_curve_state,
-    BondingCurveState, CreateEvent, Status,
+    calculate_initial_supply, initialize_bonding_curve_state, BondingCurveState, CreateEvent,
+    Status,
 };
 
 use spl_pod::optional_keys::OptionalNonZeroPubkey;

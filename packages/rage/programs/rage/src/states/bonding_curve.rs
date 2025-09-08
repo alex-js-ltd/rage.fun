@@ -83,39 +83,6 @@ pub fn calculate_sell_price(
     Ok(output)
 }
 
-pub fn calculate_progress(
-    initial_reserve: u64,
-    current_reserve: u64,
-    target_reserve: u64,
-) -> Result<f64> {
-    let initial_reserve = amount_to_ui_amount(initial_reserve, 9);
-    let current_reserve = amount_to_ui_amount(current_reserve, 9);
-    let target_reserve = amount_to_ui_amount(target_reserve, 9);
-
-    // Calculate the progress
-    let progress =
-        ((current_reserve - initial_reserve) / (target_reserve - initial_reserve)) * 100.0;
-
-    Ok(progress.min(100.0))
-}
-
-pub fn calculate_market_cap(
-    total_supply: u64,
-    connector_balance: u64,
-    decimals: u8,
-    connector_weight: f64,
-) -> Result<f64> {
-    // Calculate price
-    let total_supply = amount_to_ui_amount(total_supply, decimals);
-    let connector_balance = amount_to_ui_amount(connector_balance, 9);
-    let price = connector_balance / (total_supply * connector_weight);
-
-    // Calculate market cap
-    let market_cap = price * total_supply;
-
-    Ok(market_cap)
-}
-
 pub fn get_status(
     current_supply: u64,
     target_supply: u64,
