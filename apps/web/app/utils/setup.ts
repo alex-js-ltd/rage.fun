@@ -1,6 +1,6 @@
 import { Program } from '@coral-xyz/anchor'
 import { Connection, VersionedTransaction } from '@solana/web3.js'
-import { type Magicmint, IDL } from '@repo/magicmint'
+import { type Rage, IDL } from '@repo/rage'
 import { getEnv } from './env'
 
 const { ENDPOINT } = getEnv()
@@ -10,7 +10,7 @@ export const connection = new Connection(ENDPOINT, 'confirmed')
 // Initialize the program interface with the IDL, program ID, and connection.
 // This setup allows us to interact with the on-chain program using the defined interface.
 
-export const program = new Program<Magicmint>(IDL as Magicmint, {
+export const program = new Program<Rage>(IDL as Rage, {
 	connection,
 })
 
@@ -44,7 +44,7 @@ export function isInstructionError(error: unknown): error is CustomError {
 	)
 }
 
-export function isMagicMint(deserializedTx: VersionedTransaction): boolean {
+export function isRage(deserializedTx: VersionedTransaction): boolean {
 	return deserializedTx.message.compiledInstructions.some(ix =>
 		deserializedTx.message.staticAccountKeys[ix.programIdIndex].equals(program.programId),
 	)

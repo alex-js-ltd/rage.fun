@@ -5,18 +5,17 @@ import { program } from '@/app/utils/setup'
 import { Keypair, PublicKey } from '@solana/web3.js'
 import { getEnv } from '@/app/utils/env'
 import {
-	type Magicmint,
+	type Rage,
 	type GetProxyInitIxsParams,
 	type EventData,
 	getProxyInitIxs,
 	buildTransaction,
-	getUnlockAirdropIxs,
 	getAccountsToAirdrop,
 	getBondingCurveState,
 	fetchBondingCurveState,
 	sendAndConfirm,
 	getSyncBondingCurveIx,
-} from '@repo/magicmint'
+} from '@repo/rage'
 import { connection } from '@/app/utils/setup'
 import { getRandomUsers } from '@/app/data/get_random_users'
 import { Program } from '@coral-xyz/anchor'
@@ -150,7 +149,7 @@ export async function deployToRaydium({
 	mint,
 	payer,
 }: {
-	program: Program<Magicmint>
+	program: Program<Rage>
 	payer: Keypair
 	mint: PublicKey
 }) {
@@ -174,46 +173,12 @@ export async function deployToRaydium({
 	console.log(`🔗 Transaction sig: ${sig} for raydium`)
 }
 
-export async function unlockAirdrop({
-	program,
-	mint,
-	payer,
-}: {
-	program: Program<Magicmint>
-	payer: Keypair
-	mint: PublicKey
-}) {
-	const accounts = await getRandomUsers(mint.toBase58())
-
-	const users = getAccountsToAirdrop({ accounts, mint })
-
-	const ixs = await getUnlockAirdropIxs({
-		program,
-		mint,
-		payer: payer.publicKey,
-		users,
-	})
-
-	const tx = await buildTransaction({
-		connection,
-		payer: payer.publicKey,
-		instructions: [...ixs],
-		signers: [],
-	})
-
-	tx.sign([payer])
-
-	const sig = await sendAndConfirm({ connection, tx })
-
-	console.log(`🔗 Transaction sig: ${sig} for airdrops`)
-}
-
 export async function syncBondingCurve({
 	program,
 	token,
 	payer,
 }: {
-	program: Program<Magicmint>
+	program: Program<Rage>
 	payer: Keypair
 	token: TokenWithRelationsType
 }) {
@@ -303,10 +268,6 @@ export async function processSwapEvents(swapEvents: EventData<'swapEvent'>[]) {
 			const airdrops = await getOustandingAirdrops(swapAlert.tokenId)
 
 			console.log(`🔔 Outstanding airdrops for token ${swapAlert.tokenId}: ${airdrops}`)
-
-			for (let i = 0; i < airdrops; i++) {
-				await unlockAirdrop({ program, mint: event.data.mint, payer })
-			}
 
 			if (progress >= 100.0) {
 				await deployToRaydium({ program, mint: event.data.mint, payer })
