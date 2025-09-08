@@ -1655,6 +1655,10 @@ export type Rage = {
             "type": "u64"
           },
           {
+            "name": "openTime",
+            "type": "u64"
+          },
+          {
             "name": "status",
             "type": {
               "defined": {

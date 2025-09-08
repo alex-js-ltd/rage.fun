@@ -159,7 +159,7 @@ pub fn initialize(
     let target_reserve = ui_amount_to_amount(80.0, 9);
 
     let initial_reserve = ui_amount_to_amount(0.000000001, 9);
-    let connector_weight = 0.3;
+    let connector_weight = 0.33;
     let decimals = ctx.accounts.token_0_mint.decimals;
 
     let initial_supply = create_bonding_curve(
@@ -181,13 +181,6 @@ pub fn initialize(
             &[ctx.bumps.bonding_curve_auth],
         ]],
     )?;
-
-    msg!("Target reserve: {}", amount_to_ui_amount(target_reserve, 9));
-
-    msg!(
-        "Initial supply: {}",
-        amount_to_ui_amount(initial_supply, ctx.accounts.token_0_mint.decimals)
-    );
 
     let current_supply = initial_supply;
     let block_timestamp = Clock::get()?.unix_timestamp;

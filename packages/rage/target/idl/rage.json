@@ -1649,6 +1649,10 @@
             "type": "u64"
           },
           {
+            "name": "open_time",
+            "type": "u64"
+          },
+          {
             "name": "status",
             "type": {
               "defined": {
