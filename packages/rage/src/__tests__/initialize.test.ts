@@ -66,7 +66,7 @@ describe('Launch', () => {
 			creator: payer.publicKey,
 			args,
 			decimals: token.decimals,
-			targetReserve: '0.35',
+			targetReserve: '80.0',
 		})
 
 		const tx = await buildTransaction({
