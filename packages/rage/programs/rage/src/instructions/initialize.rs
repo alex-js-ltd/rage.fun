@@ -27,8 +27,8 @@ use crate::states::{
 use spl_pod::optional_keys::OptionalNonZeroPubkey;
 
 use crate::utils::seed::{
-    BONDING_CURVE_AUTH_SEED, BONDING_CURVE_STATE_SEED, MAGIC_MINT_TOKEN_SEED,
-    META_LIST_ACCOUNT_SEED, TRADING_FEE_AUTH_SEED,
+    BONDING_CURVE_AUTH_SEED, BONDING_CURVE_STATE_SEED, META_LIST_ACCOUNT_SEED, RAGE_TOKEN_SEED,
+    TRADING_FEE_AUTH_SEED,
 };
 
 use crate::error::ErrorCode;
@@ -55,7 +55,7 @@ pub struct Initialize<'info> {
         extensions::metadata_pointer::authority = payer,
         extensions::metadata_pointer::metadata_address = token_0_mint,
 
-        seeds = [MAGIC_MINT_TOKEN_SEED.as_bytes(), args.symbol.as_bytes()],
+        seeds = [RAGE_TOKEN_SEED.as_bytes(), args.symbol.as_bytes()],
         bump,
 
     )]
