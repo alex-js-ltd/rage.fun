@@ -159,7 +159,7 @@ pub fn initialize(
     let target_reserve = ui_amount_to_amount(80.0, 9);
 
     let initial_reserve = ui_amount_to_amount(0.000000001, 9);
-    let connector_weight = 0.33;
+    let connector_weight = 0.3;
     let decimals = ctx.accounts.token_0_mint.decimals;
 
     let initial_supply = create_bonding_curve(
