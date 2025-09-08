@@ -20,6 +20,7 @@ import {
 	getHarvestYieldIx,
 	getRageToken,
 	generateToken,
+	calculateProgress,
 } from '../index'
 import { TOKEN_2022_PROGRAM_ID, getMint, getAssociatedTokenAddress, getAccount } from '@solana/spl-token'
 
@@ -119,7 +120,7 @@ describe('Launch', () => {
 	it('buy token', async () => {
 		const arr1 = ['1.0']
 
-		const arr2 = ['1.0', '1.0', '1.0', '1.0', '1.0', '1.0', '1.0', '1.0']
+		const arr2 = ['10.0', '10.0', '10.0', '10.0', '10.0', '10.0', '10.0', '10.0', '10.75']
 
 		for (const a of arr2) {
 			const one = await getBuyTokenIx({
@@ -155,6 +156,12 @@ describe('Launch', () => {
 			console.log('current reserve:', state.currentReserve.toString())
 
 			console.log('cw:', state.connectorWeight)
+
+			console.log('status:', state.status)
+
+			const p = await calculateProgress({ program, mint: token.mint })
+
+			console.log('p', p)
 		}
 	}, 50000)
 
