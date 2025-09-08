@@ -69,7 +69,7 @@ pub fn sync_bonding_curve(ctx: Context<SyncBondingCurve>) -> Result<()> {
     let drift_amount = ctx
         .accounts
         .bonding_curve_state
-        .total_supply
+        .current_supply
         .saturating_sub(current_supply);
 
     if drift_amount == 0 {
@@ -97,7 +97,7 @@ pub fn sync_bonding_curve(ctx: Context<SyncBondingCurve>) -> Result<()> {
         .base;
 
     require_eq!(
-        ctx.accounts.bonding_curve_state.total_supply,
+        ctx.accounts.bonding_curve_state.current_supply,
         token_0_mint.supply
     );
 

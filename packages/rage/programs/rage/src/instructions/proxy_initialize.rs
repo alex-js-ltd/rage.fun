@@ -14,7 +14,7 @@ use raydium_cpmm_cpi::{
 
 use anchor_spl::token::spl_token::native_mint;
 
-use crate::states::{BondingCurveState, RaydiumEvent};
+use crate::states::{BondingCurveState, RaydiumEvent, Status};
 
 use crate::utils::seed::{BONDING_CURVE_AUTH_SEED, BONDING_CURVE_STATE_SEED};
 use crate::utils::token::{
@@ -187,7 +187,7 @@ pub struct ProxyInitialize<'info> {
 }
 
 pub fn proxy_initialize(ctx: Context<ProxyInitialize>, open_time: u64) -> Result<()> {
-    if ctx.accounts.bonding_curve_state.progress < 100.0 {
+    if ctx.accounts.bonding_curve_state.status != Status::Complete {
         return Err(ErrorCode::BondingCurveNotComplete.into());
     }
 
@@ -386,7 +386,8 @@ pub fn proxy_initialize(ctx: Context<ProxyInitialize>, open_time: u64) -> Result
 
     let curve = &mut ctx.accounts.bonding_curve_state;
 
-    curve.total_supply = ctx.accounts.bonding_curve_mint.supply;
+    curve.current_supply = ctx.accounts.bonding_curve_mint.supply;
+    curve.status = Status::Migrated;
 
     // check pda account
     require_eq!(ctx.accounts.creator.owner, &crate::id());

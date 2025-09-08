@@ -517,10 +517,6 @@
               "name": "CreateMintAccountArgs"
             }
           }
-        },
-        {
-          "name": "target_reserve",
-          "type": "u64"
         }
       ]
     },
@@ -1621,11 +1617,15 @@
             "type": "f64"
           },
           {
-            "name": "total_supply",
-            "type": "u64"
+            "name": "decimals",
+            "type": "u8"
           },
           {
             "name": "initial_supply",
+            "type": "u64"
+          },
+          {
+            "name": "current_supply",
             "type": "u64"
           },
           {
@@ -1633,23 +1633,11 @@
             "type": "u64"
           },
           {
-            "name": "reserve_balance",
+            "name": "initial_reserve",
             "type": "u64"
           },
           {
-            "name": "decimals",
-            "type": "u8"
-          },
-          {
-            "name": "progress",
-            "type": "f64"
-          },
-          {
-            "name": "market_cap",
-            "type": "f64"
-          },
-          {
-            "name": "open_time",
+            "name": "current_reserve",
             "type": "u64"
           },
           {
@@ -1659,6 +1647,14 @@
           {
             "name": "trading_fees",
             "type": "u64"
+          },
+          {
+            "name": "status",
+            "type": {
+              "defined": {
+                "name": "Status"
+              }
+            }
           }
         ]
       }
@@ -1748,6 +1744,23 @@
           {
             "name": "open_time",
             "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Status",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "Funding"
+          },
+          {
+            "name": "Complete"
+          },
+          {
+            "name": "Migrated"
           }
         ]
       }

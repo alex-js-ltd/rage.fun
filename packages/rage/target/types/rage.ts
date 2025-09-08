@@ -523,10 +523,6 @@ export type Rage = {
               "name": "createMintAccountArgs"
             }
           }
-        },
-        {
-          "name": "targetReserve",
-          "type": "u64"
         }
       ]
     },
@@ -1627,11 +1623,15 @@ export type Rage = {
             "type": "f64"
           },
           {
-            "name": "totalSupply",
-            "type": "u64"
+            "name": "decimals",
+            "type": "u8"
           },
           {
             "name": "initialSupply",
+            "type": "u64"
+          },
+          {
+            "name": "currentSupply",
             "type": "u64"
           },
           {
@@ -1639,23 +1639,11 @@ export type Rage = {
             "type": "u64"
           },
           {
-            "name": "reserveBalance",
+            "name": "initialReserve",
             "type": "u64"
           },
           {
-            "name": "decimals",
-            "type": "u8"
-          },
-          {
-            "name": "progress",
-            "type": "f64"
-          },
-          {
-            "name": "marketCap",
-            "type": "f64"
-          },
-          {
-            "name": "openTime",
+            "name": "currentReserve",
             "type": "u64"
           },
           {
@@ -1665,6 +1653,14 @@ export type Rage = {
           {
             "name": "tradingFees",
             "type": "u64"
+          },
+          {
+            "name": "status",
+            "type": {
+              "defined": {
+                "name": "status"
+              }
+            }
           }
         ]
       }
@@ -1754,6 +1750,23 @@ export type Rage = {
           {
             "name": "openTime",
             "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "status",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "funding"
+          },
+          {
+            "name": "complete"
+          },
+          {
+            "name": "migrated"
           }
         ]
       }

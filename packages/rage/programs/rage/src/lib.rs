@@ -17,9 +17,8 @@ pub mod rage {
         ctx: Context<Initialize>,
         token_decimals: u8,
         args: CreateMintAccountArgs,
-        target_reserve: u64,
     ) -> Result<()> {
-        instructions::initialize(ctx, token_decimals, args, target_reserve)
+        instructions::initialize(ctx, token_decimals, args)
     }
 
     pub fn buy_token(ctx: Context<BuyToken>, lamports: u64) -> Result<()> {
