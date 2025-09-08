@@ -351,16 +351,10 @@ export type Rage = {
               {
                 "kind": "const",
                 "value": [
-                  109,
+                  114,
                   97,
                   103,
-                  105,
-                  99,
-                  95,
-                  109,
-                  105,
-                  110,
-                  116,
+                  101,
                   95,
                   116,
                   111,
@@ -1489,31 +1483,36 @@ export type Rage = {
     },
     {
       "code": 6012,
-      "name": "invalidAirdrop",
-      "msg": "Invalid airdrop amount"
+      "name": "invalidSupply",
+      "msg": "Invalid supply"
     },
     {
       "code": 6013,
+      "name": "invalidReserve",
+      "msg": "Invalid reserve"
+    },
+    {
+      "code": 6014,
       "name": "noPendingAirdrops",
       "msg": "No pending airdrops: all airdrops for this milestone have been claimed"
     },
     {
-      "code": 6014,
+      "code": 6015,
       "name": "curveAlreadyInSync",
       "msg": "Curve already in sync: no missing supply to mint"
     },
     {
-      "code": 6015,
+      "code": 6016,
       "name": "targetReserveTooLow",
       "msg": "Target reserve must be ≥ 0.3 SOL"
     },
     {
-      "code": 6016,
+      "code": 6017,
       "name": "targetReserveTooHigh",
       "msg": "Target reserve must be ≤ 80 SOL"
     },
     {
-      "code": 6017,
+      "code": 6018,
       "name": "dontMigrate",
       "msg": "Dont Migrate"
     }

@@ -12,10 +12,7 @@ export function getExtraMetas({ program, mint }: { program: Program<Rage>; mint:
 
 // Auth
 export function getRageToken({ program, tokenSymbol }: { program: Program<Rage>; tokenSymbol: string }): PublicKey {
-	return PublicKey.findProgramAddressSync(
-		[Buffer.from('magic_mint_token'), Buffer.from(tokenSymbol)],
-		program.programId,
-	)[0]
+	return PublicKey.findProgramAddressSync([Buffer.from('rage_token'), Buffer.from(tokenSymbol)], program.programId)[0]
 }
 // Auth
 export function getBondingCurveAuth({ program, mint }: { program: Program<Rage>; mint: PublicKey }): PublicKey {

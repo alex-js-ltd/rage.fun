@@ -165,6 +165,16 @@ pub fn sell_token(ctx: Context<SellToken>, token_amount: u64) -> Result<()> {
     let target_reserve = ctx.accounts.bonding_curve_state.target_reserve;
     let trading_fees = get_account_balance(ctx.accounts.trading_fee_auth.to_account_info())?;
 
+    require!(
+        current_supply >= ctx.accounts.bonding_curve_state.initial_supply,
+        ErrorCode::InvalidSupply
+    );
+
+    require!(
+        current_reserve >= ctx.accounts.bonding_curve_state.initial_reserve,
+        ErrorCode::InvalidReserve
+    );
+
     let status = get_status(
         current_supply,
         target_supply,

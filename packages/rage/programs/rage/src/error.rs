@@ -48,8 +48,11 @@ pub enum ErrorCode {
     #[msg("Not approved")]
     NotApproved,
 
-    #[msg("Invalid airdrop amount")]
-    InvalidAirdrop,
+    #[msg("Invalid supply")]
+    InvalidSupply,
+
+    #[msg("Invalid reserve")]
+    InvalidReserve,
 
     #[msg("No pending airdrops: all airdrops for this milestone have been claimed")]
     NoPendingAirdrops,

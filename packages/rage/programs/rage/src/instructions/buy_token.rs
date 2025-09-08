@@ -1,8 +1,8 @@
 use anchor_lang::prelude::*;
 
 use crate::states::{
-    calculate_buy_amount,  get_status, get_swap_event,
-    update_bonding_curve_state, BondingCurveState, Status, SwapType,
+    calculate_buy_amount, get_status, get_swap_event, update_bonding_curve_state,
+    BondingCurveState, Status, SwapType,
 };
 use crate::utils::seed::{
     BONDING_CURVE_AUTH_SEED, BONDING_CURVE_STATE_SEED, TRADING_FEE_AUTH_SEED,
@@ -198,6 +198,16 @@ pub fn buy_token(ctx: Context<BuyToken>, lamports: u64) -> Result<()> {
     let current_reserve = ctx.accounts.bonding_curve_state.current_reserve + safe_deposit;
     let target_reserve = ctx.accounts.bonding_curve_state.target_reserve;
     let trading_fees = get_account_balance(ctx.accounts.trading_fee_auth.to_account_info())?;
+
+    require!(
+        current_supply >= ctx.accounts.bonding_curve_state.initial_supply,
+        ErrorCode::InvalidSupply
+    );
+
+    require!(
+        current_reserve >= ctx.accounts.bonding_curve_state.initial_reserve,
+        ErrorCode::InvalidReserve
+    );
 
     let status = get_status(
         current_supply,

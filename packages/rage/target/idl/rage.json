@@ -345,16 +345,10 @@
               {
                 "kind": "const",
                 "value": [
-                  109,
+                  114,
                   97,
                   103,
-                  105,
-                  99,
-                  95,
-                  109,
-                  105,
-                  110,
-                  116,
+                  101,
                   95,
                   116,
                   111,
@@ -1483,31 +1477,36 @@
     },
     {
       "code": 6012,
-      "name": "InvalidAirdrop",
-      "msg": "Invalid airdrop amount"
+      "name": "InvalidSupply",
+      "msg": "Invalid supply"
     },
     {
       "code": 6013,
+      "name": "InvalidReserve",
+      "msg": "Invalid reserve"
+    },
+    {
+      "code": 6014,
       "name": "NoPendingAirdrops",
       "msg": "No pending airdrops: all airdrops for this milestone have been claimed"
     },
     {
-      "code": 6014,
+      "code": 6015,
       "name": "CurveAlreadyInSync",
       "msg": "Curve already in sync: no missing supply to mint"
     },
     {
-      "code": 6015,
+      "code": 6016,
       "name": "TargetReserveTooLow",
       "msg": "Target reserve must be ≥ 0.3 SOL"
     },
     {
-      "code": 6016,
+      "code": 6017,
       "name": "TargetReserveTooHigh",
       "msg": "Target reserve must be ≤ 80 SOL"
     },
     {
-      "code": 6017,
+      "code": 6018,
       "name": "DontMigrate",
       "msg": "Dont Migrate"
     }
