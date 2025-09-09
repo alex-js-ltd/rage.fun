@@ -40,9 +40,7 @@ function TokenCard({ token, children }: { token: TokenFeedType; children?: React
 		id: mint,
 		creatorId,
 		metadata: { name, symbol, image, thumbhash },
-
 		metrics: { progress, price, marketCap, liquidity, volume, transactionCount },
-
 		updateType,
 	} = token
 
@@ -101,9 +99,10 @@ function TokenCard({ token, children }: { token: TokenFeedType; children?: React
 
 				<div className="flex gap-2 items-center flex-wrap">
 					<div className="flex gap-2 items-center flex-wrap">
+						<Pill label="P" value={`$${formatNumberSmart(price)}`} tooltip="Price" />
 						<Pill label="M" value={`$${formatNumberSmart(marketCap)}`} tooltip="Market Cap" />
 
-						<Pill label="L" value={`$${formatNumberSmart(reserveBalance)}`} tooltip="Liquidity" />
+						<Pill label="L" value={`$${formatNumberSmart(liquidity)}`} tooltip="Liquidity" />
 
 						<Pill label="V" value={`$${formatNumberSmart(volume)}`} tooltip="Volume" />
 

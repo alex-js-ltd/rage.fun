@@ -284,10 +284,10 @@ export async function createTokenFeedSchema(options: {
 
 			const metrics = {
 				progress,
-				price: solToUsd(price, solPrice),
-				marketCap: solToUsd(marketCap, solPrice),
-				liquidity: solToUsd(liquidity, solPrice),
-				volume: solToUsd(volume, solPrice),
+				price: solToUsd(price, solPrice).toNumber(),
+				marketCap: solToUsd(marketCap, solPrice).toNumber(),
+				liquidity: solToUsd(liquidity, solPrice).toNumber(),
+				volume: solToUsd(volume, solPrice).toNumber(),
 				transactionCount,
 			}
 
