@@ -29,6 +29,7 @@ import {
 	getAirdropAuth,
 	getTradingFeeAuth,
 	getRageToken,
+	BondingCurveState,
 } from './index'
 
 import Decimal from 'decimal.js'
@@ -392,13 +393,8 @@ export async function getReallocIx({ program, payer, mint }: ReallocIxParams) {
 	return sync
 }
 
-interface CalculateProgressParams {
-	program: Program<Rage>
-	mint: PublicKey
-}
-
-export async function calculateProgress({ program, mint }: CalculateProgressParams) {
-	const { currentReserve, initialReserve, targetReserve } = await fetchBondingCurveState({ program, mint })
+export function calculateProgress(state: BondingCurveState) {
+	const { currentReserve, initialReserve, targetReserve } = state
 
 	const cur = new Decimal(currentReserve.toString())
 	const init = new Decimal(initialReserve.toString())
@@ -409,7 +405,28 @@ export async function calculateProgress({ program, mint }: CalculateProgressPara
 
 	const num = cur.minus(init)
 
-	const progress = num.div(denom).mul(100).toNumber()
+	const progress = num.div(denom).mul(100)
 
-	return progress // % as a JS number
+	return progress
+}
+
+export function calculatePrice(state: BondingCurveState) {
+	const { currentReserve, currentSupply, connectorWeight, decimals } = state
+
+	const reserve = new Decimal(currentReserve.toString()).div(1e9) // lamports → SOL
+	const supply = new Decimal(currentSupply.toString()).div(
+		new Decimal(10).pow(decimals), // base units → tokens
+	)
+
+	const cw = new Decimal(connectorWeight)
+
+	return reserve.dividedBy(supply.mul(cw))
+}
+
+export function calculateMarketCap(state: BondingCurveState) {
+	const price = calculatePrice(state)
+
+	const supply = new Decimal(state.currentSupply.toString()).div(new Decimal(10).pow(state.decimals))
+
+	return price.mul(supply)
 }
