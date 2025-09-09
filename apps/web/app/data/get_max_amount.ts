@@ -3,7 +3,7 @@
 import { getAssociatedTokenAddress, getAccount, TOKEN_2022_PROGRAM_ID } from '@solana/spl-token'
 import { PublicKey, Connection } from '@solana/web3.js'
 import { connection } from '@/app/utils/setup'
-import { fromLamports } from '@repo/magicmint'
+import { fromLamports } from '@repo/rage'
 import { BN } from '@coral-xyz/anchor'
 import { getDecimals } from './get_decimals'
 
