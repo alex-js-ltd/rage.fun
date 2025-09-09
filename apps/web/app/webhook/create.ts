@@ -1,12 +1,12 @@
 import { PublicKey } from '@solana/web3.js'
-import { type EventData, getBondingCurveState, fetchBondingCurveState } from '@repo/magicmint'
+import { type EventData, getBondingCurveState, fetchBondingCurveState } from '@repo/rage'
 import { program } from '@/app/utils/setup'
 import { prisma } from '@/app/utils/db'
-import { Prisma } from '@prisma/client'
+import { Prisma, $Enums } from '@prisma/client'
 import { getServerEnv } from '@/app/utils/env'
 import { getTokenWithRelations } from '@/app/data/get_token'
 import { sendUpdateAlertToAbly } from '@/app/webhook/ably'
-import { sendCreateAlertToDiscord } from '@/app/webhook/discord'
+
 import { revalidateTag } from 'next/cache'
 import * as Ably from 'ably'
 import 'server-only'
@@ -18,36 +18,45 @@ export async function createBondingCurve(mint: PublicKey) {
 	const pda = getBondingCurveState({ program, mint })
 	const id = pda.toBase58()
 
-	const { progress, decimals, creator, connectorWeight, marketCap, ...rest } = await fetchBondingCurveState({
+	const { connectorWeight, decimals, ...rest } = await fetchBondingCurveState({
 		program,
 		mint,
 	})
 
-	const totalSupply = BigInt(rest.totalSupply.toString())
+	const initialSupply = BigInt(rest.initialSupply.toString())
+	const currentSupply = BigInt(rest.currentSupply.toString())
+	const targetSupply = BigInt(rest.targetSupply.toString())
 
-	const reserveBalance = BigInt(rest.reserveBalance.toString())
-
-	const startTime = BigInt(rest.openTime.toString())
-
+	const initialReserve = BigInt(rest.initialReserve.toString())
+	const currentReserve = BigInt(rest.currentReserve.toString())
 	const targetReserve = BigInt(rest.targetReserve.toString())
 
-	const volume = BigInt('0')
+	const openTime = BigInt(rest.openTime.toString())
 
 	const tradingFees = BigInt('0')
+
+	const status = $Enums.Status.Funding
 
 	const create = Prisma.validator<Prisma.BondingCurveCreateArgs>()({
 		data: {
 			id,
-			progress,
-			decimals,
-			totalSupply,
-			reserveBalance,
-			startTime,
-			marketCap,
+
 			connectorWeight,
+			decimals,
+
+			initialSupply,
+			currentSupply,
+			targetSupply,
+
+			initialReserve,
+			currentReserve,
 			targetReserve,
-			volume,
+
+			openTime,
 			tradingFees,
+
+			status,
+
 			token: { connect: { id: tokenId } },
 		},
 	})
@@ -68,8 +77,6 @@ export async function processCreateEvents(createEvents: EventData<'createEvent'>
 			const token = await getTokenWithRelations(event.data.mint.toBase58())
 
 			await sendUpdateAlertToAbly(channel, token, 'CREATE')
-
-			await sendCreateAlertToDiscord(event, token)
 
 			revalidateTag(token.id)
 		} catch (err) {

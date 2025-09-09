@@ -1,7 +1,6 @@
 import * as Ably from 'ably'
 import {
-	type TokenWithRelationsType,
-	type AirdropSignatureType,
+	type TokenFeedType,
 	type SwapEventType,
 	type UpdateEnumType,
 	type TopHolderType,
@@ -30,17 +29,9 @@ async function sendSwapAlertToAbly(channel: Ably.Channel, event: SwapEventType) 
 	}
 }
 
-async function sendUpdateAlertToAbly(channel: Ably.Channel, token: TokenWithRelationsType, updateType: UpdateEnumType) {
+async function sendUpdateAlertToAbly(channel: Ably.Channel, token: TokenFeedType, updateType: UpdateEnumType) {
 	try {
 		await channel.publish('updateEvent', { ...token, updateType })
-	} catch (error) {
-		console.error(error)
-	}
-}
-
-async function sendAirdropAlertToAbly(channel: Ably.Channel, airdrop: AirdropSignatureType) {
-	try {
-		await channel.publish('airdropEvent', airdrop)
 	} catch (error) {
 		console.error(error)
 	}
@@ -54,11 +45,7 @@ async function sendTransactionAlertToAbly(channel: Ably.Channel, transaction: Tr
 	}
 }
 
-async function sendTopHoldersAlertToAbly(
-	channel: Ably.Channel,
-	holders: TopHolderType[],
-	token: TokenWithRelationsType,
-) {
+async function sendTopHoldersAlertToAbly(channel: Ably.Channel, holders: TopHolderType[], token: TokenFeedType) {
 	try {
 		await channel.publish('holdersEvent', { holders, id: token.id })
 	} catch (error) {
@@ -79,7 +66,6 @@ export {
 	sendSwapAlertToAbly,
 	sendTransactionAlertToAbly,
 	sendUpdateAlertToAbly,
-	sendAirdropAlertToAbly,
 	sendTopHoldersAlertToAbly,
 	sendCommentAlertToAbly,
 }

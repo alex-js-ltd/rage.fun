@@ -1,6 +1,6 @@
 import { prisma } from '@/app/utils/db'
 import { program } from '@/app/utils/setup'
-import { getBondingCurveState } from '@repo/magicmint'
+import { getBondingCurveState } from '@repo/rage'
 import { PublicKey } from '@solana/web3.js'
 import { unstable_cache } from 'next/cache'
 import 'server-only'
