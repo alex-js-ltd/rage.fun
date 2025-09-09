@@ -7,7 +7,7 @@ import { isSymbolUnique } from '@/app/data/is_symbol_unique'
 import { prisma } from '@/app/utils/db'
 import { Prisma } from '@prisma/client'
 import { program, connection } from '@/app/utils/setup'
-import { type CreateMintAccountArgs, getMagicMintToken, getInitializeIx, buildTransaction } from '@repo/magicmint'
+import { type CreateMintAccountArgs, getRageToken, getInitializeIx, buildTransaction } from '@repo/rage'
 import { PublicKey } from '@solana/web3.js'
 import { auth } from '@/app/auth'
 
@@ -17,7 +17,6 @@ import { PinataSDK } from 'pinata'
 
 import sharp from 'sharp'
 import * as ThumbHash from 'thumbhash'
-import { isOgUser, getSigner } from '@/app/utils/misc'
 
 const { PINATA_JWT, PROXY_PRIVATE_KEY } = getServerEnv()
 
@@ -78,7 +77,7 @@ export async function initializeAction(_prevState: State, formData: FormData) {
 
 	await getUser(creator.toBase58())
 
-	const mint = getMagicMintToken({ program, tokenSymbol: symbol })
+	const mint = getRageToken({ program, tokenSymbol: symbol })
 
 	await uploadMetadata({
 		creator,
@@ -150,27 +149,27 @@ export async function uploadMetadata({
 }: UploadMetadataParams) {
 	const tokenId = mint.toBase58()
 
-	const data = Prisma.validator<Prisma.TokenMetadataCreateInput>()({
+	const data = Prisma.validator<Prisma.TokenCreateInput>()({
 		id: tokenId,
-		name,
-		symbol,
-		image,
-		thumbhash,
-		description,
-		creator: { connect: { id: creator.toBase58() } },
 
-		nsfw: {
+		metadata: {
 			create: {
-				isNsfw: false, // Optional because of default(false), but explicit is good
+				name,
+				symbol,
+				image,
+				thumbhash,
+				description,
 			},
 		},
+
+		creator: { connect: { id: creator.toBase58() } },
 	})
 
-	const token = await prisma.tokenMetadata.create({
+	const token = await prisma.token.create({
 		data,
 	})
 
-	return data
+	return token
 }
 
 export async function generateThumbHash(imageBuffer: Buffer) {

@@ -3,7 +3,7 @@ import { z } from 'zod'
 const schema = z.object({
 	NEXT_PUBLIC_CLUSTER: z.enum(['devnet', 'mainnet-beta'] as const),
 	NEXT_PUBLIC_ENDPOINT: z.string(),
-	NEXT_PUBLIC_BASE_URL: z.string(),
+
 	PROXY_PRIVATE_KEY: z.string(),
 	HELIUS_SECRET: z.string(),
 	HELIUS_API_KEY: z.string(),
@@ -42,7 +42,6 @@ export function getEnv() {
 	return {
 		CLUSTER: process.env.NEXT_PUBLIC_CLUSTER,
 		ENDPOINT: process.env.NEXT_PUBLIC_ENDPOINT,
-		BASE_URL: process.env.NEXT_PUBLIC_BASE_URL,
 	}
 }
 

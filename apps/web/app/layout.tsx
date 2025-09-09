@@ -10,11 +10,11 @@ import './globals.css'
 
 export const metadata: Metadata = {
 	title: {
-		template: '%s | Magic Mint',
-		default: 'Magic Mint',
+		template: '%s | Lets Rage',
+		default: 'Lets Rage',
 	},
-	description: 'Launch a token with one click and earn interest',
-	metadataBase: new URL('https://www.magicmint.fun'),
+	description: 'Rage against platform fees. Launch a token with one click & trade with zero extraction.',
+	metadataBase: new URL('https://www.letsrage.fun'),
 }
 
 export default async function RootLayout(props: { children: ReactNode }) {
