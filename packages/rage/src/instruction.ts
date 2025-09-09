@@ -26,7 +26,6 @@ import {
 	fetchBondingCurveState,
 	isRentExempt,
 	getBondingCurveAuth,
-	getAirdropAuth,
 	getTradingFeeAuth,
 	getRageToken,
 	BondingCurveState,

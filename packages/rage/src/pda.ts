@@ -19,10 +19,6 @@ export function getBondingCurveAuth({ program, mint }: { program: Program<Rage>;
 	return PublicKey.findProgramAddressSync([Buffer.from('bonding_curve_auth'), mint.toBuffer()], program.programId)[0]
 }
 
-export function getAirdropAuth({ program, mint }: { program: Program<Rage>; mint: PublicKey }): PublicKey {
-	return PublicKey.findProgramAddressSync([Buffer.from('airdrop_auth'), mint.toBuffer()], program.programId)[0]
-}
-
 export function getTradingFeeAuth({ program, mint }: { program: Program<Rage>; mint: PublicKey }): PublicKey {
 	return PublicKey.findProgramAddressSync([Buffer.from('trading_fee_auth'), mint.toBuffer()], program.programId)[0]
 }

@@ -2,7 +2,7 @@ import { Rage } from '../target/types/rage'
 import {
 	type Signer,
 	type TransactionInstruction,
-	Connection,
+	type Connection,
 	PublicKey,
 	TransactionMessage,
 	VersionedTransaction,
