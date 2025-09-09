@@ -14,13 +14,13 @@ import { type ToastDescription, useToast } from '@/app/hooks/use_toast'
 import { useSignAndSendTx } from '@/app/hooks/use_sign_and_send_tx'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/app/comps/tooltip'
 
-import { type TokenWithRelationsType } from '@/app/utils/schemas'
+import { type TokenFeedType } from '@/app/utils/schemas'
 import { formatNumberSmart } from '@/app/utils/misc'
 
 const initialState: State = {}
 
 interface HarvestYieldProps {
-	token: TokenWithRelationsType
+	token: TokenFeedType
 }
 
 export function HarvestYieldForm({ token }: HarvestYieldProps) {
@@ -49,7 +49,7 @@ export function HarvestYieldForm({ token }: HarvestYieldProps) {
 
 	const payer = usePayer()
 
-	const config = { loading: `Harvesting ${token.symbol} 🌾`, success: `Harvest confirmed ✅` }
+	const config = { loading: `Harvesting ${token.metadata.symbol} 🌾`, success: `Harvest confirmed ✅` }
 
 	const { isSuccess } = harvest
 

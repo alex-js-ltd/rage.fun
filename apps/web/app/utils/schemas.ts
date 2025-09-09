@@ -291,7 +291,19 @@ export async function createTokenFeedSchema(options: {
 				transactionCount,
 			}
 
-			return { id: data.id, creatorId: data.creatorId, metadata, metrics, updateType, bondingCurve }
+			const tradingFees = solToUsd(new Decimal(bondingCurve.tradingFees).div(1e9), solPrice).toNumber()
+
+			return {
+				id: data.id,
+				creatorId: data.creatorId,
+				metadata,
+				metrics,
+				updateType,
+				bondingCurve: {
+					...bondingCurve,
+					tradingFees,
+				},
+			}
 		})
 }
 

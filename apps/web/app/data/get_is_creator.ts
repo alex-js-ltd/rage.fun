@@ -5,7 +5,7 @@ export async function getIsCreator(creatorId: string | undefined) {
 	if (!creatorId) {
 		return false
 	}
-	const count = await prisma.tokenMetadata.count({
+	const count = await prisma.token.count({
 		where: { creatorId },
 	})
 
