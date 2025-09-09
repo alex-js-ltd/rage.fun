@@ -15,34 +15,29 @@ datasource db {
 }
 
 model User {
-  id            String          @id @default(cuid())
-  createdAt     DateTime        @default(now())
-  updatedAt     DateTime        @updatedAt
-  tokenMetadata TokenMetadata[]
-  comment       Comment[]
+  id        String    @id @default(cuid())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  tokens    Token[]
+  comments  Comment[]
 }
 
-model TokenMetadata {
-  id           String        @id @default(cuid())
-  name         String
-  symbol       String        @unique
-  description  String
-  image        String
-  thumbhash    Bytes
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
-  creator      User          @relation(fields: [creatorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  creatorId    String
+model Token {
+  id String @id @default(cuid()) // use mint address as id
+
+  metadata Metadata?
+
   bondingCurve BondingCurve?
-  swapEvents   SwapEvent[]
 
-  comments Comment[]
-
-  airdropSignatures AirdropSignature[]
-
-  nsfw Nsfw?
-
+  swapEvents    SwapEvent[]
+  comments      Comment[]
   harvestEvents HarvestEvent[]
+
+  creator   User   @relation(fields: [creatorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  creatorId String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   // non-unique foreign key
   @@index([creatorId])
@@ -50,25 +45,45 @@ model TokenMetadata {
   @@index([creatorId, createdAt])
 }
 
+model Metadata {
+  id          String   @id // ← SAME value as Token.id
+  token       Token    @relation(fields: [id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  name        String
+  symbol      String   @unique
+  description String
+  image       String
+  thumbhash   Bytes
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+enum Status {
+  Funding
+  Complete
+  Migrated
+}
+
 model BondingCurve {
-  id              String  @id @default(cuid())
-  progress        Decimal
+  id String @id @default(cuid())
+
   connectorWeight Decimal
+  decimals        Int
 
-  decimals  Int
-  startTime BigInt
+  initialSupply BigInt
+  currentSupply BigInt
+  targetSupply  BigInt
 
-  totalSupply    BigInt
-  reserveBalance BigInt
+  initialReserve BigInt
+  currentReserve BigInt
   targetReserve  BigInt
 
-  volume    BigInt
-  marketCap Decimal
-
   tradingFees BigInt
+  openTime    BigInt
 
-  token   TokenMetadata @relation(fields: [tokenId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  tokenId String        @unique
+  status Status
+
+  token   Token  @relation(fields: [tokenId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  tokenId String @unique
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -77,8 +92,8 @@ model BondingCurve {
 }
 
 enum SwapType {
-  BUY
-  SELL
+  Buy
+  Sell
 }
 
 model SwapEvent {
@@ -89,9 +104,9 @@ model SwapEvent {
   amount     BigInt
   swapType   SwapType
   lamports   BigInt
-  rentAmount BigInt?
+  rentAmount BigInt
 
-  token   TokenMetadata @relation(fields: [tokenId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  token   Token  @relation(fields: [tokenId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   tokenId String // Foreign key to TokenMetadata
 
   @@index([tokenId])
@@ -112,45 +127,10 @@ model Comment {
   ownerId String
 
   // Relation to the main entity being commented on (e.g., Post, TokenMetadata)
-  token   TokenMetadata @relation(fields: [tokenId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  token   Token  @relation(fields: [tokenId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   tokenId String // Foreign key to TokenMetadata
 
   @@index([tokenId])
-}
-
-model AirdropSignature {
-  id String @id @default(cuid())
-
-  airdropId Int?
-
-  airdropEvents AirdropEvent[]
-  createdAt     DateTime       @default(now())
-  updatedAt     DateTime       @updatedAt
-
-  token   TokenMetadata @relation(fields: [tokenId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  tokenId String // Foreign key to TokenMetadata
-
-  @@unique([id, tokenId]) // Ensures each signature is tied to one mint
-  @@index([tokenId])
-}
-
-model AirdropEvent {
-  id     String @id @default(cuid())
-  user   String
-  time   BigInt
-  amount BigInt
-
-  signature   AirdropSignature @relation(fields: [signatureId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  signatureId String // Foreign key to TokenMetadata
-
-  @@unique([user, signatureId]) // Ensures a user can only be rewarded once per signature
-}
-
-model Nsfw {
-  tokenId String  @id
-  isNsfw  Boolean @default(false)
-
-  token TokenMetadata @relation(fields: [tokenId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }
 
 model HarvestEvent {
@@ -159,15 +139,14 @@ model HarvestEvent {
   time     BigInt
   lamports BigInt
 
-  token   TokenMetadata @relation(fields: [tokenId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  token   Token  @relation(fields: [tokenId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   tokenId String // Foreign key to TokenMetadata
 
   @@index([tokenId])
 }
 
-
 model BotWallet {
-  id       String @id @default(cuid())
+  id        String @id @default(cuid())
   secretKey Json
 
   createdAt DateTime @default(now())
