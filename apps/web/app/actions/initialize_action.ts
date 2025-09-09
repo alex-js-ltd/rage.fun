@@ -62,7 +62,7 @@ export async function initializeAction(_prevState: State, formData: FormData) {
 
 	const { file, name, symbol, description, targetReserve, creator } = submission.value
 
-	const decimals = 9
+	const decimals = 6
 
 	if (creator.toBase58() !== session.user?.id) {
 		return
