@@ -4,7 +4,7 @@ import { useWallet } from '@jup-ag/wallet-adapter'
 import { connection } from '@/app/utils/setup'
 import { useAsync } from '@/app/hooks/use_async'
 import { isInstructionError, getErrorMessage } from '@/app/utils/setup'
-import { isMagicMint } from '@/app/utils/setup'
+import { isRage } from '@/app/utils/setup'
 import { useLatestRef } from '@/app/hooks/use_latest_ref'
 
 import * as Ably from 'ably'
@@ -20,7 +20,7 @@ export function useSignAndSendTx(tx?: Uint8Array) {
 	async function signAndSend(tx: Uint8Array) {
 		const deserializedTx = deserialize(tx)
 
-		const correctProgramId = isMagicMint(deserializedTx)
+		const correctProgramId = isRage(deserializedTx)
 
 		if (!correctProgramId) {
 			throw new Error('incorrect program id')

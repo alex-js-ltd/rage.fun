@@ -8,18 +8,18 @@ import { Icon } from './_icon'
 import { Collapsible, CollapsibleContent } from './collapsible'
 import { useAsync } from '@/app/hooks/use_async'
 
-import { type TokenWithRelationsType } from '@/app/utils/schemas'
-import { redirectAction } from '@/app/actions/redirect_action'
+import { type TokenFeedType } from '@/app/utils/schemas'
+
 import { Button } from '@/app/comps/button'
 
 export function Events() {
-	const { run, data: current, reset, setData } = useAsync<TokenWithRelationsType>()
+	const { run, data: current, reset, setData } = useAsync<TokenFeedType>()
 
 	const timerRef = useRef<NodeJS.Timeout | null>(null) // Best practice
 
 	// Listen for new events and add them to the queue
 	useChannel('updateEvent', async (message: Ably.Message) => {
-		const updateEvent: TokenWithRelationsType = message.data
+		const updateEvent: TokenFeedType = message.data
 
 		setData(updateEvent)
 
@@ -48,14 +48,14 @@ export function Events() {
 				forceMount
 				className="transition-transform duration-300 data-[state=closed]:animate-scale-out-50 data-[state=open]:animate-scale-in-50"
 			>
-				<form className="text-text-100 relative w-fit" action={redirectAction}>
+				<div className="text-text-100 relative w-fit">
 					<Button type="submit" className="w-fit h-auto relative flex items-center justify-center">
 						<Icon name="up-arrow" className="size-4 text-text-100" />
 					</Button>
 					<input type="hidden" name="pathname" defaultValue={`/token/${current.id}?interval=86400000`} />
-				</form>
+				</div>
 
-				<TokenLogo className="rounded-full" {...getTokenLogoProps(current)} />
+				<TokenLogo className="rounded-full" {...getTokenLogoProps(current.metadata)} />
 
 				<span>{current?.updateType === 'BUY' ? '🪄' : '🔥'}</span>
 			</CollapsibleContent>

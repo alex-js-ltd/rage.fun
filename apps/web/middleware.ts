@@ -8,7 +8,6 @@ import NextAuth, { type Session } from 'next-auth'
 import { authConfig } from '@/app/auth.config'
 import { isOgUser } from '@/app/utils/misc'
 import { getServerEnv } from '@/app/utils/env'
-import { sendIpBanToDiscord } from '@/app/webhook/discord'
 
 const { HELIUS_SECRET } = getServerEnv()
 
@@ -62,8 +61,6 @@ export default auth(async function middleware(req: NextRequest & { auth: Session
 
 		console.warn(`🚨 PERMA-BLOCKED IP: ${ip} tried /api/helius`)
 
-		await sendIpBanToDiscord(ip)
-
 		return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 	}
 
@@ -77,8 +74,6 @@ export default auth(async function middleware(req: NextRequest & { auth: Session
 		})
 
 		console.warn(`🚨 PERMA-BLOCKED IP: ${ip} tried /admin`)
-
-		await sendIpBanToDiscord(ip)
 
 		return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 	}

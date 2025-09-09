@@ -11,18 +11,7 @@ const schema = z.object({
 
 	ABLY_API_KEY: z.string(),
 
-	TELEGRAM_BOT_TOKEN: z.string(),
-	TELEGRAM_CHAT_ID: z.string(),
-
-	DISCORD_WEBHOOK_URL_CHAT: z.string(),
-	DISCORD_WEBHOOK_URL_ALERTS: z.string(),
-
 	PINATA_JWT: z.string(),
-
-	TWITTER_API_KEY: z.string(),
-	TWITTER_API_SECRET: z.string(),
-	TWITTER_ACCESS_TOKEN: z.string(),
-	TWITTER_ACCESS_TOKEN_SECRET: z.string(),
 })
 
 declare global {
@@ -63,20 +52,9 @@ export function getServerEnv() {
 		HELIUS_SECRET: process.env.HELIUS_SECRET,
 		HELIUS_API_KEY: process.env.HELIUS_API_KEY,
 		KV_URL: process.env.KV_URL,
+
 		ABLY_API_KEY: process.env.ABLY_API_KEY,
-
-		TELEGRAM_BOT_TOKEN: process.env.TELEGRAM_BOT_TOKEN,
-		TELEGRAM_CHAT_ID: process.env.TELEGRAM_CHAT_ID,
-
-		DISCORD_WEBHOOK_URL_CHAT: process.env.DISCORD_WEBHOOK_URL_CHAT,
-		DISCORD_WEBHOOK_URL_ALERTS: process.env.DISCORD_WEBHOOK_URL_ALERTS,
-
 		PINATA_JWT: process.env.PINATA_JWT,
-
-		TWITTER_API_KEY: process.env.TWITTER_API_KEY,
-		TWITTER_API_SECRET: process.env.TWITTER_API_SECRET,
-		TWITTER_ACCESS_TOKEN: process.env.TWITTER_ACCESS_TOKEN,
-		TWITTER_ACCESS_TOKEN_SECRET: process.env.TWITTER_ACCESS_TOKEN_SECRET,
 	}
 }
 
