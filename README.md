@@ -20,11 +20,11 @@ anchor build -- --features devnet
 
 "resolutions": { "@solana/wallet-standard-wallet-adapter-base": "1.0.1" }
 
-anchor upgrade target/deploy/magicmint.so --program-id E6fmMvQjzN3bEhk9bVffSmK13yRezBp8xqPdpno5oXdV
+anchor upgrade target/deploy/rage.so --program-id DUShtzhevyTnQLXQmQaT9EfjjjGhg26m6yXHav3vwe6Z
 
-du -h target/deploy/magicmint.so
+du -h target/deploy/rage.so
 
-solana program extend E6fmMvQjzN3bEhk9bVffSmK13yRezBp8xqPdpno5oXdV 200000
+solana program extend DUShtzhevyTnQLXQmQaT9EfjjjGhg26m6yXHav3vwe6Z 200000
 
-solana program deploy --buffer recover.json target/deploy/magicmint.so --program-id
-E6fmMvQjzN3bEhk9bVffSmK13yRezBp8xqPdpno5oXdV
+solana program deploy --buffer recover.json target/deploy/rage.so --program-id
+DUShtzhevyTnQLXQmQaT9EfjjjGhg26m6yXHav3vwe6Z

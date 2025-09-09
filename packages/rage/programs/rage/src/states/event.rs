@@ -37,6 +37,11 @@ pub fn get_swap_event<'a>(
 
     msg!("Price per token: {} SOL", price);
 
+    msg!(
+        "Token Amount: {}",
+        spl_token_2022::amount_to_ui_amount(token_amount, decimals)
+    );
+
     Ok(SwapEvent {
         mint: mint.key(),
         signer: signer.key(),

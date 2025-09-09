@@ -120,7 +120,7 @@ describe('Launch', () => {
 	it('buy token', async () => {
 		const arr1 = ['1.0']
 
-		const arr2 = ['10.0', '10.0', '10.0', '10.0', '10.0', '10.0', '10.0', '10.0', '10.75']
+		const arr2 = ['85.0']
 
 		for (const a of arr2) {
 			const one = await getBuyTokenIx({
@@ -159,7 +159,7 @@ describe('Launch', () => {
 
 			console.log('status:', state.status)
 
-			const p = await calculateProgress({ program, mint: token.mint })
+			const p = calculateProgress(state)
 
 			console.log('p', p)
 		}
