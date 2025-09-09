@@ -17,7 +17,7 @@ import {
 	getSyncBondingCurveIx,
 } from '@repo/rage'
 import { connection } from '@/app/utils/setup'
-import { getRandomUsers } from '@/app/data/get_random_users'
+
 import { Program } from '@coral-xyz/anchor'
 
 import { getMint, TOKEN_2022_PROGRAM_ID } from '@solana/spl-token'

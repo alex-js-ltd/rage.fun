@@ -3,7 +3,8 @@ import { prisma } from '@/app/utils/db'
 import { Keypair } from '@solana/web3.js'
 import { getUser } from '@/app/data/get_user'
 import { uploadMetadata, fetchImage, generateThumbHash } from '@/app/actions/initialize_action'
-import { getMagicMintToken } from '@repo/magicmint'
+import { getRageToken } from '@repo/rage'
+import { $Enums } from '@prisma/client'
 
 async function seed() {
 	console.log('🌱 Seeding...')
@@ -42,17 +43,24 @@ async function seed() {
 
 		await prisma.bondingCurve.create({
 			data: {
-				progress: Math.floor(Math.random() * 100) + 1,
+				id: '234',
+
 				tokenId: token.mint.publicKey.toBase58(),
-				decimals: 9,
-				totalSupply: 1000000,
-				reserveBalance: 1000000,
-				connectorWeight: 0.15,
-				startTime: 1000000,
-				targetReserve: 1,
-				volume: BigInt(0),
-				marketCap: 0,
+				connectorWeight: 0.33,
+				decimals: 6,
+
+				initialSupply: 1000,
+				currentSupply: 1000,
+				targetSupply: 10000000,
+
+				initialReserve: 1000,
+				currentReserve: 1000,
+				targetReserve: 10000000,
+
+				openTime: 1000000,
 				tradingFees: 0,
+
+				status: $Enums.Status.Funding,
 			},
 		})
 	}

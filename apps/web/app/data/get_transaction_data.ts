@@ -5,7 +5,7 @@ import { getCachedSolPrice } from '@/app/data/get_sol_price'
 import 'server-only'
 
 export async function getTransactionData(mint: string) {
-	const query = Prisma.validator<Prisma.TokenMetadataFindFirstOrThrowArgs>()({
+	const query = Prisma.validator<Prisma.TokenFindFirstOrThrowArgs>()({
 		where: {
 			id: mint,
 
@@ -26,7 +26,7 @@ export async function getTransactionData(mint: string) {
 					signer: true,
 					time: true,
 					price: true,
-					amount: true,
+					tokenAmount: true,
 					lamports: true,
 					swapType: true,
 					rentAmount: true,
@@ -44,7 +44,7 @@ export async function getTransactionData(mint: string) {
 		},
 	})
 
-	const token = await prisma.tokenMetadata.findUniqueOrThrow(query)
+	const token = await prisma.token.findUniqueOrThrow(query)
 
 	const { decimals } = token?.bondingCurve || {}
 
