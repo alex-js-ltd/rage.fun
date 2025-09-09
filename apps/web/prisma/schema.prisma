@@ -48,9 +48,9 @@ model Token {
 }
 
 model Metadata {
-  name        String
-  symbol      String   @unique
-  description String
+  name        String   @db.VarChar(32)
+  symbol      String   @unique @db.VarChar(8)
+  description String   @db.VarChar(280)
   image       String
   thumbhash   Bytes
   createdAt   DateTime @default(now())
