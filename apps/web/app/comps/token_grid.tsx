@@ -40,6 +40,7 @@ function TokenCard({ token, children }: { token: TokenFeedType; children?: React
 		id: mint,
 		creatorId,
 		metadata: { name, symbol, image, thumbhash },
+
 		metrics: { progress, price, marketCap, liquidity, volume, transactionCount },
 		updateType,
 	} = token
@@ -167,7 +168,7 @@ export function TokenGrid({
 	const { tokens, isLastPage, nextCursorId, searchParams } = state || {}
 
 	const { channel } = useChannel('updateEvent', (message: Ably.Message) => {
-		const updateEvent: TokenWithRelationsType = message.data
+		const updateEvent: TokenFeedType = message.data
 
 		if (!state || !updateEvent.updateType) return
 
@@ -188,22 +189,6 @@ export function TokenGrid({
 		if (existingIndex !== -1) {
 			const newTokens = [...state.tokens]
 			newTokens[existingIndex] = updateEvent
-
-			if (searchParams?.sortType === 'progress' && searchParams?.sortOrder === 'asc') {
-				newTokens.sort((a, b) => a.bondingCurve.progress - b.bondingCurve.progress) // ascending
-			}
-
-			if (searchParams?.sortType === 'progress' && searchParams?.sortOrder === 'desc') {
-				newTokens.sort((a, b) => b.bondingCurve.progress - a.bondingCurve.progress) // descending
-			}
-
-			if (searchParams?.sortType === 'volume' && searchParams?.sortOrder === 'asc') {
-				newTokens.sort((a, b) => a.bondingCurve.volume - b.bondingCurve.volume) // ascending
-			}
-
-			if (searchParams?.sortType === 'volume' && searchParams?.sortOrder === 'desc') {
-				newTokens.sort((a, b) => b.bondingCurve.volume - a.bondingCurve.volume) // descending
-			}
 
 			setState({ ...state, tokens: newTokens })
 		}
