@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { HeliusSchema } from '@/app/utils/schemas'
 import { connection, program } from '@/app/utils/setup'
-import { fetchAllEvents, groupEvents } from '@repo/magicmint'
+import { fetchAllEvents, groupEvents } from '@repo/rage'
 import { getServerEnv } from '@/app/utils/env'
 import { processSwapEvents } from '@/app/webhook/swap'
 import { processCreateEvents } from '@/app/webhook/create'
@@ -32,15 +32,13 @@ export async function POST(request: NextRequest) {
 
 	const events = await fetchAllEvents({ program, signatureList, connection })
 
-	const { swapEvent, createEvent, airdropEvent, harvestEvent, raydiumEvent } = groupEvents(events)
+	const { swapEvent, createEvent, harvestEvent, raydiumEvent } = groupEvents(events)
 
-	console.log('events', { swapEvent, createEvent, airdropEvent, harvestEvent, raydiumEvent })
+	console.log('events', { swapEvent, createEvent, harvestEvent, raydiumEvent })
 
 	await processSwapEvents(swapEvent)
 
 	await processCreateEvents(createEvent)
-
-	await processAirdropEvents(airdropEvent)
 
 	await processHarvestEvents(harvestEvent)
 

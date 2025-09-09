@@ -14,7 +14,7 @@ export async function getSingleTransaction(signature: string, decimals: number):
 			signer: true,
 			time: true,
 			price: true,
-			amount: true,
+			tokenAmount: true,
 			lamports: true,
 			swapType: true,
 			rentAmount: true,

@@ -13,9 +13,9 @@ import {
 
 import { PublicKey } from '@solana/web3.js'
 import { program, connection } from '@/app/utils/setup'
-import { buildTransaction, getBuyTokenIx } from '@repo/magicmint'
+import { buildTransaction, getBuyTokenIx } from '@repo/rage'
 import { parseWithZod } from '@conform-to/zod'
-import { DialectMetadataSchema, DialectSwapSchema2 } from '@/app/utils/schemas'
+import { DialectMetadataSchema, DialectSwapSchema } from '@/app/utils/schemas'
 import { getCachedTokenMetadata } from '@/app/data/get_token_metadata'
 
 // CAIP-2 format for Solana
@@ -91,7 +91,7 @@ export async function POST(req: NextRequest) {
 	const searchParams = req.nextUrl.searchParams
 
 	const submission = parseWithZod(searchParams, {
-		schema: DialectSwapSchema2,
+		schema: DialectSwapSchema,
 	})
 
 	if (submission.status !== 'success') {

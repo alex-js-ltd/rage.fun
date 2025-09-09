@@ -5,45 +5,12 @@ import { getTransactionCount } from './get_transaction_count'
 import 'server-only'
 
 export async function getTokenWithRelations(mint: string) {
-	const token = await prisma.tokenMetadata.findUniqueOrThrow({
+	const token = await prisma.token.findUniqueOrThrow({
 		where: {
 			id: mint,
 		},
 
-		select: {
-			id: true,
-			name: true,
-			symbol: true,
-			description: true,
-			image: true,
-			thumbhash: true,
-			creatorId: true,
-			createdAt: true,
-			updatedAt: true,
-			bondingCurve: {
-				select: {
-					id: true,
-					progress: true,
-					connectorWeight: true,
-					decimals: true,
-					startTime: true,
-					totalSupply: true,
-					reserveBalance: true,
-					targetReserve: true,
-					marketCap: true,
-					volume: true,
-					tradingFees: true,
-					tokenId: true,
-					createdAt: true,
-					updatedAt: true,
-				},
-			},
-			nsfw: {
-				select: {
-					isNsfw: true,
-				},
-			},
-		},
+		include: { bondingCurve: true },
 	})
 
 	const solPrice = getCachedSolPrice()

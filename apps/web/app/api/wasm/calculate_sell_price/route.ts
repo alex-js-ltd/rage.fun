@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { parseWithZod } from '@conform-to/zod'
 import { WasmSchema } from '@/app/utils/schemas'
-import { fetchBondingCurveState, fromLamports, uiAmountToAmount } from '@repo/magicmint'
+import { fetchBondingCurveState, fromLamports, uiAmountToAmount } from '@repo/rage'
 import { program } from '@/app/utils/setup'
 import { BN } from '@coral-xyz/anchor'
 
@@ -32,9 +32,9 @@ export async function GET(req: NextRequest) {
 
 	const bondingCurve = await fetchBondingCurveState({ mint, program })
 
-	const supply = BigInt(bondingCurve.totalSupply.toString())
+	const supply = BigInt(bondingCurve.currentSupply.toString())
 	const tokenAmount = BigInt(uiAmountToAmount(uiAmount, bondingCurve.decimals).toString())
-	const connectorBalance = BigInt(bondingCurve.reserveBalance.toString())
+	const connectorBalance = BigInt(bondingCurve.currentReserve.toString())
 
 	const lamports = calculate_sell_price(
 		supply,
