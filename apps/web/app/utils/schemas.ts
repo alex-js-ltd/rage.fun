@@ -7,7 +7,7 @@ import { BN } from '@coral-xyz/anchor'
 import { Prisma, $Enums } from '@prisma/client'
 import dayjs from 'dayjs'
 import { calculatePercentageDifference, catchError } from './misc'
-import { fromLamports } from '@repo/magicmint'
+import { fromLamports } from '@repo/rage'
 import { formatCompactNumber } from '@/app/utils/misc'
 import { calculatePercentage } from './misc'
 import { OhlcData } from 'lightweight-charts'
@@ -142,17 +142,6 @@ export const DialectMetadataSchema = z.object({
 export const DialectSwapSchema = z.object({
 	mint: Mint,
 	amount: z.string(),
-	decimals: z
-		.number({
-			invalid_type_error: 'Expected Number',
-		})
-		.max(9, { message: 'Decimal is too high' })
-		.min(2, { message: 'Decimal is too low' }),
-})
-
-export const DialectSwapSchema2 = z.object({
-	mint: Mint,
-	amount: z.string(),
 })
 
 export const SearchSchema = z.object({
@@ -205,60 +194,40 @@ export const UpdateEnumSchema = z.enum(['BUY', 'SELL', 'CREATE', 'HARVEST'])
 
 export type UpdateEnumType = z.infer<typeof UpdateEnumSchema>
 
-export const RedirectSchema = z.object({
-	pathname: z.string().regex(/^\/.*/, {
-		message: 'pathname must start with a forward slash ("/")',
-	}),
-})
-
 // Prisma Schemas
-export const TokenMetadataSchema = z.object({
-	id: z.string(),
+export const MetadataSchema = z.object({
+	tokenId: z.string(),
 	name: z.string(),
 	symbol: z.string(),
 	description: z.string(),
 	image: z.string(),
 	thumbhash: z.instanceof(Buffer).transform(val => Buffer.from(val).toString('base64')),
-	creatorId: z.string(),
 	createdAt: z.date().transform(d => d.toISOString()),
 	updatedAt: z.date().transform(d => d.toISOString()),
 })
 
 export const BondingcurveSchema = z.object({
 	id: z.string(),
-	progress: z.instanceof(Prisma.Decimal).transform(val => val.toNumber()),
+
 	connectorWeight: z.instanceof(Prisma.Decimal).transform(val => val.toNumber()),
 	decimals: z.number(),
-	startTime: z
-		.custom<bigint>(val => typeof val === 'bigint', { message: 'Must be a native JS bigint' })
-		.transform(val => val.toString()),
-	totalSupply: z
-		.custom<bigint>(val => typeof val === 'bigint', { message: 'Must be a native JS bigint' })
-		.transform(val => val.toString()),
-	reserveBalance: z
-		.custom<bigint>(val => typeof val === 'bigint', { message: 'Must be a native JS bigint' })
-		.transform(val => val.toString()),
 
-	targetReserve: z
-		.custom<bigint>(val => typeof val === 'bigint', { message: 'Must be a native JS bigint' })
-		.transform(val => val.toString()),
-	marketCap: z.instanceof(Prisma.Decimal).transform(val => val.toString()),
+	initialSupply: z.bigint().transform(val => val.toString()),
+	currentSupply: z.bigint().transform(val => val.toString()),
+	targetSupply: z.bigint().transform(val => val.toString()),
 
-	volume: z
-		.custom<bigint>(val => typeof val === 'bigint', { message: 'Must be a native JS bigint' })
-		.transform(val => val.toString()),
+	initialReserve: z.bigint().transform(val => val.toString()),
+	currentReserve: z.bigint().transform(val => val.toString()),
+	targetReserve: z.bigint().transform(val => val.toString()),
 
-	tradingFees: z
-		.custom<bigint>(val => typeof val === 'bigint', { message: 'Must be a native JS bigint' })
-		.transform(val => val.toString()),
+	tradingFees: z.bigint().transform(val => val.toString()),
+	openTime: z.bigint().transform(val => val.toString()),
+
+	status: z.enum(['Funding', 'Complete', 'Migrated']),
 
 	tokenId: z.string(),
 	createdAt: z.date().transform(d => d.toISOString()),
 	updatedAt: z.date().transform(d => d.toISOString()),
-})
-
-export const NSFWSchema = z.object({
-	isNsfw: z.boolean(),
 })
 
 export const SwapEventSchema = z.object({
@@ -327,28 +296,6 @@ export function createTokenWithRelationsSchema(options: {
 		}
 	})
 }
-
-export const AirdropEventSchema = z.object({
-	id: z.string(),
-	user: z.string(),
-	time: z
-		.custom<bigint>(val => typeof val === 'bigint', { message: 'Must be a native JS bigint' })
-		.transform(val => val.toString()),
-	amount: z
-		.custom<bigint>(val => typeof val === 'bigint', { message: 'Must be a native JS bigint' })
-		.transform(val => val.toString()),
-	signatureId: z.string(),
-})
-
-export const AirdropSignatureSchema = z.object({
-	id: z.string(),
-	airdropId: z.number(),
-	createdAt: z.date().transform(d => d.toISOString()),
-	updatedAt: z.date().transform(d => d.toISOString()),
-	tokenId: z.string(),
-	airdropEvents: z.array(AirdropEventSchema),
-	token: TokenMetadataSchema.extend({ bondingCurve: z.object({ decimals: z.number() }) }),
-})
 
 export function createTransactionTableSchema(options: { decimals: number; solPrice: number }) {
 	return SwapEventSchema.transform(data => {
@@ -454,7 +401,3 @@ export function isOhlcData(data: unknown): data is OhlcData {
 		typeof (data as OhlcData).close === 'number'
 	)
 }
-
-export const DiscordBotSchema = z.object({
-	content: z.string(),
-})
