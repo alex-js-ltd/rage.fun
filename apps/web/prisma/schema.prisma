@@ -49,7 +49,7 @@ model Token {
 
 model Metadata {
   name        String   @db.VarChar(32)
-  symbol      String   @unique @db.VarChar(8)
+  symbol      String   @unique @db.VarChar(10)
   description String   @db.VarChar(280)
   image       String
   thumbhash   Bytes
