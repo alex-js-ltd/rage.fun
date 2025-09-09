@@ -7,7 +7,7 @@ import { BN } from '@coral-xyz/anchor'
 import { Prisma, $Enums } from '@prisma/client'
 import dayjs from 'dayjs'
 import { calculatePercentageDifference, catchError } from './misc'
-import { fromLamports, calculatePrice, calculateMarketCap, calculateProgress } from '@repo/rage'
+import { fromLamports } from '@repo/rage'
 import { formatCompactNumber } from '@/app/utils/misc'
 import { calculatePercentage } from './misc'
 import { OhlcData } from 'lightweight-charts'
@@ -288,7 +288,7 @@ export async function createTokenFeedSchema(options: {
 				transactionCount,
 			}
 
-			return { metadata, metrics, updateType }
+			return { id: data.id, metadata, metrics, updateType }
 		})
 }
 
