@@ -1,7 +1,7 @@
 import { prisma } from '@/app/utils/db'
 import { Prisma, SwapType, SwapEvent, HarvestEvent } from '@prisma/client'
 
-import { type EventData } from '@repo/magicmint'
+import { type EventData } from '@repo/rage'
 
 import { updateBondingCurveState } from '@/app/webhook/swap'
 
@@ -10,7 +10,7 @@ import * as Ably from 'ably'
 import { getTokenWithRelations } from '@/app/data/get_token'
 
 // ALERTS
-import { sendHarvestAlertoDiscord } from '@/app/webhook/discord'
+
 import { sendUpdateAlertToAbly } from '@/app/webhook/ably'
 import 'server-only'
 
@@ -60,8 +60,6 @@ export async function processHarvestEvents(harvestEvents: EventData<'harvestEven
 			const token = await getTokenWithRelations(harvestAlert.tokenId)
 
 			await sendUpdateAlertToAbly(updateChannel, token, 'HARVEST')
-
-			await sendHarvestAlertoDiscord(harvestAlert)
 		} catch (err) {
 			console.error('processHarvestEvents error', {
 				signature: event.signature,

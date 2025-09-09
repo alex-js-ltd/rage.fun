@@ -1,6 +1,6 @@
 import { program } from '@/app/utils/setup'
-import { type EventData, fetchBondingCurveState, getBondingCurveState } from '@repo/magicmint'
-import { sendRaydiumAlertoDiscord } from '@/app/webhook/discord'
+import { type EventData, fetchBondingCurveState, getBondingCurveState } from '@repo/rage'
+
 import { getTokenWithRelations } from '@/app/data/get_token'
 import { PublicKey } from '@solana/web3.js'
 import { prisma } from '@/app/utils/db'
@@ -11,12 +11,12 @@ import 'server-only'
 async function updateBondingCurveSupply(mint: PublicKey) {
 	const pda = getBondingCurveState({ program, mint })
 
-	const { progress, marketCap, connectorWeight, ...rest } = await fetchBondingCurveState({ program, mint })
+	const { ...rest } = await fetchBondingCurveState({ program, mint })
 
-	const totalSupply = BigInt(rest.totalSupply.toString())
+	const currentSupply = BigInt(rest.currentSupply.toString())
 
 	const data = Prisma.validator<Prisma.BondingCurveUpdateInput>()({
-		totalSupply,
+		currentSupply,
 	})
 
 	const update = await prisma.bondingCurve.update({
@@ -32,7 +32,6 @@ export async function processRaydiumEvents(raydiumEvents: EventData<'raydiumEven
 		try {
 			await updateBondingCurveSupply(event.data.mint)
 			const token = await getTokenWithRelations(event.data.mint.toBase58())
-			await sendRaydiumAlertoDiscord(event, token)
 		} catch (err) {
 			console.error('processRaydiumEvents error', {
 				signature: event.signature,

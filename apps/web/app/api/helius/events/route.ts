@@ -5,7 +5,7 @@ import { fetchAllEvents, groupEvents } from '@repo/rage'
 import { getServerEnv } from '@/app/utils/env'
 import { processSwapEvents } from '@/app/webhook/swap'
 import { processCreateEvents } from '@/app/webhook/create'
-import { processAirdropEvents } from '@/app/webhook/airdrop'
+
 import { processHarvestEvents } from '@/app/webhook/harvest'
 import { processRaydiumEvents } from '@/app/webhook/raydium'
 

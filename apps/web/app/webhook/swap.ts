@@ -1,5 +1,5 @@
 import { prisma } from '@/app/utils/db'
-import { Prisma, SwapType, SwapEvent } from '@prisma/client'
+import { Prisma, SwapType, SwapEvent, $Enums } from '@prisma/client'
 
 import { program } from '@/app/utils/setup'
 import { Keypair, PublicKey } from '@solana/web3.js'
@@ -34,8 +34,7 @@ import { getSigner } from '@/app/utils/misc'
 import { getSingleTransaction } from '@/app/data/get_single_transaction'
 
 // ALERTS
-import { sendSwapAlertToDiscord } from '@/app/webhook/discord'
-import { sendSwapAlertToTelegram } from '@/app/webhook/telegram'
+
 import {
 	sendSwapAlertToAbly,
 	sendTopHoldersAlertToAbly,
@@ -43,7 +42,6 @@ import {
 	sendTransactionAlertToAbly,
 } from '@/app/webhook/ably'
 import { getTopHolders } from '@/app/data/get_top_holders'
-import { getOustandingAirdrops } from '@/app/data/get_outstanding_airdrops'
 
 import 'server-only'
 
@@ -55,24 +53,23 @@ export async function updateBondingCurveState(address: string) {
 	const mint = new PublicKey(address)
 	const pda = getBondingCurveState({ program, mint })
 
-	const { progress, marketCap, connectorWeight, ...rest } = await fetchBondingCurveState({ program, mint })
+	const { ...rest } = await fetchBondingCurveState({ program, mint })
 
-	const totalSupply = BigInt(rest.totalSupply.toString())
+	const currentSupply = BigInt(rest.currentSupply.toString())
+	const currentReserve = BigInt(rest.currentReserve.toString())
+	const tradingFees = BigInt(rest?.tradingFees?.toString())
 
-	const reserveBalance = BigInt(rest.reserveBalance.toString())
-
-	const startTime = BigInt(rest.openTime.toString())
-
-	const tradingFees = rest?.tradingFees ? BigInt(rest?.tradingFees?.toString()) : BigInt(0)
+	const status = rest.status.funding
+		? $Enums.Status.Funding
+		: rest.status.complete
+			? $Enums.Status.Complete
+			: $Enums.Status.Migrated
 
 	const data = Prisma.validator<Prisma.BondingCurveUpdateInput>()({
-		progress,
-		totalSupply,
-		reserveBalance,
-		marketCap,
-		startTime,
-		connectorWeight,
+		currentSupply,
+		currentReserve,
 		tradingFees,
+		status,
 	})
 
 	const update = await prisma.bondingCurve.update({
@@ -82,7 +79,7 @@ export async function updateBondingCurveState(address: string) {
 
 	console.log('🔁 Synced bonding curve:', update)
 
-	return progress
+	return status
 }
 
 export async function upsertSwapEvent(eventData: EventData<'swapEvent'>): Promise<SwapEvent> {

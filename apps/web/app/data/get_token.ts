@@ -1,7 +1,8 @@
 import { prisma } from '@/app/utils/db'
-import { createTokenWithRelationsSchema } from '@/app/utils/schemas'
+import { createTokenFeedSchema } from '@/app/utils/schemas'
 import { getCachedSolPrice } from './get_sol_price'
 import { getTransactionCount } from './get_transaction_count'
+import { getVolume } from './get_volume'
 import 'server-only'
 
 export async function getTokenWithRelations(mint: string) {
@@ -13,16 +14,19 @@ export async function getTokenWithRelations(mint: string) {
 		include: { bondingCurve: true },
 	})
 
-	const solPrice = getCachedSolPrice()
+	const solPricePromise = getCachedSolPrice()
 
-	const transactionCount = getTransactionCount(token.id)
+	const transactionPromise = getTransactionCount(token.id)
 
-	const TokenWithRelationsSchema = createTokenWithRelationsSchema({
-		solPrice,
-		transactionCount,
+	const volumePromise = getVolume(token.id)
+
+	const TokenFeedSchema = await createTokenFeedSchema({
+		solPricePromise,
+		transactionPromise,
+		volumePromise,
 	})
 
-	const parsed = await TokenWithRelationsSchema.safeParseAsync(token)
+	const parsed = await TokenFeedSchema.safeParseAsync(token)
 
 	if (!parsed.success) {
 		console.error(parsed.error.format())
