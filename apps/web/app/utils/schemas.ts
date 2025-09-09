@@ -297,7 +297,7 @@ export function createTokenWithRelationsSchema(options: {
 
 export function createTransactionTableSchema(options: { decimals: number; solPrice: number }) {
 	return SwapEventSchema.transform(data => {
-		const uiResult = fromLamports(new BN(data.amount), options.decimals)
+		const uiResult = fromLamports(new BN(data.tokenAmount), options.decimals)
 
 		const uiAmount = formatCompactNumber(uiResult)
 
@@ -314,17 +314,13 @@ export function createTransactionTableSchema(options: { decimals: number; solPri
 }
 
 // Prisma Types
-export type TokenMetadataType = z.infer<typeof TokenMetadataSchema>
+export type TokenMetadataType = z.infer<typeof MetadataSchema>
 
 export type BondingCurveType = z.infer<typeof BondingcurveSchema>
 
 export type SwapEventType = z.infer<typeof SwapEventSchema>
 
-export type NSFWType = z.infer<typeof NSFWSchema>
-
 export type TokenWithRelationsType = z.infer<ReturnType<typeof createTokenWithRelationsSchema>>
-
-export type AirdropSignatureType = z.infer<typeof AirdropSignatureSchema>
 
 export type TransactionTableType = z.infer<ReturnType<typeof createTransactionTableSchema>>
 
@@ -338,7 +334,7 @@ export const AccountSchema = z.object({
 		.refine(a => a > BigInt('0'), { message: 'Amount must be greater than 0' })
 		.transform(a => a.toString()),
 
-	accountType: z.enum(['trader', 'bonding-curve', 'airdrop-pool', 'raydium-pool']),
+	accountType: z.enum(['trader', 'bonding-curve', 'raydium-pool']),
 })
 
 export function createTopHolderSchema(decimals: number, totalSupply: BN) {
@@ -362,13 +358,6 @@ export const WasmSchema = z.object({
 	uiAmount: z.string(),
 })
 
-export const RandomAirdropSchema = z.object({
-	mint: Mint,
-	users: z.array(Wallet).nonempty(),
-	payer: Wallet,
-	amount: z.string(),
-})
-
 export const TokenAmountSchema = z.object({
 	amount: z.string().regex(/^\d+$/, {
 		message: 'Amount must be a numeric string',
@@ -379,14 +368,6 @@ export const TokenAmountSchema = z.object({
 		message: 'uiAmountString must be a valid number string',
 	}),
 })
-
-export const WalletSchema = TokenMetadataSchema.extend({
-	bondingCurve: BondingcurveSchema,
-	nsfw: NSFWSchema,
-	tokenAmount: TokenAmountSchema,
-})
-
-export type WalletType = z.infer<typeof WalletSchema>
 
 export function isOhlcData(data: unknown): data is OhlcData {
 	return (
