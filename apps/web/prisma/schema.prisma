@@ -16,10 +16,13 @@ datasource db {
 
 model User {
   id        String    @id @default(cuid())
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+
   tokens    Token[]
   comments  Comment[]
+
+
+    createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
 }
 
 model Token {
