@@ -4,15 +4,6 @@ export async function GET() {
 	const payload: ActionsJson = {
 		rules: [
 			// map all root level routes to an action
-			{
-				pathPattern: '/*',
-				apiPath: '/api/buy/*',
-			},
-			// idempotent rule as the fallback
-			{
-				pathPattern: '/api/buy/**',
-				apiPath: '/api/buy/**',
-			},
 
 			{
 				pathPattern: '/api/dialect/buy/*',
