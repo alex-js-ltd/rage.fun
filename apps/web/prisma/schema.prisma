@@ -15,14 +15,13 @@ datasource db {
 }
 
 model User {
-  id        String    @id @default(cuid())
+  id String @id @default(cuid())
 
-  tokens    Token[]
-  comments  Comment[]
+  tokens   Token[]
+  comments Comment[]
 
-
-    createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Token {
@@ -49,8 +48,6 @@ model Token {
 }
 
 model Metadata {
-  id          String   @id // ← SAME value as Token.id
-  token       Token    @relation(fields: [id], references: [id], onDelete: Cascade, onUpdate: Cascade)
   name        String
   symbol      String   @unique
   description String
@@ -58,6 +55,9 @@ model Metadata {
   thumbhash   Bytes
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+
+  token   Token  @relation(fields: [tokenId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  tokenId String @unique
 }
 
 enum Status {
