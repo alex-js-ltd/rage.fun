@@ -7,10 +7,11 @@ import { BN } from '@coral-xyz/anchor'
 import { Prisma, $Enums } from '@prisma/client'
 import dayjs from 'dayjs'
 import { calculatePercentageDifference, catchError } from './misc'
-import { fromLamports } from '@repo/rage'
+import { fromLamports, calculatePrice, calculateMarketCap, calculateProgress } from '@repo/rage'
 import { formatCompactNumber } from '@/app/utils/misc'
 import { calculatePercentage } from './misc'
 import { OhlcData } from 'lightweight-charts'
+import { metadata } from '../layout'
 
 const MAX_UPLOAD_SIZE = 1024 * 1024 * 1 // 1MB
 
@@ -249,50 +250,71 @@ export const SwapEventSchema = z.object({
 	tokenId: z.string(),
 })
 
-export function solToUsd(amountInSol: Decimal, solPrice: number): Decimal {
-	return amountInSol.mul(new Decimal(solPrice))
+export async function createTokenFeedSchema(options: {
+	volumePromise: Promise<string>
+	transactionPromise: Promise<{
+		readonly buys: number
+		readonly sells: number
+		readonly total: number
+	}>
+	solPricePromise: Promise<number>
+}) {
+	const [solVolume, transactionCount, solPrice] = await Promise.all([
+		options.volumePromise,
+		options.transactionPromise,
+		options.solPricePromise,
+	])
+
+	return z
+		.object({
+			id: z.string(),
+			metadata: MetadataSchema,
+			bondingCurve: BondingcurveSchema,
+			updateType: UpdateEnumSchema.optional(),
+		})
+		.transform(async data => {
+			const { metadata, bondingCurve, updateType } = data
+
+			const price = calculatePrice(bondingCurve)
+			const marketCap = calculateMarketCap(bondingCurve)
+			const liquidity = new Decimal(bondingCurve.currentReserve).div(1e9)
+			const volume = new Decimal(solVolume).div(1e9)
+
+			const metrics = {
+				price: solToUsd(price, solPrice),
+				marketCap: solToUsd(marketCap, solPrice),
+				liquidity: solToUsd(liquidity, solPrice),
+				volume: solToUsd(volume, solPrice),
+				transactionCount,
+			}
+
+			return { metadata, metrics, updateType }
+		})
 }
 
-export function createTokenWithRelationsSchema(options: {
-	solPrice: Promise<number>
+export function calculatePrice(state: BondingCurveType) {
+	const { currentReserve, currentSupply, connectorWeight, decimals } = state
 
-	transactionCount: Promise<{ buys: number; sells: number; total: number }>
-}) {
-	return TokenMetadataSchema.extend({
-		bondingCurve: BondingcurveSchema,
+	const reserve = new Decimal(currentReserve).div(1e9) // lamports → SOL
+	const supply = new Decimal(currentSupply).div(
+		new Decimal(10).pow(decimals), // base units → tokens
+	)
 
-		updateType: UpdateEnumSchema.optional(),
-	}).transform(async data => {
-		const price = await options.solPrice
+	const cw = new Decimal(connectorWeight)
 
-		const marketCap = solToUsd(new Decimal(data.bondingCurve.marketCap), price).toNumber()
+	return reserve.dividedBy(supply.mul(cw))
+}
 
-		const reserveBalanceSol = new Decimal(data.bondingCurve.reserveBalance).div(1e9)
+export function calculateMarketCap(state: BondingCurveType) {
+	const price = calculatePrice(state)
 
-		const reserveBalance = solToUsd(reserveBalanceSol, price).toNumber()
+	const supply = new Decimal(state.currentSupply.toString()).div(new Decimal(10).pow(state.decimals))
 
-		const volumeSol = new Decimal(data.bondingCurve.volume).div(1e9)
+	return price.mul(supply)
+}
 
-		const volume = solToUsd(volumeSol, price).toNumber()
-
-		const tradingFeesSol = new Decimal(data.bondingCurve.tradingFees).div(1e9)
-
-		const tradingFees = solToUsd(tradingFeesSol, price).toNumber()
-
-		const transactionCount = await options.transactionCount
-
-		return {
-			...data,
-			bondingCurve: {
-				...data.bondingCurve,
-				marketCap,
-				reserveBalance,
-				volume,
-				tradingFees,
-				transactionCount,
-			},
-		}
-	})
+export function solToUsd(amountInSol: Decimal, solPrice: number): Decimal {
+	return amountInSol.mul(new Decimal(solPrice))
 }
 
 export function createTransactionTableSchema(options: { decimals: number; solPrice: number }) {
@@ -320,7 +342,7 @@ export type BondingCurveType = z.infer<typeof BondingcurveSchema>
 
 export type SwapEventType = z.infer<typeof SwapEventSchema>
 
-export type TokenWithRelationsType = z.infer<ReturnType<typeof createTokenWithRelationsSchema>>
+export type TokenFeedType = z.output<Awaited<ReturnType<typeof createTokenFeedSchema>>>
 
 export type TransactionTableType = z.infer<ReturnType<typeof createTransactionTableSchema>>
 
