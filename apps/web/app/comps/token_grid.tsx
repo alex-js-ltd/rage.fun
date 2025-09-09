@@ -50,8 +50,8 @@ function TokenCard({ token, children }: { token: TokenFeedType; children?: React
 			<div
 				className={cn(
 					'absolute inset-0',
-					updateType === 'BUY' && 'animate-buy',
-					updateType === 'SELL' && 'animate-sell',
+					updateType === 'Buy' && 'animate-buy',
+					updateType === 'Sell' && 'animate-sell',
 				)}
 			/>
 			<div className="relative p-4 grid grid-cols-1 gap-4">
@@ -174,7 +174,7 @@ export function TokenGrid({
 
 		// Create Event
 		if (
-			updateEvent.updateType === 'CREATE' &&
+			updateEvent.updateType === 'Create' &&
 			searchParams?.sortType === 'createdAt' &&
 			searchParams?.sortOrder === 'desc'
 		) {

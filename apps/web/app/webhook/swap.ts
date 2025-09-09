@@ -21,7 +21,7 @@ import { getRandomUsers } from '@/app/data/get_random_users'
 import { Program } from '@coral-xyz/anchor'
 
 import { getMint, TOKEN_2022_PROGRAM_ID } from '@solana/spl-token'
-import { TokenWithRelationsType } from '../utils/schemas'
+import { TokenFeedType } from '../utils/schemas'
 import { BN } from '@coral-xyz/anchor'
 
 import { revalidateTag, revalidatePath } from 'next/cache'
@@ -89,21 +89,21 @@ export async function upsertSwapEvent(eventData: EventData<'swapEvent'>): Promis
 	const signer = data.signer.toBase58()
 	const time = BigInt(data.time.toString())
 	const price = data.price
-	const amount = BigInt(data.tokenAmount.toString())
+	const tokenAmount = BigInt(data.tokenAmount.toString())
 	const lamports = BigInt(data.lamports.toString())
 	const rentAmount = BigInt(data.rentAmount.toString())
 	const tokenId = data.mint.toBase58()
 
 	const buy = data.swapType.buy ? true : false
 
-	const swapType = buy ? SwapType.BUY : SwapType.SELL
+	const swapType = buy ? SwapType.Buy : SwapType.Sell
 
 	const create = Prisma.validator<Prisma.SwapEventCreateInput>()({
 		id,
 		signer,
 		time,
 		price,
-		amount,
+		tokenAmount,
 		lamports,
 		rentAmount,
 		swapType,
@@ -119,26 +119,6 @@ export async function upsertSwapEvent(eventData: EventData<'swapEvent'>): Promis
 	const swapEvent = await prisma.swapEvent.upsert(upsert)
 
 	return swapEvent
-}
-
-export async function updateVolume(mint: string) {
-	const agg = await prisma.swapEvent.aggregate({
-		where: { tokenId: mint },
-		_sum: { lamports: true },
-	})
-
-	const volume = agg._sum.lamports ?? BigInt(0)
-
-	const data = Prisma.validator<Prisma.BondingCurveUpdateInput>()({
-		volume,
-	})
-
-	const update = await prisma.bondingCurve.update({
-		where: { tokenId: mint },
-		data,
-	})
-
-	console.log('🔁 volume updated:', update)
 }
 
 export async function deployToRaydium({
@@ -177,14 +157,14 @@ export async function syncBondingCurve({
 }: {
 	program: Program<Rage>
 	payer: Keypair
-	token: TokenWithRelationsType
+	token: TokenFeedType
 }) {
 	const { id } = token
-	const { totalSupply } = token.bondingCurve
+	const { currentSupply } = token.bondingCurve
 
 	const mint = new PublicKey(id)
 
-	const offChain = new BN(totalSupply)
+	const offChain = new BN(currentSupply)
 
 	const { supply } = await getMint(connection, mint, 'confirmed', TOKEN_2022_PROGRAM_ID)
 
@@ -227,8 +207,7 @@ export async function processSwapEvents(swapEvents: EventData<'swapEvent'>[]) {
 	for await (const event of swapEvents) {
 		try {
 			const swapEvent = await upsertSwapEvent(event)
-			const progress = await updateBondingCurveState(event.data.mint.toBase58())
-			await updateVolume(event.data.mint.toBase58())
+			const status = await updateBondingCurveState(event.data.mint.toBase58())
 
 			const parsed = SwapEventSchema.safeParse(swapEvent)
 
@@ -257,16 +236,9 @@ export async function processSwapEvents(swapEvents: EventData<'swapEvent'>[]) {
 
 			await sendTopHoldersAlertToAbly(holdersChannel, topHolders, token)
 
-			await sendSwapAlertToDiscord(swapAlert, token, topHolders)
-			await sendSwapAlertToTelegram(swapAlert, token, topHolders)
-
 			await syncBondingCurve({ program, payer, token })
-			// Unlock pending airdrops and deploy to Raydium if progress is complete.
-			const airdrops = await getOustandingAirdrops(swapAlert.tokenId)
 
-			console.log(`🔔 Outstanding airdrops for token ${swapAlert.tokenId}: ${airdrops}`)
-
-			if (progress >= 100.0) {
+			if (status === 'Complete') {
 				await deployToRaydium({ program, mint: event.data.mint, payer })
 			}
 		} catch (err) {

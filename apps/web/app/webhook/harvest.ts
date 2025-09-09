@@ -59,7 +59,7 @@ export async function processHarvestEvents(harvestEvents: EventData<'harvestEven
 
 			const token = await getTokenWithRelations(harvestAlert.tokenId)
 
-			await sendUpdateAlertToAbly(updateChannel, token, 'HARVEST')
+			await sendUpdateAlertToAbly(updateChannel, token, 'Harvest')
 		} catch (err) {
 			console.error('processHarvestEvents error', {
 				signature: event.signature,

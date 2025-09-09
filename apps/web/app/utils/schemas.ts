@@ -191,7 +191,7 @@ export const HarvestYieldSchema = z.object({
 	mint: Mint,
 })
 
-export const UpdateEnumSchema = z.enum(['BUY', 'SELL', 'CREATE', 'HARVEST'])
+export const UpdateEnumSchema = z.enum(['Buy', 'Sell', 'Create', 'Harvest'])
 
 export type UpdateEnumType = z.infer<typeof UpdateEnumSchema>
 
@@ -291,7 +291,7 @@ export async function createTokenFeedSchema(options: {
 				transactionCount,
 			}
 
-			return { id: data.id, creatorId: data.creatorId, metadata, metrics, updateType }
+			return { id: data.id, creatorId: data.creatorId, metadata, metrics, updateType, bondingCurve }
 		})
 }
 

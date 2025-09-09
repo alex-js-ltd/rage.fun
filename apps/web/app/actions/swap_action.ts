@@ -4,7 +4,7 @@ import { SubmissionResult } from '@conform-to/react'
 import { parseWithZod } from '@conform-to/zod'
 import { SwapSchema } from '@/app/utils/schemas'
 import { program, connection } from '@/app/utils/setup'
-import { getBuyTokenIx, getSellTokenIx, buildTransaction } from '@repo/magicmint'
+import { getBuyTokenIx, getSellTokenIx, buildTransaction } from '@repo/rage'
 
 import { auth } from '@/app/auth'
 import { PublicKey } from '@solana/web3.js'

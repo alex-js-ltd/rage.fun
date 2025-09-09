@@ -37,7 +37,7 @@ export function Events() {
 
 	const open = current ? true : false
 
-	if (!current || current.updateType === 'CREATE') return null
+	if (!current || current.updateType === 'Create') return null
 
 	return (
 		<Collapsible
@@ -57,7 +57,7 @@ export function Events() {
 
 				<TokenLogo className="rounded-full" {...getTokenLogoProps(current.metadata)} />
 
-				<span>{current?.updateType === 'BUY' ? '🪄' : '🔥'}</span>
+				<span>{current?.updateType === 'Buy' ? '🪄' : '🔥'}</span>
 			</CollapsibleContent>
 		</Collapsible>
 	)

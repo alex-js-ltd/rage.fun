@@ -21,22 +21,12 @@ import { TransactionTable } from '@/app/comps/transaction_table'
 import { getTransactionData } from '@/app/data/get_transaction_data'
 import { HoldersTable } from '@/app/comps/holders_table'
 import { getTopHolders } from '@/app/data/get_top_holders'
-import { BondingCurve, BondingCurveFallback } from '@/app/comps/bonding_curve'
 
 import type { Metadata, ResolvingMetadata } from 'next'
 import { getCachedTokenMetadata } from '@/app/data/get_token_metadata'
 import { generateSolanaBlink } from '@/app/utils/misc'
 import { TokenPair, TokenPairFallback } from '@/app/comps/token_pair'
 import { Back } from '@/app/comps/back'
-import { airDrop, fetchBondingCurveState } from '@repo/magicmint'
-
-import { PublicKey } from '@solana/web3.js'
-
-import { program } from '@/app/utils/setup'
-import { TokenMetadata } from '@prisma/client'
-import { TokenWithRelationsType } from '@/app/utils/schemas'
-
-import { getAirdropState } from '@/app/data/get_airdrop_state'
 
 import { getComments } from '@/app/data/get_comments'
 import { Comments } from '@/app/comps/comments'

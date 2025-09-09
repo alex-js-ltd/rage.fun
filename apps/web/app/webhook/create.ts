@@ -76,7 +76,7 @@ export async function processCreateEvents(createEvents: EventData<'createEvent'>
 
 			const token = await getTokenWithRelations(event.data.mint.toBase58())
 
-			await sendUpdateAlertToAbly(channel, token, 'CREATE')
+			await sendUpdateAlertToAbly(channel, token, 'Create')
 
 			revalidateTag(token.id)
 		} catch (err) {
