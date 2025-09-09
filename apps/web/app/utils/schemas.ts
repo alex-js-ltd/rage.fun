@@ -239,9 +239,7 @@ export const SwapEventSchema = z.object({
 			message: 'Must be a valid Prisma.Decimal instance',
 		})
 		.transform(val => (val as Prisma.Decimal).toNumber()),
-	amount: z
-		.custom<bigint>(val => typeof val === 'bigint', { message: 'Must be bigint' })
-		.transform(val => val.toString()),
+	tokenAmount: z.bigint().transform(val => val.toString()),
 	swapType: z.nativeEnum($Enums.SwapType),
 
 	lamports: z.bigint().transform(val => val.toString()),
