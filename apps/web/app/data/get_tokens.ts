@@ -29,12 +29,15 @@ export async function getTokens(searchParams: SearchParams) {
 		orderBy: [...getOrderBy({ sortType, sortOrder })],
 	})
 
+	console.log('tokens', tokens)
+
 	const solPricePromise = getCachedSolPrice()
 
 	const promise = tokens.map(async token => {
 		const transactionPromise = getTransactionCount(token.id)
 		const volumePromise = getVolume(token.id)
 
+		console.log('token', token)
 		const TokenFeedSchema = await createTokenFeedSchema({
 			solPricePromise,
 			transactionPromise,
@@ -42,7 +45,7 @@ export async function getTokens(searchParams: SearchParams) {
 		})
 
 		const parsed = await TokenFeedSchema.safeParseAsync(token)
-
+		console.log('parsed', parsed)
 		if (!parsed.success) {
 			console.error(parsed.error.format())
 			throw new Error('Invalid token with relations')

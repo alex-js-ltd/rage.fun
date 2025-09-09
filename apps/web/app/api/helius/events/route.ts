@@ -34,11 +34,11 @@ export async function POST(request: NextRequest) {
 
 	const { swapEvent, createEvent, harvestEvent, raydiumEvent } = groupEvents(events)
 
-	console.log('events', { swapEvent, createEvent, harvestEvent, raydiumEvent })
-
-	await processSwapEvents(swapEvent)
+	console.log('events', { createEvent, swapEvent, harvestEvent, raydiumEvent })
 
 	await processCreateEvents(createEvent)
+
+	await processSwapEvents(swapEvent)
 
 	await processHarvestEvents(harvestEvent)
 
