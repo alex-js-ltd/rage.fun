@@ -20,7 +20,7 @@ export async function getTokens(searchParams: SearchParams) {
 
 	console.log('creatorId', creatorId)
 
-	const tokens = await prisma.tokenMetadata.findMany({
+	const tokens = await prisma.token.findMany({
 		where: getWhere(creatorId),
 		select,
 		take: TAKE + 1,
@@ -67,11 +67,8 @@ const TAKE: number = 12
 
 function getWhere(creatorId?: string) {
 	if (creatorId) {
-		return Prisma.validator<Prisma.TokenMetadataWhereInput>()({
+		return Prisma.validator<Prisma.TokenWhereInput>()({
 			bondingCurve: {
-				isNot: null,
-			},
-			nsfw: {
 				isNot: null,
 			},
 
@@ -79,76 +76,76 @@ function getWhere(creatorId?: string) {
 		})
 	}
 
-	return Prisma.validator<Prisma.TokenMetadataWhereInput>()({
+	return Prisma.validator<Prisma.TokenWhereInput>()({
 		bondingCurve: {
-			isNot: null,
-		},
-		nsfw: {
 			isNot: null,
 		},
 	})
 }
 
-const select = Prisma.validator<Prisma.TokenMetadataSelect>()({
+const select = Prisma.validator<Prisma.TokenSelect>()({
 	id: true,
-	name: true,
-	symbol: true,
-	description: true,
-	image: true,
-	thumbhash: true,
 	creatorId: true,
 	createdAt: true,
 	updatedAt: true,
 
+	metadata: {
+		select: {
+			name: true,
+			symbol: true,
+			description: true,
+			image: true,
+			thumbhash: true,
+
+			createdAt: true,
+			updatedAt: true,
+
+			tokenId: true,
+		},
+	},
+
 	bondingCurve: {
 		select: {
 			id: true,
-			progress: true,
+
 			connectorWeight: true,
 			decimals: true,
-			startTime: true,
-			totalSupply: true,
-			reserveBalance: true,
+
+			initialSupply: true,
+			currentSupply: true,
+			targetSupply: true,
+
+			initialReserve: true,
+			currentReserve: true,
 			targetReserve: true,
-			marketCap: true,
-			volume: true,
+
 			tradingFees: true,
-			tokenId: true,
+			openTime: true,
+
 			createdAt: true,
 			updatedAt: true,
-		},
-	},
-	nsfw: {
-		select: {
-			isNsfw: true,
+
+			tokenId: true,
 		},
 	},
 })
 
 function getCursor(cursorId: SearchParams['cursorId']) {
 	const cursor = cursorId ? { id: cursorId } : undefined
-	return Prisma.validator<Prisma.TokenMetadataFindManyArgs['cursor']>()(cursor)
+	return Prisma.validator<Prisma.TokenFindManyArgs['cursor']>()(cursor)
 }
 
 function getOrderBy({ sortType, sortOrder }: SearchParams) {
 	switch (sortType) {
 		case 'createdAt':
-			return Prisma.validator<Prisma.TokenMetadataOrderByWithRelationInput[]>()([
-				{ createdAt: sortOrder },
-				{ id: sortOrder },
-			])
+			return Prisma.validator<Prisma.TokenOrderByWithRelationInput[]>()([{ createdAt: sortOrder }, { id: sortOrder }])
 
-		case 'progress':
-			return Prisma.validator<Prisma.TokenMetadataOrderByWithRelationInput[]>()([
-				{ bondingCurve: { progress: sortOrder } },
+		case 'updatedAt':
+			return Prisma.validator<Prisma.TokenOrderByWithRelationInput[]>()([
+				{ bondingCurve: { updatedAt: sortOrder } },
 				{ bondingCurve: { id: sortOrder } },
 			])
 
-		case 'volume':
-			return Prisma.validator<Prisma.TokenMetadataOrderByWithRelationInput[]>()([
-				{ bondingCurve: { volume: sortOrder } },
-				{ createdAt: 'desc' },
-			])
 		default:
 			throw new Error(`Unsupported sortType: ${sortType}`)
 	}

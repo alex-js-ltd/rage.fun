@@ -145,7 +145,7 @@ export const DialectSwapSchema = z.object({
 })
 
 export const SearchSchema = z.object({
-	sortType: z.enum(['createdAt', 'progress', 'volume']),
+	sortType: z.enum(['createdAt', 'updatedAt']),
 	sortOrder: z.enum(['asc', 'desc']),
 	cursorId: z.string().optional(),
 	query: z.string().optional(),
@@ -260,7 +260,7 @@ export function createTokenWithRelationsSchema(options: {
 }) {
 	return TokenMetadataSchema.extend({
 		bondingCurve: BondingcurveSchema,
-		nsfw: NSFWSchema,
+
 		updateType: UpdateEnumSchema.optional(),
 	}).transform(async data => {
 		const price = await options.solPrice
