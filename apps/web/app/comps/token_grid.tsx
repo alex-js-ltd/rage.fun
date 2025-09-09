@@ -4,7 +4,7 @@ import React, { use, useState, useEffect, useRef, FormHTMLAttributes } from 'rea
 import Link from 'next/link'
 
 import { Icon } from './_icon'
-import { type TokenWithRelationsType, SearchParams } from '@/app/utils/schemas'
+import { type TokenFeedType, SearchParams } from '@/app/utils/schemas'
 
 import { useAsync } from '@/app/hooks/use_async'
 import Image from 'next/image'
@@ -29,23 +29,19 @@ import { useInView } from 'react-intersection-observer'
 import { HarvestYieldForm } from '@/app/comps/harvest_yield_form'
 
 export type InitialState = {
-	tokens: TokenWithRelationsType[]
+	tokens: TokenFeedType[]
 	isLastPage: boolean
 	searchParams: SearchParams
 	nextCursorId?: string
 }
 
-function TokenCard({ token, children }: { token: TokenWithRelationsType; children?: React.ReactNode }) {
+function TokenCard({ token, children }: { token: TokenFeedType; children?: React.ReactNode }) {
 	const {
 		id: mint,
-		name,
-		symbol,
-		image,
-		thumbhash,
 		creatorId,
+		metadata: { name, symbol, image, thumbhash },
 
-		nsfw: { isNsfw },
-		bondingCurve: { updatedAt, progress, marketCap, reserveBalance, volume, transactionCount },
+		metrics: { progress, price, marketCap, liquidity, volume, transactionCount },
 
 		updateType,
 	} = token
@@ -86,10 +82,6 @@ function TokenCard({ token, children }: { token: TokenWithRelationsType; childre
 								placeholder="blur"
 								sizes="(min-width: 1280px) 14vw, (min-width: 1024px) 16vw, (min-width: 768px) 20vw, (min-width: 640px) 25vw, 33vw"
 							/>
-
-							{isNsfw && (
-								<div className="z-10 absolute frost inset-0 grid place-items-center text-text-100 text-xs">NSFW</div>
-							)}
 						</Link>
 					</SquareProgress>
 

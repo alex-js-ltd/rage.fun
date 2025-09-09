@@ -268,6 +268,7 @@ export async function createTokenFeedSchema(options: {
 	return z
 		.object({
 			id: z.string(),
+			creatorId: z.string(),
 			metadata: MetadataSchema,
 			bondingCurve: BondingcurveSchema,
 			updateType: UpdateEnumSchema.optional(),
@@ -275,12 +276,14 @@ export async function createTokenFeedSchema(options: {
 		.transform(async data => {
 			const { metadata, bondingCurve, updateType } = data
 
+			const progress = calculateProgress(bondingCurve)
 			const price = calculatePrice(bondingCurve)
 			const marketCap = calculateMarketCap(bondingCurve)
 			const liquidity = new Decimal(bondingCurve.currentReserve).div(1e9)
 			const volume = new Decimal(solVolume).div(1e9)
 
 			const metrics = {
+				progress,
 				price: solToUsd(price, solPrice),
 				marketCap: solToUsd(marketCap, solPrice),
 				liquidity: solToUsd(liquidity, solPrice),
@@ -288,7 +291,7 @@ export async function createTokenFeedSchema(options: {
 				transactionCount,
 			}
 
-			return { id: data.id, metadata, metrics, updateType }
+			return { id: data.id, creatorId: data.creatorId, metadata, metrics, updateType }
 		})
 }
 
@@ -311,6 +314,23 @@ export function calculateMarketCap(state: BondingCurveType) {
 	const supply = new Decimal(state.currentSupply.toString()).div(new Decimal(10).pow(state.decimals))
 
 	return price.mul(supply)
+}
+
+export function calculateProgress(state: BondingCurveType) {
+	const { currentReserve, initialReserve, targetReserve } = state
+
+	const cur = new Decimal(currentReserve)
+	const init = new Decimal(initialReserve)
+	const target = new Decimal(targetReserve)
+
+	const denom = target.minus(init)
+	if (denom.lte(0)) return 0
+
+	const num = cur.minus(init)
+
+	const progress = num.div(denom).mul(100)
+
+	return progress.toNumber()
 }
 
 export function solToUsd(amountInSol: Decimal, solPrice: number): Decimal {
