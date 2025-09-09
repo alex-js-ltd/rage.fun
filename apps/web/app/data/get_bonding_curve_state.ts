@@ -1,4 +1,4 @@
-import { type BondingCurveState, fetchBondingCurveState } from '@repo/magicmint'
+import { type BondingCurveState, fetchBondingCurveState } from '@repo/rage'
 import { program } from '@/app/utils/setup'
 import { PublicKey } from '@solana/web3.js'
 import 'server-only'

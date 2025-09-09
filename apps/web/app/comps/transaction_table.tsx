@@ -4,7 +4,7 @@ import React, { type ReactNode, use, useState } from 'react'
 import { type TransactionTableType } from '@/app/utils/schemas'
 
 import { cn, formatNumberSmart } from '@/app/utils/misc'
-import { type TokenWithRelationsType } from '@/app/utils/schemas'
+import { type TokenFeedType } from '@/app/utils/schemas'
 import { shortAddress } from '@/app/utils/misc'
 import { Icon } from './_icon'
 
@@ -14,7 +14,7 @@ import { timeFromNow } from '@/app/utils/misc'
 
 export type TransactionTableProps = {
 	transactionPromise: Promise<TransactionTableType[]>
-	tokenPromise: Promise<TokenWithRelationsType>
+	tokenPromise: Promise<TokenFeedType>
 }
 
 export function TransactionTable({ transactionPromise, tokenPromise }: TransactionTableProps) {
@@ -61,7 +61,7 @@ export function TransactionTable({ transactionPromise, tokenPromise }: Transacti
 								className="px-3 text-right text-text-200 font-medium max-w-[100px] truncate whitespace-nowrap overflow-hidden"
 								style={{ width: 150 }}
 							>
-								{token.symbol}
+								{token.metadata.symbol}
 							</th>
 							<th className="px-3 text-right text-text-200 font-medium max-sm:hidden" style={{ width: 150 }}>
 								Trader
@@ -84,8 +84,8 @@ function TableRow({ row, animate }: { row: TransactionTableType; animate: boolea
 		<tr
 			className={cn(
 				'h-10 text-text-100',
-				row.swapType === 'BUY' && animate && 'animate-buy',
-				row.swapType === 'SELL' && animate && 'animate-sell',
+				row.swapType === 'Buy' && animate && 'animate-buy',
+				row.swapType === 'Sell' && animate && 'animate-sell',
 			)}
 		>
 			<td className="px-3 text-left font-medium">
@@ -116,6 +116,6 @@ function TableRow({ row, animate }: { row: TransactionTableType; animate: boolea
 }
 
 function SwapType({ swapType }: { swapType: TransactionTableType['swapType'] }) {
-	const color = swapType === 'BUY' ? 'text-emerald-400' : 'text-red-400'
+	const color = swapType === 'Buy' ? 'text-emerald-400' : 'text-red-400'
 	return <div className={cn('inline-flex items-center rounded px-1 py-0.5 text-xs font-medium', color)}>{swapType}</div>
 }

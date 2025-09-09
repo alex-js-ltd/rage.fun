@@ -1,11 +1,11 @@
 import { use } from 'react'
 import { TokenLogo, getTokenLogoProps, solLogoProps } from '@/app/comps/token_logo'
 import { cn } from '@/app/utils/misc'
-import { type TokenWithRelationsType } from '@/app/utils/schemas'
+import { type TokenFeedType } from '@/app/utils/schemas'
 import { Loading } from './loading'
 
 export interface TokenPairProps extends React.ComponentProps<'div'> {
-	tokenPromise: Promise<TokenWithRelationsType>
+	tokenPromise: Promise<TokenFeedType>
 }
 
 export function TokenPair({ tokenPromise, className, ...props }: TokenPairProps) {
@@ -13,10 +13,10 @@ export function TokenPair({ tokenPromise, className, ...props }: TokenPairProps)
 
 	return (
 		<div className={cn('flex items-center ', className)} {...props}>
-			<TokenLogo {...getTokenLogoProps(token)} />
+			<TokenLogo {...getTokenLogoProps(token.metadata)} />
 			<TokenLogo className="-translate-x-2" {...solLogoProps} />
 
-			<span className="text-text-200 uppercase  text-xs text-nowrap">{token.symbol} / SOL</span>
+			<span className="text-text-200 uppercase  text-xs text-nowrap">{token.metadata.symbol} / SOL</span>
 		</div>
 	)
 }
