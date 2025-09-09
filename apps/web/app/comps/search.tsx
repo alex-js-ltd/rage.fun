@@ -71,14 +71,14 @@ export function SearchResults({ searchPromise }: { searchPromise: Promise<TokenM
 					<div className="w-full max-h-[50vh] overflow-y-auto overscroll-contain">
 						<ul className="">
 							{tokens.map(token => (
-								<li key={token.id} className="text-text-100 hover:bg-white/5 transition-colors p-3">
+								<li key={token.tokenId} className="text-text-100 hover:bg-white/5 transition-colors p-3">
 									<Link
 										className="flex items-center gap-2"
 										href={{
-											pathname: `/token/${token.id}`,
+											pathname: `/token/${token.tokenId}`,
 											query: { interval: '86400000' },
 										}}
-										as={`/token/${token.id}?interval=86400000`}
+										as={`/token/${token.tokenId}?interval=86400000`}
 									>
 										<TokenLogo {...getTokenLogoProps(token)} className="w-[40px] h-[40px] rounded-full" />
 										<span className="text-text-200 uppercase  text-xs text-nowrap">{token.symbol}</span>

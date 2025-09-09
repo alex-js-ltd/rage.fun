@@ -71,28 +71,12 @@ export function HoldersTable({ holdersPromise }: HoldersTableProps) {
 	)
 }
 
-// function getAccountType(row: TopHolderType) {
-// 	switch (row.accountType) {
-// 		case 'bonding-curve':
-// 			return 'Bonding Curve'
-// 		case 'airdrop-pool':
-// 			return 'Airdrop Vault'
-// 		case 'raydium-pool':
-// 			return 'Raydium Pool'
-// 		case 'trader':
-// 			return ''
-// 		default:
-// 			return ''
-// 	}
-// }
-
 function getAccountType(row: TopHolderType) {
 	const baseClass = 'ml-1 px-1.5 py-0.5 text-[10px] font-semibold uppercase rounded tracking-wide'
 	switch (row.accountType) {
 		case 'bonding-curve':
 			return <span className={`${baseClass} bg-purple-500/20 text-purple-300`}>Bonding Curve</span>
-		case 'airdrop-pool':
-			return <span className={`${baseClass} bg-blue-500/20 text-blue-300`}>Airdrop Vault</span>
+
 		case 'raydium-pool':
 			return <span className={`${baseClass} bg-green-500/20 text-green-300`}>Raydium</span>
 		default:

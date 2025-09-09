@@ -20,7 +20,7 @@ import { Toast } from '@/app/comps/toast'
 import { type ToastDescription as ToastConfig, useToast } from '@/app/hooks/use_toast'
 import { useSignAndSendTx } from '@/app/hooks/use_sign_and_send_tx'
 
-import { type TokenWithRelationsType } from '@/app/utils/schemas'
+import { type TokenFeedType } from '@/app/utils/schemas'
 
 import { useDebounceCallback } from 'usehooks-ts'
 import { useAsync } from '@/app/hooks/use_async'
@@ -34,7 +34,7 @@ import { ConnectWallet } from '@/app/comps/connect_wallet'
 import { Progress } from '@/app/comps/progress'
 
 export interface SwapFormProps {
-	tokenPromise: Promise<TokenWithRelationsType>
+	tokenPromise: Promise<TokenFeedType>
 }
 
 interface FormProps {
@@ -64,7 +64,7 @@ export function SwapForm({ tokenPromise }: SwapFormProps) {
 	const [state, setState] = useState(token)
 
 	const { channel } = useChannel('updateEvent', (message: Ably.Message) => {
-		const updateEvent: TokenWithRelationsType = message.data
+		const updateEvent: TokenFeedType = message.data
 
 		if (updateEvent.id === token.id) {
 			setState(updateEvent)
@@ -72,7 +72,7 @@ export function SwapForm({ tokenPromise }: SwapFormProps) {
 	})
 
 	const { id: mint } = token
-	const { progress } = token.bondingCurve
+	const { currentSupply } = token.bondingCurve
 
 	const [tab, setTab] = useState<'buy' | 'sell'>('buy') // you control it
 
@@ -122,14 +122,15 @@ export function SwapForm({ tokenPromise }: SwapFormProps) {
 				<div className="h-[2px] w-full border-b-[2px] border-white opacity-[0.125]" />
 			</div>
 
-			<Progress mint={mint} progress={progress} />
+			{/* <Progress mint={mint} progress={progress} /> */}
 		</>
 	)
 }
 
-function Buy({ token }: { token: TokenWithRelationsType }) {
-	const { id: mint, symbol } = token
-	const { progress } = token.bondingCurve
+function Buy({ token }: { token: TokenFeedType }) {
+	const { id: mint } = token
+	const { symbol } = token.metadata
+	const { progress } = token.metrics
 	return (
 		<Form
 			badge={<TokenBadge {...solLogoProps} />}
@@ -144,14 +145,15 @@ function Buy({ token }: { token: TokenWithRelationsType }) {
 	)
 }
 
-function Sell({ token }: { token: TokenWithRelationsType }) {
-	const { id: mint, symbol } = token
-
-	const { decimals, progress } = token.bondingCurve
+function Sell({ token }: { token: TokenFeedType }) {
+	const { id: mint } = token
+	const { symbol } = token.metadata
+	const { progress } = token.metrics
+	const { decimals } = token.bondingCurve
 
 	return (
 		<Form
-			badge={<TokenBadge {...getTokenLogoProps(token)} className="size-8 rounded-full" />}
+			badge={<TokenBadge {...getTokenLogoProps(token.metadata)} className="size-8 rounded-full" />}
 			mint={mint}
 			decimals={decimals}
 			action={sellAction}
