@@ -14,9 +14,6 @@ import { SwapForm, SwapFormFallback } from '@/app/comps/swap_form'
 import { Tabs, List, Trigger, Content } from '@/app/comps/tabs'
 import { Button } from '@/app/comps/button'
 
-import { HarvestYieldForm } from '@/app/comps/harvest_yield_form'
-import { getTradingFeeYield } from '@/app/data/get_trading_fee_yield'
-
 import { TransactionTable } from '@/app/comps/transaction_table'
 import { getTransactionData } from '@/app/data/get_transaction_data'
 import { HoldersTable } from '@/app/comps/holders_table'
