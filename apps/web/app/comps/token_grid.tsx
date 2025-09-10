@@ -305,6 +305,7 @@ export function TokenCardFallback({ i, children }: { i: number; children?: React
 						<Loading className="w-[62px] h-[20px] rounded-full" i={i + 4} />
 						<Loading className="w-[62px] h-[20px] rounded-full" i={i + 5} />
 						<Loading className="w-[62px] h-[20px] rounded-full" i={i + 6} />
+						<Loading className="w-[62px] h-[20px] rounded-full" i={i + 7} />
 					</div>
 
 					<div className="xs:ml-auto">{children ? children : null}</div>
