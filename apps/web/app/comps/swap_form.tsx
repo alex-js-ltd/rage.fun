@@ -66,12 +66,12 @@ export function SwapForm({ tokenPromise }: SwapFormProps) {
 	const { channel } = useChannel('updateEvent', (message: Ably.Message) => {
 		const updateEvent: TokenFeedType = message.data
 
-		if (updateEvent.id === token.id) {
+		if (updateEvent.id === state.id) {
 			setState(updateEvent)
 		}
 	})
 
-	const { id: mint } = token
+	const { id: mint } = state
 
 	const [tab, setTab] = useState<'buy' | 'sell'>('buy') // you control it
 
@@ -121,7 +121,7 @@ export function SwapForm({ tokenPromise }: SwapFormProps) {
 				<div className="h-[2px] w-full border-b-[2px] border-white opacity-[0.125]" />
 			</div>
 
-			<Progress mint={mint} progress={token.metrics.progress} />
+			<Progress mint={mint} progress={state.metrics.progress} />
 		</>
 	)
 }
