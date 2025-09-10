@@ -58,7 +58,7 @@ export async function GET(req: NextRequest) {
 		icon: token.image,
 		label: `Sell ${token.symbol} `,
 		description: `${token.description}`,
-		title: `magicmint.fun`,
+		title: `letsrage.fun`,
 
 		links: {
 			actions: [
