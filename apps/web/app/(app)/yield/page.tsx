@@ -52,10 +52,14 @@ export default async function Page(props: Props) {
 							<TokenGrid tokenPromise={tokenPromise} creatorId={creatorId} />
 						</Suspense>
 					) : (
-						<p className="text-sm text-text-200 p-4">
-							Ready to earn? Launch your token and start collecting <strong>100% of swap fees</strong> from your bonding
-							curve.
-						</p>
+						<div className="p-4 flex flex-col gap-4">
+							<p className="text-sm text-text-200">Take your fees back ✊</p>
+
+							<p className="text-sm text-text-200">
+								Launch a token and own <strong>100% of swap fees</strong> from your bonding curve — no middlemen, no
+								extraction.
+							</p>
+						</div>
 					)}
 				</section>
 			</div>
