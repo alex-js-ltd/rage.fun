@@ -72,7 +72,6 @@ export function SwapForm({ tokenPromise }: SwapFormProps) {
 	})
 
 	const { id: mint } = token
-	const { currentSupply } = token.bondingCurve
 
 	const [tab, setTab] = useState<'buy' | 'sell'>('buy') // you control it
 
@@ -200,7 +199,7 @@ function Form({ badge, decimals, mint, action, toastConfig, wasmAction, receive,
 
 	const handleUpdate = useDebounceCallback((uiAmount: string) => {
 		control.change(uiAmount)
-	}, 1000)
+	}, 1500)
 
 	const wasmRef = useLatestRef((uiAmount: string) => {
 		const params = new URLSearchParams({ mint, uiAmount })

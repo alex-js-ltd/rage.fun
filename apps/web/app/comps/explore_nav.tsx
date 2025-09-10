@@ -35,6 +35,28 @@ export function ExploreNav({ searchParams }: { searchParams: SearchParams }) {
 					)}
 				/>
 			</Link>
+
+			<Link
+				className={cn('relative h-full w-fit flex items-center px-6 hover:bg-white/10')}
+				href={{
+					pathname: `/home`,
+					query: {
+						sortType: 'lastTrade',
+						sortOrder: searchParams.sortOrder,
+						query: '',
+					},
+				}}
+				replace
+			>
+				<span className="font-medium text-text-200 text-[15px]">Last Trade</span>
+
+				<div
+					className={cn(
+						'absolute bottom-0 left-4 right-4 h-[1px]',
+						searchParams.sortType === 'lastTrade' && 'border-2 border-text-200 rounded',
+					)}
+				/>
+			</Link>
 		</div>
 	)
 }

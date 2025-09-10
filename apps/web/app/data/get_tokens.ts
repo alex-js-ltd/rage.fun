@@ -147,7 +147,7 @@ function getOrderBy({ sortType, sortOrder }: SearchParams) {
 		case 'createdAt':
 			return Prisma.validator<Prisma.TokenOrderByWithRelationInput[]>()([{ createdAt: sortOrder }, { id: sortOrder }])
 
-		case 'updatedAt':
+		case 'lastTrade':
 			return Prisma.validator<Prisma.TokenOrderByWithRelationInput[]>()([
 				{ bondingCurve: { updatedAt: sortOrder } },
 				{ bondingCurve: { id: sortOrder } },

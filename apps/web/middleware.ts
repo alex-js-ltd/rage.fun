@@ -64,20 +64,6 @@ export default auth(async function middleware(req: NextRequest & { auth: Session
 		return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 	}
 
-	if (
-		req.auth?.user?.id !== '8jCcTyypwWUmYPsQZLT2qK3tuhvWzpU9Se4v8yadKJcv' &&
-		req.nextUrl.pathname.startsWith('/admin')
-	) {
-		await kv.set(`blocked_ip:${ip}`, {
-			reason: 'Invalid Admin authorization',
-			time: Date.now(),
-		})
-
-		console.warn(`🚨 PERMA-BLOCKED IP: ${ip} tried /admin`)
-
-		return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-	}
-
 	if (req.nextUrl.pathname.startsWith('/blocked')) {
 		return NextResponse.next()
 	}
@@ -116,41 +102,13 @@ export default auth(async function middleware(req: NextRequest & { auth: Session
 	}
 
 	if (req.nextUrl.pathname === '/') {
-		const searchUrl = new NextURL('/home?sortType=createdAt&sortOrder=desc', req.nextUrl)
+		const searchUrl = new NextURL('/home?sortType=createdAt', req.nextUrl)
 		const res = NextResponse.redirect(searchUrl)
 
 		res.headers.set('X-RateLimit-Success', success.toString())
 		res.headers.set('X-RateLimit-Limit', limit.toString())
 		res.headers.set('X-RateLimit-Remaining', remaining.toString())
 
-		return res
-	}
-
-	const session = req.auth
-	const og = isOgUser(session?.user?.id || '')
-
-	if (req.nextUrl.pathname === '/airdrop' && !og) {
-		const searchUrl = new NextURL('/home?sortType=createdAt&sortOrder=desc', req.nextUrl)
-		const res = NextResponse.redirect(searchUrl)
-
-		res.headers.set('X-RateLimit-Success', success.toString())
-		res.headers.set('X-RateLimit-Limit', limit.toString())
-		res.headers.set('X-RateLimit-Remaining', remaining.toString())
-		return res
-	}
-
-	if (req.nextUrl.pathname === '/api/buy') {
-		const url = req.nextUrl.clone()
-		const mint = url.searchParams.get('mint') ?? ''
-
-		url.pathname = '/api/dialect/buy'
-		url.searchParams.set('mint', mint)
-
-		const res = NextResponse.rewrite(url)
-
-		res.headers.set('X-RateLimit-Success', success.toString())
-		res.headers.set('X-RateLimit-Limit', limit.toString())
-		res.headers.set('X-RateLimit-Remaining', remaining.toString())
 		return res
 	}
 
