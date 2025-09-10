@@ -109,10 +109,9 @@ export async function initializeAction(_prevState: State, formData: FormData) {
 	const ix = await getInitializeIx({
 		program,
 		payer,
-		creator,
+
 		decimals,
 		args,
-		targetReserve,
 	})
 
 	const tx = await buildTransaction({
