@@ -14,7 +14,7 @@ pub struct SwapEvent {
     #[index]
     pub mint: Pubkey,
     pub signer: Pubkey,
-    pub time: i64,
+    pub time: u64,
     pub price: f64,
     pub token_amount: u64,
     pub lamports: u64,
@@ -31,7 +31,7 @@ pub fn get_swap_event<'a>(
     rent_amount: u64,
     swap_type: SwapType,
 ) -> Result<SwapEvent> {
-    let block_timestamp = Clock::get()?.unix_timestamp;
+    let block_timestamp = Clock::get()?.unix_timestamp as u64;
 
     let price = calculate_price(token_amount, lamports, decimals)?;
 
