@@ -198,7 +198,10 @@ function Form({ badge, decimals, mint, action, toastConfig, wasmAction, receive,
 	const { run, data: quote, setData } = useAsync<string | null>()
 
 	const handleUpdate = useDebounceCallback(async (uiAmount: string) => {
-		if (!uiAmount) return
+		if (!uiAmount || progress === 100.0) {
+			setData(null)
+			return
+		}
 
 		const params = new URLSearchParams({ mint, uiAmount })
 
