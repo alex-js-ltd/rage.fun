@@ -361,35 +361,6 @@ export async function getSyncBondingCurveIx({ program, payer, mint }: SyncBondin
 	return sync
 }
 
-interface ReallocIxParams {
-	program: Program<Rage>
-	payer: PublicKey
-	mint: PublicKey
-}
-
-export async function getReallocIx({ program, payer, mint }: ReallocIxParams) {
-	const bondingCurveState = getBondingCurveState({
-		program,
-		mint,
-	})
-
-	const sync = await program.methods
-		.realloc()
-		.accountsStrict({
-			payer,
-			token0Mint: mint,
-
-			bondingCurveState,
-
-			systemProgram: web3.SystemProgram.programId,
-
-			token0Program: TOKEN_2022_PROGRAM_ID,
-		})
-		.instruction()
-
-	return sync
-}
-
 export function calculateProgress(state: BondingCurveState) {
 	const { currentReserve, initialReserve, targetReserve } = state
 
