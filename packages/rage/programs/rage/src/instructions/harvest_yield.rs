@@ -70,6 +70,8 @@ pub fn harvest_yield(ctx: Context<HarvestYield>) -> Result<()> {
 
     let lamports = pda_balance;
 
+    require!(lamports > 0, ErrorCode::InsufficientYield);
+
     transfer_sol_from_pda(pda, creator, lamports)?;
 
     let curve = &mut ctx.accounts.bonding_curve_state;

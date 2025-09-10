@@ -41,10 +41,6 @@ pub enum ErrorCode {
     #[msg("Insufficient reward balance")]
     InsufficientReward,
 
-    /// First airdrop has already been dispatched
-    #[msg("First airdrop already dispatched")]
-    FirstAirdropAlreadyDispatched,
-
     #[msg("Not approved")]
     NotApproved,
 
@@ -54,18 +50,10 @@ pub enum ErrorCode {
     #[msg("Invalid reserve")]
     InvalidReserve,
 
-    #[msg("No pending airdrops: all airdrops for this milestone have been claimed")]
-    NoPendingAirdrops,
-
     #[msg("Curve already in sync: no missing supply to mint")]
     CurveAlreadyInSync,
 
-    #[msg("Target reserve must be ≥ 0.3 SOL")]
-    TargetReserveTooLow,
-
-    #[msg("Target reserve must be ≤ 80 SOL")]
-    TargetReserveTooHigh,
-
-    #[msg("Dont Migrate")]
-    DontMigrate,
+    /// Insufficient yield balance
+    #[msg("Insufficient yield balance")]
+    InsufficientYield,
 }
