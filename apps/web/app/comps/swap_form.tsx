@@ -197,27 +197,15 @@ function Form({ badge, decimals, mint, action, toastConfig, wasmAction, receive,
 
 	const { run, data: quote, setData } = useAsync<string | null>()
 
-	const handleUpdate = useDebounceCallback((uiAmount: string) => {
-		control.change(uiAmount)
-	}, 1500)
+	const handleUpdate = useDebounceCallback(async (uiAmount: string) => {
+		if (!uiAmount) return
 
-	const wasmRef = useLatestRef((uiAmount: string) => {
 		const params = new URLSearchParams({ mint, uiAmount })
-		return wasmAction(params)
-	})
 
-	useEffect(() => {
-		const isComplete = progress === 100.0
-
-		if (!uiAmount || isComplete || !wasmRef.current) {
-			setData(null)
-			return
-		}
-
-		const promise = wasmRef.current(uiAmount)
+		const promise = wasmAction(params)
 
 		run(promise)
-	}, [run, uiAmount, progress, setData])
+	}, 1500)
 
 	return (
 		<FormProvider context={form.context}>
