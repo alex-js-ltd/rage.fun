@@ -13,3 +13,4 @@ public/dist
 
 apps/web/app/api/update/**
 apps/web/app/admin/page.tsx
+.vercel
