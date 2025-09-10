@@ -16,10 +16,10 @@ const noop = () => {}
 type Params = Omit<Parameters<typeof UnifiedWalletProvider>[0], 'children'>
 
 const metadata = {
-	name: 'magicmint.fun',
-	description: 'Dynamic bonding curves with near-zero slippage',
-	url: 'https://www.magicmint.fun',
-	iconUrls: ['https://www.magicmint.fun/favicon.ico'],
+	name: 'letsrage.fun',
+	description: 'Take your trading fees back',
+	url: 'https://letsrage.fun',
+	iconUrls: ['https://www.letsrage.fun/favicon.ico'],
 }
 
 export function WalletProvider({ children }: { children: ReactNode }) {

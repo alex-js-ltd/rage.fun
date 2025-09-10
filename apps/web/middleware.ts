@@ -77,29 +77,29 @@ export default auth(async function middleware(req: NextRequest & { auth: Session
 		id: req.auth?.user?.id,
 	})
 
-	if (!success && isApi) {
-		const res = NextResponse.json(null, { status: 429 })
+	// if (!success && isApi) {
+	// 	const res = NextResponse.json(null, { status: 429 })
 
-		res.headers.set('X-RateLimit-Success', success.toString())
-		res.headers.set('X-RateLimit-Limit', limit.toString())
-		res.headers.set('X-RateLimit-Remaining', remaining.toString())
+	// 	res.headers.set('X-RateLimit-Success', success.toString())
+	// 	res.headers.set('X-RateLimit-Limit', limit.toString())
+	// 	res.headers.set('X-RateLimit-Remaining', remaining.toString())
 
-		return res
-	}
+	// 	return res
+	// }
 
-	if (!success && !isApi) {
-		console.error(`🚨 ABUSIVE IP BLOCKED: ${ip}`)
+	// if (!success && !isApi) {
+	// 	console.error(`🚨 ABUSIVE IP BLOCKED: ${ip}`)
 
-		const blockedUrl = new NextURL('/blocked', req.nextUrl)
+	// 	const blockedUrl = new NextURL('/blocked', req.nextUrl)
 
-		const res = NextResponse.redirect(blockedUrl)
+	// 	const res = NextResponse.redirect(blockedUrl)
 
-		res.headers.set('X-RateLimit-Success', success.toString())
-		res.headers.set('X-RateLimit-Limit', limit.toString())
-		res.headers.set('X-RateLimit-Remaining', remaining.toString())
+	// 	res.headers.set('X-RateLimit-Success', success.toString())
+	// 	res.headers.set('X-RateLimit-Limit', limit.toString())
+	// 	res.headers.set('X-RateLimit-Remaining', remaining.toString())
 
-		return res
-	}
+	// 	return res
+	// }
 
 	if (req.nextUrl.pathname === '/') {
 		const searchUrl = new NextURL('/home?sortType=createdAt', req.nextUrl)

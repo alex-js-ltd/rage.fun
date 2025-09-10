@@ -3,7 +3,7 @@ async function client<DataType>(endpoint: string, config: RequestInit): Promise<
 		const rateLimitSuccess = response.headers.get('x-ratelimit-success')?.toLowerCase()
 
 		if (rateLimitSuccess === 'false') {
-			window.location.href = 'https://www.magicmint.fun/blocked'
+			window.location.href = 'https://www.letsrage.fun/blocked'
 			return new Promise(() => {}) // keeps the function hanging (optional)
 		}
 
