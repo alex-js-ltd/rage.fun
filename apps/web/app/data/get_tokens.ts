@@ -127,6 +127,8 @@ const select = Prisma.validator<Prisma.TokenSelect>()({
 			tradingFees: true,
 			openTime: true,
 
+			status: true,
+
 			createdAt: true,
 			updatedAt: true,
 

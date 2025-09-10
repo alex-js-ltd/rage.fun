@@ -202,7 +202,9 @@ export const MetadataSchema = z.object({
 	symbol: z.string(),
 	description: z.string(),
 	image: z.string(),
-	thumbhash: z.instanceof(Buffer).transform(val => Buffer.from(val).toString('base64')),
+	thumbhash: z
+		.union([z.instanceof(Buffer), z.instanceof(Uint8Array)])
+		.transform(val => Buffer.from(val).toString('base64')),
 	createdAt: z.date().transform(d => d.toISOString()),
 	updatedAt: z.date().transform(d => d.toISOString()),
 })
