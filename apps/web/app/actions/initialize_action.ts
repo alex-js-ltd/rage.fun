@@ -59,7 +59,7 @@ export async function initializeAction(_prevState: State, formData: FormData) {
 		}
 	}
 
-	const { file, name, symbol, description, targetReserve, creator } = submission.value
+	const { file, name, symbol, description, creator } = submission.value
 
 	const decimals = 6
 

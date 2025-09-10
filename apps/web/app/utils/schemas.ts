@@ -38,7 +38,7 @@ export const InitializeSchema = z.object({
 	name: z.string(),
 	symbol: z
 		.string({ required_error: 'Required' })
-		.max(12, { message: 'Symbol is too long' })
+		.max(9, { message: 'Symbol is too long' })
 		.min(2, { message: 'Symbol is too short' }),
 	targetReserve: z
 		.number({
@@ -67,7 +67,7 @@ export function initializeBondingCurveSchema(
 		.object({
 			symbol: z
 				.string({ required_error: 'Required' })
-				.transform(val => val.toUpperCase())
+				.transform(val => `$${val.trim().toUpperCase()}`)
 
 				.pipe(
 					z.string().superRefine((username, ctx) => {
