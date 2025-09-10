@@ -108,7 +108,7 @@ pub fn initialize(
     token_decimals: u8,
     args: CreateMintAccountArgs,
 ) -> Result<()> {
-    let creator = ctx.remaining_accounts.get(0).unwrap();
+    let creator = ctx.accounts.payer.to_account_info();
 
     create_token_metadata(
         &ctx.accounts.token_0_program.to_account_info(),
@@ -155,6 +155,14 @@ pub fn initialize(
         ctx.accounts.system_program.to_account_info(),
     )?;
 
+    // create trading fee account to store yield for the creator
+    create_trading_fee_account(
+        &ctx.accounts.payer.to_account_info(),
+        &ctx.accounts.trading_fee_auth.to_account_info(),
+        &ctx.accounts.token_0_mint.to_account_info(),
+        &ctx.accounts.system_program.to_account_info(),
+    )?;
+
     let target_supply = ui_amount_to_amount(800_000_000.0, ctx.accounts.token_0_mint.decimals);
     let target_reserve = ui_amount_to_amount(80.0, 9);
 
@@ -190,7 +198,9 @@ pub fn initialize(
 
     require_eq!(current_reserve, initial_reserve);
 
-    let trading_fees = 0;
+    let trading_fees = get_account_balance(ctx.accounts.trading_fee_auth.to_account_info())?;
+
+    require_eq!(trading_fees, 0);
 
     let status = Status::Funding;
 
@@ -216,13 +226,6 @@ pub fn initialize(
     };
 
     initialize_bonding_curve_state(&mut ctx.accounts.bonding_curve_state, curve_payload)?;
-
-    create_trading_fee_account(
-        &ctx.accounts.payer.to_account_info(),
-        &ctx.accounts.trading_fee_auth.to_account_info(),
-        &ctx.accounts.token_0_mint.to_account_info(),
-        &ctx.accounts.system_program.to_account_info(),
-    )?;
 
     let block_timestamp = Clock::get()?.unix_timestamp;
 
