@@ -22,7 +22,7 @@ export function Progress({ progress, mint, className }: ProgressProps) {
 				alignOffset={0}
 				side="bottom"
 			>
-				{`Bonding curve progress ${progress.toFixed(2)} % `}
+				{`Bonding curve progress ${progress} % `}
 
 				{progress >= 100.0 && (
 					<>
