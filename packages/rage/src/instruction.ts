@@ -233,13 +233,12 @@ export interface CreateMintAccountArgs {
 interface GetinitializeIxParams {
 	program: Program<Rage>
 	payer: PublicKey
-	creator: PublicKey
+
 	decimals: number
 	args: CreateMintAccountArgs
-	targetReserve: string
 }
 
-export async function getInitializeIx({ program, payer, creator, decimals, args, ...rest }: GetinitializeIxParams) {
+export async function getInitializeIx({ program, payer, decimals, args }: GetinitializeIxParams) {
 	const mint = getRageToken({ program, tokenSymbol: args.symbol })
 
 	const extraMetasAccount = getExtraMetas({ program, mint })
@@ -275,7 +274,6 @@ export async function getInitializeIx({ program, payer, creator, decimals, args,
 
 			updateAuthority,
 		})
-		.remainingAccounts([{ pubkey: creator, isSigner: false, isWritable: true }])
 		.instruction()
 
 	const modifyComputeUnits = ComputeBudgetProgram.setComputeUnitLimit({
