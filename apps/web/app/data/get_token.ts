@@ -11,8 +11,10 @@ export async function getTokenWithRelations(mint: string) {
 			id: mint,
 		},
 
-		include: { bondingCurve: true },
+		include: { metadata: true, bondingCurve: true },
 	})
+
+	console.log(token)
 
 	const solPricePromise = getCachedSolPrice()
 
@@ -28,6 +30,7 @@ export async function getTokenWithRelations(mint: string) {
 
 	const parsed = await TokenFeedSchema.safeParseAsync(token)
 
+	console.log(parsed.error)
 	if (!parsed.success) {
 		console.error(parsed.error.format())
 		throw new Error('Invalid token with relations')
