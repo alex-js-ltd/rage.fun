@@ -76,7 +76,7 @@ pub struct HarvestEvent {
     pub signer: Pubkey,
     pub mint: Pubkey,
     pub lamports: u64,
-    pub time: i64,
+    pub time: u64,
 }
 
 /// Emitted when new bonding curve is created

@@ -1640,7 +1640,7 @@ export type Rage = {
           },
           {
             "name": "time",
-            "type": "i64"
+            "type": "u64"
           }
         ]
       }

@@ -82,7 +82,7 @@ pub fn harvest_yield(ctx: Context<HarvestYield>) -> Result<()> {
 
     let block_timestamp = Clock::get()?.unix_timestamp;
 
-    let time = block_timestamp;
+    let time = block_timestamp as u64;
 
     emit!(HarvestEvent {
         signer: creator.key(),
