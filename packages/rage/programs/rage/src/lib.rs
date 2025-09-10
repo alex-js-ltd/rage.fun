@@ -6,7 +6,7 @@ pub mod utils;
 use anchor_lang::prelude::*;
 use instructions::*;
 
-declare_id!("DUShtzhevyTnQLXQmQaT9EfjjjGhg26m6yXHav3vwe6Z");
+declare_id!("rageM7X7HTzpPgcQwVJbVr47GBQKgpPqnQZZ7YMkkPv");
 
 #[program]
 pub mod rage {
@@ -39,9 +39,5 @@ pub mod rage {
 
     pub fn sync_bonding_curve(ctx: Context<SyncBondingCurve>) -> Result<()> {
         instructions::sync_bonding_curve(ctx)
-    }
-
-    pub fn realloc(ctx: Context<Realloc>) -> Result<()> {
-        instructions::realloc(ctx)
     }
 }

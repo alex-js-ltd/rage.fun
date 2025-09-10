@@ -20,11 +20,20 @@ anchor build -- --features devnet
 
 "resolutions": { "@solana/wallet-standard-wallet-adapter-base": "1.0.1" }
 
-anchor upgrade target/deploy/rage.so --program-id DUShtzhevyTnQLXQmQaT9EfjjjGhg26m6yXHav3vwe6Z
+anchor upgrade target/deploy/rage.so --program-id rageM7X7HTzpPgcQwVJbVr47GBQKgpPqnQZZ7YMkkPv
 
 du -h target/deploy/rage.so
 
-solana program extend DUShtzhevyTnQLXQmQaT9EfjjjGhg26m6yXHav3vwe6Z 200000
+solana program extend rageM7X7HTzpPgcQwVJbVr47GBQKgpPqnQZZ7YMkkPv 200000
 
 solana program deploy --buffer recover.json target/deploy/rage.so --program-id
-DUShtzhevyTnQLXQmQaT9EfjjjGhg26m6yXHav3vwe6Z
+rageM7X7HTzpPgcQwVJbVr47GBQKgpPqnQZZ7YMkkPv
+
+
+
+
+
+
+
+
+

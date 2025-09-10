@@ -5,19 +5,19 @@ resolution = true
 skip-lint = false
 
 [programs.devnet]
-rage = "DUShtzhevyTnQLXQmQaT9EfjjjGhg26m6yXHav3vwe6Z"
+rage = "rageM7X7HTzpPgcQwVJbVr47GBQKgpPqnQZZ7YMkkPv"
 
 [programs.localnet]
-rage = "DUShtzhevyTnQLXQmQaT9EfjjjGhg26m6yXHav3vwe6Z"
+rage = "rageM7X7HTzpPgcQwVJbVr47GBQKgpPqnQZZ7YMkkPv"
 
 [programs.mainnet]
-rage = "DUShtzhevyTnQLXQmQaT9EfjjjGhg26m6yXHav3vwe6Z"
+rage = "rageM7X7HTzpPgcQwVJbVr47GBQKgpPqnQZZ7YMkkPv"
 
 [registry]
 url = "https://api.apr.dev"
 
 [provider]
-cluster = "localnet"
+cluster = "Localnet"
 wallet = "~/.config/solana/id.json"
 
 [scripts]

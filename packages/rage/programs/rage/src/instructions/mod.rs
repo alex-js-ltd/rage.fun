@@ -10,8 +10,6 @@ pub mod harvest_yield;
 
 pub mod sync_bonding_curve;
 
-pub mod realloc;
-
 pub use initialize::*;
 
 pub use buy_token::*;
@@ -23,5 +21,3 @@ pub use proxy_initialize::*;
 pub use harvest_yield::*;
 
 pub use sync_bonding_curve::*;
-
-pub use realloc::*;

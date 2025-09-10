@@ -5,7 +5,7 @@
  * IDL can be found at `target/idl/rage.json`.
  */
 export type Rage = {
-  "address": "DUShtzhevyTnQLXQmQaT9EfjjjGhg26m6yXHav3vwe6Z",
+  "address": "rageM7X7HTzpPgcQwVJbVr47GBQKgpPqnQZZ7YMkkPv",
   "metadata": {
     "name": "rage",
     "version": "0.1.0",
@@ -921,79 +921,6 @@ export type Rage = {
       ]
     },
     {
-      "name": "realloc",
-      "discriminator": [
-        138,
-        139,
-        3,
-        51,
-        58,
-        130,
-        86,
-        208
-      ],
-      "accounts": [
-        {
-          "name": "payer",
-          "docs": [
-            "The payer for the transaction"
-          ],
-          "writable": true,
-          "signer": true
-        },
-        {
-          "name": "token0Mint"
-        },
-        {
-          "name": "bondingCurveState",
-          "writable": true,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "value": [
-                  98,
-                  111,
-                  110,
-                  100,
-                  105,
-                  110,
-                  103,
-                  95,
-                  99,
-                  117,
-                  114,
-                  118,
-                  101,
-                  95,
-                  115,
-                  116,
-                  97,
-                  116,
-                  101
-                ]
-              },
-              {
-                "kind": "account",
-                "path": "token0Mint"
-              }
-            ]
-          }
-        },
-        {
-          "name": "token0Program",
-          "docs": [
-            "Spl token program for meme coin"
-          ]
-        },
-        {
-          "name": "systemProgram",
-          "address": "11111111111111111111111111111111"
-        }
-      ],
-      "args": []
-    },
-    {
       "name": "sellToken",
       "discriminator": [
         109,
@@ -1473,48 +1400,28 @@ export type Rage = {
     },
     {
       "code": 6010,
-      "name": "firstAirdropAlreadyDispatched",
-      "msg": "First airdrop already dispatched"
-    },
-    {
-      "code": 6011,
       "name": "notApproved",
       "msg": "Not approved"
     },
     {
-      "code": 6012,
+      "code": 6011,
       "name": "invalidSupply",
       "msg": "Invalid supply"
     },
     {
-      "code": 6013,
+      "code": 6012,
       "name": "invalidReserve",
       "msg": "Invalid reserve"
     },
     {
-      "code": 6014,
-      "name": "noPendingAirdrops",
-      "msg": "No pending airdrops: all airdrops for this milestone have been claimed"
-    },
-    {
-      "code": 6015,
+      "code": 6013,
       "name": "curveAlreadyInSync",
       "msg": "Curve already in sync: no missing supply to mint"
     },
     {
-      "code": 6016,
-      "name": "targetReserveTooLow",
-      "msg": "Target reserve must be ≥ 0.3 SOL"
-    },
-    {
-      "code": 6017,
-      "name": "targetReserveTooHigh",
-      "msg": "Target reserve must be ≤ 80 SOL"
-    },
-    {
-      "code": 6018,
-      "name": "dontMigrate",
-      "msg": "Dont Migrate"
+      "code": 6014,
+      "name": "insufficientYield",
+      "msg": "Insufficient yield balance"
     }
   ],
   "types": [
@@ -1789,7 +1696,7 @@ export type Rage = {
           },
           {
             "name": "time",
-            "type": "i64"
+            "type": "u64"
           },
           {
             "name": "price",
