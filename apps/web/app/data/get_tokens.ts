@@ -19,7 +19,7 @@ export async function getTokens(searchParams: SearchParams) {
 	const { sortType, sortOrder, cursorId, creatorId } = submission.data
 
 	const tokens = await prisma.token.findMany({
-		where: getWhere(creatorId),
+		where: getWhere({ sortType, sortOrder, creatorId }),
 		select,
 		take: TAKE + 1,
 		skip: 0,
@@ -65,22 +65,29 @@ export async function getTokens(searchParams: SearchParams) {
 
 const TAKE: number = 12
 
-function getWhere(creatorId?: string) {
-	if (creatorId) {
-		return Prisma.validator<Prisma.TokenWhereInput>()({
-			bondingCurve: {
-				isNot: null,
-			},
+function getWhere({ sortType, creatorId }: SearchParams & { creatorId?: string }) {
+	switch (sortType) {
+		case 'createdAt':
+			return Prisma.validator<Prisma.TokenWhereInput>()({
+				bondingCurve: {
+					isNot: null,
+				},
 
-			creatorId: { equals: creatorId },
-		})
+				...(creatorId && { creatorId: { equals: creatorId } }),
+			})
+
+		case 'lastTrade':
+			return Prisma.validator<Prisma.TokenWhereInput>()({
+				bondingCurve: {
+					isNot: null,
+				},
+				swapEvents: { some: {} },
+				...(creatorId && { creatorId: { equals: creatorId } }),
+			})
+
+		default:
+			throw new Error(`Unsupported sortType: ${sortType}`)
 	}
-
-	return Prisma.validator<Prisma.TokenWhereInput>()({
-		bondingCurve: {
-			isNot: null,
-		},
-	})
 }
 
 const select = Prisma.validator<Prisma.TokenSelect>()({
@@ -130,6 +137,12 @@ const select = Prisma.validator<Prisma.TokenSelect>()({
 			tokenId: true,
 		},
 	},
+
+	// 👇 This fetches only the last swap event
+	swapEvents: {
+		orderBy: { time: 'desc' },
+		take: 1,
+	},
 })
 
 function getCursor(cursorId: SearchParams['cursorId']) {
@@ -143,11 +156,12 @@ function getOrderBy({ sortType, sortOrder }: SearchParams) {
 			return Prisma.validator<Prisma.TokenOrderByWithRelationInput[]>()([{ createdAt: sortOrder }, { id: sortOrder }])
 
 		case 'lastTrade':
+			// Order by the bonding curve row's updatedAt (updated on every swap)
 			return Prisma.validator<Prisma.TokenOrderByWithRelationInput[]>()([
 				{ bondingCurve: { updatedAt: sortOrder } },
-				{ bondingCurve: { id: sortOrder } },
+				{ createdAt: sortOrder },
+				{ id: sortOrder },
 			])
-
 		default:
 			throw new Error(`Unsupported sortType: ${sortType}`)
 	}

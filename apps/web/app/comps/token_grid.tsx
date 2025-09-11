@@ -45,8 +45,6 @@ function TokenCard({ token, children }: { token: TokenFeedType; children?: React
 		updateType,
 	} = token
 
-	console.log('progress', progress)
-
 	return (
 		<article className="group relative flex flex-col w-full min-h-[178px] border-b border-white border-opacity-[0.125] hover:bg-white/[0.05]">
 			<div
