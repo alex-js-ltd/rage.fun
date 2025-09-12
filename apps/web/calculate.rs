@@ -1,15 +1,3 @@
-/// Convert the UI representation of a token amount (using the decimals field
-/// defined in its mint) to the raw amount
-pub fn ui_amount_to_amount(ui_amount: f64, decimals: u8) -> u64 {
-    (ui_amount * 10_usize.pow(decimals as u32) as f64) as u64
-}
-
-/// Convert a raw amount to its UI representation (using the decimals field
-/// defined in its mint)
-pub fn amount_to_ui_amount(amount: u64, decimals: u8) -> f64 {
-    amount as f64 / 10_usize.pow(decimals as u32) as f64
-}
-
 #[no_mangle]
 pub extern "C" fn calculate_buy_amount(
     supply: u64,
@@ -59,12 +47,11 @@ pub extern "C" fn calculate_sell_price(
 }
 
 #[no_mangle]
-pub extern "C" fn calculate_max_mint(supply: u64, token_amount: u64, target_supply: u64) -> u64 {
-    // Calculate the remaining amount that can be minted to not exceed target_supply
-    let remaining_supply = target_supply - supply;
+pub extern "C" fn ui_amount_to_amount(ui_amount: f64, decimals: u8) -> u64 {
+    (ui_amount * 10_usize.pow(decimals as u32) as f64) as u64
+}
 
-    // The max mintable amount is the minimum of remaining supply and token_amount
-    let mint_amount = remaining_supply.min(token_amount);
-
-    mint_amount
+#[no_mangle]
+pub extern "C" fn amount_to_ui_amount(amount: u64, decimals: u8) -> f64 {
+    amount as f64 / 10_usize.pow(decimals as u32) as f64
 }

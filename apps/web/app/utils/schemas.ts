@@ -410,8 +410,16 @@ export function createTopHolderSchema(decimals: number, totalSupply: BN) {
 export type TopHolderType = z.infer<ReturnType<typeof createTopHolderSchema>>
 
 export const WasmSchema = z.object({
-	mint: Mint,
 	uiAmount: z.string(),
+
+	currentReserve: z.string(),
+	targetReserve: z.string(),
+
+	currentSupply: z.string(),
+	targetSupply: z.string(),
+
+	connectorWeight: z.number(),
+	decimals: z.number(),
 })
 
 export const TokenAmountSchema = z.object({
