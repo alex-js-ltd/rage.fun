@@ -150,8 +150,7 @@ function Buy({ token }: { token: TokenFeedType }) {
 		async (uiAmount: string) => {
 			const params = { uiAmount, currentReserve, targetReserve, currentSupply, targetSupply, connectorWeight, decimals }
 			const quote = await calculateBuyAmount(params)
-			console.log('quote', quote)
-			console.log(typeof quote)
+
 			const output = formatCompactNumber(quote)
 			return output
 		},
