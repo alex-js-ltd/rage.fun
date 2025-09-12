@@ -17,7 +17,7 @@ export const runtime = 'edge'
 export async function POST(req: NextRequest) {
 	const instance = (await module$) as any
 	const exports = instance.exports as typeof calculateWasmModule
-	const { calculate_buy_amount, ui_amount_to_amount, amount_to_ui_amount } = exports
+	const { calculate_buy_amount, ui_amount_to_amount } = exports
 
 	const body = await req.json()
 
