@@ -178,7 +178,7 @@ export function TokenGrid({
 			searchParams?.sortType === 'createdAt' &&
 			searchParams?.sortOrder === 'desc'
 		) {
-			const newTokens = [updateEvent, ...state.tokens.slice(0, -1)]
+			const newTokens = [updateEvent, ...state.tokens]
 
 			setState({ ...state, tokens: newTokens })
 			return
@@ -189,6 +189,10 @@ export function TokenGrid({
 		if (existingIndex !== -1) {
 			const newTokens = [...state.tokens]
 			newTokens[existingIndex] = updateEvent
+
+			if (searchParams?.sortType === 'lastTrade' && searchParams?.sortOrder === 'desc') {
+				newTokens.sort((a, b) => dayjs(b.bondingCurve.updatedAt).valueOf() - dayjs(a.bondingCurve.updatedAt).valueOf())
+			}
 
 			setState({ ...state, tokens: newTokens })
 		}
