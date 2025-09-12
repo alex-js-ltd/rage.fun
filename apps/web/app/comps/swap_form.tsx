@@ -61,8 +61,8 @@ async function calculateBuyAmount(params: WasmType): Promise<number> {
 	})
 }
 
-async function calculateSellPrice(params: WasmType): Promise<string> {
-	return client<string>(`/api/wasm/calculate_sell_price`, {
+async function calculateSellPrice(params: WasmType): Promise<number> {
+	return client<number>(`/api/wasm/calculate_sell_price`, {
 		method: 'POST',
 		body: JSON.stringify(params),
 		headers: {
@@ -150,7 +150,6 @@ function Buy({ token }: { token: TokenFeedType }) {
 		async (uiAmount: string) => {
 			const params = { uiAmount, currentReserve, targetReserve, currentSupply, targetSupply, connectorWeight, decimals }
 			const quote = await calculateBuyAmount(params)
-
 			const output = formatCompactNumber(quote)
 			return output
 		},
@@ -179,8 +178,9 @@ function Sell({ token }: { token: TokenFeedType }) {
 	const getQuote = useCallback(
 		async (uiAmount: string) => {
 			const params = { uiAmount, currentReserve, targetReserve, currentSupply, targetSupply, connectorWeight, decimals }
-
-			return await calculateBuyAmount(params)
+			const quote = await calculateSellPrice(params)
+			const output = quote.toFixed(9)
+			return output
 		},
 		[currentReserve, targetReserve, currentSupply, targetSupply, connectorWeight, decimals],
 	)
