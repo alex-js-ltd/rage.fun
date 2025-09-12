@@ -55,8 +55,12 @@ export async function POST(req: NextRequest) {
 		bondingCurve.connectorWeight,
 	)
 
+	const maxMint = bondingCurve.targetSupply - bondingCurve.currentSupply
+
+	const tokenAmount = buyAmount > maxMint ? maxMint : buyAmount
+
 	// Return a success response
-	return NextResponse.json(buyAmount.toString(), { status: 200 })
+	return NextResponse.json(tokenAmount.toString(), { status: 200 })
 }
 
 /**
