@@ -422,6 +422,8 @@ export const WasmSchema = z.object({
 	decimals: z.number(),
 })
 
+export type WasmType = z.infer<typeof WasmSchema>
+
 export const TokenAmountSchema = z.object({
 	amount: z.string().regex(/^\d+$/, {
 		message: 'Amount must be a numeric string',

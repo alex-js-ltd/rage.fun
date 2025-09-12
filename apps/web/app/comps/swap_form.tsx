@@ -8,7 +8,7 @@ import { Button } from '@/app/comps/button'
 import { usePayer } from '@/app/hooks/use_payer'
 import { useForm, FormProvider, getFormProps, useInputControl } from '@conform-to/react'
 import { parseWithZod } from '@conform-to/zod'
-import { SwapSchema } from '@/app/utils/schemas'
+import { SwapSchema, WasmType } from '@/app/utils/schemas'
 import { buyAction, sellAction } from '@/app/actions/swap_action'
 import { Input } from '@/app/comps/input'
 
@@ -50,12 +50,26 @@ interface FormProps {
 	progress: number
 }
 
-async function calculateBuyAmount(params: URLSearchParams): Promise<string> {
-	return client<string>(`/api/wasm/calculate_buy_amount?${params.toString()}`, { cache: 'no-store' })
+async function calculateBuyAmount(params: WasmType): Promise<string> {
+	return client<string>(`/api/wasm/calculate_buy_amount`, {
+		method: 'POST',
+		body: JSON.stringify(params),
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		cache: 'no-store',
+	})
 }
 
-async function calculateSellPrice(params: URLSearchParams): Promise<string> {
-	return client<string>(`/api/wasm/calculate_sell_price?${params.toString()}`, { cache: 'no-store' })
+async function calculateSellPrice(params: WasmType): Promise<string> {
+	return client<string>(`/api/wasm/calculate_sell_price`, {
+		method: 'POST',
+		body: JSON.stringify(params),
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		cache: 'no-store',
+	})
 }
 
 export function SwapForm({ tokenPromise }: SwapFormProps) {
