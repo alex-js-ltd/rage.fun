@@ -35,6 +35,7 @@ import { Progress } from '@/app/comps/progress'
 import { formatCompactNumber } from '../utils/misc'
 import { fromLamports } from '@repo/rage'
 import { BN } from '@coral-xyz/anchor'
+import { amountToUiAmount } from '@repo/rage'
 
 export interface SwapFormProps {
 	tokenPromise: Promise<TokenFeedType>
@@ -169,8 +170,9 @@ function Buy({ token }: { token: TokenFeedType }) {
 			receive={symbol}
 			getQuote={getQuote}
 			displayQuote={(quote: string) => {
-				const uiAmount = fromLamports(new BN(quote), decimals)
-				return formatCompactNumber(uiAmount)
+				console.log('quote', quote)
+				const uiAmount = amountToUiAmount(new BN(quote), decimals)
+				return formatCompactNumber(Number(uiAmount))
 			}}
 		/>
 	)
@@ -202,6 +204,7 @@ function Sell({ token }: { token: TokenFeedType }) {
 			receive="SOL"
 			getQuote={getQuote}
 			displayQuote={(quote: string) => {
+				console.log('quote', quote)
 				const uiAmount = fromLamports(new BN(quote), 9)
 				return uiAmount.toFixed(9)
 			}}

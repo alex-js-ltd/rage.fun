@@ -26,7 +26,7 @@ export async function POST(req: NextRequest) {
 
 		const uiAmount = Number(data.uiAmount)
 
-		const depositAmount = ui_amount_to_amount(uiAmount, decimals)
+		const depositAmount = ui_amount_to_amount(uiAmount, 9)
 
 		const currentReserve = BigInt(data.currentReserve)
 		const targetReserve = BigInt(data.targetReserve)
