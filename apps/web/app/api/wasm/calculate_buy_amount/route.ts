@@ -55,10 +55,8 @@ export async function POST(req: NextRequest) {
 		bondingCurve.connectorWeight,
 	)
 
-	const result = amount_to_ui_amount(buyAmount, bondingCurve.decimals)
-
 	// Return a success response
-	return NextResponse.json(result, { status: 200 })
+	return NextResponse.json(buyAmount.toString(), { status: 200 })
 }
 
 /**

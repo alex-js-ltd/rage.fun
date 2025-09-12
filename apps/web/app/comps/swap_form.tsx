@@ -33,6 +33,8 @@ import { ConnectWallet } from '@/app/comps/connect_wallet'
 
 import { Progress } from '@/app/comps/progress'
 import { formatCompactNumber } from '../utils/misc'
+import { fromLamports } from '@repo/rage'
+import { BN } from '@coral-xyz/anchor'
 
 export interface SwapFormProps {
 	tokenPromise: Promise<TokenFeedType>
@@ -48,10 +50,11 @@ interface FormProps {
 	receive: string
 
 	getQuote: (uiAmount: string) => Promise<string>
+	displayQuote: (amount: string) => string
 }
 
-async function calculateBuyAmount(params: WasmType): Promise<number> {
-	return client<number>(`/api/wasm/calculate_buy_amount`, {
+async function calculateBuyAmount(params: WasmType): Promise<string> {
+	return client<string>(`/api/wasm/calculate_buy_amount`, {
 		method: 'POST',
 		body: JSON.stringify(params),
 		headers: {
@@ -61,8 +64,8 @@ async function calculateBuyAmount(params: WasmType): Promise<number> {
 	})
 }
 
-async function calculateSellPrice(params: WasmType): Promise<number> {
-	return client<number>(`/api/wasm/calculate_sell_price`, {
+async function calculateSellPrice(params: WasmType): Promise<string> {
+	return client<string>(`/api/wasm/calculate_sell_price`, {
 		method: 'POST',
 		body: JSON.stringify(params),
 		headers: {
@@ -150,8 +153,8 @@ function Buy({ token }: { token: TokenFeedType }) {
 		async (uiAmount: string) => {
 			const params = { uiAmount, currentReserve, targetReserve, currentSupply, targetSupply, connectorWeight, decimals }
 			const quote = await calculateBuyAmount(params)
-			const output = formatCompactNumber(quote)
-			return output
+
+			return quote
 		},
 		[currentReserve, targetReserve, currentSupply, targetSupply, connectorWeight, decimals],
 	)
@@ -165,6 +168,10 @@ function Buy({ token }: { token: TokenFeedType }) {
 			toastConfig={{ loading: `Minting ${symbol} 🌿`, success: `Mint confirmed ✅` }}
 			receive={symbol}
 			getQuote={getQuote}
+			displayQuote={(quote: string) => {
+				const uiAmount = fromLamports(new BN(quote), decimals)
+				return formatCompactNumber(uiAmount)
+			}}
 		/>
 	)
 }
@@ -179,8 +186,8 @@ function Sell({ token }: { token: TokenFeedType }) {
 		async (uiAmount: string) => {
 			const params = { uiAmount, currentReserve, targetReserve, currentSupply, targetSupply, connectorWeight, decimals }
 			const quote = await calculateSellPrice(params)
-			const output = quote.toFixed(9)
-			return output
+
+			return quote
 		},
 		[currentReserve, targetReserve, currentSupply, targetSupply, connectorWeight, decimals],
 	)
@@ -194,11 +201,15 @@ function Sell({ token }: { token: TokenFeedType }) {
 			toastConfig={{ loading: `Burning ${symbol} 🔥`, success: `Burn confirmed ✅` }}
 			receive="SOL"
 			getQuote={getQuote}
+			displayQuote={(quote: string) => {
+				const uiAmount = fromLamports(new BN(quote), 9)
+				return uiAmount.toFixed(9)
+			}}
 		/>
 	)
 }
 
-function Form({ badge, decimals, mint, action, toastConfig, receive, getQuote }: FormProps) {
+function Form({ badge, decimals, mint, action, toastConfig, receive, getQuote, displayQuote }: FormProps) {
 	const [lastResult, formAction, isPending] = useActionState(action, undefined)
 
 	const [form, fields] = useForm({
@@ -235,6 +246,7 @@ function Form({ badge, decimals, mint, action, toastConfig, receive, getQuote }:
 
 	useEffect(() => {
 		if (!uiAmount || typeof uiAmount !== 'string') return
+
 		const promise = getQuote(uiAmount)
 
 		run(promise)
@@ -252,7 +264,7 @@ function Form({ badge, decimals, mint, action, toastConfig, receive, getQuote }:
 					<input name="payer" type="hidden" defaultValue={payer} />
 					<input name="mint" type="hidden" defaultValue={mint} />
 					<input name="decimals" type="hidden" defaultValue={decimals} />
-
+					{quote && <input name="quote" type="hidden" defaultValue={quote} />}
 					<div className="relative transition-colors flex gap-2 items-center rounded-full border border-white border-opacity-[0.125] cursor-default">
 						<Input
 							variant="amount"
@@ -290,7 +302,7 @@ function Form({ badge, decimals, mint, action, toastConfig, receive, getQuote }:
 					)}
 
 					<span className="absolute -bottom-6 text-xs text-teal-300 w-full right-0 text-end">
-						{quote ? `you receive ${quote} ${receive ?? ''}` : ''}
+						{quote ? `you receive ${displayQuote(quote)} ${receive ?? ''}` : ''}
 					</span>
 				</form>
 			</div>

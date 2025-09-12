@@ -54,10 +54,8 @@ export async function POST(req: NextRequest) {
 
 	const sellerAmount = lamports - tradingFee
 
-	const result = amount_to_ui_amount(sellerAmount, 9)
-
 	// Return a success response
-	return NextResponse.json(result, { status: 200 })
+	return NextResponse.json(sellerAmount.toString(), { status: 200 })
 }
 
 /**
