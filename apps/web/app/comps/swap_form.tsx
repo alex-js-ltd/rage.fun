@@ -22,7 +22,7 @@ import { useSignAndSendTx } from '@/app/hooks/use_sign_and_send_tx'
 
 import { type TokenFeedType } from '@/app/utils/schemas'
 
-import { useDebounceCallback } from 'usehooks-ts'
+import { useDebounceCallback, useDebounceValue } from 'usehooks-ts'
 import { useAsync } from '@/app/hooks/use_async'
 import { client } from '@/app/utils/client'
 import { useLatestRef } from '@/app/hooks/use_latest_ref'
@@ -227,15 +227,18 @@ function Form({ badge, decimals, mint, action, toastConfig, receive, getQuote }:
 
 	const control = useInputControl(fields.amount)
 
-	const { value: uiAmount } = control
-
 	const { run, data: quote, setData } = useAsync<string | null>()
 
-	const handleUpdate = useDebounceCallback(async (uiAmount: string) => {
+	const input = control.value
+
+	const [uiAmount] = useDebounceValue(input, 1500)
+
+	useEffect(() => {
+		if (!uiAmount || typeof uiAmount !== 'string') return
 		const promise = getQuote(uiAmount)
 
 		run(promise)
-	}, 1500)
+	}, [uiAmount, getQuote, run])
 
 	return (
 		<FormProvider context={form.context}>
@@ -256,7 +259,10 @@ function Form({ badge, decimals, mint, action, toastConfig, receive, getQuote }:
 							{...getPlaceholder(decimals)}
 							type="number"
 							name="amount"
-							onChange={e => handleUpdate(e.target.value)}
+							onChange={e => {
+								console.log(e.target.value)
+								control.change(e.target.value)
+							}}
 							inputMode="numeric"
 						/>
 
