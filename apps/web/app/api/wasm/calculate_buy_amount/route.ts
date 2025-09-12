@@ -26,7 +26,7 @@ export async function POST(req: NextRequest) {
 
 		const uiAmount = Number(data.uiAmount)
 
-		const depositAmount = ui_amount_to_amount(uiAmount, 9)
+		const lamports = ui_amount_to_amount(uiAmount, 9)
 
 		const currentReserve = BigInt(data.currentReserve)
 		const targetReserve = BigInt(data.targetReserve)
@@ -34,22 +34,26 @@ export async function POST(req: NextRequest) {
 		const currentSupply = BigInt(data.currentSupply)
 		const targetSupply = BigInt(data.targetSupply)
 
-		return { depositAmount, currentReserve, targetReserve, currentSupply, targetSupply, connectorWeight, decimals }
+		return { lamports, currentReserve, targetReserve, currentSupply, targetSupply, connectorWeight, decimals }
 	}).safeParse(body)
 
 	if (parsed.error) {
 		return NextResponse.json(parsed.error.flatten(), { status: 404 })
 	}
 
-	const { depositAmount, ...bondingCurve } = parsed.data
+	const { lamports, ...bondingCurve } = parsed.data
 
-	const tradingFee = calculateTradingFee(depositAmount)
+	const tradingFee = calculateTradingFee(lamports)
 
-	const lamports = depositAmount - tradingFee
+	const depositAmount = lamports - tradingFee
+
+	const maxDeposit = bondingCurve.targetReserve - bondingCurve.currentReserve
+
+	const safeDeposit = depositAmount > maxDeposit ? maxDeposit : depositAmount
 
 	const buyAmount = calculate_buy_amount(
 		bondingCurve.currentSupply,
-		lamports,
+		safeDeposit,
 		bondingCurve.currentReserve,
 		bondingCurve.decimals,
 		bondingCurve.connectorWeight,
