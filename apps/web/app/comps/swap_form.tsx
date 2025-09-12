@@ -1,6 +1,6 @@
 'use client'
 
-import { type ReactNode, useActionState, use, useEffect, useState } from 'react'
+import { type ReactNode, useActionState, use, useEffect, useState, useCallback } from 'react'
 
 import { Tabs, List, Trigger, Content } from '@/app/comps/tabs'
 import { Button } from '@/app/comps/button'
@@ -32,6 +32,7 @@ import { useChannel } from 'ably/react'
 import { ConnectWallet } from '@/app/comps/connect_wallet'
 
 import { Progress } from '@/app/comps/progress'
+import { formatCompactNumber } from '../utils/misc'
 
 export interface SwapFormProps {
 	tokenPromise: Promise<TokenFeedType>
@@ -45,13 +46,12 @@ interface FormProps {
 
 	toastConfig: ToastConfig
 	receive: string
-	wasmAction: typeof calculateBuyAmount | typeof calculateSellPrice
 
-	progress: number
+	getQuote: (uiAmount: string) => Promise<string>
 }
 
-async function calculateBuyAmount(params: WasmType): Promise<string> {
-	return client<string>(`/api/wasm/calculate_buy_amount`, {
+async function calculateBuyAmount(params: WasmType): Promise<number> {
+	return client<number>(`/api/wasm/calculate_buy_amount`, {
 		method: 'POST',
 		body: JSON.stringify(params),
 		headers: {
@@ -143,7 +143,21 @@ export function SwapForm({ tokenPromise }: SwapFormProps) {
 function Buy({ token }: { token: TokenFeedType }) {
 	const { id: mint } = token
 	const { symbol } = token.metadata
-	const { progress } = token.metrics
+
+	const { currentReserve, targetReserve, currentSupply, targetSupply, connectorWeight, decimals } = token.bondingCurve
+
+	const getQuote = useCallback(
+		async (uiAmount: string) => {
+			const params = { uiAmount, currentReserve, targetReserve, currentSupply, targetSupply, connectorWeight, decimals }
+			const quote = await calculateBuyAmount(params)
+			console.log('quote', quote)
+			console.log(typeof quote)
+			const output = formatCompactNumber(quote)
+			return output
+		},
+		[currentReserve, targetReserve, currentSupply, targetSupply, connectorWeight, decimals],
+	)
+
 	return (
 		<Form
 			badge={<TokenBadge {...solLogoProps} />}
@@ -152,8 +166,7 @@ function Buy({ token }: { token: TokenFeedType }) {
 			action={buyAction}
 			toastConfig={{ loading: `Minting ${symbol} 🌿`, success: `Mint confirmed ✅` }}
 			receive={symbol}
-			wasmAction={calculateBuyAmount}
-			progress={progress}
+			getQuote={getQuote}
 		/>
 	)
 }
@@ -161,8 +174,17 @@ function Buy({ token }: { token: TokenFeedType }) {
 function Sell({ token }: { token: TokenFeedType }) {
 	const { id: mint } = token
 	const { symbol } = token.metadata
-	const { progress } = token.metrics
-	const { decimals } = token.bondingCurve
+
+	const { currentReserve, targetReserve, currentSupply, targetSupply, connectorWeight, decimals } = token.bondingCurve
+
+	const getQuote = useCallback(
+		async (uiAmount: string) => {
+			const params = { uiAmount, currentReserve, targetReserve, currentSupply, targetSupply, connectorWeight, decimals }
+
+			return await calculateBuyAmount(params)
+		},
+		[currentReserve, targetReserve, currentSupply, targetSupply, connectorWeight, decimals],
+	)
 
 	return (
 		<Form
@@ -172,13 +194,12 @@ function Sell({ token }: { token: TokenFeedType }) {
 			action={sellAction}
 			toastConfig={{ loading: `Burning ${symbol} 🔥`, success: `Burn confirmed ✅` }}
 			receive="SOL"
-			wasmAction={calculateSellPrice}
-			progress={progress}
+			getQuote={getQuote}
 		/>
 	)
 }
 
-function Form({ badge, decimals, mint, action, toastConfig, wasmAction, receive, progress }: FormProps) {
+function Form({ badge, decimals, mint, action, toastConfig, receive, getQuote }: FormProps) {
 	const [lastResult, formAction, isPending] = useActionState(action, undefined)
 
 	const [form, fields] = useForm({
@@ -212,14 +233,7 @@ function Form({ badge, decimals, mint, action, toastConfig, wasmAction, receive,
 	const { run, data: quote, setData } = useAsync<string | null>()
 
 	const handleUpdate = useDebounceCallback(async (uiAmount: string) => {
-		if (!uiAmount || progress === 100.0) {
-			setData(null)
-			return
-		}
-
-		const params = new URLSearchParams({ mint, uiAmount })
-
-		const promise = wasmAction(params)
+		const promise = getQuote(uiAmount)
 
 		run(promise)
 	}, 1500)
