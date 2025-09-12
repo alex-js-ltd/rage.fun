@@ -245,7 +245,7 @@ function Form({ badge, decimals, mint, action, toastConfig, receive, getQuote, d
 
 	const input = control.value
 
-	const [uiAmount] = useDebounceValue(input, 1500)
+	const [uiAmount] = useDebounceValue(input, 300)
 
 	useEffect(() => {
 		if (!uiAmount || typeof uiAmount !== 'string') return
