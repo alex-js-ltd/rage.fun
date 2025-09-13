@@ -75,7 +75,7 @@ pub struct BuyToken<'info> {
     pub associated_token_program: Program<'info, AssociatedToken>,
 }
 
-pub fn buy_token(ctx: Context<BuyToken>, lamports: u64) -> Result<()> {
+pub fn buy_token(ctx: Context<BuyToken>, lamports: u64, min_output: u64) -> Result<()> {
     // check pda accounts
     require_eq!(ctx.accounts.bonding_curve_auth.owner, &crate::id());
     require_eq!(ctx.accounts.trading_fee_auth.owner, &crate::id());
@@ -162,6 +162,11 @@ pub fn buy_token(ctx: Context<BuyToken>, lamports: u64) -> Result<()> {
     } else {
         token_amount
     };
+
+
+    if payer_amount < min_output {
+          return Err(ErrorCode::SlippageExceeded.into());
+    }
 
     // Mint to payer
     token_mint_to(

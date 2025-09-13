@@ -56,4 +56,7 @@ pub enum ErrorCode {
     /// Insufficient yield balance
     #[msg("Insufficient yield balance")]
     InsufficientYield,
+
+    #[msg("Slippage exceeded.")]
+    SlippageExceeded,
 }

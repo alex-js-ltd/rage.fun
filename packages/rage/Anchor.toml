@@ -17,7 +17,7 @@ rage = "rageM7X7HTzpPgcQwVJbVr47GBQKgpPqnQZZ7YMkkPv"
 url = "https://api.apr.dev"
 
 [provider]
-cluster = "mainnet"
+cluster = "localnet"
 wallet = "~/.config/solana/id.json"
 
 [scripts]
