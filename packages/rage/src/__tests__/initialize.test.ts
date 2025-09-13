@@ -16,7 +16,6 @@ import {
 	getAccountsToAirdrop,
 	getInitializeIx,
 	getBondingCurveAuth,
-	getAirdropAuth,
 	getHarvestYieldIx,
 	getRageToken,
 	generateToken,
@@ -64,10 +63,9 @@ describe('Launch', () => {
 		const ixs = await getInitializeIx({
 			program,
 			payer: payer.publicKey,
-			creator: payer.publicKey,
+
 			args,
 			decimals: token.decimals,
-			targetReserve: '80.0',
 		})
 
 		const tx = await buildTransaction({
@@ -129,6 +127,8 @@ describe('Launch', () => {
 				mint: token.mint,
 				uiAmount: a,
 				decimals: token.decimals,
+
+				minOutput: new BN(0),
 			})
 
 			const tx = await buildTransaction({
@@ -178,6 +178,7 @@ describe('Launch', () => {
 	// 		mint: token.mint,
 	// 		uiAmount: uiAmount,
 	// 		decimals: token.decimals,
+	//				minOutput: new BN(0),
 	// 	})
 
 	// 	const tx = await buildTransaction({
