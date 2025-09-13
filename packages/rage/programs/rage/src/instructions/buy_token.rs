@@ -163,9 +163,8 @@ pub fn buy_token(ctx: Context<BuyToken>, lamports: u64, min_output: u64) -> Resu
         token_amount
     };
 
-
     if payer_amount < min_output {
-          return Err(ErrorCode::SlippageExceeded.into());
+        return Err(ErrorCode::SlippageExceeded.into());
     }
 
     // Mint to payer
