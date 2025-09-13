@@ -170,7 +170,6 @@ function Buy({ token }: { token: TokenFeedType }) {
 			receive={symbol}
 			getQuote={getQuote}
 			displayQuote={(quote: string) => {
-				console.log('quote', quote)
 				const uiAmount = amountToUiAmount(new BN(quote), decimals)
 				return formatCompactNumber(Number(uiAmount))
 			}}
@@ -188,7 +187,6 @@ function Sell({ token }: { token: TokenFeedType }) {
 		async (uiAmount: string) => {
 			const params = { uiAmount, currentReserve, targetReserve, currentSupply, targetSupply, connectorWeight, decimals }
 			const quote = await calculateSellPrice(params)
-
 			return quote
 		},
 		[currentReserve, targetReserve, currentSupply, targetSupply, connectorWeight, decimals],
@@ -204,7 +202,6 @@ function Sell({ token }: { token: TokenFeedType }) {
 			receive="SOL"
 			getQuote={getQuote}
 			displayQuote={(quote: string) => {
-				console.log('quote', quote)
 				const uiAmount = fromLamports(new BN(quote), 9)
 				return uiAmount.toFixed(9)
 			}}
@@ -275,7 +272,6 @@ function Form({ badge, decimals, mint, action, toastConfig, receive, getQuote, d
 							type="number"
 							name="amount"
 							onChange={e => {
-								console.log(e.target.value)
 								control.change(e.target.value)
 							}}
 							inputMode="numeric"
@@ -305,7 +301,7 @@ function Form({ badge, decimals, mint, action, toastConfig, receive, getQuote, d
 					)}
 
 					<span className="absolute -bottom-6 text-xs text-teal-300 w-full right-0 text-end">
-						{quote ? `you receive ${displayQuote(quote)} ${receive ?? ''}` : ''}
+						{quote ? `Quote: ${displayQuote(quote)} ${receive ?? ''}` : ''}
 					</span>
 				</form>
 			</div>
