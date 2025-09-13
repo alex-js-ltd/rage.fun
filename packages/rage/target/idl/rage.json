@@ -168,6 +168,10 @@
         {
           "name": "lamports",
           "type": "u64"
+        },
+        {
+          "name": "min_output",
+          "type": "u64"
         }
       ]
     },
@@ -1072,6 +1076,10 @@
         {
           "name": "amount",
           "type": "u64"
+        },
+        {
+          "name": "min_output",
+          "type": "u64"
         }
       ]
     },
@@ -1416,6 +1424,11 @@
       "code": 6014,
       "name": "InsufficientYield",
       "msg": "Insufficient yield balance"
+    },
+    {
+      "code": 6015,
+      "name": "SlippageExceeded",
+      "msg": "Slippage exceeded."
     }
   ],
   "types": [

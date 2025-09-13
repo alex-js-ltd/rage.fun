@@ -39,9 +39,10 @@ interface SwapTokenIxsParams {
 	mint: PublicKey
 	uiAmount: string
 	decimals: number
+	minOutput: BN
 }
 
-export async function getBuyTokenIx({ program, payer, mint, uiAmount, decimals }: SwapTokenIxsParams) {
+export async function getBuyTokenIx({ program, payer, mint, uiAmount, decimals, minOutput }: SwapTokenIxsParams) {
 	const token0PayerAta = await getAssociatedTokenAddress(mint, payer, true, TOKEN_2022_PROGRAM_ID)
 
 	const tradingFeeAuth = getTradingFeeAuth({ program, mint })
@@ -56,7 +57,7 @@ export async function getBuyTokenIx({ program, payer, mint, uiAmount, decimals }
 	})
 
 	const buy = await program.methods
-		.buyToken(amount)
+		.buyToken(amount, minOutput)
 		.accountsStrict({
 			payer,
 			token0Mint: mint,
@@ -77,7 +78,7 @@ export async function getBuyTokenIx({ program, payer, mint, uiAmount, decimals }
 	return buy
 }
 
-export async function getSellTokenIx({ program, payer, mint, uiAmount, decimals }: SwapTokenIxsParams) {
+export async function getSellTokenIx({ program, payer, mint, uiAmount, decimals, minOutput }: SwapTokenIxsParams) {
 	const token0SellerAta = await getAssociatedTokenAddress(mint, payer, true, TOKEN_2022_PROGRAM_ID)
 
 	const tradingFeeAuth = getTradingFeeAuth({ program, mint })
@@ -92,7 +93,7 @@ export async function getSellTokenIx({ program, payer, mint, uiAmount, decimals 
 	})
 
 	const sell = await program.methods
-		.sellToken(amount)
+		.sellToken(amount, minOutput)
 		.accountsStrict({
 			signer: payer,
 			token0Mint: mint,

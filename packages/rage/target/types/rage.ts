@@ -174,6 +174,10 @@ export type Rage = {
         {
           "name": "lamports",
           "type": "u64"
+        },
+        {
+          "name": "minOutput",
+          "type": "u64"
         }
       ]
     },
@@ -1078,6 +1082,10 @@ export type Rage = {
         {
           "name": "amount",
           "type": "u64"
+        },
+        {
+          "name": "minOutput",
+          "type": "u64"
         }
       ]
     },
@@ -1422,6 +1430,11 @@ export type Rage = {
       "code": 6014,
       "name": "insufficientYield",
       "msg": "Insufficient yield balance"
+    },
+    {
+      "code": 6015,
+      "name": "slippageExceeded",
+      "msg": "Slippage exceeded."
     }
   ],
   "types": [
