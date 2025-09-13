@@ -21,12 +21,12 @@ pub mod rage {
         instructions::initialize(ctx, token_decimals, args)
     }
 
-    pub fn buy_token(ctx: Context<BuyToken>, lamports: u64) -> Result<()> {
-        instructions::buy_token(ctx, lamports)
+    pub fn buy_token(ctx: Context<BuyToken>, lamports: u64, min_output: u64) -> Result<()> {
+        instructions::buy_token(ctx, lamports, min_output)
     }
 
-    pub fn sell_token(ctx: Context<SellToken>, amount: u64) -> Result<()> {
-        instructions::sell_token(ctx, amount)
+    pub fn sell_token(ctx: Context<SellToken>, amount: u64, min_output: u64) -> Result<()> {
+        instructions::sell_token(ctx, amount, min_output)
     }
 
     pub fn proxy_initialize(ctx: Context<ProxyInitialize>, open_time: u64) -> Result<()> {

@@ -66,7 +66,7 @@ pub struct SellToken<'info> {
     pub associated_token_program: Program<'info, AssociatedToken>,
 }
 
-pub fn sell_token(ctx: Context<SellToken>, token_amount: u64) -> Result<()> {
+pub fn sell_token(ctx: Context<SellToken>, token_amount: u64, min_output: u64) -> Result<()> {
     // check pda accounts
     require_eq!(ctx.accounts.bonding_curve_auth.owner, &crate::id());
     require_eq!(ctx.accounts.trading_fee_auth.owner, &crate::id());
@@ -149,6 +149,10 @@ pub fn sell_token(ctx: Context<SellToken>, token_amount: u64) -> Result<()> {
             ctx.accounts.signer.to_account_info(),
             ctx.accounts.signer.to_account_info(),
         )?;
+    }
+
+    if seller_amount < min_output {
+        return Err(ErrorCode::SlippageExceeded.into());
     }
 
     let pda = &ctx.accounts.bonding_curve_auth;
