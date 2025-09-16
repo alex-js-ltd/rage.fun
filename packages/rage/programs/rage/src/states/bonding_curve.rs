@@ -84,12 +84,7 @@ pub fn calculate_sell_price(
     Ok(output)
 }
 
-pub fn get_status(
-    current_supply: u64,
-    target_supply: u64,
-    current_reserve: u64,
-    target_reserve: u64,
-) -> Status {
+pub fn get_status(current_reserve: u64, target_reserve: u64) -> Status {
     if current_reserve >= target_reserve {
         Status::Complete
     } else {

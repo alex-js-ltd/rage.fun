@@ -166,17 +166,11 @@ pub fn sell_token(ctx: Context<SellToken>, token_amount: u64, min_output: u64) -
     transfer_sol_from_pda(pda, trading_fee_account, trading_fee)?;
 
     let current_supply = ctx.accounts.bonding_curve_state.current_supply - token_amount;
-    let target_supply = ctx.accounts.bonding_curve_state.target_supply;
     let current_reserve = ctx.accounts.bonding_curve_state.current_reserve - lamports;
     let target_reserve = ctx.accounts.bonding_curve_state.target_reserve;
     let trading_fees = get_account_balance(ctx.accounts.trading_fee_auth.to_account_info())?;
 
-    let status = get_status(
-        current_supply,
-        target_supply,
-        current_reserve,
-        target_reserve,
-    );
+    let status = get_status(current_reserve, target_reserve);
 
     update_bonding_curve_state(
         &mut ctx.accounts.bonding_curve_state,
