@@ -280,7 +280,7 @@ pub fn proxy_initialize(ctx: Context<ProxyInitialize>, open_time: u64) -> Result
     );
 
     let current_supply = ctx.accounts.bonding_curve_mint.supply;
-    let remaining_supply = (current_supply >> 3) * 2;
+    let remaining_supply = current_supply.saturating_div(4);
 
     token_mint_to(
         ctx.accounts.creator.to_account_info(),
