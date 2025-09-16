@@ -12,8 +12,7 @@ use anchor_spl::{
 
 use crate::utils::token::{
     create_or_allocate_account, create_token_metadata, edit_token_metadata_update_authority,
-    get_account_balance, get_meta_list_size, get_mint_extensible_extension_data, get_or_create_ata,
-    set_authority, token_mint_to, transfer_sol_to_vault,
+    get_account_balance, get_meta_list_size, get_mint_extensible_extension_data, set_authority,
     update_account_lamports_to_minimum_balance,
 };
 
