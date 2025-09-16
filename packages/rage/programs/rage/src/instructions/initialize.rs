@@ -174,10 +174,8 @@ pub fn initialize(
         &ctx.accounts.payer.to_account_info(),
         &ctx.accounts.token_0_mint.to_account_info(),
         &ctx.accounts.bonding_curve_auth.to_account_info(),
-        &ctx.accounts.token_0_bonding_curve_ata.to_account_info(),
         &ctx.accounts.token_0_program.to_account_info(),
         &ctx.accounts.system_program.to_account_info(),
-        &ctx.accounts.associated_token_program.to_account_info(),
         target_supply,
         target_reserve,
         virtual_reserve,
@@ -236,10 +234,8 @@ pub fn create_bonding_curve<'info>(
     payer: &AccountInfo<'info>,
     token_0_mint: &AccountInfo<'info>,
     bonding_curve_auth: &AccountInfo<'info>,
-    token_0_bonding_curve_ata: &AccountInfo<'info>,
     token_0_program: &AccountInfo<'info>,
     system_program: &AccountInfo<'info>,
-    assocaited_token_program: &AccountInfo<'info>,
     target_supply: u64,
     target_reserve: u64,
     virtual_reserve: u64,
@@ -274,16 +270,6 @@ pub fn create_bonding_curve<'info>(
     )?;
 
     require_eq!(bonding_curve_auth.owner, &crate::id());
-
-    get_or_create_ata(
-        payer.to_account_info(),
-        token_0_bonding_curve_ata.to_account_info(),
-        bonding_curve_auth.to_account_info(),
-        token_0_mint.to_account_info(),
-        system_program.to_account_info(),
-        token_0_program.to_account_info(),
-        assocaited_token_program.to_account_info(),
-    )?;
 
     // change mint authority
     set_authority(
