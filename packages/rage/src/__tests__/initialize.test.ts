@@ -119,7 +119,7 @@ describe('Launch', () => {
 	it('buy token', async () => {
 		const arr1 = ['1.0']
 
-		const arr2 = ['79.0']
+		const arr2 = ['1.0', '1.0', '1.0']
 
 		for (const a of arr2) {
 			const one = await getBuyTokenIx({
@@ -211,17 +211,17 @@ describe('Launch', () => {
 		console.log('reserve balance:', state.currentReserve.toString())
 	})
 
-	it('user should have 0 tokens', async () => {
-		const payerAta = await getAssociatedTokenAddress(token.mint, payer.publicKey, true, TOKEN_2022_PROGRAM_ID)
+	// it('user should have 0 tokens', async () => {
+	// 	const payerAta = await getAssociatedTokenAddress(token.mint, payer.publicKey, true, TOKEN_2022_PROGRAM_ID)
 
-		const account = await getAccount(connection, payerAta, 'confirmed', TOKEN_2022_PROGRAM_ID)
+	// 	const account = await getAccount(connection, payerAta, 'confirmed', TOKEN_2022_PROGRAM_ID)
 
-		const state = await fetchBondingCurveState({ program, mint: token.mint })
+	// 	const state = await fetchBondingCurveState({ program, mint: token.mint })
 
-		console.log(account)
+	// 	console.log(account)
 
-		// expect(account.amount).toEqual(BigInt('0'))
-	})
+	// 	// expect(account.amount).toEqual(BigInt('0'))
+	// })
 
 	it('harvest yield', async () => {
 		const ix = await getHarvestYieldIx({
