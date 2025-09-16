@@ -13,7 +13,10 @@ import {
 	generateToken,
 	getSyncBondingCurveIx,
 	getAccountsToAirdrop,
+	fromLamports,
 } from '../index'
+
+import { TOKEN_2022_PROGRAM_ID, getMint, getAssociatedTokenAddress, getAccount } from '@solana/spl-token'
 
 describe('proxy test', () => {
 	const provider = AnchorProvider.env()
@@ -112,6 +115,14 @@ describe('proxy test', () => {
 		const res = await connection.simulateTransaction(tx)
 		console.log(res.value.logs)
 		await sendAndConfirm({ connection, tx })
+
+		const mint = await getMint(connection, token.mint, 'confirmed', TOKEN_2022_PROGRAM_ID)
+
+		console.log(mint)
+
+		console.log(mint.supply.toString())
+
+		console.log(fromLamports(new BN(mint.supply.toString()), token.decimals))
 	})
 
 	it('proxy init', async () => {
