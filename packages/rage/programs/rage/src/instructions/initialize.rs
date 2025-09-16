@@ -166,7 +166,7 @@ pub fn initialize(
     let target_supply = ui_amount_to_amount(800_000_000.0, ctx.accounts.token_0_mint.decimals);
     let target_reserve = ui_amount_to_amount(80.0, 9);
 
-    let initial_reserve = ui_amount_to_amount(0.000000001, 9);
+    let virtual_reserve = ui_amount_to_amount(0.000000200, 9);
     let connector_weight = 0.33;
     let decimals = ctx.accounts.token_0_mint.decimals;
 
@@ -180,7 +180,7 @@ pub fn initialize(
         &ctx.accounts.associated_token_program.to_account_info(),
         target_supply,
         target_reserve,
-        initial_reserve,
+        virtual_reserve,
         connector_weight,
         decimals,
     )?;
@@ -191,8 +191,6 @@ pub fn initialize(
     let open_time = block_timestamp as u64;
 
     let current_reserve = get_account_balance(ctx.accounts.bonding_curve_auth.to_account_info())?;
-
-    require_eq!(current_reserve, initial_reserve);
 
     let trading_fees = get_account_balance(ctx.accounts.trading_fee_auth.to_account_info())?;
 
@@ -211,7 +209,7 @@ pub fn initialize(
         current_supply,
         target_supply,
 
-        initial_reserve,
+        virtual_reserve,
         current_reserve,
         target_reserve,
 
@@ -244,7 +242,7 @@ pub fn create_bonding_curve<'info>(
     assocaited_token_program: &AccountInfo<'info>,
     target_supply: u64,
     target_reserve: u64,
-    initial_reserve: u64,
+    virtual_reserve: u64,
     connector_weight: f64,
     decimals: u8,
 ) -> Result<u64> {
@@ -296,18 +294,10 @@ pub fn create_bonding_curve<'info>(
         Some(bonding_curve_auth.to_account_info().key()),
     )?;
 
-    // Transfer SOL to bonding curve vault pda
-    transfer_sol_to_vault(
-        payer.to_account_info(),
-        bonding_curve_auth.to_account_info(),
-        system_program.to_account_info(),
-        initial_reserve,
-    )?;
-
     let virtual_supply = calculate_virtual_supply(
         target_supply,
         target_reserve,
-        initial_reserve,
+        virtual_reserve,
         connector_weight,
         decimals,
     )?;

@@ -1580,7 +1580,7 @@
             "type": "u64"
           },
           {
-            "name": "initial_reserve",
+            "name": "virtual_reserve",
             "type": "u64"
           },
           {

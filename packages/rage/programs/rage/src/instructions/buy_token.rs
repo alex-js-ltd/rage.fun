@@ -146,7 +146,7 @@ pub fn buy_token(ctx: Context<BuyToken>, lamports: u64, min_output: u64) -> Resu
         ctx.accounts.bonding_curve_state.virtual_supply
             + ctx.accounts.bonding_curve_state.current_supply,
         safe_deposit,
-        ctx.accounts.bonding_curve_state.current_reserve,
+      ctx.accounts.bonding_curve_state.virtual_reserve +  ctx.accounts.bonding_curve_state.current_reserve,
         ctx.accounts.bonding_curve_state.decimals,
         ctx.accounts.bonding_curve_state.connector_weight,
     )?;
@@ -204,10 +204,7 @@ pub fn buy_token(ctx: Context<BuyToken>, lamports: u64, min_output: u64) -> Resu
     let target_reserve = ctx.accounts.bonding_curve_state.target_reserve;
     let trading_fees = get_account_balance(ctx.accounts.trading_fee_auth.to_account_info())?;
 
-    require!(
-        current_reserve >= ctx.accounts.bonding_curve_state.initial_reserve,
-        ErrorCode::InvalidReserve
-    );
+
 
     let status = get_status(
         current_supply,

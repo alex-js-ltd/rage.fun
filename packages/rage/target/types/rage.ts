@@ -1586,7 +1586,7 @@ export type Rage = {
             "type": "u64"
           },
           {
-            "name": "initialReserve",
+            "name": "virtualReserve",
             "type": "u64"
           },
           {

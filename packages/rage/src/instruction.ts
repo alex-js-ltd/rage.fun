@@ -363,10 +363,10 @@ export async function getSyncBondingCurveIx({ program, payer, mint }: SyncBondin
 }
 
 export function calculateProgress(state: BondingCurveState) {
-	const { currentReserve, initialReserve, targetReserve } = state
+	const { currentReserve, virtualReserve, targetReserve } = state
 
 	const cur = new Decimal(currentReserve.toString())
-	const init = new Decimal(initialReserve.toString())
+	const init = new Decimal(virtualReserve.toString())
 	const target = new Decimal(targetReserve.toString())
 
 	const denom = target.minus(init)
