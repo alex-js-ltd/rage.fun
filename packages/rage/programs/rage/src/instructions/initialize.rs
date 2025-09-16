@@ -20,8 +20,8 @@ use crate::utils::token::{
 use anchor_spl::token_interface::spl_token_2022::{self, ui_amount_to_amount};
 
 use crate::states::{
-    calculate_initial_supply, initialize_bonding_curve_state, BondingCurveState, CreateEvent,
-    Status,
+    calculate_initial_supply, calculate_virtual_supply, initialize_bonding_curve_state,
+    BondingCurveState, CreateEvent, Status,
 };
 
 use spl_pod::optional_keys::OptionalNonZeroPubkey;
@@ -170,7 +170,7 @@ pub fn initialize(
     let connector_weight = 0.33;
     let decimals = ctx.accounts.token_0_mint.decimals;
 
-    let initial_supply = create_bonding_curve(
+    let virtual_supply = create_bonding_curve(
         &ctx.accounts.payer.to_account_info(),
         &ctx.accounts.token_0_mint.to_account_info(),
         &ctx.accounts.bonding_curve_auth.to_account_info(),
@@ -183,14 +183,10 @@ pub fn initialize(
         initial_reserve,
         connector_weight,
         decimals,
-        &[&[
-            BONDING_CURVE_AUTH_SEED.as_bytes(),
-            ctx.accounts.token_0_mint.key().as_ref(),
-            &[ctx.bumps.bonding_curve_auth],
-        ]],
     )?;
 
-    let current_supply = initial_supply;
+    // Real minted supply
+    let current_supply = 0;
     let block_timestamp = Clock::get()?.unix_timestamp;
     let open_time = block_timestamp as u64;
 
@@ -211,7 +207,7 @@ pub fn initialize(
         connector_weight,
         decimals,
 
-        initial_supply,
+        virtual_supply,
         current_supply,
         target_supply,
 
@@ -251,7 +247,6 @@ pub fn create_bonding_curve<'info>(
     initial_reserve: u64,
     connector_weight: f64,
     decimals: u8,
-    signer_seeds: &[&[&[u8]]],
 ) -> Result<u64> {
     if bonding_curve_auth.owner != &system_program::ID {
         return err!(ErrorCode::NotApproved);
@@ -309,7 +304,7 @@ pub fn create_bonding_curve<'info>(
         initial_reserve,
     )?;
 
-    let initial_supply = calculate_initial_supply(
+    let virtual_supply = calculate_virtual_supply(
         target_supply,
         target_reserve,
         initial_reserve,
@@ -317,28 +312,7 @@ pub fn create_bonding_curve<'info>(
         decimals,
     )?;
 
-    // add liquidity to token supply
-    token_mint_to(
-        bonding_curve_auth.to_account_info(),
-        token_0_program.to_account_info(),
-        token_0_mint.to_account_info(),
-        token_0_bonding_curve_ata.to_account_info(),
-        initial_supply,
-        signer_seeds,
-    )?;
-
-    let token_account = spl_token_2022::extension::StateWithExtensions::<
-        spl_token_2022::state::Account,
-    >::unpack(&token_0_bonding_curve_ata.data.borrow())?
-    .base;
-
-    require_eq!(initial_supply, token_account.amount);
-
-    require_eq!(bonding_curve_auth.key(), token_account.owner);
-
-    require_eq!(token_0_mint.key(), token_account.mint);
-
-    Ok(initial_supply)
+    Ok(virtual_supply)
 }
 
 pub fn create_trading_fee_account<'info>(

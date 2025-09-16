@@ -1183,7 +1183,35 @@ export type Rage = {
           }
         },
         {
-          "name": "token0BondingCurveAta",
+          "name": "frozenAuth",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  102,
+                  114,
+                  111,
+                  122,
+                  101,
+                  110,
+                  95,
+                  97,
+                  117,
+                  116,
+                  104
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "token0Mint"
+              }
+            ]
+          }
+        },
+        {
+          "name": "token0FrozenAta",
           "docs": [
             "Token account to which the tokens will be minted (created if needed)"
           ],
@@ -1192,7 +1220,7 @@ export type Rage = {
             "seeds": [
               {
                 "kind": "account",
-                "path": "bondingCurveAuth"
+                "path": "frozenAuth"
               },
               {
                 "kind": "account",
@@ -1546,7 +1574,7 @@ export type Rage = {
             "type": "u8"
           },
           {
-            "name": "initialSupply",
+            "name": "virtualSupply",
             "type": "u64"
           },
           {

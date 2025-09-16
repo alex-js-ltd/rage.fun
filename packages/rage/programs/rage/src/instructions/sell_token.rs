@@ -88,7 +88,8 @@ pub fn sell_token(ctx: Context<SellToken>, token_amount: u64, min_output: u64) -
     }
 
     let lamports = calculate_sell_price(
-        ctx.accounts.bonding_curve_state.current_supply,
+        ctx.accounts.bonding_curve_state.current_supply
+            + ctx.accounts.bonding_curve_state.virtual_supply,
         token_amount,
         ctx.accounts.bonding_curve_state.current_reserve,
         ctx.accounts.bonding_curve_state.decimals,
@@ -168,11 +169,6 @@ pub fn sell_token(ctx: Context<SellToken>, token_amount: u64, min_output: u64) -
     let current_reserve = ctx.accounts.bonding_curve_state.current_reserve - lamports;
     let target_reserve = ctx.accounts.bonding_curve_state.target_reserve;
     let trading_fees = get_account_balance(ctx.accounts.trading_fee_auth.to_account_info())?;
-
-    require!(
-        current_supply >= ctx.accounts.bonding_curve_state.initial_supply,
-        ErrorCode::InvalidSupply
-    );
 
     require!(
         current_reserve >= ctx.accounts.bonding_curve_state.initial_reserve,

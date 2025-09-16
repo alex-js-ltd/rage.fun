@@ -22,7 +22,7 @@ pub struct BondingCurveState {
     pub connector_weight: f64,
     pub decimals: u8,
 
-    pub initial_supply: u64,
+    pub virtual_supply: u64,
     pub current_supply: u64,
     pub target_supply: u64,
 
@@ -90,7 +90,7 @@ pub fn get_status(
     current_reserve: u64,
     target_reserve: u64,
 ) -> Status {
-    if current_supply >= target_supply || current_reserve >= target_reserve {
+    if current_reserve >= target_reserve {
         Status::Complete
     } else {
         Status::Funding
@@ -148,7 +148,7 @@ pub fn initialize_bonding_curve_state<'a>(
     curve.connector_weight = payload.connector_weight;
     curve.decimals = payload.decimals;
 
-    curve.initial_supply = payload.initial_supply;
+    curve.virtual_supply = payload.virtual_supply;
     curve.current_supply = payload.current_supply;
     curve.target_supply = payload.target_supply;
 
@@ -172,4 +172,26 @@ pub fn update_bonding_curve_state<'a>(
     curve.trading_fees = trading_fees;
     curve.status = status;
     Ok(())
+}
+
+pub fn calculate_virtual_supply(
+    target_supply: u64, // 800M in base units
+    delta_reserve: u64, // 80 SOL in lamports (ΔR)
+    r0: u64,            // initial reserve in lamports (R0)
+    connector_weight: f64,
+    decimals: u8,
+) -> Result<u64> {
+    // convert to UI floats only for pow; keep types clear
+    let s_target_ui = amount_to_ui_amount(target_supply, decimals);
+    let dr_ui = amount_to_ui_amount(delta_reserve, 9);
+    let r0_ui = amount_to_ui_amount(r0, 9);
+
+    let term = (1.0 + dr_ui / r0_ui).powf(connector_weight) - 1.0;
+
+    // divide by term (not 1+term); ceil so you don't finish short
+    let s_v_ui = (s_target_ui / term).ceil();
+
+    let output = ui_amount_to_amount(s_v_ui, decimals);
+
+    Ok(output)
 }
