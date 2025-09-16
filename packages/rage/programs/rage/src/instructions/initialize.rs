@@ -20,8 +20,8 @@ use crate::utils::token::{
 use anchor_spl::token_interface::spl_token_2022::{self, ui_amount_to_amount};
 
 use crate::states::{
-    calculate_initial_supply, calculate_virtual_supply, initialize_bonding_curve_state,
-    BondingCurveState, CreateEvent, Status,
+    calculate_virtual_supply, initialize_bonding_curve_state, BondingCurveState, CreateEvent,
+    Status,
 };
 
 use spl_pod::optional_keys::OptionalNonZeroPubkey;
@@ -166,7 +166,7 @@ pub fn initialize(
     let target_supply = ui_amount_to_amount(800_000_000.0, ctx.accounts.token_0_mint.decimals);
     let target_reserve = ui_amount_to_amount(80.0, 9);
 
-    let virtual_reserve = ui_amount_to_amount(0.000000200, 9);
+    let virtual_reserve = ui_amount_to_amount(0.000000001, 9);
     let connector_weight = 0.33;
     let decimals = ctx.accounts.token_0_mint.decimals;
 

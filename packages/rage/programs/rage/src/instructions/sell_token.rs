@@ -91,13 +91,13 @@ pub fn sell_token(ctx: Context<SellToken>, token_amount: u64, min_output: u64) -
         ctx.accounts.bonding_curve_state.current_supply
             + ctx.accounts.bonding_curve_state.virtual_supply,
         token_amount,
-        ctx.accounts.bonding_curve_state.current_reserve
+        ctx.accounts.bonding_curve_state.virtual_reserve
             + ctx.accounts.bonding_curve_state.current_reserve,
         ctx.accounts.bonding_curve_state.decimals,
         ctx.accounts.bonding_curve_state.connector_weight,
     )?;
 
-    if lamports >= ctx.accounts.bonding_curve_state.current_reserve {
+    if lamports > ctx.accounts.bonding_curve_state.current_reserve {
         return Err(ErrorCode::InsufficientReserve.into());
     }
 
