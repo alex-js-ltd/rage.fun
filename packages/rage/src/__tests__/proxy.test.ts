@@ -94,7 +94,7 @@ describe('proxy test', () => {
 			program,
 			payer: payer.publicKey,
 			mint: token.mint,
-			uiAmount: '85.0',
+			uiAmount: '80.9',
 			decimals: token.decimals,
 			minOutput: new BN(0),
 		})
@@ -112,35 +112,6 @@ describe('proxy test', () => {
 		const res = await connection.simulateTransaction(tx)
 		console.log(res.value.logs)
 		await sendAndConfirm({ connection, tx })
-	})
-
-	// it('sync bonding curve', async () => {
-	// 	const sync = await getSyncBondingCurveIx({
-	// 		program,
-	// 		payer: payer.publicKey,
-	// 		mint: token.mint,
-	// 	})
-
-	// 	const tx = await buildTransaction({
-	// 		connection: connection,
-	// 		payer: payer.publicKey,
-	// 		instructions: [sync],
-	// 		signers: [],
-	// 	})
-
-	// 	payer.signTransaction(tx)
-
-	// 	// Simulate the transaction
-	// 	const res = await connection.simulateTransaction(tx)
-	// 	console.log(res.value.logs)
-	// 	await sendAndConfirm({ connection, tx })
-	// })
-
-	it('airdrop payer', async () => {
-		await airDrop({
-			connection,
-			account: payer.publicKey,
-		})
 	})
 
 	it('proxy init', async () => {
@@ -170,5 +141,11 @@ describe('proxy test', () => {
 
 		const txSize = tx.serialize().length
 		console.log('Transaction size in bytes:', txSize)
+
+		const state = await fetchBondingCurveState({ program, mint: token.mint })
+
+		console.log(state)
+
+		console.log(state.currentSupply.toString())
 	})
 })
