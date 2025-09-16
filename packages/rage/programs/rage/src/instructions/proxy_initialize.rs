@@ -279,11 +279,8 @@ pub fn proxy_initialize(ctx: Context<ProxyInitialize>, open_time: u64) -> Result
         mint_data.mint_authority
     );
 
-    // mint remaining token supply
-    let total_supply =
-        ui_amount_to_amount(1_000_000_000.0, ctx.accounts.bonding_curve_mint.decimals);
     let current_supply = ctx.accounts.bonding_curve_mint.supply;
-    let remaining_supply = total_supply.saturating_sub(current_supply);
+    let remaining_supply = (current_supply >> 3) * 2;
 
     token_mint_to(
         ctx.accounts.creator.to_account_info(),
@@ -314,8 +311,6 @@ pub fn proxy_initialize(ctx: Context<ProxyInitialize>, open_time: u64) -> Result
     ctx.accounts.token_0_mint.reload()?;
     ctx.accounts.token_1_mint.reload()?;
     ctx.accounts.bonding_curve_mint.reload()?;
-
-    assert_eq!(total_supply, ctx.accounts.bonding_curve_mint.supply);
 
     let init_0 =
         spl_token_2022::extension::StateWithExtensions::<spl_token_2022::state::Account>::unpack(
