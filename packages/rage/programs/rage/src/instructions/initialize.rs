@@ -166,7 +166,7 @@ pub fn initialize(
     let target_supply = ui_amount_to_amount(800_000_000.0, ctx.accounts.token_0_mint.decimals);
     let target_reserve = ui_amount_to_amount(80.0, 9);
 
-    let virtual_reserve = ui_amount_to_amount(0.000000001, 9);
+    let virtual_reserve = ui_amount_to_amount(0.1, 9);
     let connector_weight = 0.33;
     let decimals = ctx.accounts.token_0_mint.decimals;
 

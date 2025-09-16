@@ -117,7 +117,7 @@ describe('Launch', () => {
 	})
 
 	it('buy token', async () => {
-		const arr1 = ['80.0']
+		const arr1 = ['0.1']
 
 		const arr2 = ['1.0', '1.0', '1.0', '1.0', '1.0']
 
