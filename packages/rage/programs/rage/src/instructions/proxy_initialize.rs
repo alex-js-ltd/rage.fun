@@ -243,6 +243,17 @@ pub fn proxy_initialize(ctx: Context<ProxyInitialize>, open_time: u64) -> Result
         &ctx.accounts.creator_token_1.to_account_info(),
     )?;
 
+    // create ata for meme token
+    get_or_create_ata(
+        ctx.accounts.signer.to_account_info(),
+        bonding_curve_ata.to_account_info(),
+        ctx.accounts.creator.to_account_info(),
+        bonding_curve_mint.to_account_info(),
+        ctx.accounts.system_program.to_account_info(),
+        bonding_curve_program.to_account_info(),
+        ctx.accounts.associated_token_program.to_account_info(),
+    )?;
+
     let bonding_curve_account = spl_token_2022::extension::StateWithExtensions::<
         spl_token_2022::state::Account,
     >::unpack(&bonding_curve_ata.data.borrow())?

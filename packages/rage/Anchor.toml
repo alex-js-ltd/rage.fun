@@ -21,7 +21,7 @@ cluster = "localnet"
 wallet = "~/.config/solana/id.json"
 
 [scripts]
-test = "pnpm run jest src/__tests__/initialize.test.ts"
+test = "pnpm run jest src/__tests__/proxy.test.ts"
 
 [test]
 startup_wait = 8000
