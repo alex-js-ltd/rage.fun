@@ -284,7 +284,7 @@ export async function getInitializeIx({ program, payer, decimals, args }: Getini
 		microLamports: 20000,
 	})
 
-	return [init]
+	return [modifyComputeUnits, addPriorityFee, init]
 }
 
 interface GetHarvestYieldIxParams {
