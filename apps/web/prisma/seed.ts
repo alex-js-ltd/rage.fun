@@ -49,11 +49,11 @@ async function seed() {
 				connectorWeight: 0.33,
 				decimals: 6,
 
-				initialSupply: 1000,
+				virtualSupply: 1000,
 				currentSupply: 1000,
 				targetSupply: 10000000,
 
-				initialReserve: 1000,
+				virtualReserve: 1000,
 				currentReserve: 1000,
 				targetReserve: 10000000,
 
