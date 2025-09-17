@@ -172,8 +172,9 @@ export async function processSwapEvents(swapEvents: EventData<'swapEvent'>[]) {
 
 			const swapAlert = parsed.data
 
-			revalidateTag(`price-deltas-${swapAlert.tokenId}`)
 			revalidateTag(swapAlert.tokenId)
+
+			revalidatePath(`/(.)token/${swapAlert.tokenId}`)
 			revalidatePath(`/token/${swapAlert.tokenId}`)
 
 			await sendSwapAlertToAbly(swapChannel, swapAlert)
