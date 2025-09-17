@@ -51,7 +51,7 @@ export function useSignAndSendTx(tx?: Uint8Array) {
 
 	const { channel } = useChannel('signatureEvent', (message: Ably.Message) => {
 		const sigEvent: SignatureStatus & { signature: string } = message.data
-
+		console.log(sigEvent)
 		const { signature, ...rest } = sigEvent
 
 		// no transaction signature
