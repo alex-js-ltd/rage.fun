@@ -142,11 +142,18 @@ pub fn buy_token(ctx: Context<BuyToken>, lamports: u64, min_output: u64) -> Resu
         deposit_amount
     };
 
+    // use virtual suppply + current supply for price formula
+    let supply = ctx.accounts.bonding_curve_state.virtual_supply
+        + ctx.accounts.bonding_curve_state.current_supply;
+
+    // use virtual reserve + current reserve for price formula
+    let connector_balance = ctx.accounts.bonding_curve_state.virtual_reserve
+        + ctx.accounts.bonding_curve_state.current_reserve;
+
     let token_amount = calculate_buy_amount(
-        ctx.accounts.bonding_curve_state.virtual_supply
-            + ctx.accounts.bonding_curve_state.current_supply,
+        supply,
         safe_deposit,
-      ctx.accounts.bonding_curve_state.virtual_reserve +  ctx.accounts.bonding_curve_state.current_reserve,
+        connector_balance,
         ctx.accounts.bonding_curve_state.decimals,
         ctx.accounts.bonding_curve_state.connector_weight,
     )?;
@@ -202,11 +209,7 @@ pub fn buy_token(ctx: Context<BuyToken>, lamports: u64, min_output: u64) -> Resu
     let current_reserve = ctx.accounts.bonding_curve_state.current_reserve + safe_deposit;
     let target_reserve = ctx.accounts.bonding_curve_state.target_reserve;
     let trading_fees = get_account_balance(ctx.accounts.trading_fee_auth.to_account_info())?;
-
-    let status = get_status(
-        current_reserve,
-        target_reserve,
-    );
+    let status = get_status(current_reserve, target_reserve);
 
     update_bonding_curve_state(
         &mut ctx.accounts.bonding_curve_state,

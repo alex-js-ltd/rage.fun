@@ -87,12 +87,18 @@ pub fn sell_token(ctx: Context<SellToken>, token_amount: u64, min_output: u64) -
         return Err(ErrorCode::InsufficientUserSupply.into());
     }
 
+    // use virtual suppply + current supply for price formula
+    let supply = ctx.accounts.bonding_curve_state.virtual_supply
+        + ctx.accounts.bonding_curve_state.current_supply;
+
+    // use virtual reserve + current reserve for price formula
+    let connector_balance = ctx.accounts.bonding_curve_state.virtual_reserve
+        + ctx.accounts.bonding_curve_state.current_reserve;
+
     let lamports = calculate_sell_price(
-        ctx.accounts.bonding_curve_state.current_supply
-            + ctx.accounts.bonding_curve_state.virtual_supply,
+        supply,
         token_amount,
-        ctx.accounts.bonding_curve_state.virtual_reserve
-            + ctx.accounts.bonding_curve_state.current_reserve,
+        connector_balance,
         ctx.accounts.bonding_curve_state.decimals,
         ctx.accounts.bonding_curve_state.connector_weight,
     )?;
