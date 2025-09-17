@@ -21,6 +21,7 @@ import {
 	generateToken,
 	calculateProgress,
 	fromLamports,
+	calculatePrice,
 } from '../index'
 import { TOKEN_2022_PROGRAM_ID, getMint, getAssociatedTokenAddress, getAccount } from '@solana/spl-token'
 
@@ -98,6 +99,10 @@ describe('Launch', () => {
 		console.log('current reserve:', state.currentReserve.toString())
 
 		console.log('cw:', state.connectorWeight)
+
+		const price = calculatePrice(state)
+
+		console.log('start price', price.toString())
 	})
 
 	it('check bonding curve mint authority is rent exempt', async () => {
@@ -117,7 +122,7 @@ describe('Launch', () => {
 	})
 
 	it('buy token', async () => {
-		const arr1 = ['0.000000010']
+		const arr1 = ['1.0']
 
 		const arr2 = ['1.0', '1.0', '1.0', '1.0', '1.0']
 
