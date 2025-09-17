@@ -124,9 +124,9 @@ describe('Launch', () => {
 	it('buy token', async () => {
 		const arr1 = ['1.0']
 
-		const arr2 = ['1.0', '1.0', '1.0', '1.0', '1.0']
+		const arr2 = ['10.0', '10.0', '10.0', '10.0', '10.0', '10.0', '10.0']
 
-		for (const a of arr1) {
+		for (const a of arr2) {
 			const one = await getBuyTokenIx({
 				program,
 				payer: payer.publicKey,

@@ -376,7 +376,7 @@ pub fn proxy_initialize(ctx: Context<ProxyInitialize>, open_time: u64) -> Result
         open_time,
     )?;
 
-    // Transfer ownership of pda back to magic mint program
+    // Transfer ownership of pda back to rage program
     create_or_allocate_account(
         &crate::id(),
         ctx.accounts.signer.to_account_info(),
