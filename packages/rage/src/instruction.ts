@@ -264,7 +264,7 @@ export async function getInitializeIx({ program, payer, decimals, args }: Getini
 
 			extraMetasAccount: extraMetasAccount,
 			systemProgram: web3.SystemProgram.programId,
-			associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
+
 			token0Program: TOKEN_2022_PROGRAM_ID,
 
 			bondingCurveAuth,
@@ -285,7 +285,7 @@ export async function getInitializeIx({ program, payer, decimals, args }: Getini
 		microLamports: 20000,
 	})
 
-	return [modifyComputeUnits, init]
+	return [init]
 }
 
 interface GetHarvestYieldIxParams {
@@ -323,43 +323,6 @@ export async function getHarvestYieldIx({ program, creator, mint }: GetHarvestYi
 		.instruction()
 
 	return init
-}
-
-interface SyncBondingCurveIxsParams {
-	program: Program<Rage>
-	payer: PublicKey
-	mint: PublicKey
-}
-
-export async function getSyncBondingCurveIx({ program, payer, mint }: SyncBondingCurveIxsParams) {
-	const bondingCurveAuth = getBondingCurveAuth({ program, mint })
-
-	const bondingCurveState = getBondingCurveState({
-		program,
-		mint,
-	})
-
-	const token0BondingCurveAta = await getAssociatedTokenAddress(mint, bondingCurveAuth, true, TOKEN_2022_PROGRAM_ID)
-
-	const sync = await program.methods
-		.syncBondingCurve()
-		.accountsStrict({
-			payer,
-			token0Mint: mint,
-
-			bondingCurveAuth,
-
-			bondingCurveState,
-
-			systemProgram: web3.SystemProgram.programId,
-			associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
-			token0Program: TOKEN_2022_PROGRAM_ID,
-
-			token0BondingCurveAta,
-		})
-		.instruction()
-
-	return sync
 }
 
 export function calculateProgress(state: BondingCurveState) {

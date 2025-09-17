@@ -70,7 +70,7 @@ pub struct Initialize<'info> {
     )]
     pub extra_metas_account: UncheckedAccount<'info>,
     pub system_program: Program<'info, System>,
-    pub associated_token_program: Program<'info, AssociatedToken>,
+
     pub token_0_program: Program<'info, Token2022>,
 
     /// CHECK: pda to control vault_meme_ata & lamports
