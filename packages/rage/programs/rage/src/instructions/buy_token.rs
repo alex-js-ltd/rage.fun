@@ -88,7 +88,7 @@ pub fn buy_token(ctx: Context<BuyToken>, lamports: u64, min_output: u64) -> Resu
         return Err(ErrorCode::InsufficientFunds.into());
     }
 
-    if lamports < 100 {
+    if lamports < 10 {
         return Err(ErrorCode::InsufficientBuyAmount.into());
     }
 
