@@ -27,13 +27,25 @@ export async function POST(req: NextRequest) {
 
 		const tokenAmount = ui_amount_to_amount(uiAmount, decimals)
 
+		const virtualReserve = BigInt(data.virtualReserve)
 		const currentReserve = BigInt(data.currentReserve)
 		const targetReserve = BigInt(data.targetReserve)
 
+		const virtualSupply = BigInt(data.virtualSupply)
 		const currentSupply = BigInt(data.currentSupply)
 		const targetSupply = BigInt(data.targetSupply)
 
-		return { tokenAmount, currentReserve, targetReserve, currentSupply, targetSupply, connectorWeight, decimals }
+		return {
+			tokenAmount,
+			virtualReserve,
+			currentReserve,
+			targetReserve,
+			virtualSupply,
+			currentSupply,
+			targetSupply,
+			connectorWeight,
+			decimals,
+		}
 	}).safeParse(body)
 
 	if (parsed.error) {
@@ -43,9 +55,9 @@ export async function POST(req: NextRequest) {
 	const { tokenAmount, ...bondingCurve } = parsed.data
 
 	const lamports = calculate_sell_price(
-		bondingCurve.currentSupply,
+		bondingCurve.currentSupply + bondingCurve.virtualSupply,
 		tokenAmount,
-		bondingCurve.currentReserve,
+		bondingCurve.currentReserve + bondingCurve.virtualReserve,
 		bondingCurve.decimals,
 		bondingCurve.connectorWeight,
 	)
