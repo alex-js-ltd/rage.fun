@@ -117,7 +117,7 @@ describe('Launch', () => {
 	})
 
 	it('buy token', async () => {
-		const arr1 = ['1.0']
+		const arr1 = ['80.9']
 
 		const arr2 = ['1.0', '1.0', '1.0', '1.0', '1.0']
 
@@ -170,7 +170,7 @@ describe('Launch', () => {
 
 			console.log(mint.supply.toString())
 
-			console.log(fromLamports(new BN(mint.supply.toString()), token.decimals))
+			console.log('on chain supply', fromLamports(new BN(mint.supply.toString()), token.decimals))
 		}
 	}, 50000)
 
