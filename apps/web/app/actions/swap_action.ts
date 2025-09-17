@@ -8,6 +8,7 @@ import { getBuyTokenIx, getSellTokenIx, buildTransaction } from '@repo/rage'
 
 import { auth } from '@/app/auth'
 import { PublicKey } from '@solana/web3.js'
+import { BN } from '@coral-xyz/anchor'
 
 export type State =
 	| (SubmissionResult<string[]> & {
@@ -39,6 +40,7 @@ export async function buyAction(_prevState: State, formData: FormData) {
 		mint,
 		uiAmount: amount,
 		decimals,
+		minOutput: new BN(0),
 	})
 
 	const transaction = await buildTransaction({
@@ -78,6 +80,7 @@ export async function sellAction(_prevState: State, formData: FormData) {
 		mint,
 		uiAmount: amount,
 		decimals,
+		minOutput: new BN(0),
 	})
 
 	const transaction = await buildTransaction({

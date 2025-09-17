@@ -23,11 +23,11 @@ export async function createBondingCurve(mint: PublicKey) {
 		mint,
 	})
 
-	const initialSupply = BigInt(rest.initialSupply.toString())
+	const virtualSupply = BigInt(rest.virtualSupply.toString())
 	const currentSupply = BigInt(rest.currentSupply.toString())
 	const targetSupply = BigInt(rest.targetSupply.toString())
 
-	const initialReserve = BigInt(rest.initialReserve.toString())
+	const virtualReserve = BigInt(rest.virtualReserve.toString())
 	const currentReserve = BigInt(rest.currentReserve.toString())
 	const targetReserve = BigInt(rest.targetReserve.toString())
 
@@ -44,11 +44,11 @@ export async function createBondingCurve(mint: PublicKey) {
 			connectorWeight,
 			decimals,
 
-			initialSupply,
+			virtualSupply,
 			currentSupply,
 			targetSupply,
 
-			initialReserve,
+			virtualReserve,
 			currentReserve,
 			targetReserve,
 

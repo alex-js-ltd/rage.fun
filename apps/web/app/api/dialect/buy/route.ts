@@ -17,7 +17,7 @@ import { buildTransaction, getBuyTokenIx } from '@repo/rage'
 import { parseWithZod } from '@conform-to/zod'
 import { DialectMetadataSchema, DialectSwapSchema } from '@/app/utils/schemas'
 import { getCachedTokenMetadata } from '@/app/data/get_token_metadata'
-
+import { BN } from '@coral-xyz/anchor'
 // CAIP-2 format for Solana
 const blockchain = BLOCKCHAIN_IDS.mainnet
 
@@ -109,6 +109,7 @@ export async function POST(req: NextRequest) {
 			mint,
 			uiAmount: amount,
 			decimals,
+			minOutput: new BN(0),
 		})
 
 		const transaction = await buildTransaction({

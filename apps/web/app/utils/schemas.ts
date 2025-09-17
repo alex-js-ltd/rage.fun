@@ -215,11 +215,11 @@ export const BondingcurveSchema = z.object({
 	connectorWeight: z.instanceof(Prisma.Decimal).transform(val => val.toNumber()),
 	decimals: z.number(),
 
-	initialSupply: z.bigint().transform(val => val.toString()),
+	virtualSupply: z.bigint().transform(val => val.toString()),
 	currentSupply: z.bigint().transform(val => val.toString()),
 	targetSupply: z.bigint().transform(val => val.toString()),
 
-	initialReserve: z.bigint().transform(val => val.toString()),
+	virtualReserve: z.bigint().transform(val => val.toString()),
 	currentReserve: z.bigint().transform(val => val.toString()),
 	targetReserve: z.bigint().transform(val => val.toString()),
 
@@ -310,39 +310,47 @@ export async function createTokenFeedSchema(options: {
 }
 
 export function calculatePrice(state: BondingCurveType) {
-	const { currentReserve, currentSupply, connectorWeight, decimals } = state
+	const {
+		currentReserve, // lamports
+		virtualReserve, // lamports
+		currentSupply, // base units (10^decimals)
+		virtualSupply, // base units (10^decimals)
+		connectorWeight, // e.g. 0.33
+		decimals, // token decimals, e.g. 9
+	} = state
 
-	const reserve = new Decimal(currentReserve).div(1e9) // lamports → SOL
-	const supply = new Decimal(currentSupply).div(
-		new Decimal(10).pow(decimals), // base units → tokens
-	)
+	// Sum in base units first, then convert once.
+	const reserveLamports = new Decimal(currentReserve).add(new Decimal(virtualReserve))
+	const reserve = reserveLamports.div(1e9) // → SOL
+
+	const supplyBaseUnits = new Decimal(currentSupply).add(new Decimal(virtualSupply))
+	const supply = supplyBaseUnits.div(new Decimal(10).pow(decimals)) // → tokens
 
 	const cw = new Decimal(connectorWeight)
 
-	return reserve.dividedBy(supply.mul(cw))
+	if (supply.lte(0) || cw.lte(0)) {
+		throw new Error('Invalid state: supply and connectorWeight must be > 0')
+	}
+
+	return reserve.div(supply.mul(cw)) // Decimal
 }
 
 export function calculateMarketCap(state: BondingCurveType) {
 	const price = calculatePrice(state)
 
-	const supply = new Decimal(state.currentSupply.toString()).div(new Decimal(10).pow(state.decimals))
+	const supply = new Decimal(state.currentSupply).div(new Decimal(10).pow(state.decimals))
 
 	return price.mul(supply)
 }
 
 export function calculateProgress(state: BondingCurveType) {
-	const { currentReserve, initialReserve, targetReserve } = state
+	const { currentReserve, targetReserve } = state
 
-	const cur = new Decimal(currentReserve)
-	const init = new Decimal(initialReserve)
+	const curr = new Decimal(currentReserve)
+
 	const target = new Decimal(targetReserve)
 
-	const denom = target.minus(init)
-	if (denom.lte(0)) return 0
-
-	const num = cur.minus(init)
-
-	const progress = num.div(denom).mul(100)
+	const progress = curr.div(target).mul(100)
 
 	return progress.toNumber()
 }

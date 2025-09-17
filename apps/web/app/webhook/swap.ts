@@ -14,7 +14,6 @@ import {
 	getBondingCurveState,
 	fetchBondingCurveState,
 	sendAndConfirm,
-	getSyncBondingCurveIx,
 } from '@repo/rage'
 import { connection } from '@/app/utils/setup'
 
@@ -150,51 +149,6 @@ export async function deployToRaydium({
 	console.log(`🔗 Transaction sig: ${sig} for raydium`)
 }
 
-export async function syncBondingCurve({
-	program,
-	token,
-	payer,
-}: {
-	program: Program<Rage>
-	payer: Keypair
-	token: TokenFeedType
-}) {
-	const { id } = token
-	const { currentSupply } = token.bondingCurve
-
-	const mint = new PublicKey(id)
-
-	const offChain = new BN(currentSupply)
-
-	const { supply } = await getMint(connection, mint, 'confirmed', TOKEN_2022_PROGRAM_ID)
-
-	const onChain = new BN(supply.toString())
-
-	if (onChain.eq(offChain)) {
-		console.log('bonding curve already in sync 🫡')
-		return
-	}
-
-	const ix = await getSyncBondingCurveIx({
-		program,
-		mint,
-		payer: payer.publicKey,
-	})
-
-	const tx = await buildTransaction({
-		connection,
-		payer: payer.publicKey,
-		instructions: [ix],
-		signers: [],
-	})
-
-	tx.sign([payer])
-
-	const sig = await sendAndConfirm({ connection, tx })
-
-	console.log(`🔗 Transaction sig: ${sig} for sync bonding curve`)
-}
-
 export async function processSwapEvents(swapEvents: EventData<'swapEvent'>[]) {
 	const client = new Ably.Rest(ABLY_API_KEY)
 
@@ -235,8 +189,6 @@ export async function processSwapEvents(swapEvents: EventData<'swapEvent'>[]) {
 			const topHolders = await getTopHolders(swapAlert.tokenId)
 
 			await sendTopHoldersAlertToAbly(holdersChannel, topHolders, token)
-
-			await syncBondingCurve({ program, payer, token })
 
 			if (status === 'Complete') {
 				await deployToRaydium({ program, mint: event.data.mint, payer })

@@ -118,11 +118,11 @@ const select = Prisma.validator<Prisma.TokenSelect>()({
 			connectorWeight: true,
 			decimals: true,
 
-			initialSupply: true,
+			virtualSupply: true,
 			currentSupply: true,
 			targetSupply: true,
 
-			initialReserve: true,
+			virtualReserve: true,
 			currentReserve: true,
 			targetReserve: true,
 

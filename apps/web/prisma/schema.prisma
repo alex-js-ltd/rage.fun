@@ -72,11 +72,11 @@ model BondingCurve {
   connectorWeight Decimal
   decimals        Int
 
-  initialSupply BigInt
+  virtualSupply BigInt
   currentSupply BigInt
   targetSupply  BigInt
 
-  initialReserve BigInt
+  virtualReserve BigInt
   currentReserve BigInt
   targetReserve  BigInt
 

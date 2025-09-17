@@ -4,8 +4,7 @@ import { type EventData, fetchBondingCurveState, getBondingCurveState } from '@r
 import { getTokenWithRelations } from '@/app/data/get_token'
 import { PublicKey } from '@solana/web3.js'
 import { prisma } from '@/app/utils/db'
-import { Prisma } from '@prisma/client'
-
+import { Prisma, SwapType, SwapEvent, $Enums } from '@prisma/client'
 import 'server-only'
 
 async function updateBondingCurveSupply(mint: PublicKey) {
@@ -15,8 +14,15 @@ async function updateBondingCurveSupply(mint: PublicKey) {
 
 	const currentSupply = BigInt(rest.currentSupply.toString())
 
+	const status = rest.status.funding
+		? $Enums.Status.Funding
+		: rest.status.complete
+			? $Enums.Status.Complete
+			: $Enums.Status.Migrated
+
 	const data = Prisma.validator<Prisma.BondingCurveUpdateInput>()({
 		currentSupply,
+		status,
 	})
 
 	const update = await prisma.bondingCurve.update({
