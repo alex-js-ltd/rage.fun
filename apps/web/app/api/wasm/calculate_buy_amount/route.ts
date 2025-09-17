@@ -28,13 +28,25 @@ export async function POST(req: NextRequest) {
 
 		const lamports = ui_amount_to_amount(uiAmount, 9)
 
+		const virtualReserve = BigInt(data.virtualReserve)
 		const currentReserve = BigInt(data.currentReserve)
 		const targetReserve = BigInt(data.targetReserve)
 
+		const virtualSupply = BigInt(data.virtualSupply)
 		const currentSupply = BigInt(data.currentSupply)
 		const targetSupply = BigInt(data.targetSupply)
 
-		return { lamports, currentReserve, targetReserve, currentSupply, targetSupply, connectorWeight, decimals }
+		return {
+			lamports,
+			virtualReserve,
+			currentReserve,
+			targetReserve,
+			virtualSupply,
+			currentSupply,
+			targetSupply,
+			connectorWeight,
+			decimals,
+		}
 	}).safeParse(body)
 
 	if (parsed.error) {
@@ -52,9 +64,9 @@ export async function POST(req: NextRequest) {
 	const safeDeposit = depositAmount > maxDeposit ? maxDeposit : depositAmount
 
 	const buyAmount = calculate_buy_amount(
-		bondingCurve.currentSupply,
+		bondingCurve.currentSupply + bondingCurve.virtualSupply,
 		safeDeposit,
-		bondingCurve.currentReserve,
+		bondingCurve.currentReserve + bondingCurve.virtualReserve,
 		bondingCurve.decimals,
 		bondingCurve.connectorWeight,
 	)

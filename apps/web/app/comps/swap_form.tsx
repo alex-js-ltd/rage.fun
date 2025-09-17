@@ -148,16 +148,44 @@ function Buy({ token }: { token: TokenFeedType }) {
 	const { id: mint } = token
 	const { symbol } = token.metadata
 
-	const { currentReserve, targetReserve, currentSupply, targetSupply, connectorWeight, decimals } = token.bondingCurve
+	const {
+		virtualReserve,
+		currentReserve,
+		targetReserve,
+		virtualSupply,
+		currentSupply,
+		targetSupply,
+		connectorWeight,
+		decimals,
+	} = token.bondingCurve
 
 	const getQuote = useCallback(
 		async (uiAmount: string) => {
-			const params = { uiAmount, currentReserve, targetReserve, currentSupply, targetSupply, connectorWeight, decimals }
+			const params = {
+				uiAmount,
+				virtualReserve,
+				currentReserve,
+				targetReserve,
+				virtualSupply,
+				currentSupply,
+				targetSupply,
+				connectorWeight,
+				decimals,
+			}
 			const quote = await calculateBuyAmount(params)
 
 			return quote
 		},
-		[currentReserve, targetReserve, currentSupply, targetSupply, connectorWeight, decimals],
+		[
+			virtualReserve,
+			currentReserve,
+			targetReserve,
+			virtualSupply,
+			currentSupply,
+			targetSupply,
+			connectorWeight,
+			decimals,
+		],
 	)
 
 	return (
@@ -181,15 +209,43 @@ function Sell({ token }: { token: TokenFeedType }) {
 	const { id: mint } = token
 	const { symbol } = token.metadata
 
-	const { currentReserve, targetReserve, currentSupply, targetSupply, connectorWeight, decimals } = token.bondingCurve
+	const {
+		virtualReserve,
+		currentReserve,
+		targetReserve,
+		virtualSupply,
+		currentSupply,
+		targetSupply,
+		connectorWeight,
+		decimals,
+	} = token.bondingCurve
 
 	const getQuote = useCallback(
 		async (uiAmount: string) => {
-			const params = { uiAmount, currentReserve, targetReserve, currentSupply, targetSupply, connectorWeight, decimals }
+			const params = {
+				uiAmount,
+				virtualReserve,
+				currentReserve,
+				targetReserve,
+				virtualSupply,
+				currentSupply,
+				targetSupply,
+				connectorWeight,
+				decimals,
+			}
 			const quote = await calculateSellPrice(params)
 			return quote
 		},
-		[currentReserve, targetReserve, currentSupply, targetSupply, connectorWeight, decimals],
+		[
+			virtualReserve,
+			currentReserve,
+			targetReserve,
+			virtualSupply,
+			currentSupply,
+			targetSupply,
+			connectorWeight,
+			decimals,
+		],
 	)
 
 	return (

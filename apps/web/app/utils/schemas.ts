@@ -406,9 +406,11 @@ export type TopHolderType = z.infer<ReturnType<typeof createTopHolderSchema>>
 export const WasmSchema = z.object({
 	uiAmount: z.string(),
 
+	virtualReserve: z.string(),
 	currentReserve: z.string(),
 	targetReserve: z.string(),
 
+	virtualSupply: z.string(),
 	currentSupply: z.string(),
 	targetSupply: z.string(),
 
