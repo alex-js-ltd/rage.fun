@@ -11,6 +11,7 @@ import { useAsync } from '@/app/hooks/use_async'
 import { type TokenFeedType } from '@/app/utils/schemas'
 
 import { Button } from '@/app/comps/button'
+import Link from 'next/link'
 
 export function Events() {
 	const { run, data: current, reset, setData } = useAsync<TokenFeedType>()
@@ -48,16 +49,23 @@ export function Events() {
 				forceMount
 				className="transition-transform duration-300 data-[state=closed]:animate-scale-out-50 data-[state=open]:animate-scale-in-50"
 			>
-				<div className="text-text-100 relative w-fit">
+				<Link
+					href={{
+						pathname: `/token/${current.id}`,
+						query: { interval: '86400000' },
+					}}
+					as={`/token/${current.id}?interval=86400000`}
+					className="text-text-100 relative w-fit"
+				>
 					<Button type="submit" className="w-fit h-auto relative flex items-center justify-center">
 						<Icon name="up-arrow" className="size-4 text-text-100" />
 					</Button>
 					<input type="hidden" name="pathname" defaultValue={`/token/${current.id}?interval=86400000`} />
-				</div>
+				</Link>
 
 				<TokenLogo className="rounded-full" {...getTokenLogoProps(current.metadata)} />
 
-				<span>{current?.updateType === 'Buy' ? '🪄' : '🔥'}</span>
+				<span>{current?.updateType === 'Buy' ? '🤑' : '🔥'}</span>
 			</CollapsibleContent>
 		</Collapsible>
 	)
