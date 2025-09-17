@@ -36,8 +36,4 @@ pub mod rage {
     pub fn harvest_yield(ctx: Context<HarvestYield>) -> Result<()> {
         instructions::harvest_yield(ctx)
     }
-
-    pub fn sync_bonding_curve(ctx: Context<SyncBondingCurve>) -> Result<()> {
-        instructions::sync_bonding_curve(ctx)
-    }
 }
