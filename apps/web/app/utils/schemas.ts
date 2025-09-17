@@ -40,13 +40,6 @@ export const InitializeSchema = z.object({
 		.string({ required_error: 'Required' })
 		.max(9, { message: 'Symbol is too long' })
 		.min(2, { message: 'Symbol is too short' }),
-	targetReserve: z
-		.number({
-			invalid_type_error: 'Expected Number',
-		})
-		.max(80, { message: 'Amount is too high' })
-		.min(0.3, { message: 'Amount is too low' })
-		.transform(t => t.toFixed(9)),
 
 	description: z.string(),
 
@@ -106,13 +99,6 @@ export function initializeBondingCurveSchema(
 			z.object({
 				creator: Wallet,
 				name: z.string(),
-				targetReserve: z
-					.number({
-						invalid_type_error: 'Expected Number',
-					})
-					.max(80, { message: 'Amount is too high' })
-					.min(0.3, { message: 'Amount is too low' })
-					.transform(t => t.toFixed(9)),
 
 				description: z.string(),
 				file: z.instanceof(File).refine(file => {

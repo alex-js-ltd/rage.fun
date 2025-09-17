@@ -72,7 +72,7 @@ export function Form() {
 					}}
 				>
 					<fieldset className="relative flex w-full flex-1 items-center transition-all duration-300 flex-col gap-6">
-						<div className="relative grid grid-cols-1 sm:grid-cols-3 w-full">
+						<div className="relative grid grid-cols-1 w-full">
 							<Field
 								inputProps={{
 									...getInputProps(fields.name, { type: 'text' }),
@@ -82,6 +82,7 @@ export function Form() {
 								}}
 								errors={fields.name.errors}
 							/>
+
 							<Field
 								inputProps={{
 									...getInputProps(fields.symbol, { type: 'text' }),
@@ -91,21 +92,12 @@ export function Form() {
 								}}
 								errors={fields.symbol.errors}
 							/>
-							<Field
-								inputProps={{
-									...getInputProps(fields.targetReserve, { type: 'number' }),
-									placeholder: 'SOL Raised',
-									key: fields.targetReserve.key,
-									className: 'bg-inherit',
-								}}
-								errors={fields.targetReserve.errors}
-							/>
 
 							<Field
 								inputProps={{
 									...getInputProps(fields.description, { type: 'text' }),
 									placeholder: 'Description',
-									className: 'sm:col-span-4 w-full bg-inherit',
+									className: 'w-full bg-inherit',
 									key: fields.description.key,
 								}}
 								errors={fields.description.errors}
