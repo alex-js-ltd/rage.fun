@@ -454,10 +454,6 @@ export type Rage = {
           }
         },
         {
-          "name": "token0BondingCurveAta",
-          "writable": true
-        },
-        {
           "name": "bondingCurveState",
           "docs": [
             "pda to store bonding curve state"

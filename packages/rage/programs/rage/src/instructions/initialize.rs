@@ -70,7 +70,6 @@ pub struct Initialize<'info> {
     )]
     pub extra_metas_account: UncheckedAccount<'info>,
     pub system_program: Program<'info, System>,
-
     pub token_0_program: Program<'info, Token2022>,
 
     /// CHECK: pda to control vault_meme_ata & lamports
@@ -79,10 +78,6 @@ pub struct Initialize<'info> {
             bump,
         )]
     pub bonding_curve_auth: UncheckedAccount<'info>,
-
-    /// CHECK: ATA for bonding curve vault (created manually to save stack space)
-    #[account(mut)]
-    pub token_0_bonding_curve_ata: UncheckedAccount<'info>,
 
     /// pda to store bonding curve state
     #[account(init,

@@ -245,7 +245,7 @@ export async function getInitializeIx({ program, payer, decimals, args }: Getini
 	const extraMetasAccount = getExtraMetas({ program, mint })
 
 	const bondingCurveAuth = getBondingCurveAuth({ program, mint })
-	const token0BondingCurveAta = await getAssociatedTokenAddress(mint, bondingCurveAuth, true, TOKEN_2022_PROGRAM_ID)
+
 	const bondingCurveState = getBondingCurveState({
 		program,
 		mint,
@@ -268,7 +268,6 @@ export async function getInitializeIx({ program, payer, decimals, args }: Getini
 			token0Program: TOKEN_2022_PROGRAM_ID,
 
 			bondingCurveAuth,
-			token0BondingCurveAta,
 			bondingCurveState,
 
 			tradingFeeAuth,

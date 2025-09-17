@@ -448,10 +448,6 @@
           }
         },
         {
-          "name": "token_0_bonding_curve_ata",
-          "writable": true
-        },
-        {
           "name": "bonding_curve_state",
           "docs": [
             "pda to store bonding curve state"
