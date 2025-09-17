@@ -342,16 +342,29 @@ export function calculateProgress(state: BondingCurveState) {
 }
 
 export function calculatePrice(state: BondingCurveState) {
-	const { currentReserve, currentSupply, connectorWeight, decimals } = state
+	const {
+		currentReserve, // lamports
+		virtualReserve, // lamports
+		currentSupply, // base units (10^decimals)
+		virtualSupply, // base units (10^decimals)
+		connectorWeight, // e.g. 0.33
+		decimals, // token decimals, e.g. 9
+	} = state
 
-	const reserve = new Decimal(currentReserve.toString()).div(1e9) // lamports → SOL
-	const supply = new Decimal(currentSupply.toString()).div(
-		new Decimal(10).pow(decimals), // base units → tokens
-	)
+	// Sum in base units first, then convert once.
+	const reserveLamports = new Decimal(currentReserve.toString()).add(new Decimal(virtualReserve.toString()))
+	const reserve = reserveLamports.div(1e9) // → SOL
+
+	const supplyBaseUnits = new Decimal(currentSupply.toString()).add(new Decimal(virtualSupply.toString()))
+	const supply = supplyBaseUnits.div(new Decimal(10).pow(decimals)) // → tokens
 
 	const cw = new Decimal(connectorWeight)
 
-	return reserve.dividedBy(supply.mul(cw))
+	if (supply.lte(0) || cw.lte(0)) {
+		throw new Error('Invalid state: supply and connectorWeight must be > 0')
+	}
+
+	return reserve.div(supply.mul(cw)) // Decimal
 }
 
 export function calculateMarketCap(state: BondingCurveState) {
