@@ -253,7 +253,7 @@ export async function getInitializeIx({ program, payer, decimals, args }: Getini
 
 	const tradingFeeAuth = getTradingFeeAuth({ program, mint })
 
-	const updateAuthority = new PublicKey('rageaYnfntSQHMMC1iQcRDSWxaPkk7Qr4ULJ9EDjHpV')
+	const updateAuthority = new PublicKey('rageM7X7HTzpPgcQwVJbVr47GBQKgpPqnQZZ7YMkkPv')
 
 	const init = await program.methods
 

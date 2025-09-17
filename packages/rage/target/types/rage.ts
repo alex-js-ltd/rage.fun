@@ -5,7 +5,7 @@
  * IDL can be found at `target/idl/rage.json`.
  */
 export type Rage = {
-  "address": "rageM7X7HTzpPgcQwVJbVr47GBQKgpPqnQZZ7YMkkPv",
+  "address": "rage9dQeAYhkEhpXwFcrqwikW81dMXdGNY77jdrSmnq",
   "metadata": {
     "name": "rage",
     "version": "0.1.0",
