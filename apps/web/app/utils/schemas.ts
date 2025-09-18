@@ -238,21 +238,16 @@ export const SwapEventSchema = z.object({
 	tokenId: z.string(),
 })
 
-export async function createTokenFeedSchema(options: {
-	volumePromise: Promise<string>
-	transactionPromise: Promise<{
+export function createTokenFeedSchema(options: {
+	volume: string
+	transactionCount: {
 		readonly buys: number
 		readonly sells: number
 		readonly total: number
-	}>
-	solPricePromise: Promise<number>
+	}
+	solPrice: number
 }) {
-	const [solVolume, transactionCount, solPrice] = await Promise.all([
-		options.volumePromise,
-		options.transactionPromise,
-		options.solPricePromise,
-	])
-
+	const { solPrice } = options
 	return z
 		.object({
 			id: z.string(),
@@ -261,14 +256,14 @@ export async function createTokenFeedSchema(options: {
 			bondingCurve: BondingcurveSchema,
 			updateType: UpdateEnumSchema.optional(),
 		})
-		.transform(async data => {
+		.transform(data => {
 			const { metadata, bondingCurve, updateType } = data
 
 			const progress = calculateProgress(bondingCurve)
 			const price = calculatePrice(bondingCurve)
 			const marketCap = calculateMarketCap(bondingCurve)
 			const liquidity = new Decimal(bondingCurve.currentReserve).div(1e9)
-			const volume = new Decimal(solVolume).div(1e9)
+			const volume = new Decimal(options.volume).div(1e9)
 
 			const metrics = {
 				progress,
@@ -276,7 +271,7 @@ export async function createTokenFeedSchema(options: {
 				marketCap: solToUsd(marketCap, solPrice).toNumber(),
 				liquidity: solToUsd(liquidity, solPrice).toNumber(),
 				volume: solToUsd(volume, solPrice).toNumber(),
-				transactionCount,
+				transactionCount: options.transactionCount,
 			}
 
 			const tradingFees = solToUsd(new Decimal(bondingCurve.tradingFees).div(1e9), solPrice).toNumber()

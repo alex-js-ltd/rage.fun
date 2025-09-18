@@ -4,8 +4,8 @@ import { prisma } from '@/app/utils/db'
 import { Prisma } from '@prisma/client'
 import { getCachedSolPrice } from '@/app/data/get_sol_price'
 import { createTokenFeedSchema } from '@/app/utils/schemas'
-import { getVolume } from './get_volume'
-import { getTransactionCount } from './get_transaction_count'
+import { getVolume, getVolumeRecord } from './get_volume'
+import { getTransactionCount, getTransactionRecord } from './get_transaction_count'
 import 'server-only'
 
 export async function getTokens(searchParams: SearchParams) {
@@ -27,19 +27,29 @@ export async function getTokens(searchParams: SearchParams) {
 		orderBy: [...getOrderBy({ sortType, sortOrder })],
 	})
 
+	const ids = tokens.map(t => t.id)
+
 	const solPricePromise = getCachedSolPrice()
+	const transactionRecordPromise = getTransactionRecord(ids)
+	const volumeRecordPromise = getVolumeRecord(ids)
 
-	const promise = tokens.map(async token => {
-		const transactionPromise = getTransactionCount(token.id)
-		const volumePromise = getVolume(token.id)
+	const [solPrice, transactionRecord, volumeRecord] = await Promise.all([
+		solPricePromise,
+		transactionRecordPromise,
+		volumeRecordPromise,
+	])
 
-		const TokenFeedSchema = await createTokenFeedSchema({
-			solPricePromise,
-			transactionPromise,
-			volumePromise,
+	const data = tokens.map(token => {
+		const transactionCount = transactionRecord[token.id]
+		const volume = volumeRecord[token.id]
+
+		const TokenFeedSchema = createTokenFeedSchema({
+			solPrice,
+			transactionCount,
+			volume,
 		})
 
-		const parsed = await TokenFeedSchema.safeParseAsync(token)
+		const parsed = TokenFeedSchema.safeParse(token)
 
 		if (!parsed.success) {
 			console.error(parsed.error.format())
@@ -48,8 +58,6 @@ export async function getTokens(searchParams: SearchParams) {
 
 		return parsed.data
 	}, [])
-
-	const data = await Promise.all(promise)
 
 	// Determine if it's the last page by checking if we have fetched more than TAKE tokens
 	const isLastPage = tokens.length <= TAKE // If we have only TAKE tokens, it's the last page

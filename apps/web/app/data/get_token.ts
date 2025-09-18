@@ -1,8 +1,8 @@
 import { prisma } from '@/app/utils/db'
 import { createTokenFeedSchema } from '@/app/utils/schemas'
 import { getCachedSolPrice } from './get_sol_price'
-import { getTransactionCount } from './get_transaction_count'
-import { getVolume } from './get_volume'
+import { getTransactionRecord } from './get_transaction_count'
+import { getVolumeRecord } from './get_volume'
 import 'server-only'
 
 export async function getTokenWithRelations(mint: string) {
@@ -17,20 +17,26 @@ export async function getTokenWithRelations(mint: string) {
 	console.log(token)
 
 	const solPricePromise = getCachedSolPrice()
+	const transactionRecordPromise = getTransactionRecord([token.id])
+	const volumeRecordPromise = getVolumeRecord([token.id])
 
-	const transactionPromise = getTransactionCount(token.id)
-
-	const volumePromise = getVolume(token.id)
-
-	const TokenFeedSchema = await createTokenFeedSchema({
+	const [solPrice, transactionRecord, volumeRecord] = await Promise.all([
 		solPricePromise,
-		transactionPromise,
-		volumePromise,
+		transactionRecordPromise,
+		volumeRecordPromise,
+	])
+
+	const transactionCount = transactionRecord[token.id]
+	const volume = volumeRecord[token.id]
+
+	const TokenFeedSchema = createTokenFeedSchema({
+		solPrice,
+		transactionCount,
+		volume,
 	})
 
-	const parsed = await TokenFeedSchema.safeParseAsync(token)
+	const parsed = TokenFeedSchema.safeParse(token)
 
-	console.log(parsed.error)
 	if (!parsed.success) {
 		console.error(parsed.error.format())
 		throw new Error('Invalid token with relations')
