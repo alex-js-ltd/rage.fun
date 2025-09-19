@@ -20,8 +20,8 @@ export async function GET(req: NextRequest) {
 
 	for (const w of chosen.wallet) {
 		const mint = new PublicKey(w.mint)
-		const uiAmount = getUiAmountForSell(w.tokenAmount.uiAmountString)
 		const decimals = w.tokenAmount.decimals
+		const uiAmount = getUiAmountForSell(w.tokenAmount.uiAmountString, decimals)
 
 		const ix = await getSellTokenIx({
 			program,
@@ -103,7 +103,7 @@ async function getUiAmountForBuy(wallet: PublicKey) {
 	return uiAmount.toFixed(9)
 }
 
-function getUiAmountForSell(one: string) {
+function getUiAmountForSell(one: string, decimals: number) {
 	const whole = Number(one)
 	const half = Number(one) / 2
 	const quarter = Number(one) / 4
@@ -116,5 +116,5 @@ function getUiAmountForSell(one: string) {
 
 	const uiAmount = randomFraction
 
-	return uiAmount.toFixed(6)
+	return uiAmount.toFixed(decimals)
 }
