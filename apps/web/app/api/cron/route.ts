@@ -5,6 +5,7 @@ import { program, connection } from '@/app/utils/setup'
 import { getBotWallets } from '@/app/webhook/bot'
 import { BN } from '@coral-xyz/anchor'
 import { getRandomToken } from '@/app/data/get_random_token'
+import { delay } from '@/app/utils/misc'
 
 import 'server-only'
 
@@ -43,6 +44,11 @@ export async function GET(req: NextRequest) {
 		const sig = await connection.sendTransaction(tx)
 		console.log(`🔗 Transaction sig: ${sig} for sell instruction`)
 	}
+
+	const ms = Math.floor(Math.random() * (5000 - 1000 + 1)) + 1000
+	await delay(ms)
+
+	await delay(ms)
 
 	const token = await getRandomToken()
 	const mint = new PublicKey(token.id)
