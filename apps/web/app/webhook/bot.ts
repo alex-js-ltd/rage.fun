@@ -38,5 +38,5 @@ export async function getBotWallets() {
 
 	const data = await Promise.all(promise)
 
-	return data.filter(bot => bot.wallet.length > 0)
+	return data
 }
