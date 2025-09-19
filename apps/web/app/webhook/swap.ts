@@ -174,13 +174,13 @@ export async function processSwapEvents(swapEvents: EventData<'swapEvent'>[]) {
 
 			await sendSwapAlertToAbly(swapChannel, swapAlert)
 
+			const transaction = await getSingleTransaction(swapAlert.id)
+
+			await sendTransactionAlertToAbly(transactionChannel, transaction)
+
 			const token = await getTokenWithRelations(swapAlert.tokenId)
 
 			await sendUpdateAlertToAbly(updateChannel, token, parsed.data.swapType)
-
-			const transaction = await getSingleTransaction(swapAlert.id, token.bondingCurve.decimals)
-
-			await sendTransactionAlertToAbly(transactionChannel, transaction)
 
 			const topHolders = await getTopHolders(swapAlert.tokenId)
 
