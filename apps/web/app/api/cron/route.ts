@@ -9,14 +9,9 @@ import { delay } from '@/app/utils/misc'
 
 import 'server-only'
 
-const SHOULD_RUN_PROB = 0.9
+const SHOULD_SELL_PROB = 0.5
 
 export async function GET(req: NextRequest) {
-	if (Math.random() > SHOULD_RUN_PROB) {
-		// no-op this tick to look natural and save compute
-		return new NextResponse(null, { status: 204 })
-	}
-
 	const bots = await getBotWallets()
 
 	const randomIndex = Math.floor(Math.random() * bots.length)
@@ -25,31 +20,33 @@ export async function GET(req: NextRequest) {
 	const signer = chosen.keypair
 	const payer = chosen.keypair.publicKey
 
-	for (const w of chosen.wallet) {
-		const mint = new PublicKey(w.mint)
-		const decimals = w.tokenAmount.decimals
-		const uiAmount = getUiAmountForSell(w.tokenAmount.uiAmountString, decimals)
+	if (Math.random() > SHOULD_SELL_PROB) {
+		for (const w of chosen.wallet) {
+			const mint = new PublicKey(w.mint)
+			const decimals = w.tokenAmount.decimals
+			const uiAmount = getUiAmountForSell(w.tokenAmount.uiAmountString, decimals)
 
-		const ix = await getSellTokenIx({
-			program,
-			payer,
-			mint,
-			uiAmount,
-			decimals,
-			minOutput: new BN(0),
-		})
+			const ix = await getSellTokenIx({
+				program,
+				payer,
+				mint,
+				uiAmount,
+				decimals,
+				minOutput: new BN(0),
+			})
 
-		const tx = await buildTransaction({
-			connection,
-			payer,
-			instructions: [ix],
-			signers: [],
-		})
+			const tx = await buildTransaction({
+				connection,
+				payer,
+				instructions: [ix],
+				signers: [],
+			})
 
-		tx.sign([signer])
+			tx.sign([signer])
 
-		const sig = await connection.sendTransaction(tx)
-		console.log(`🔗 Transaction sig: ${sig} for sell instruction`)
+			const sig = await connection.sendTransaction(tx)
+			console.log(`🔗 Transaction sig: ${sig} for sell instruction`)
+		}
 	}
 
 	const ms = Math.floor(Math.random() * (5000 - 1000 + 1)) + 1000
