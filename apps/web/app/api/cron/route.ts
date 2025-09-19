@@ -70,6 +70,8 @@ export async function POST(req: NextRequest) {
 
 	const sig = await sendAndConfirm({ connection, tx })
 
+	console.log(`🔗 Transaction sig: ${sig} for buy instruction`)
+
 	// Return a success response
 	return NextResponse.json(
 		{
