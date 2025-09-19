@@ -9,7 +9,14 @@ import { delay } from '@/app/utils/misc'
 
 import 'server-only'
 
+const SHOULD_RUN_PROB = 0.6
+
 export async function GET(req: NextRequest) {
+	if (Math.random() > SHOULD_RUN_PROB) {
+		// no-op this tick to look natural and save compute
+		return new NextResponse(null, { status: 204 })
+	}
+
 	const bots = await getBotWallets()
 
 	const randomIndex = Math.floor(Math.random() * bots.length)
