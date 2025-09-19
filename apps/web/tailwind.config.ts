@@ -171,9 +171,9 @@ const config: Config = {
 
 				'animate-border': 'animate-border 2s linear 3',
 
-				buy: 'buy 1000ms linear',
+				buy: 'buy 3000ms linear',
 
-				sell: 'sell 1000ms linear',
+				sell: 'sell 3000ms linear',
 			},
 
 			backgroundSize: {
