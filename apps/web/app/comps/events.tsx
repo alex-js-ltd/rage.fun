@@ -56,6 +56,7 @@ export function Events() {
 					}}
 					as={`/token/${current.id}?interval=86400000`}
 					className="text-text-100 relative w-fit"
+					prefetch={false}
 				>
 					<Button type="submit" className="w-fit h-auto relative flex items-center justify-center">
 						<Icon name="up-arrow" className="size-4 text-text-100" />
