@@ -9,6 +9,12 @@ import 'server-only'
 
 export const dynamic = 'force-dynamic'
 
+interface Wallet {
+	mint: any
+	uiAmount: any
+	tokenAmount: any
+}
+
 export async function getWallet(wallet?: string) {
 	if (!wallet) return []
 
@@ -20,46 +26,22 @@ export async function getWallet(wallet?: string) {
 		include: { bondingCurve: true },
 	})
 
-	const userTokens = accounts.value.reduce<Record<string, number>>((acc, curr) => {
+	const userTokens = accounts.value.reduce<Wallet[]>((acc, curr) => {
 		const info = curr.account.data.parsed.info
 		const mint = info.mint
 		const uiAmount = info.tokenAmount.uiAmount
 		const tokenAmount = info.tokenAmount
 
-		if (uiAmount > 0) {
-			acc[mint] = tokenAmount
-		}
+		const find = rageTokens.find(t => t.id === mint)
 
-		return acc
-	}, {})
+		if (find) {
+			const value = { mint, uiAmount, tokenAmount }
 
-	const mints = Object.keys(userTokens)
-
-	const tokens = await prisma.token.findMany({
-		where: {
-			id: {
-				in: mints,
-			},
-		},
-
-		include: { bondingCurve: true },
-	})
-
-	const data = tokens.reduce<WalletType[]>((acc, curr) => {
-		const mint = curr.id
-
-		const tokenAmount = userTokens[mint]
-
-		const value = { ...curr, tokenAmount }
-
-		const parsed = WalletSchema.safeParse(value)
-
-		if (parsed.success) {
-			acc.push(parsed.data)
+			acc.push(value)
 		}
 
 		return acc
 	}, [])
 
-	return data
+	return userTokens
 }
