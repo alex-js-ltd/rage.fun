@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { PublicKey } from '@solana/web3.js'
+import { PublicKey, LAMPORTS_PER_SOL } from '@solana/web3.js'
 import { getSellTokenIx, getBuyTokenIx, buildTransaction, sendAndConfirm } from '@repo/rage'
 import { program, connection } from '@/app/utils/setup'
 import { getBotWallets } from '@/app/webhook/bot'
@@ -47,7 +47,7 @@ export async function POST(req: NextRequest) {
 	const token = await getRandomToken()
 	const mint = new PublicKey(token.id)
 
-	const uiAmount = '0.000000100'
+	const uiAmount = await getUiAmount(payer)
 	const decimals = 9
 
 	const ix = await getBuyTokenIx({
@@ -79,4 +79,16 @@ export async function POST(req: NextRequest) {
 		},
 		{ status: 200 },
 	)
+}
+
+async function getUiAmount(wallet: PublicKey) {
+	const lamports = await connection.getBalance(wallet)
+
+	// 2) take 25%
+	const quarter = Math.floor(lamports * 0.25)
+
+	// 3) convert to SOL (UI amount)
+	const uiAmount = quarter / LAMPORTS_PER_SOL
+
+	return uiAmount.toFixed(9)
 }
