@@ -53,9 +53,7 @@ export function HoldersTable({ holdersPromise }: HoldersTableProps) {
 									<div className="flex items-center gap-x-1 truncate">
 										<a href={`https://solscan.io/account/${row.address}`}>
 											<span className="text-text-200">{`#${i + 1} `}</span>
-											<span>
-												{shortAddress(row.owner)} {getAccountType(row)}
-											</span>
+											<span>{shortAddress(row.owner)}</span>
 										</a>
 									</div>
 								</td>
@@ -69,17 +67,4 @@ export function HoldersTable({ holdersPromise }: HoldersTableProps) {
 			</div>
 		</div>
 	)
-}
-
-function getAccountType(row: TopHolderType) {
-	const baseClass = 'ml-1 px-1.5 py-0.5 text-[10px] font-semibold uppercase rounded tracking-wide'
-	switch (row.accountType) {
-		case 'bonding-curve':
-			return <span className={`${baseClass} bg-purple-500/20 text-purple-300`}>Bonding Curve</span>
-
-		case 'raydium-pool':
-			return <span className={`${baseClass} bg-green-500/20 text-green-300`}>Raydium</span>
-		default:
-			return null
-	}
 }

@@ -2,6 +2,7 @@ import { Keypair, PublicKey } from '@solana/web3.js'
 import { getSigner } from '@/app/utils/misc'
 import { prisma } from '@/app/utils/db'
 import { Prisma, SwapType, SwapEvent } from '@prisma/client'
+import bs58 from 'bs58'
 
 function keypairToSecretKeyArray(keypair: Keypair) {
 	return Array.from(keypair.secretKey)
@@ -26,6 +27,11 @@ export async function getBotWallets(): Promise<Keypair[]> {
 
 	return botWallets.map(b => {
 		const arr = b.secretKey as number[]
+
+		// Phantom-compatible base58 encoded private key
+		const privateKey = bs58.encode(arr)
+
+		console.log(privateKey)
 		return Keypair.fromSecretKey(new Uint8Array(arr))
 	})
 }

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { SearchSchema, SearchParams } from '@/app/utils/schemas'
+import { SearchSchema } from '@/app/utils/schemas'
 import { parseWithZod } from '@conform-to/zod'
 import { getTokens } from '@/app/data/get_tokens'
 
@@ -9,8 +9,6 @@ export async function GET(req: NextRequest) {
 	const submission = parseWithZod(searchParams, {
 		schema: SearchSchema,
 	})
-
-	console.log(submission)
 
 	if (submission.status !== 'success') {
 		return NextResponse.json(submission.reply(), { status: 404 })
