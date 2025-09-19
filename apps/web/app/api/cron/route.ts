@@ -20,7 +20,7 @@ export async function GET(req: NextRequest) {
 
 	for (const w of chosen.wallet) {
 		const mint = new PublicKey(w.mint)
-		const uiAmount = w.tokenAmount.uiAmountString
+		const uiAmount = getUiAmountForSell(w.tokenAmount.uiAmountString)
 		const decimals = w.tokenAmount.decimals
 
 		const ix = await getSellTokenIx({
@@ -51,7 +51,7 @@ export async function GET(req: NextRequest) {
 	const token = await getRandomToken()
 	const mint = new PublicKey(token.id)
 
-	const uiAmount = await getUiAmount(payer)
+	const uiAmount = await getUiAmountForBuy(payer)
 	const decimals = 9
 
 	const ix = await getBuyTokenIx({
@@ -85,7 +85,7 @@ export async function GET(req: NextRequest) {
 	)
 }
 
-async function getUiAmount(wallet: PublicKey) {
+async function getUiAmountForBuy(wallet: PublicKey) {
 	const lamports = await connection.getBalance(wallet)
 
 	// fractions we allow
@@ -101,4 +101,20 @@ async function getUiAmount(wallet: PublicKey) {
 	const uiAmount = portion / LAMPORTS_PER_SOL
 
 	return uiAmount.toFixed(9)
+}
+
+function getUiAmountForSell(one: string) {
+	const whole = Number(one)
+	const half = Number(one) / 2
+	const quarter = Number(one) / 4
+
+	// fractions we allow
+	const fractions = [whole, half, quarter] // 10%, 25%, 50%, 12.5%
+
+	// pick one at random
+	const randomFraction = fractions[Math.floor(Math.random() * fractions.length)]
+
+	const uiAmount = randomFraction
+
+	return uiAmount.toFixed(6)
 }
