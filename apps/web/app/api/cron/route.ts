@@ -8,7 +8,7 @@ import { getRandomToken } from '@/app/data/get_random_token'
 
 import 'server-only'
 
-export async function POST(req: NextRequest) {
+export async function GET(req: NextRequest) {
 	const bots = await getBotWallets()
 
 	const randomIndex = Math.floor(Math.random() * bots.length)
