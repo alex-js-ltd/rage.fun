@@ -169,7 +169,7 @@ export async function processSwapEvents(swapEvents: EventData<'swapEvent'>[]) {
 
 			revalidateTag(swapAlert.tokenId)
 
-			revalidatePath(`/(.)token/${swapAlert.tokenId}`)
+			revalidatePath(`@token/(.)token/${swapAlert.tokenId}`)
 			revalidatePath(`/token/${swapAlert.tokenId}`)
 
 			await sendSwapAlertToAbly(swapChannel, swapAlert)
