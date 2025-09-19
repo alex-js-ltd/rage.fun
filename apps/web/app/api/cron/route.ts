@@ -9,7 +9,7 @@ import { delay } from '@/app/utils/misc'
 
 import 'server-only'
 
-const SHOULD_RUN_PROB = 0.6
+const SHOULD_RUN_PROB = 0.9
 
 export async function GET(req: NextRequest) {
 	if (Math.random() > SHOULD_RUN_PROB) {
