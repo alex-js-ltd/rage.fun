@@ -48,8 +48,6 @@ export async function GET(req: NextRequest) {
 	const ms = Math.floor(Math.random() * (5000 - 1000 + 1)) + 1000
 	await delay(ms)
 
-	await delay(ms)
-
 	const token = await getRandomToken()
 	const mint = new PublicKey(token.id)
 
@@ -90,11 +88,17 @@ export async function GET(req: NextRequest) {
 async function getUiAmount(wallet: PublicKey) {
 	const lamports = await connection.getBalance(wallet)
 
-	// 2) take 25%
-	const quarter = Math.floor(lamports * 0.25)
+	// fractions we allow
+	const fractions = [0.1, 0.25, 0.5, 0.125] // 10%, 25%, 50%, 12.5%
 
-	// 3) convert to SOL (UI amount)
-	const uiAmount = quarter / LAMPORTS_PER_SOL
+	// pick one at random
+	const randomFraction = fractions[Math.floor(Math.random() * fractions.length)]
+
+	// apply it
+	const portion = Math.floor(lamports * randomFraction)
+
+	// convert to SOL (UI amount)
+	const uiAmount = portion / LAMPORTS_PER_SOL
 
 	return uiAmount.toFixed(9)
 }
