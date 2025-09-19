@@ -1,7 +1,4 @@
-import {} from '@/app/utils/schemas'
 import { prisma } from '@/app/utils/db'
-import { Prisma } from '@prisma/client'
-
 import { connection } from '@/app/utils/setup'
 import { TOKEN_2022_PROGRAM_ID } from '@solana/spl-token'
 import { PublicKey } from '@solana/web3.js'
@@ -9,16 +6,22 @@ import 'server-only'
 
 export const dynamic = 'force-dynamic'
 
-interface Wallet {
-	mint: any
-	uiAmount: any
-	tokenAmount: any
+interface TokenAmount {
+	amount: string
+	decimals: number
+	uiAmount: number
+	uiAmountString: string
 }
 
-export async function getWallet(wallet?: string) {
+interface TokenAccount {
+	mint: string
+	tokenAmount: TokenAmount
+}
+
+export async function getWallet(wallet?: PublicKey) {
 	if (!wallet) return []
 
-	const accounts = await connection.getParsedTokenAccountsByOwner(new PublicKey(wallet), {
+	const accounts = await connection.getParsedTokenAccountsByOwner(wallet, {
 		programId: TOKEN_2022_PROGRAM_ID,
 	})
 
@@ -26,17 +29,16 @@ export async function getWallet(wallet?: string) {
 		include: { bondingCurve: true },
 	})
 
-	const userTokens = accounts.value.reduce<Wallet[]>((acc, curr) => {
+	const userTokens = accounts.value.reduce<TokenAccount[]>((acc, curr) => {
 		const info = curr.account.data.parsed.info
 		const mint = info.mint
-		const uiAmount = info.tokenAmount.uiAmount
 		const tokenAmount = info.tokenAmount
 
 		const find = rageTokens.find(t => t.id === mint)
 
-		if (find) {
-			const value = { mint, uiAmount, tokenAmount }
+		const value = { mint, tokenAmount }
 
+		if (find && tokenAmount.uiAmount > 0) {
 			acc.push(value)
 		}
 

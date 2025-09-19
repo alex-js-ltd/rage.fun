@@ -3,6 +3,7 @@ import { getSigner } from '@/app/utils/misc'
 import { prisma } from '@/app/utils/db'
 import { Prisma, SwapType, SwapEvent } from '@prisma/client'
 import bs58 from 'bs58'
+import { getWallet } from '../data/get_wallet'
 
 function keypairToSecretKeyArray(keypair: Keypair) {
 	return Array.from(keypair.secretKey)
@@ -22,16 +23,20 @@ export async function createBotWallet() {
 	return botWallet
 }
 
-export async function getBotWallets(): Promise<Keypair[]> {
+export async function getBotWallets() {
 	const botWallets = await prisma.botWallet.findMany()
 
-	return botWallets.map(b => {
+	const promise = botWallets.map(async b => {
 		const arr = b.secretKey as number[]
 
-		// Phantom-compatible base58 encoded private key
-		const privateKey = bs58.encode(arr)
+		const keypair = Keypair.fromSecretKey(new Uint8Array(arr))
 
-		console.log(privateKey)
-		return Keypair.fromSecretKey(new Uint8Array(arr))
+		const wallet = await getWallet(keypair.publicKey)
+
+		return { keypair, wallet }
 	})
+
+	const data = await Promise.all(promise)
+
+	return data.filter(bot => bot.wallet.length > 0)
 }
