@@ -18,11 +18,6 @@ import {
 import { connection } from '@/app/utils/setup'
 
 import { Program } from '@coral-xyz/anchor'
-
-import { getMint, TOKEN_2022_PROGRAM_ID } from '@solana/spl-token'
-import { TokenFeedType } from '../utils/schemas'
-import { BN } from '@coral-xyz/anchor'
-
 import { revalidateTag, revalidatePath } from 'next/cache'
 
 import { getServerEnv } from '@/app/utils/env'
