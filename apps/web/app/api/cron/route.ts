@@ -40,7 +40,7 @@ export async function POST(req: NextRequest) {
 
 		tx.sign([signer])
 
-		const sig = await sendAndConfirm({ connection, tx })
+		const sig = await connection.sendTransaction(tx)
 		console.log(`🔗 Transaction sig: ${sig} for sell instruction`)
 	}
 
@@ -68,7 +68,7 @@ export async function POST(req: NextRequest) {
 
 	tx.sign([signer])
 
-	const sig = await sendAndConfirm({ connection, tx })
+	const sig = await connection.sendTransaction(tx)
 
 	console.log(`🔗 Transaction sig: ${sig} for buy instruction`)
 
