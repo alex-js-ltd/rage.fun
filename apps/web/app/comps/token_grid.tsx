@@ -69,7 +69,7 @@ function TokenCard({ token, children }: { token: TokenFeedType; children?: React
 							onClick={e => {
 								e.stopPropagation()
 							}}
-							prefetch={true}
+							prefetch={false}
 						>
 							<Image
 								priority
