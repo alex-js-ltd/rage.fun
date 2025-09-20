@@ -25,7 +25,7 @@ export function IntervalPanel({ mint }: { mint: string }) {
 	}, start)
 
 	return (
-		<div className="flex gap-2 justify-end">
+		<div className="flex gap-2 justify-end z-50">
 			{intervals.map(([label, value]) => (
 				<NavLink replace key={label} href={`/token/${mint}?interval=${value}`}>
 					{({ isActive }) => (
