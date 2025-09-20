@@ -31,6 +31,8 @@ model Token {
 
   bondingCurve BondingCurve?
 
+  // marketData MarketData?
+
   swapEvents    SwapEvent[]
   comments      Comment[]
   harvestEvents HarvestEvent[]
@@ -155,3 +157,23 @@ model BotWallet {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+// model MarketData {
+//   id String @id @default(cuid())
+
+//   price     BigInt
+//   marketCap BigInt
+//   liquidity BigInt
+//   volume    BigInt
+
+//   buyCount  Int
+//   sellCount Int
+
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt
+
+//   token   Token  @relation(fields: [tokenId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+//   tokenId String @unique
+
+//   @@index([tokenId])
+// }

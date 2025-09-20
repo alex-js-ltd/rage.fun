@@ -12,7 +12,6 @@ async function seed() {
 
 	console.time('🧹 Cleaned up the database...')
 
-	await prisma.user.deleteMany()
 	console.timeEnd('🧹 Cleaned up the database...')
 	const payer = Keypair.generate()
 
@@ -35,7 +34,7 @@ async function seed() {
 			creator: payer.publicKey,
 			mint: token.mint.publicKey,
 			name: token.name,
-			symbol: token.symbol,
+			symbol: token.symbol.slice(0, 9),
 			image: token.image,
 			thumbhash,
 			description: token.description,
