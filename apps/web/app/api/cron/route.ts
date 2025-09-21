@@ -9,7 +9,7 @@ import { delay } from '@/app/utils/misc'
 
 import 'server-only'
 
-const SHOULD_SELL_PROB = 0.5
+const SHOULD_SELL_PROB = 0.95
 
 export async function GET(req: NextRequest) {
 	const bots = await getBotWallets()
