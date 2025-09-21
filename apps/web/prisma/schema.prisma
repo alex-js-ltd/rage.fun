@@ -51,7 +51,7 @@ model Token {
 
 model Metadata {
   name        String   @db.VarChar(32)
-  symbol      String   @unique @db.VarChar(10)
+  symbol      String   @unique @db.VarChar(12)
   description String   @db.VarChar(280)
   image       String
   thumbhash   Bytes
@@ -163,7 +163,7 @@ model MarketData {
 
   price     Decimal
   marketCap Decimal
-  
+
   liquidity BigInt
   volume    BigInt
 
