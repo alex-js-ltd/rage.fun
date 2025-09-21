@@ -132,7 +132,7 @@ export const DialectSwapSchema = z.object({
 })
 
 export const SearchSchema = z.object({
-	sortType: z.enum(['createdAt', 'lastTrade', 'volume']),
+	sortType: z.enum(['createdAt', 'lastTrade', 'marketCap', 'volume']),
 	sortOrder: z.enum(['asc', 'desc']),
 	cursorId: z.string().optional(),
 	query: z.string().optional(),

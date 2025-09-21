@@ -87,6 +87,15 @@ function getWhere({ sortType, creatorId }: SearchParams & { creatorId?: string }
 				...(creatorId && { creatorId: { equals: creatorId } }),
 			})
 
+		case 'marketCap':
+			return Prisma.validator<Prisma.TokenWhereInput>()({
+				bondingCurve: {
+					isNot: null,
+				},
+
+				...(creatorId && { creatorId: { equals: creatorId } }),
+			})
+
 		default:
 			throw new Error(`Unsupported sortType: ${sortType}`)
 	}
@@ -183,6 +192,14 @@ function getOrderBy({ sortType, sortOrder }: SearchParams) {
 			// Order by the bonding curve row's updatedAt (updated on every swap)
 			return Prisma.validator<Prisma.TokenOrderByWithRelationInput[]>()([
 				{ marketData: { volume: sortOrder } },
+				{ createdAt: sortOrder },
+				{ id: sortOrder },
+			])
+
+		case 'marketCap':
+			// Order by the bonding curve row's updatedAt (updated on every swap)
+			return Prisma.validator<Prisma.TokenOrderByWithRelationInput[]>()([
+				{ marketData: { marketCap: sortOrder } },
 				{ createdAt: sortOrder },
 				{ id: sortOrder },
 			])
