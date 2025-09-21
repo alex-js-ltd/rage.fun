@@ -240,11 +240,7 @@ export const SwapEventSchema = z.object({
 	id: z.string(),
 	signer: z.string(),
 	time: z.bigint().transform(val => val.toString()),
-	price: z
-		.custom<Prisma.Decimal>(val => val instanceof Prisma.Decimal, {
-			message: 'Must be a valid Prisma.Decimal instance',
-		})
-		.transform(val => (val as Prisma.Decimal).toNumber()),
+	price: z.instanceof(Prisma.Decimal).transform(p => p.toNumber()),
 	tokenAmount: z.bigint().transform(val => val.toString()),
 	swapType: z.nativeEnum($Enums.SwapType),
 
