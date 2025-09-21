@@ -83,7 +83,7 @@ function getWhere({ sortType, creatorId }: SearchParams & { creatorId?: string }
 				bondingCurve: {
 					isNot: null,
 				},
-				swapEvents: { some: {} },
+
 				...(creatorId && { creatorId: { equals: creatorId } }),
 			})
 
