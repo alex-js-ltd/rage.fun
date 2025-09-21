@@ -18,6 +18,9 @@ export async function createBotWallet() {
 		data: { id, secretKey },
 	})
 
+	const phantomPrivateKey = bs58.encode(keypair.secretKey)
+	console.log(phantomPrivateKey)
+
 	console.log(`🤖 Bot wallet created! [${botWallet.id.slice(0, 4)}…${botWallet.id.slice(-4)}] 🎉`)
 
 	return botWallet
