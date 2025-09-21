@@ -5,7 +5,6 @@ import { prisma } from '@/app/utils/db'
 import { Prisma, $Enums, BondingCurve } from '@prisma/client'
 import { getServerEnv } from '@/app/utils/env'
 import { getTokenWithRelations } from '@/app/data/get_token'
-import { getVolume } from '@/app/data/get_volume'
 import { sendUpdateAlertToAbly } from '@/app/webhook/ably'
 
 import { revalidateTag } from 'next/cache'
@@ -89,6 +88,7 @@ export async function createMarketData(bondingCurve: BondingCurve) {
 
 			buyCount,
 			sellCount,
+
 			token: { connect: { id: tokenId } },
 		},
 	})

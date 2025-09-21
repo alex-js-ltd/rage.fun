@@ -1,5 +1,5 @@
 import { prisma } from '@/app/utils/db'
-import { Prisma, SwapType, SwapEvent, $Enums } from '@prisma/client'
+import { Prisma, SwapType, SwapEvent, $Enums, BondingCurve } from '@prisma/client'
 
 import { program } from '@/app/utils/setup'
 import { Keypair, PublicKey } from '@solana/web3.js'
@@ -36,8 +36,10 @@ import {
 	sendTransactionAlertToAbly,
 } from '@/app/webhook/ably'
 import { getTopHolders } from '@/app/data/get_top_holders'
-
+import { getVolume } from '@/app/data/get_volume'
+import { calculatePrice, calculateMarketCap } from './create'
 import 'server-only'
+import { getTransactionCount } from '../data/get_transaction_count'
 
 const { ABLY_API_KEY, PROXY_PRIVATE_KEY } = getServerEnv()
 
@@ -73,7 +75,40 @@ export async function updateBondingCurveState(address: string) {
 
 	console.log('🔁 Synced bonding curve:', update)
 
-	return status
+	return update
+}
+
+export async function updateMarketData(bondingCurve: BondingCurve) {
+	const tokenId = bondingCurve.tokenId
+
+	const price = calculatePrice(bondingCurve)
+	const marketCap = calculateMarketCap(price, bondingCurve)
+	const liquidity = bondingCurve.currentReserve
+
+	const volume = await getVolume(tokenId)
+
+	const { buys, sells } = await getTransactionCount(tokenId)
+
+	const buyCount = buys
+	const sellCount = sells
+
+	const data = Prisma.validator<Prisma.MarketDataUpdateInput>()({
+		price,
+		marketCap,
+
+		liquidity,
+		volume,
+
+		buyCount,
+		sellCount,
+	})
+
+	const update = await prisma.marketData.update({
+		where: { tokenId },
+		data,
+	})
+
+	return update
 }
 
 export async function upsertSwapEvent(eventData: EventData<'swapEvent'>): Promise<SwapEvent> {
@@ -156,7 +191,8 @@ export async function processSwapEvents(swapEvents: EventData<'swapEvent'>[]) {
 	for await (const event of swapEvents) {
 		try {
 			const swapEvent = await upsertSwapEvent(event)
-			const status = await updateBondingCurveState(event.data.mint.toBase58())
+			const curve = await updateBondingCurveState(event.data.mint.toBase58())
+			await updateMarketData(curve)
 
 			const parsed = SwapEventSchema.safeParse(swapEvent)
 
@@ -186,7 +222,7 @@ export async function processSwapEvents(swapEvents: EventData<'swapEvent'>[]) {
 
 			await sendTopHoldersAlertToAbly(holdersChannel, topHolders, token)
 
-			if (status === 'Complete') {
+			if (curve.status === 'Complete') {
 				await deployToRaydium({ program, mint: event.data.mint, payer })
 			}
 		} catch (err) {
