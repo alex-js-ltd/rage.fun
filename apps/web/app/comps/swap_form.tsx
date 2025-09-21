@@ -139,7 +139,7 @@ export function SwapForm({ tokenPromise }: SwapFormProps) {
 				<div className="h-[2px] w-full border-b-[2px] border-white opacity-[0.125]" />
 			</div>
 
-			<Progress mint={mint} progress={state.metrics.progress} />
+			<Progress mint={mint} progress={state.marketData.progress} />
 		</>
 	)
 }

@@ -219,6 +219,23 @@ export const BondingcurveSchema = z.object({
 	updatedAt: z.date().transform(d => d.toISOString()),
 })
 
+export const MarketDataSchema = z.object({
+	id: z.string(),
+
+	price: z.instanceof(Prisma.Decimal),
+	marketCap: z.instanceof(Prisma.Decimal),
+
+	liquidity: z.bigint().transform(val => val.toString()),
+	volume: z.bigint().transform(val => val.toString()),
+
+	buyCount: z.number(),
+	sellCount: z.number(),
+
+	tokenId: z.string(),
+	createdAt: z.date().transform(d => d.toISOString()),
+	updatedAt: z.date().transform(d => d.toISOString()),
+})
+
 export const SwapEventSchema = z.object({
 	id: z.string(),
 	signer: z.string(),
@@ -238,15 +255,7 @@ export const SwapEventSchema = z.object({
 	tokenId: z.string(),
 })
 
-export function createTokenFeedSchema(options: {
-	volume: string
-	transactionCount: {
-		readonly buys: number
-		readonly sells: number
-		readonly total: number
-	}
-	solPrice: number
-}) {
+export function createTokenFeedSchema(options: { solPrice: number }) {
 	const { solPrice } = options
 	return z
 		.object({
@@ -254,25 +263,20 @@ export function createTokenFeedSchema(options: {
 			creatorId: z.string(),
 			metadata: MetadataSchema,
 			bondingCurve: BondingcurveSchema,
+			marketData: MarketDataSchema,
 			updateType: UpdateEnumSchema.optional(),
 		})
 		.transform(data => {
-			const { metadata, bondingCurve, updateType } = data
+			const { metadata, bondingCurve, marketData, updateType } = data
 
 			const progress = calculateProgress(bondingCurve)
-			const price = calculatePrice(bondingCurve)
-			const marketCap = calculateMarketCap(bondingCurve)
-			const liquidity = new Decimal(bondingCurve.currentReserve).div(1e9)
-			const volume = new Decimal(options.volume).div(1e9)
 
-			const metrics = {
-				progress,
-				price: solToUsd(price, solPrice).toNumber(),
-				marketCap: solToUsd(marketCap, solPrice).toNumber(),
-				liquidity: solToUsd(liquidity, solPrice).toNumber(),
-				volume: solToUsd(volume, solPrice).toNumber(),
-				transactionCount: options.transactionCount,
-			}
+			const price = solToUsd(marketData.price, solPrice).toNumber()
+			const marketCap = solToUsd(marketData.marketCap, solPrice).toNumber()
+			const liquidityInSol = new Decimal(marketData.liquidity).div(1e9)
+			const volumeInSol = new Decimal(marketData.volume).div(1e9)
+			const liquidity = solToUsd(liquidityInSol, solPrice).toNumber()
+			const volume = solToUsd(volumeInSol, solPrice).toNumber()
 
 			const tradingFees = solToUsd(new Decimal(bondingCurve.tradingFees).div(1e9), solPrice).toNumber()
 
@@ -280,48 +284,24 @@ export function createTokenFeedSchema(options: {
 				id: data.id,
 				creatorId: data.creatorId,
 				metadata,
-				metrics,
+
 				updateType,
+
 				bondingCurve: {
 					...bondingCurve,
 					tradingFees,
 				},
+
+				marketData: {
+					...marketData,
+					price,
+					marketCap,
+					liquidity,
+					volume,
+					progress,
+				},
 			}
 		})
-}
-
-export function calculatePrice(state: BondingCurveType) {
-	const {
-		currentReserve, // lamports
-		virtualReserve, // lamports
-		currentSupply, // base units (10^decimals)
-		virtualSupply, // base units (10^decimals)
-		connectorWeight, // e.g. 0.33
-		decimals, // token decimals, e.g. 9
-	} = state
-
-	// Sum in base units first, then convert once.
-	const reserveLamports = new Decimal(currentReserve).add(new Decimal(virtualReserve))
-	const reserve = reserveLamports.div(1e9) // → SOL
-
-	const supplyBaseUnits = new Decimal(currentSupply).add(new Decimal(virtualSupply))
-	const supply = supplyBaseUnits.div(new Decimal(10).pow(decimals)) // → tokens
-
-	const cw = new Decimal(connectorWeight)
-
-	if (supply.lte(0) || cw.lte(0)) {
-		throw new Error('Invalid state: supply and connectorWeight must be > 0')
-	}
-
-	return reserve.div(supply.mul(cw)) // Decimal
-}
-
-export function calculateMarketCap(state: BondingCurveType) {
-	const price = calculatePrice(state)
-
-	const supply = new Decimal(state.currentSupply).div(new Decimal(10).pow(state.decimals))
-
-	return price.mul(supply)
 }
 
 export function calculateProgress(state: BondingCurveType) {

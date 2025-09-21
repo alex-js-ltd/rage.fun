@@ -12,28 +12,15 @@ export async function getTokenWithRelations(mint: string) {
 			id: mint,
 		},
 
-		include: { metadata: true, bondingCurve: true },
+		include: { metadata: true, bondingCurve: true, marketData: true },
 	})
 
 	console.log(token)
 
-	const solPricePromise = getCachedSolPrice()
-	const transactionRecordPromise = getTransactionRecord([token.id])
-	const volumeRecordPromise = getVolumeRecord([token.id])
-
-	const [solPrice, transactionRecord, volumeRecord] = await Promise.all([
-		solPricePromise,
-		transactionRecordPromise,
-		volumeRecordPromise,
-	])
-
-	const transactionCount = transactionRecord[token.id]
-	const volume = volumeRecord[token.id]
+	const solPrice = await getCachedSolPrice()
 
 	const TokenFeedSchema = createTokenFeedSchema({
 		solPrice,
-		transactionCount,
-		volume,
 	})
 
 	const parsed = TokenFeedSchema.safeParse(token)

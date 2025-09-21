@@ -27,26 +27,11 @@ export async function getTokens(searchParams: SearchParams) {
 		orderBy: [...getOrderBy({ sortType, sortOrder })],
 	})
 
-	const ids = tokens.map(t => t.id)
-
-	const solPricePromise = getCachedSolPrice()
-	const transactionRecordPromise = getTransactionRecord(ids)
-	const volumeRecordPromise = getVolumeRecord(ids)
-
-	const [solPrice, transactionRecord, volumeRecord] = await Promise.all([
-		solPricePromise,
-		transactionRecordPromise,
-		volumeRecordPromise,
-	])
+	const solPrice = await getCachedSolPrice()
 
 	const data = tokens.map(token => {
-		const transactionCount = transactionRecord[token.id]
-		const volume = volumeRecord[token.id]
-
 		const TokenFeedSchema = createTokenFeedSchema({
 			solPrice,
-			transactionCount,
-			volume,
 		})
 
 		const parsed = TokenFeedSchema.safeParse(token)
@@ -146,10 +131,24 @@ const select = Prisma.validator<Prisma.TokenSelect>()({
 		},
 	},
 
-	// 👇 This fetches only the last swap event
-	swapEvents: {
-		orderBy: { time: 'desc' },
-		take: 1,
+	marketData: {
+		select: {
+			id: true,
+
+			price: true,
+			marketCap: true,
+
+			liquidity: true,
+			volume: true,
+
+			buyCount: true,
+			sellCount: true,
+
+			createdAt: true,
+			updatedAt: true,
+
+			tokenId: true,
+		},
 	},
 })
 

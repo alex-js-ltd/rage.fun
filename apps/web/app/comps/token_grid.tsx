@@ -41,7 +41,7 @@ function TokenCard({ token, children }: { token: TokenFeedType; children?: React
 		creatorId,
 		metadata: { name, symbol, image, thumbhash },
 
-		metrics: { progress, price, marketCap, liquidity, volume, transactionCount },
+		marketData: { progress, price, marketCap, liquidity, volume, buyCount, sellCount },
 		updateType,
 	} = token
 
@@ -111,8 +111,7 @@ function TokenCard({ token, children }: { token: TokenFeedType; children?: React
 							label={''}
 							value={
 								<div className="flex gap-2">
-									<div className="text-emerald-400">{transactionCount.buys}</div> /{' '}
-									<div className="text-red-400">{transactionCount.sells}</div>
+									<div className="text-emerald-400">{buyCount}</div> / <div className="text-red-400">{sellCount}</div>
 								</div>
 							}
 							tooltip="TXNS"
