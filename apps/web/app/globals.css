@@ -88,14 +88,7 @@ input[type='number'] {
 }
 
 .button {
-	background: linear-gradient(
-		45deg,
-		#ff3b30 0%,
-		/* red */ #ffd60a 35%,
-		/* yellow */ #ffc107 60%,
-		/* amber */ #34c759 100% /* green */
-	) !important;
-	color: #0b0b0b; /* or white if you prefer */
+	background: linear-gradient(45deg, #06b0f9, #f906b0) !important;
 }
 
 .button span {
