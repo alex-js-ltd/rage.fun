@@ -161,8 +161,9 @@ model BotWallet {
 model MarketData {
   id String @id @default(cuid())
 
-  price     BigInt
-  marketCap BigInt
+  price     Decimal
+  marketCap Decimal
+  
   liquidity BigInt
   volume    BigInt
 
