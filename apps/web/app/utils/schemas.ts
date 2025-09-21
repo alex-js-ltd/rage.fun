@@ -38,7 +38,7 @@ export const InitializeSchema = z.object({
 	name: z.string(),
 	symbol: z
 		.string({ required_error: 'Required' })
-		.max(9, { message: 'Symbol is too long' })
+		.max(11, { message: 'Symbol is too long' })
 		.min(2, { message: 'Symbol is too short' }),
 
 	description: z.string(),
