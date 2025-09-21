@@ -1,8 +1,6 @@
 import { prisma } from '@/app/utils/db'
 import { createTokenFeedSchema } from '@/app/utils/schemas'
 import { getCachedSolPrice } from '@/app/data/get_sol_price'
-import { getTransactionRecord } from '@/app/data/get_transaction_record'
-import { getVolumeRecord } from '@/app/data/get_volume_record'
 
 import 'server-only'
 
@@ -14,8 +12,6 @@ export async function getTokenWithRelations(mint: string) {
 
 		include: { metadata: true, bondingCurve: true, marketData: true },
 	})
-
-	console.log(token)
 
 	const solPrice = await getCachedSolPrice()
 
