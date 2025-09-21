@@ -3,12 +3,13 @@ import { Prisma, SwapType, SwapEvent, HarvestEvent } from '@prisma/client'
 
 import { type EventData } from '@repo/rage'
 
-import { updateBondingCurveState } from '@/app/webhook/swap'
+import { updateBondingCurveState, updateMarketData } from '@/app/webhook/swap'
 
 import { getServerEnv } from '@/app/utils/env'
 import * as Ably from 'ably'
 import { getTokenWithRelations } from '@/app/data/get_token'
-
+import { program } from '@/app/utils/setup'
+import { fetchBondingCurveState } from '@repo/rage'
 // ALERTS
 
 import { sendUpdateAlertToAbly } from '@/app/webhook/ably'
@@ -55,7 +56,14 @@ export async function processHarvestEvents(harvestEvents: EventData<'harvestEven
 		try {
 			const harvestAlert = await upsertHarvestEvent(event)
 
-			await updateBondingCurveState(harvestAlert.tokenId)
+			const mint = event.data.mint
+			const state = await fetchBondingCurveState({
+				program,
+				mint,
+			})
+
+			await updateBondingCurveState(state)
+			await updateMarketData(state)
 
 			const token = await getTokenWithRelations(harvestAlert.tokenId)
 

@@ -1,5 +1,5 @@
 import { PublicKey } from '@solana/web3.js'
-import { type EventData, getBondingCurveState, fetchBondingCurveState } from '@repo/rage'
+import { type EventData, getBondingCurveState, fetchBondingCurveState, BondingCurveState } from '@repo/rage'
 import { program } from '@/app/utils/setup'
 import { prisma } from '@/app/utils/db'
 import { Prisma, $Enums, BondingCurve } from '@prisma/client'
@@ -14,15 +14,11 @@ import 'server-only'
 
 const { ABLY_API_KEY } = getServerEnv()
 
-export async function createBondingCurve(mint: PublicKey) {
+export async function createBondingCurve(state: BondingCurveState) {
+	const { mint, connectorWeight, decimals, ...rest } = state
 	const tokenId = mint.toBase58()
 	const pda = getBondingCurveState({ program, mint })
 	const id = pda.toBase58()
-
-	const { connectorWeight, decimals, ...rest } = await fetchBondingCurveState({
-		program,
-		mint,
-	})
 
 	const virtualSupply = BigInt(rest.virtualSupply.toString())
 	const currentSupply = BigInt(rest.currentSupply.toString())
@@ -67,12 +63,14 @@ export async function createBondingCurve(mint: PublicKey) {
 	return data
 }
 
-export async function createMarketData(bondingCurve: BondingCurve) {
-	const tokenId = bondingCurve.tokenId
+export async function createMarketData(state: BondingCurveState) {
+	const { mint } = state
 
-	const price = calculatePrice(bondingCurve)
-	const marketCap = calculateMarketCap(price, bondingCurve)
-	const liquidity = bondingCurve.currentReserve
+	const tokenId = mint.toBase58()
+
+	const price = calculatePrice(state)
+	const marketCap = calculateMarketCap(price, state)
+	const liquidity = state.currentReserve.toNumber()
 
 	const volume = BigInt('0')
 	const buyCount = 0
@@ -104,9 +102,14 @@ export async function processCreateEvents(createEvents: EventData<'createEvent'>
 
 	for await (const event of createEvents) {
 		try {
-			const curve = await createBondingCurve(event.data.mint)
+			const mint = event.data.mint
+			const state = await fetchBondingCurveState({
+				program,
+				mint,
+			})
+			const curve = await createBondingCurve(state)
 
-			await createMarketData(curve)
+			await createMarketData(state)
 
 			const token = await getTokenWithRelations(event.data.mint.toBase58())
 
@@ -123,7 +126,7 @@ export async function processCreateEvents(createEvents: EventData<'createEvent'>
 	}
 }
 
-export function calculatePrice(state: BondingCurve) {
+export function calculatePrice(state: BondingCurveState) {
 	const {
 		currentReserve, // lamports
 		virtualReserve, // lamports
@@ -149,7 +152,7 @@ export function calculatePrice(state: BondingCurve) {
 	return reserve.div(supply.mul(cw)) // Decimal
 }
 
-export function calculateMarketCap(price: Decimal, state: BondingCurve) {
+export function calculateMarketCap(price: Decimal, state: BondingCurveState) {
 	const supply = new Decimal(state.currentSupply.toString()).div(new Decimal(10).pow(state.decimals))
 
 	return price.mul(supply)

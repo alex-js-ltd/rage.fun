@@ -14,6 +14,7 @@ import {
 	getBondingCurveState,
 	fetchBondingCurveState,
 	sendAndConfirm,
+	BondingCurveState,
 } from '@repo/rage'
 import { connection } from '@/app/utils/setup'
 
@@ -45,11 +46,10 @@ const { ABLY_API_KEY, PROXY_PRIVATE_KEY } = getServerEnv()
 
 const { CLUSTER } = getEnv()
 
-export async function updateBondingCurveState(address: string) {
-	const mint = new PublicKey(address)
-	const pda = getBondingCurveState({ program, mint })
+export async function updateBondingCurveState(state: BondingCurveState) {
+	const { mint, ...rest } = state
 
-	const { ...rest } = await fetchBondingCurveState({ program, mint })
+	const pda = getBondingCurveState({ program, mint })
 
 	const currentSupply = BigInt(rest.currentSupply.toString())
 	const currentReserve = BigInt(rest.currentReserve.toString())
@@ -78,12 +78,14 @@ export async function updateBondingCurveState(address: string) {
 	return update
 }
 
-export async function updateMarketData(bondingCurve: BondingCurve) {
-	const tokenId = bondingCurve.tokenId
+export async function updateMarketData(state: BondingCurveState) {
+	const { mint } = state
 
-	const price = calculatePrice(bondingCurve)
-	const marketCap = calculateMarketCap(price, bondingCurve)
-	const liquidity = bondingCurve.currentReserve
+	const tokenId = mint.toBase58()
+
+	const price = calculatePrice(state)
+	const marketCap = calculateMarketCap(price, state)
+	const liquidity = state.currentReserve.toNumber()
 
 	const volume = await getVolume(tokenId)
 
@@ -191,8 +193,14 @@ export async function processSwapEvents(swapEvents: EventData<'swapEvent'>[]) {
 	for await (const event of swapEvents) {
 		try {
 			const swapEvent = await upsertSwapEvent(event)
-			const curve = await updateBondingCurveState(event.data.mint.toBase58())
-			await updateMarketData(curve)
+
+			const mint = event.data.mint
+			const state = await fetchBondingCurveState({
+				program,
+				mint,
+			})
+			const curve = await updateBondingCurveState(state)
+			await updateMarketData(state)
 
 			const parsed = SwapEventSchema.safeParse(swapEvent)
 
