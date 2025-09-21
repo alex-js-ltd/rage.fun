@@ -4,7 +4,7 @@ import { Prisma } from '@prisma/client'
 export async function getRandomToken() {
 	const latest = await prisma.token.findMany({
 		orderBy: { createdAt: 'desc' },
-		take: 4,
+		take: 3,
 		select: { id: true, createdAt: true }, // add fields you need
 	})
 
