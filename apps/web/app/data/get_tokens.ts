@@ -200,6 +200,7 @@ function getOrderBy({ sortType, sortOrder }: SearchParams) {
 			// Order by the bonding curve row's updatedAt (updated on every swap)
 			return Prisma.validator<Prisma.TokenOrderByWithRelationInput[]>()([
 				{ marketData: { marketCap: sortOrder } },
+				{ marketData: { liquidity: sortOrder } },
 				{ createdAt: sortOrder },
 				{ id: sortOrder },
 			])
