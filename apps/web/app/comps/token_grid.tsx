@@ -40,7 +40,6 @@ function TokenCard({ token, children }: { token: TokenFeedType; children?: React
 		id: mint,
 		creatorId,
 		metadata: { name, symbol, image, thumbhash },
-
 		marketData: { progress, price, marketCap, liquidity, volume, buyCount, sellCount },
 		updateType,
 	} = token
@@ -197,6 +196,28 @@ export function TokenGrid({
 					return searchParams?.sortOrder === 'asc'
 						? aTime - bTime // oldest → newest
 						: bTime - aTime // newest → oldest
+				})
+			}
+
+			if (searchParams?.sortType === 'marketCap') {
+				newTokens.sort((a, b) => {
+					const aMarketCap = a.marketData.marketCap
+					const bMarketCap = b.marketData.marketCap
+
+					return searchParams?.sortOrder === 'asc'
+						? aMarketCap - bMarketCap // oldest → newest
+						: bMarketCap - aMarketCap // newest → oldest
+				})
+			}
+
+			if (searchParams?.sortType === 'volume') {
+				newTokens.sort((a, b) => {
+					const aVolume = a.marketData.volume
+					const bVolume = b.marketData.volume
+
+					return searchParams?.sortOrder === 'asc'
+						? aVolume - bVolume // oldest → newest
+						: bVolume - aVolume // newest → oldest
 				})
 			}
 
