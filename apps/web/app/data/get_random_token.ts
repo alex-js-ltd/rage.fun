@@ -1,27 +1,30 @@
 import { prisma } from '@/app/utils/db'
-import { Prisma, SwapType, SwapEvent, $Enums } from '@prisma/client'
+import { Prisma } from '@prisma/client'
 
-export async function getRandomToken() {
-	const since = new Date(Date.now() - 24 * 60 * 60 * 1000)
+type Options = {
+	hours?: number // recency window
+	limit?: number // how many newest to consider
+	requireTraded?: boolean // only tokens that have at least one swap
+}
+
+export async function getRandomToken({ hours = 24, limit = 200, requireTraded = false }: Options = {}) {
+	const since = new Date(Date.now() - hours * 60 * 60 * 1000)
 
 	const where: Prisma.TokenWhereInput = {
 		createdAt: { gte: since },
-		// optional: only launched tokens
+		// only launched tokens? uncomment:
 		// bondingCurve: { isNot: null },
+		...(requireTraded ? { swapEvents: { some: {} } } : {}),
 	}
 
-	const count = await prisma.token.count({ where })
-	if (count === 0) return null
-
-	const skip = Math.floor(Math.random() * count)
-
-	const [token] = await prisma.token.findMany({
+	const tokens = await prisma.token.findMany({
 		where,
-		orderBy: { id: 'asc' }, // ensure deterministic order when using skip
-		skip,
-		take: 1,
-		// select: { id: true, ... } // add fields you need
+		orderBy: { createdAt: 'desc' },
+		take: limit,
+		select: { id: true, createdAt: true }, // add fields you need
 	})
 
-	return token ?? null
+	if (tokens.length === 0) return null
+	const idx = Math.floor(Math.random() * tokens.length)
+	return tokens[idx]
 }
