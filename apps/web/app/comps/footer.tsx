@@ -4,7 +4,7 @@ import Link from 'next/link'
 
 export function Footer() {
 	return (
-		<footer className="fixed bottom-0 right-0 z-50 items-center justify-between px-4 pt-1 text-white hidden sm:inline-flex pb-2">
+		<footer className="sr-only fixed bottom-0 right-0 z-50 items-center justify-between px-4 pt-1 text-white hidden sm:inline-flex pb-2">
 			<nav className="flex items-center gap-2.5 rounded-full text-xs font-medium">
 				<Link className="text-text-100 hover:text-text-200 transition duration-300 ease-in-out" href="/faq">
 					FAQ
