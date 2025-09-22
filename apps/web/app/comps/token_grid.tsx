@@ -38,11 +38,11 @@ export type InitialState = {
 
 function TokenCard({
 	token,
-	disableCreatorLink,
+	pathname,
 	children,
 }: {
 	token: TokenFeedType
-	disableCreatorLink: boolean
+	pathname: string
 	children?: React.ReactNode
 }) {
 	const {
@@ -52,6 +52,8 @@ function TokenCard({
 		marketData: { progress, price, marketCap, liquidity, volume, buyCount, sellCount },
 		updateType,
 	} = token
+
+	const disableCreatorLink = pathname !== '/home'
 
 	return (
 		<article className="group relative flex flex-col w-full min-h-[178px] border-b border-white border-opacity-[0.125] hover:bg-white/[0.05]">
@@ -256,8 +258,6 @@ export function TokenGrid({
 
 	const isYieldPage = pathname === '/yield' && !!creatorId
 
-	const disableCreatorLink = pathname !== '/home'
-
 	return (
 		<div className="grid">
 			<ul className="mx-auto grid w-full grid-cols-1 gap-0">
@@ -270,7 +270,7 @@ export function TokenGrid({
 							ref={isPenultimate && !isLastPage && !isLoading ? ref : undefined}
 							className="space-y-4 w-full"
 						>
-							<TokenCard token={token} disableCreatorLink={disableCreatorLink}>
+							<TokenCard token={token} pathname={pathname}>
 								{isYieldPage ? <HarvestYieldForm token={token} /> : null}
 							</TokenCard>
 						</li>
