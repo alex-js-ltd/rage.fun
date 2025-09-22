@@ -36,7 +36,15 @@ export type InitialState = {
 	nextCursorId?: string
 }
 
-function TokenCard({ token, children }: { token: TokenFeedType; children?: React.ReactNode }) {
+function TokenCard({
+	token,
+	disableCreatorLink,
+	children,
+}: {
+	token: TokenFeedType
+	disableCreatorLink: boolean
+	children?: React.ReactNode
+}) {
 	const {
 		id: mint,
 		creatorId,
@@ -88,15 +96,11 @@ function TokenCard({ token, children }: { token: TokenFeedType; children?: React
 						<div className="text text-text-200 w-full">{symbol}</div>
 
 						<Link
+							style={{ pointerEvents: disableCreatorLink ? 'none' : undefined }}
 							href={{
 								pathname: `/${creatorId}`,
 							}}
 							className="text-xs text-text-200 w-fit"
-							onClick={e => {
-								if (children) {
-									e.preventDefault() // stops Next.js router from pushing
-								}
-							}}
 						>
 							{shortenWallet(creatorId)}
 						</Link>
@@ -252,6 +256,8 @@ export function TokenGrid({
 
 	const isYieldPage = pathname === '/yield' && !!creatorId
 
+	const disableCreatorLink = pathname !== '/home'
+
 	return (
 		<div className="grid">
 			<ul className="mx-auto grid w-full grid-cols-1 gap-0">
@@ -264,7 +270,9 @@ export function TokenGrid({
 							ref={isPenultimate && !isLastPage && !isLoading ? ref : undefined}
 							className="space-y-4 w-full"
 						>
-							<TokenCard token={token}>{isYieldPage ? <HarvestYieldForm token={token} /> : null}</TokenCard>
+							<TokenCard token={token} disableCreatorLink={disableCreatorLink}>
+								{isYieldPage ? <HarvestYieldForm token={token} /> : null}
+							</TokenCard>
 						</li>
 					)
 				})}
