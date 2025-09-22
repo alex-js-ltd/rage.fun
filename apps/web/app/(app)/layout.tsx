@@ -2,6 +2,7 @@
 
 import { usePathname, useSelectedLayoutSegment } from 'next/navigation'
 import { cn } from '@/app/utils/misc'
+import { PublicKey } from '@solana/web3.js'
 
 export default function Layout(props: {
 	children: React.ReactNode
@@ -13,12 +14,14 @@ export default function Layout(props: {
 	const pathname = usePathname()
 
 	const segment = useSelectedLayoutSegment()
-
+	console.log('segemnt', segment)
 	const isOnToken = pathname.startsWith('/token')
 
 	const isOnCreate = pathname.startsWith('/create')
 
-	const isTokenFeed = segment === 'home' || segment === 'yield'
+	const profile = segment && segment?.length > 20
+
+	const isTokenFeed = segment === 'home' || segment === 'yield' || profile
 
 	const hide = isOnToken && isTokenFeed
 

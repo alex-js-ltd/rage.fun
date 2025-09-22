@@ -9,6 +9,7 @@ import { getIsCreator } from '@/app/data/get_is_creator'
 import { auth } from '@/app/auth'
 
 import { Back } from '@/app/comps/back'
+import { shortenWallet } from '@/app/utils/misc'
 
 export const dynamic = 'force-dynamic'
 
@@ -33,7 +34,7 @@ export default async function Page(props: Props) {
 			<div
 				className="sticky top-0 h-[52px] border-x border-white border-opacity-[0.125] flex items-center z-40 w-full
                   bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60
-                  border-b border-white/10 max-w-[600px] frost"
+                  border-b border-white/10 max-w-[600px] frost "
 			>
 				<Back />
 			</div>
