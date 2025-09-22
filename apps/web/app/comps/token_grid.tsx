@@ -87,14 +87,14 @@ function TokenCard({ token, children }: { token: TokenFeedType; children?: React
 					<div className="grid grid-cols-1 gap-1 w-full">
 						<div className="text text-text-200 w-full">{symbol}</div>
 
-						<Tooltip>
-							<TooltipTrigger asChild>
-								<span className="text-xs text-text-200 w-fit">{shortenWallet(creatorId)}</span>
-							</TooltipTrigger>
-							<TooltipContent variant={'submit_3'} side="bottom" sideOffset={-20}>
-								Creator
-							</TooltipContent>
-						</Tooltip>
+						<Link
+							href={{
+								pathname: `/${creatorId}`,
+							}}
+							className="text-xs text-text-200 w-fit"
+						>
+							{shortenWallet(creatorId)}
+						</Link>
 					</div>
 				</div>
 
