@@ -1,8 +1,4 @@
 import { Suspense } from 'react'
-import { TransactionTable } from '@/app/comps/transaction_table'
-import { getTransactionData } from '@/app/data/get_transaction_data'
-import { getTokenWithRelations } from '@/app/data/get_token'
-import { Loading } from '@/app/comps/loading'
 import { SearchField, SearchResults } from '@/app/comps/search'
 import { searchTokens } from '@/app/data/search_tokens'
 import { type SearchParams } from '@/app/utils/schemas'
