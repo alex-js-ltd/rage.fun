@@ -27,6 +27,7 @@ import { type TooltipContentProps, Tooltip, TooltipContent, TooltipTrigger } fro
 
 import { useInView } from 'react-intersection-observer'
 import { HarvestYieldForm } from '@/app/comps/harvest_yield_form'
+import { usePathname } from 'next/navigation'
 
 export type InitialState = {
 	tokens: TokenFeedType[]
@@ -242,6 +243,10 @@ export function TokenGrid({
 		}
 	}, [inView, isLoading, isLastPage])
 
+	const pathname = usePathname()
+
+	const isYieldPage = pathname === '/yield'
+
 	return (
 		<div className="grid">
 			<ul className="mx-auto grid w-full grid-cols-1 gap-0">
@@ -254,7 +259,9 @@ export function TokenGrid({
 							ref={isPenultimate && !isLastPage && !isLoading ? ref : undefined}
 							className="space-y-4 w-full"
 						>
-							<TokenCard token={token}>{creatorId ? <HarvestYieldForm token={token} /> : null}</TokenCard>
+							<TokenCard token={token}>
+								{creatorId && isYieldPage ? <HarvestYieldForm token={token} /> : null}
+							</TokenCard>
 						</li>
 					)
 				})}
