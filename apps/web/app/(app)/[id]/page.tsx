@@ -38,7 +38,7 @@ export default async function Page(props: Props) {
 					<Suspense
 						fallback={
 							<ul className="mx-auto grid w-full grid-cols-1 gap-0">
-								<TokenGridFallback creatorId={creatorId} />
+								<TokenGridFallback />
 							</ul>
 						}
 					>
