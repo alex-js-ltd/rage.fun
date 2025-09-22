@@ -92,6 +92,11 @@ function TokenCard({ token, children }: { token: TokenFeedType; children?: React
 								pathname: `/${creatorId}`,
 							}}
 							className="text-xs text-text-200 w-fit"
+							onClick={e => {
+								if (children) {
+									e.preventDefault() // stops Next.js router from pushing
+								}
+							}}
 						>
 							{shortenWallet(creatorId)}
 						</Link>
