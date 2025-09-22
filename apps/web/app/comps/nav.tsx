@@ -22,7 +22,7 @@ export function Nav() {
 		},
 		{ href: { pathname: '/create', query: {} }, scroll: false, label: 'Create', icon: 'face-plus' },
 		{
-			href: { pathname: '/yield', query: { sortType: 'createdAt', sortOrder: 'desc' } },
+			href: { pathname: '/yield', query: {} },
 			scroll: true,
 			label: 'Yield',
 			icon: 'dollar',

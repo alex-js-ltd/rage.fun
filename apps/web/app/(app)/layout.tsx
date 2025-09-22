@@ -14,7 +14,7 @@ export default function Layout(props: {
 	const pathname = usePathname()
 
 	const segment = useSelectedLayoutSegment()
-	console.log('segemnt', segment)
+
 	const isOnToken = pathname.startsWith('/token')
 
 	const isOnCreate = pathname.startsWith('/create')
