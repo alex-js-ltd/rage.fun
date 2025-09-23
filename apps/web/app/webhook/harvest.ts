@@ -10,9 +10,8 @@ import * as Ably from 'ably'
 import { getTokenWithRelations } from '@/app/data/get_token'
 import { program } from '@/app/utils/setup'
 import { fetchBondingCurveState } from '@repo/rage'
-// ALERTS
 
-import { sendUpdateAlertToAbly } from '@/app/webhook/ably'
+import * as AblyEvents from '@/app/webhook/ably'
 import 'server-only'
 
 const { ABLY_API_KEY, PROXY_PRIVATE_KEY } = getServerEnv()
@@ -67,7 +66,7 @@ export async function processHarvestEvents(harvestEvents: EventData<'harvestEven
 
 			const token = await getTokenWithRelations(harvestAlert.tokenId)
 
-			await sendUpdateAlertToAbly(updateChannel, token, 'Harvest')
+			await AblyEvents.publishUpdateEvent(updateChannel, token, 'Harvest')
 		} catch (err) {
 			console.error('processHarvestEvents error', {
 				signature: event.signature,
