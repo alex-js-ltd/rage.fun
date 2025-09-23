@@ -104,7 +104,6 @@ export default auth(async function middleware(req: NextRequest & { auth: Session
 	if (req.nextUrl.pathname === '/') {
 		const searchUrl = new NextURL('/home', req.nextUrl)
 		const res = NextResponse.redirect(searchUrl)
-
 		res.headers.set('X-RateLimit-Success', success.toString())
 		res.headers.set('X-RateLimit-Limit', limit.toString())
 		res.headers.set('X-RateLimit-Remaining', remaining.toString())
