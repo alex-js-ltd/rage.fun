@@ -27,13 +27,15 @@ import { SwapEventSchema, SwapEventType, TokenFeedType, TopHolderType } from '@/
 import { getTokenWithRelations } from '@/app/data/get_token'
 import { getSigner } from '@/app/utils/misc'
 import { getSingleTransaction } from '@/app/data/get_single_transaction'
-
-import * as AblyEvents from '@/app/webhook/ably'
 import { getTopHolders } from '@/app/data/get_top_holders'
 import { getVolume } from '@/app/data/get_volume'
 import { calculatePrice, calculateMarketCap } from './create'
+import { getTransactionCount } from '@/app/data/get_transaction_count'
+
+import * as AblyEvents from '@/app/webhook/ably'
+import * as DiscordAlerts from '@/app/webhook/discord'
+
 import 'server-only'
-import { getTransactionCount } from '../data/get_transaction_count'
 
 const { ABLY_API_KEY, PROXY_PRIVATE_KEY } = getServerEnv()
 
@@ -238,6 +240,14 @@ export async function processSwapEvents(swapEvents: EventData<'swapEvent'>[]) {
 			socialAlerts.push(socialAlert)
 		} catch (err) {
 			console.error(`🔥 Error processing swap event for ${event.data.mint.toBase58()}:`, err)
+		}
+	}
+
+	for await (const alert of socialAlerts) {
+		try {
+			await DiscordAlerts.publishSwapEvent(alert.swapEvent, alert.token, alert.topHolders)
+		} catch (err) {
+			console.error(`🔥 Error processing swap alert for ${alert.swapEvent.id}:`, err)
 		}
 	}
 }
