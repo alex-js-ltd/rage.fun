@@ -42,7 +42,7 @@ export async function getTokens(searchParams: SearchParams) {
 		}
 
 		return parsed.data
-	}, [])
+	})
 
 	// Determine if it's the last page by checking if we have fetched more than TAKE tokens
 	const isLastPage = tokens.length <= TAKE // If we have only TAKE tokens, it's the last page
