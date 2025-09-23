@@ -2,7 +2,6 @@
 
 import Link, { type LinkProps } from 'next/link'
 import { Icon } from '@/app/comps/_icon'
-import { useWallet } from '@jup-ag/wallet-adapter'
 import { Wallet } from './wallet'
 import Image from 'next/image'
 
@@ -12,8 +11,6 @@ interface NavItemProps extends LinkProps {
 }
 
 export function Nav() {
-	const { publicKey: creator } = useWallet()
-
 	const NAV_ITEMS = [
 		{
 			href: { pathname: '/home', query: {} },
