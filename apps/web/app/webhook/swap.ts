@@ -211,9 +211,9 @@ export async function processSwapEvents(swapEvents: EventData<'swapEvent'>[]) {
 			const transaction = await getTransaction(swapEvent)
 			const token = await getTokenWithRelations(tokenId)
 
+			await AblyEvents.publishUpdateEvent(updateChannel, token, parsed.data.swapType)
 			await AblyEvents.publishSwapEvent(swapChannel, parsed.data)
 			await AblyEvents.publishTransactionEvent(transactionChannel, transaction)
-			await AblyEvents.publishUpdateEvent(updateChannel, token, parsed.data.swapType)
 
 			const topHolders = await getTopHolders(tokenId)
 
