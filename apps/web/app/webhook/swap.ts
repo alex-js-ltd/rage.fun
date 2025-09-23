@@ -28,14 +28,7 @@ import { getTokenWithRelations } from '@/app/data/get_token'
 import { getSigner } from '@/app/utils/misc'
 import { getSingleTransaction } from '@/app/data/get_single_transaction'
 
-// ALERTS
-
-import {
-	sendSwapAlertToAbly,
-	sendTopHoldersAlertToAbly,
-	sendUpdateAlertToAbly,
-	sendTransactionAlertToAbly,
-} from '@/app/webhook/ably'
+import * as AblyEvents from '@/app/webhook/ably'
 import { getTopHolders } from '@/app/data/get_top_holders'
 import { getVolume } from '@/app/data/get_volume'
 import { calculatePrice, calculateMarketCap } from './create'
@@ -216,19 +209,19 @@ export async function processSwapEvents(swapEvents: EventData<'swapEvent'>[]) {
 			revalidatePath(`@token/(.)token/${swapAlert.tokenId}`)
 			revalidatePath(`/token/${swapAlert.tokenId}`)
 
-			await sendSwapAlertToAbly(swapChannel, swapAlert)
+			await AblyEvents.publishSwapEvent(swapChannel, swapAlert)
 
 			const transaction = await getSingleTransaction(swapAlert.id)
 
-			await sendTransactionAlertToAbly(transactionChannel, transaction)
+			await AblyEvents.publishTransactionEvent(transactionChannel, transaction)
 
 			const token = await getTokenWithRelations(swapAlert.tokenId)
 
-			await sendUpdateAlertToAbly(updateChannel, token, parsed.data.swapType)
+			await AblyEvents.publishUpdateEvent(updateChannel, token, parsed.data.swapType)
 
 			const topHolders = await getTopHolders(swapAlert.tokenId)
 
-			await sendTopHoldersAlertToAbly(holdersChannel, topHolders, token)
+			await AblyEvents.publishTopHoldersEvent(holdersChannel, topHolders, token)
 
 			if (curve.status === 'Complete') {
 				await deployToRaydium({ program, mint: event.data.mint, payer })

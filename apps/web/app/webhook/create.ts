@@ -5,7 +5,7 @@ import { prisma } from '@/app/utils/db'
 import { Prisma, $Enums, BondingCurve } from '@prisma/client'
 import { getServerEnv } from '@/app/utils/env'
 import { getTokenWithRelations } from '@/app/data/get_token'
-import { sendUpdateAlertToAbly } from '@/app/webhook/ably'
+import * as AblyEvents from '@/app/webhook/ably'
 
 import { revalidateTag } from 'next/cache'
 import { Decimal } from '@prisma/client/runtime/library'
@@ -107,13 +107,13 @@ export async function processCreateEvents(createEvents: EventData<'createEvent'>
 				program,
 				mint,
 			})
-			const curve = await createBondingCurve(state)
+			await createBondingCurve(state)
 
 			await createMarketData(state)
 
 			const token = await getTokenWithRelations(event.data.mint.toBase58())
 
-			await sendUpdateAlertToAbly(channel, token, 'Create')
+			await AblyEvents.publishUpdateEvent(channel, token, 'Create')
 
 			revalidateTag(token.id)
 		} catch (err) {

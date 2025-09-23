@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getServerEnv } from '@/app/utils/env'
 import * as Ably from 'ably'
 
-import { sendSignatureAlertToAbly } from '@/app/webhook/ably'
+import * as AblyEvents from '@/app/webhook/ably'
 import { connection } from '@/app/utils/setup'
 
 const { HELIUS_SECRET, ABLY_API_KEY } = getServerEnv()
@@ -29,7 +29,7 @@ export async function POST(request: NextRequest) {
 		console.log('signature status', status.value)
 
 		if (status.value) {
-			await sendSignatureAlertToAbly(sigChannel, { ...status.value, signature })
+			await AblyEvents.publishSignatureEvent(sigChannel, { ...status.value, signature })
 		}
 	}
 

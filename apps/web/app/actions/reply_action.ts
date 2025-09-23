@@ -9,7 +9,7 @@ import { Prisma, SwapType } from '@prisma/client'
 
 import * as Ably from 'ably'
 import { getServerEnv } from '@/app/utils/env'
-import { sendCommentAlertToAbly } from '@/app/webhook/ably'
+import * as AblyEvents from '@/app/webhook/ably'
 
 const { ABLY_API_KEY, PROXY_PRIVATE_KEY } = getServerEnv()
 
@@ -70,7 +70,7 @@ export async function replyAction(_prevState: State, formData: FormData) {
 
 	const commentChannel = client.channels.get('commentEvent')
 
-	await sendCommentAlertToAbly(commentChannel, parse.data)
+	await AblyEvents.publishCommentEvent(commentChannel, parse.data)
 
 	console.log(parse)
 

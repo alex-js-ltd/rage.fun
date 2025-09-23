@@ -10,7 +10,7 @@ import {
 import { type SignatureStatus } from '@solana/web3.js'
 import 'server-only'
 
-async function sendSignatureAlertToAbly(
+export async function publishSignatureEvent(
 	channel: Ably.Channel,
 	signatureStatus: SignatureStatus & { signature: string },
 ) {
@@ -21,7 +21,7 @@ async function sendSignatureAlertToAbly(
 	}
 }
 
-async function sendSwapAlertToAbly(channel: Ably.Channel, event: SwapEventType) {
+export async function publishSwapEvent(channel: Ably.Channel, event: SwapEventType) {
 	try {
 		await channel.publish('swapEvent', { ...event })
 	} catch (error) {
@@ -29,7 +29,7 @@ async function sendSwapAlertToAbly(channel: Ably.Channel, event: SwapEventType) 
 	}
 }
 
-async function sendUpdateAlertToAbly(channel: Ably.Channel, token: TokenFeedType, updateType: UpdateEnumType) {
+export async function publishUpdateEvent(channel: Ably.Channel, token: TokenFeedType, updateType: UpdateEnumType) {
 	try {
 		await channel.publish('updateEvent', { ...token, updateType })
 	} catch (error) {
@@ -37,7 +37,7 @@ async function sendUpdateAlertToAbly(channel: Ably.Channel, token: TokenFeedType
 	}
 }
 
-async function sendTransactionAlertToAbly(channel: Ably.Channel, transaction: TransactionTableType) {
+export async function publishTransactionEvent(channel: Ably.Channel, transaction: TransactionTableType) {
 	try {
 		await channel.publish('transactionEvent', { ...transaction })
 	} catch (error) {
@@ -45,7 +45,7 @@ async function sendTransactionAlertToAbly(channel: Ably.Channel, transaction: Tr
 	}
 }
 
-async function sendTopHoldersAlertToAbly(channel: Ably.Channel, holders: TopHolderType[], token: TokenFeedType) {
+export async function publishTopHoldersEvent(channel: Ably.Channel, holders: TopHolderType[], token: TokenFeedType) {
 	try {
 		await channel.publish('holdersEvent', { holders, id: token.id })
 	} catch (error) {
@@ -53,19 +53,10 @@ async function sendTopHoldersAlertToAbly(channel: Ably.Channel, holders: TopHold
 	}
 }
 
-async function sendCommentAlertToAbly(channel: Ably.Channel, comment: CommentType) {
+export async function publishCommentEvent(channel: Ably.Channel, comment: CommentType) {
 	try {
 		await channel.publish('commentEvent', { ...comment })
 	} catch (error) {
 		console.error(error)
 	}
-}
-
-export {
-	sendSignatureAlertToAbly,
-	sendSwapAlertToAbly,
-	sendTransactionAlertToAbly,
-	sendUpdateAlertToAbly,
-	sendTopHoldersAlertToAbly,
-	sendCommentAlertToAbly,
 }
