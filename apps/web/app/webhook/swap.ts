@@ -23,7 +23,7 @@ import { revalidateTag, revalidatePath } from 'next/cache'
 
 import { getServerEnv } from '@/app/utils/env'
 import * as Ably from 'ably'
-import { SwapEventSchema } from '@/app/utils/schemas'
+import { SwapEventSchema, SwapEventType, TokenFeedType, TopHolderType } from '@/app/utils/schemas'
 import { getTokenWithRelations } from '@/app/data/get_token'
 import { getSigner } from '@/app/utils/misc'
 import { getSingleTransaction } from '@/app/data/get_single_transaction'
@@ -183,6 +183,8 @@ export async function processSwapEvents(swapEvents: EventData<'swapEvent'>[]) {
 	const holdersChannel = client.channels.get('holdersEvent')
 	const payer = getSigner(PROXY_PRIVATE_KEY)
 
+	const socialAlerts: Array<{ swapEvent: SwapEventType; token: TokenFeedType; topHolders: TopHolderType[] }> = []
+
 	for await (const event of swapEvents) {
 		try {
 			const swapEvent = await upsertSwapEvent(event)
@@ -226,6 +228,14 @@ export async function processSwapEvents(swapEvents: EventData<'swapEvent'>[]) {
 			if (curve.status === 'Complete') {
 				await deployToRaydium({ program, mint: event.data.mint, payer })
 			}
+
+			const socialAlert: { swapEvent: SwapEventType; token: TokenFeedType; topHolders: TopHolderType[] } = {
+				swapEvent: parsed.data,
+				token,
+				topHolders,
+			}
+
+			socialAlerts.push(socialAlert)
 		} catch (err) {
 			console.error(`🔥 Error processing swap event for ${event.data.mint.toBase58()}:`, err)
 		}
