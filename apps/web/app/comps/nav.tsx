@@ -16,7 +16,7 @@ export function Nav() {
 
 	const NAV_ITEMS = [
 		{
-			href: { pathname: '/home', query: { sortType: 'createdAt', sortOrder: 'desc' } },
+			href: { pathname: '/home', query: {} },
 			scroll: true,
 			label: 'Home',
 			icon: 'home',
