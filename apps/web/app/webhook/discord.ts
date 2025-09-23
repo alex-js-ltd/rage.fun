@@ -31,8 +31,8 @@ export async function publishSwapEvent(event: SwapEventType, token: TokenFeedTyp
 	const formattedAmount = formatTokenAmount(amount)
 
 	const solScanUrl = `https://solscan.io/tx/${event.id}`
-	const magicmintUrl = `https://www.letsrage.fun/token/${token.id}?interval=86400000`
-	const dialectUrl = generateSolanaBlink(token.id)
+	const rageUrl = `https://www.letsrage.fun/token/${token.id}?interval=86400000`
+	// const dialectUrl = generateSolanaBlink(token.id)
 
 	const topHolderLines = topHolders
 		.reduce<string[]>((acc, curr) => {
@@ -72,8 +72,7 @@ export async function publishSwapEvent(event: SwapEventType, token: TokenFeedTyp
 		// LINKS SECTION
 		`**🔗 LINKS**`,
 		`** ├**[**solscan.io**](<${solScanUrl}>)`,
-		`** ├**[**letsrage.fun**](<${magicmintUrl}>)`,
-		`** ├**[**Buy on Dialect**](${dialectUrl})`,
+		`** ├**[**letsrage.fun**](<${rageUrl}>)`,
 	].join('\n')
 
 	// Then in your Discord webhook payload:
