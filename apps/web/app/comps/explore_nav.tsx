@@ -20,8 +20,6 @@ export function ExploreNav({ searchParams }: { searchParams: SearchParams }) {
 					pathname: `/home`,
 					query: {
 						sortType: 'createdAt',
-						sortOrder: searchParams.sortOrder,
-						query: '',
 					},
 				}}
 				replace
@@ -42,8 +40,6 @@ export function ExploreNav({ searchParams }: { searchParams: SearchParams }) {
 					pathname: `/home`,
 					query: {
 						sortType: 'lastTrade',
-						sortOrder: searchParams.sortOrder,
-						query: '',
 					},
 				}}
 				replace
@@ -64,8 +60,6 @@ export function ExploreNav({ searchParams }: { searchParams: SearchParams }) {
 					pathname: `/home`,
 					query: {
 						sortType: 'marketCap',
-						sortOrder: searchParams.sortOrder,
-						query: '',
 					},
 				}}
 				replace
@@ -86,8 +80,6 @@ export function ExploreNav({ searchParams }: { searchParams: SearchParams }) {
 					pathname: `/home`,
 					query: {
 						sortType: 'volume',
-						sortOrder: searchParams.sortOrder,
-						query: '',
 					},
 				}}
 				replace
