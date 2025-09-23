@@ -26,7 +26,7 @@ import * as Ably from 'ably'
 import { SwapEventSchema, SwapEventType, TokenFeedType, TopHolderType } from '@/app/utils/schemas'
 import { getTokenWithRelations } from '@/app/data/get_token'
 import { getSigner } from '@/app/utils/misc'
-import { getSingleTransaction } from '@/app/data/get_single_transaction'
+import { getTransaction } from '@/app/data/get_single_transaction'
 import { getTopHolders } from '@/app/data/get_top_holders'
 import { getVolume } from '@/app/data/get_volume'
 import { calculatePrice, calculateMarketCap } from './create'
@@ -206,30 +206,26 @@ export async function processSwapEvents(swapEvents: EventData<'swapEvent'>[]) {
 				continue
 			}
 
-			const swapAlert = parsed.data
+			const tokenId = parsed.data.tokenId
 
-			revalidateTag(swapAlert.tokenId)
+			const transaction = await getTransaction(swapEvent)
+			const token = await getTokenWithRelations(tokenId)
 
-			revalidatePath(`@token/(.)token/${swapAlert.tokenId}`)
-			revalidatePath(`/token/${swapAlert.tokenId}`)
-
-			await AblyEvents.publishSwapEvent(swapChannel, swapAlert)
-
-			const transaction = await getSingleTransaction(swapAlert.id)
-
+			await AblyEvents.publishSwapEvent(swapChannel, parsed.data)
 			await AblyEvents.publishTransactionEvent(transactionChannel, transaction)
-
-			const token = await getTokenWithRelations(swapAlert.tokenId)
-
 			await AblyEvents.publishUpdateEvent(updateChannel, token, parsed.data.swapType)
 
-			const topHolders = await getTopHolders(swapAlert.tokenId)
+			const topHolders = await getTopHolders(tokenId)
 
 			await AblyEvents.publishTopHoldersEvent(holdersChannel, topHolders, token)
 
 			if (curve.status === 'Complete') {
 				await deployToRaydium({ program, mint: event.data.mint, payer })
 			}
+
+			revalidateTag(tokenId)
+			revalidatePath(`@token/(.)token/${tokenId}`)
+			revalidatePath(`/token/${tokenId}`)
 
 			const socialAlert: { swapEvent: SwapEventType; token: TokenFeedType; topHolders: TopHolderType[] } = {
 				swapEvent: parsed.data,
@@ -243,11 +239,11 @@ export async function processSwapEvents(swapEvents: EventData<'swapEvent'>[]) {
 		}
 	}
 
-	for await (const alert of socialAlerts) {
-		try {
-			await DiscordAlerts.publishSwapEvent(alert.swapEvent, alert.token, alert.topHolders)
-		} catch (err) {
-			console.error(`🔥 Error processing swap alert for ${alert.swapEvent.id}:`, err)
-		}
-	}
+	// for await (const alert of socialAlerts) {
+	// 	try {
+	// 		await DiscordAlerts.publishSwapEvent(alert.swapEvent, alert.token, alert.topHolders)
+	// 	} catch (err) {
+	// 		console.error(`🔥 Error processing swap alert for ${alert.swapEvent.id}:`, err)
+	// 	}
+	// }
 }
