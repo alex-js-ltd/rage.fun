@@ -4,6 +4,7 @@ import Link, { type LinkProps } from 'next/link'
 import { Icon } from '@/app/comps/_icon'
 import { useWallet } from '@jup-ag/wallet-adapter'
 import { Wallet } from './wallet'
+import Image from 'next/image'
 
 interface NavItemProps extends LinkProps {
 	label: string
@@ -33,8 +34,21 @@ export function Nav() {
 		return (
 			<nav className="hidden sm:block sticky top-0">
 				<div className="relative h-[52px] sm:h-[100vh] bg-black sm:w-full sm:bg-transparent w-[100vw] ">
-					<div className="z-40 flex flex-col gap-1 sm:pb-4 sm:pt-[51px] h-full">
+					<div className="z-40 flex flex-col gap-1 sm:pb-4 sm:pt-[0px] h-full">
 						<div className="sm:ml-auto flex sm:flex-col gap-1 w-full sm:w-[70px] items-center xl:w-full xl:items-start overflow-hidden h-full">
+							<Link
+								href={'/home'}
+								className="flex items-center gap-2 rounded-full hover:bg-white/10 w-fit h-[50.25px] p-3 "
+							>
+								<div className="relative rounded-full overflow-hidden size-8">
+									<Image
+										className="object-cover object-center w-full h-full z-0"
+										src={'/pepe.png'}
+										alt="logo"
+										fill={true}
+									/>
+								</div>
+							</Link>
 							{NAV_ITEMS.map(l => (
 								<Link
 									key={l.href.pathname}
