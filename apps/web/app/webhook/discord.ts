@@ -73,7 +73,7 @@ export async function publishSwapEvent(event: SwapEventType, token: TokenFeedTyp
 		// LINKS SECTION
 		`**🔗 LINKS**`,
 		`** ├**[**solscan.io**](<${solScanUrl}>)`,
-		`** ├**[**letsrage.fun**](<${rageUrl}>)`,
+		`** ├**[**letsrage.fun**](${rageUrl})`,
 
 		'',
 	].join('\n')
