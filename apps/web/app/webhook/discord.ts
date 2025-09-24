@@ -47,6 +47,7 @@ export async function publishSwapEvent(event: SwapEventType, token: TokenFeedTyp
 	const refund = await getRefund(event)
 
 	const caption = [
+		'',
 		`${alertMessage}`,
 		'',
 		// TOKEN INFO SECTION
