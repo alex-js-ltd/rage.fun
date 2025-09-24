@@ -127,8 +127,6 @@ export async function generateMetadata({ params, searchParams }: Props, parent: 
 			images: [
 				{
 					url: meta.image, // Replace with your actual image URL
-					width: 1200,
-					height: 630,
 				},
 			],
 			type: 'website',
