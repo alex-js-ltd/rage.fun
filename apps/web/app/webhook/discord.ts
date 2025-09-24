@@ -74,6 +74,8 @@ export async function publishSwapEvent(event: SwapEventType, token: TokenFeedTyp
 		`**🔗 LINKS**`,
 		`** ├**[**solscan.io**](<${solScanUrl}>)`,
 		`** ├**[**letsrage.fun**](<${rageUrl}>)`,
+
+		'',
 	].join('\n')
 
 	// Then in your Discord webhook payload:
