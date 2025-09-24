@@ -1,34 +1,20 @@
 import { Suspense, Fragment, cache, use } from 'react'
+import type { Metadata, ResolvingMetadata } from 'next'
+import { getCachedTokenMetadata } from '@/app/data/get_token_metadata'
 import { Interval, IntervalPanel } from '@/app/comps/interval_panel'
 import { Loading } from '@/app/comps/loading'
-import { Icon } from '@/app/comps/_icon'
-import Link from 'next/link'
-
 import { getCandlstickData } from '@/app/data/get_candlestick_data'
 import { CandlestickChart } from '@/app/comps/candlestick_chart'
-
 import { getTokenWithRelations } from '@/app/data/get_token'
-
-import { SwapForm, SwapFormFallback } from '@/app/comps/swap_form'
-
 import { Tabs, List, Trigger, Content } from '@/app/comps/tabs'
 import { Button } from '@/app/comps/button'
-
 import { TransactionTable } from '@/app/comps/transaction_table'
 import { getTransactionData } from '@/app/data/get_transaction_data'
 import { HoldersTable } from '@/app/comps/holders_table'
 import { getTopHolders } from '@/app/data/get_top_holders'
-
-import type { Metadata, ResolvingMetadata } from 'next'
-import { getCachedTokenMetadata } from '@/app/data/get_token_metadata'
 import { generateSolanaBlink } from '@/app/utils/misc'
 import { TokenPair, TokenPairFallback } from '@/app/comps/token_pair'
 import { Back } from '@/app/comps/back'
-
-import { PublicKey } from '@solana/web3.js'
-
-import { program } from '@/app/utils/setup'
-
 import { getComments } from '@/app/data/get_comments'
 import { Comments } from '@/app/comps/comments'
 import { ReplyForm } from '@/app/comps/reply_form'
@@ -123,4 +109,35 @@ export default async function Page(props: Props) {
 			</Suspense>
 		</div>
 	)
+}
+
+export async function generateMetadata({ params, searchParams }: Props, parent: ResolvingMetadata): Promise<Metadata> {
+	const id = (await params).id
+
+	// fetch post information
+	const meta = await getCachedTokenMetadata(id)
+
+	return {
+		title: meta.name,
+		description: meta.description,
+
+		openGraph: {
+			title: meta.name,
+			description: meta.description,
+			images: [
+				{
+					url: meta.image, // Replace with your actual image URL
+					width: 1200,
+					height: 630,
+				},
+			],
+			type: 'website',
+		},
+		twitter: {
+			card: 'summary_large_image',
+			title: meta.name,
+			description: meta.description,
+			images: [meta.image], // Replace with your actual image URL
+		},
+	}
 }
