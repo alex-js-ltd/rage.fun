@@ -13,7 +13,7 @@ import { getCachedSolPrice } from '@/app/data/get_sol_price'
 import { client } from '@/app/utils/client'
 import { HarvestEvent } from '@prisma/client'
 
-const {} = getServerEnv()
+const { DISCORD_WEBHOOK_URL } = getServerEnv()
 
 export async function publishSwapEvent(event: SwapEventType, token: TokenFeedType, topHolders: TopHolderType[]) {
 	const { symbol } = token.metadata
@@ -81,7 +81,7 @@ export async function publishSwapEvent(event: SwapEventType, token: TokenFeedTyp
 	}
 
 	try {
-		const res = await client('', {
+		const res = await client(DISCORD_WEBHOOK_URL, {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify(payload),

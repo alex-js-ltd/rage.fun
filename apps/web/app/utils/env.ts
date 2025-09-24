@@ -16,6 +16,8 @@ const schema = z.object({
 	ABLY_API_KEY: z.string(),
 
 	PINATA_JWT: z.string(),
+
+	DISCORD_WEBHOOK_URL: z.string(),
 })
 
 declare global {
@@ -62,6 +64,8 @@ export function getServerEnv() {
 
 		ABLY_API_KEY: process.env.ABLY_API_KEY,
 		PINATA_JWT: process.env.PINATA_JWT,
+
+		DISCORD_WEBHOOK_URL: process.env.DISCORD_WEBHOOK_URL,
 	}
 }
 
