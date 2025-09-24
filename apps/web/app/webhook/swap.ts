@@ -239,11 +239,11 @@ export async function processSwapEvents(swapEvents: EventData<'swapEvent'>[]) {
 		}
 	}
 
-	// for await (const alert of socialAlerts) {
-	// 	try {
-	// 		await DiscordAlerts.publishSwapEvent(alert.swapEvent, alert.token, alert.topHolders)
-	// 	} catch (err) {
-	// 		console.error(`🔥 Error processing swap alert for ${alert.swapEvent.id}:`, err)
-	// 	}
-	// }
+	for await (const alert of socialAlerts) {
+		try {
+			await DiscordAlerts.publishSwapEvent(alert.swapEvent, alert.token, alert.topHolders)
+		} catch (err) {
+			console.error(`🔥 Error processing swap alert for ${alert.swapEvent.id}:`, err)
+		}
+	}
 }
