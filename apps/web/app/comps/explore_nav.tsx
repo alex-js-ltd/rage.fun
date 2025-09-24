@@ -1,21 +1,14 @@
 'use client'
 
-import { Select, SelectContent, SelectItem } from '@/app/comps/select'
-import { useChangeSearchParams } from '@/app/hooks/use_change_search_params'
-
-import { SearchField } from './search'
-import { Icon } from './_icon'
-import { Checkbox } from './checkbox'
 import { SearchParams } from '@/app/utils/schemas'
-import { NavLink } from './nav_link'
 import Link from 'next/link'
 import { cn } from '../utils/misc'
 
 export function ExploreNav({ searchParams }: { searchParams: SearchParams }) {
 	return (
-		<div className="flex items-center w-full h-full">
+		<div className="flex items-center w-full h-full overflow-x-scroll">
 			<Link
-				className={cn('relative h-full w-fit flex items-center px-6 hover:bg-white/10')}
+				className={cn('relative h-full w-fit flex items-center px-6 hover:bg-white/10 whitespace-nowrap')}
 				href={{
 					pathname: `/home`,
 					query: {
@@ -35,7 +28,7 @@ export function ExploreNav({ searchParams }: { searchParams: SearchParams }) {
 			</Link>
 
 			<Link
-				className={cn('relative h-full w-fit flex items-center px-6 hover:bg-white/10')}
+				className={cn('relative h-full w-fit flex items-center px-6 hover:bg-white/10 whitespace-nowrap')}
 				href={{
 					pathname: `/home`,
 					query: {
@@ -55,7 +48,7 @@ export function ExploreNav({ searchParams }: { searchParams: SearchParams }) {
 			</Link>
 
 			<Link
-				className={cn('relative h-full w-fit flex items-center px-6 hover:bg-white/10')}
+				className={cn('relative h-full w-fit flex items-center px-6 hover:bg-white/10 whitespace-nowrap')}
 				href={{
 					pathname: `/home`,
 					query: {
