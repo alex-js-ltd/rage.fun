@@ -17,11 +17,13 @@ const { DISCORD_WEBHOOK_URL } = getServerEnv()
 
 export async function publishSwapEvent(event: SwapEventType, token: TokenFeedType, topHolders: TopHolderType[]) {
 	const { symbol } = token.metadata
-	const { currentSupply, decimals } = token.bondingCurve
+	const { currentReserve, currentSupply, decimals } = token.bondingCurve
 	const { progress } = token.marketData
 
 	const circulatingSupply = amountToUiAmount(new BN(currentSupply), decimals)
 	const formattedcirculatingSupply = formatTokenAmount(circulatingSupply)
+
+	const liquidity = amountToUiAmount(new BN(currentReserve), 9)
 
 	// Format the alert message
 	const alertMessage = event.swapType === 'Buy' ? '🤑 **NEW MINT** 🤑' : '🔥 **NEW BURN** 🔥'
@@ -60,7 +62,7 @@ export async function publishSwapEvent(event: SwapEventType, token: TokenFeedTyp
 		// BONDING CURVE SECTION
 		`**🌀 BONDING CURVE**`,
 		`** ├Ciculating Supply: ${formattedcirculatingSupply}**`,
-		`** ├Progress: ${progress}%**`,
+		`** ├Liquidity: ${liquidity} / 80 SOL**`,
 		'',
 
 		// TOP HOLDERS
