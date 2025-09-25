@@ -1,6 +1,6 @@
 import { getServerEnv } from '@/app/utils/env'
 
-import { fromLamports, amountToUiAmount } from '@repo/rage'
+import { type EventData, fromLamports, amountToUiAmount } from '@repo/rage'
 import { generateSolanaBlink } from '@/app/utils/dialect'
 
 import { type TokenFeedType, SwapEventType } from '@/app/utils/schemas'
@@ -112,4 +112,50 @@ async function getRefund(event: SwapEventType) {
 	const rent = ['', `**🔄 Refunded Rent**`, `** ├Amount: \`$ ${refundAmount.toFixed(2)}\`**`, '']
 
 	return rent
+}
+
+export async function publishCreateAlert(event: EventData<'createEvent'>, token: TokenFeedType) {
+	const alertMessage = '🆕 **NEW TOKEN** 🆕'
+
+	const mint = event.data.mint.toBase58()
+	const solScanUrl = `https://solscan.io/tx/${event.signature}`
+	const letsRageUrl = `https://www.letsrage.fun/token/${mint}?interval=86400000`
+	const dialectUrl = generateSolanaBlink(mint)
+
+	const caption = [
+		``,
+		`${alertMessage}`,
+		'',
+		// TOKEN INFO SECTION
+		`**🪙 ${token.metadata.symbol}**`,
+		`** ├Creator: \`${event.data.creator.toBase58()}\`**`,
+		'',
+		// BONDING CURVE SECTION
+		`**🌀 BONDING CURVE**`,
+		`** ├Progress: 0%**`,
+		'',
+		// LINKS SECTION
+		`**🔗 LINKS**`,
+		`** ├**[**solscan.io**](<${solScanUrl}>)`,
+		`** ├**[**letrage.fun**](${letsRageUrl})`,
+
+		'',
+	].join('\n')
+
+	// Then in your Discord webhook payload:
+	const payload = {
+		content: caption,
+	}
+
+	try {
+		const res = await client(DISCORD_WEBHOOK_URL, {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify(payload),
+		})
+
+		console.log('✅ Webhook sent:', res)
+	} catch (error) {
+		console.error('Error sending message to Discord:', error)
+	}
 }

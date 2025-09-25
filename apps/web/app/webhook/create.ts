@@ -6,10 +6,11 @@ import { Prisma, $Enums, BondingCurve } from '@prisma/client'
 import { getServerEnv } from '@/app/utils/env'
 import { getTokenWithRelations } from '@/app/data/get_token'
 import * as AblyEvents from '@/app/webhook/ably'
-
+import { type SwapEventType, type TokenFeedType, type TopHolderType } from '@/app/utils/schemas'
 import { revalidateTag } from 'next/cache'
 import { Decimal } from '@prisma/client/runtime/library'
 import * as Ably from 'ably'
+import * as DiscordAlerts from '@/app/webhook/discord'
 import 'server-only'
 
 const { ABLY_API_KEY } = getServerEnv()
@@ -100,6 +101,8 @@ export async function processCreateEvents(createEvents: EventData<'createEvent'>
 	const client = new Ably.Rest(ABLY_API_KEY)
 	const channel = client.channels.get('updateEvent')
 
+	const socialAlerts: Array<{ event: EventData<'createEvent'>; token: TokenFeedType }> = []
+
 	for await (const event of createEvents) {
 		try {
 			const mint = event.data.mint
@@ -116,12 +119,24 @@ export async function processCreateEvents(createEvents: EventData<'createEvent'>
 			await AblyEvents.publishUpdateEvent(channel, token, 'Create')
 
 			revalidateTag(token.id)
+
+			const social: { event: EventData<'createEvent'>; token: TokenFeedType } = { event, token }
+
+			socialAlerts.push(social)
 		} catch (err) {
 			console.error('processCreateEvents error', {
 				signature: event.signature,
 				mint: event.data.mint?.toBase58?.(),
 				err,
 			})
+		}
+	}
+
+	for await (const alert of socialAlerts) {
+		try {
+			await DiscordAlerts.publishCreateAlert(alert.event, alert.token)
+		} catch (err) {
+			console.error(`🔥 Error processing swap alert for ${alert.event.signature}:`, err)
 		}
 	}
 }
