@@ -90,10 +90,10 @@ function Footer() {
 
 					<li>
 						<a
-							href="https://discord.gg/FfmuN25GjE"
+							href="https://t.me/+oHFpt8HM6EAyODFk"
 							target="_blank"
 							rel="noopener noreferrer"
-							className="hover:underline transition-colors text-sm text-neutral-400 pointer-events-none"
+							className="hover:underline transition-colors text-sm text-neutral-400"
 						>
 							Telegram
 						</a>
