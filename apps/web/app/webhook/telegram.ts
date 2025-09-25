@@ -11,17 +11,9 @@ import { type TopHolderType } from '@/app/utils/schemas'
 import { shortAddress } from '@/app/utils/misc'
 import { client } from '@/app/utils/client'
 
-// const { TELEGRAM_CHAT_ID, TELEGRAM_BOT_TOKEN } = getServerEnv()
+const { TELEGRAM_CHAT_ID, TELEGRAM_BOT_TOKEN } = getServerEnv()
 
-const TELEGRAM_BOT_TOKEN = ''
-const TELEGRAM_CHAT_ID = ''
-
-export async function sendSwapAlertToTelegram(
-	event: SwapEventType,
-	token: TokenFeedType,
-
-	topHolders: TopHolderType[],
-) {
+export async function publishSwapEvent(event: SwapEventType, token: TokenFeedType, topHolders: TopHolderType[]) {
 	const { symbol, image } = token.metadata
 	const { currentSupply, decimals } = token.bondingCurve
 

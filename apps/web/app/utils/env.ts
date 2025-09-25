@@ -18,6 +18,9 @@ const schema = z.object({
 	PINATA_JWT: z.string(),
 
 	DISCORD_WEBHOOK_URL: z.string(),
+
+	TELEGRAM_BOT_TOKEN: z.string(),
+	TELEGRAM_CHAT_ID: z.string(),
 })
 
 declare global {
@@ -66,6 +69,9 @@ export function getServerEnv() {
 		PINATA_JWT: process.env.PINATA_JWT,
 
 		DISCORD_WEBHOOK_URL: process.env.DISCORD_WEBHOOK_URL,
+
+		TELEGRAM_BOT_TOKEN: process.env.TELEGRAM_BOT_TOKEN,
+		TELEGRAM_CHAT_ID: process.env.TELEGRAM_CHAT_ID,
 	}
 }
 

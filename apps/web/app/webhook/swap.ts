@@ -34,6 +34,7 @@ import { getTransactionCount } from '@/app/data/get_transaction_count'
 
 import * as AblyEvents from '@/app/webhook/ably'
 import * as DiscordAlerts from '@/app/webhook/discord'
+import * as TelegramdAlerts from '@/app/webhook/telegram'
 
 import 'server-only'
 
