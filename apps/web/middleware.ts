@@ -18,7 +18,7 @@ export const config = {
 // Rate limiter for APIs (tighter)
 const apiLimit = new Ratelimit({
 	redis: kv,
-	limiter: Ratelimit.slidingWindow(10, '10 s'),
+	limiter: Ratelimit.slidingWindow(15, '10 s'),
 })
 
 // Rate limiter for pages (looser)
