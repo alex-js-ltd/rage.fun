@@ -70,9 +70,9 @@ export default function Layout(props: {
 
 function Footer() {
 	return (
-		<footer className="p-4">
+		<footer className="px-4">
 			<nav aria-label="Footer Navigation">
-				<ul className="flex justify-center gap-6 ">
+				<ul className="flex justify-center items-center gap-4">
 					<li>
 						<a
 							href="https://discord.gg/FfmuN25GjE"
@@ -81,6 +81,36 @@ function Footer() {
 							className="hover:underline transition-colors text-sm text-neutral-400"
 						>
 							Discord
+						</a>
+					</li>
+
+					<li>
+						<div className="w-[1px] h-3 bg-neutral-400" />
+					</li>
+
+					<li>
+						<a
+							href="https://discord.gg/FfmuN25GjE"
+							target="_blank"
+							rel="noopener noreferrer"
+							className="hover:underline transition-colors text-sm text-neutral-400 pointer-events-none"
+						>
+							Telegram
+						</a>
+					</li>
+
+					<li>
+						<div className="w-[1px] h-3 bg-neutral-400" />
+					</li>
+
+					<li>
+						<a
+							href="https://discord.gg/FfmuN25GjE"
+							target="_blank"
+							rel="noopener noreferrer"
+							className="hover:underline transition-colors text-sm text-neutral-400 pointer-events-none"
+						>
+							Twitter
 						</a>
 					</li>
 				</ul>
