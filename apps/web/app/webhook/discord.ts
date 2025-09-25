@@ -23,7 +23,7 @@ export async function publishSwapEvent(event: SwapEventType, token: TokenFeedTyp
 	const circulatingSupply = amountToUiAmount(new BN(currentSupply), decimals)
 	const formattedcirculatingSupply = formatTokenAmount(circulatingSupply)
 
-	const liquidity = amountToUiAmount(new BN(currentReserve), 9)
+	const liquidity = fromLamports(new BN(currentReserve), 9)
 
 	// Format the alert message
 	const alertMessage = event.swapType === 'Buy' ? '🤑 **NEW MINT** 🤑' : '🔥 **NEW BURN** 🔥'
@@ -62,7 +62,7 @@ export async function publishSwapEvent(event: SwapEventType, token: TokenFeedTyp
 		// BONDING CURVE SECTION
 		`**🌀 BONDING CURVE**`,
 		`** ├Ciculating Supply: ${formattedcirculatingSupply}**`,
-		`** ├Liquidity: ${liquidity} / 80 SOL**`,
+		`** ├Liquidity: ${liquidity.toFixed(9)} / 80 SOL**`,
 		'',
 
 		// TOP HOLDERS
