@@ -6,7 +6,7 @@ import { cn } from '../utils/misc'
 
 export function ExploreNav({ searchParams }: { searchParams: SearchParams }) {
 	return (
-		<div className="flex items-center w-full h-full overflow-x-scroll">
+		<div className="flex items-center w-full h-full overflow-x-scroll scrollbar-hide">
 			<Link
 				className={cn('relative h-full w-fit flex items-center px-6 hover:bg-white/10 whitespace-nowrap')}
 				href={{
