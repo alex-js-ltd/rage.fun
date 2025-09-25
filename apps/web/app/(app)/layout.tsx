@@ -51,7 +51,13 @@ export default function Layout(props: {
 					{/* RIGHT — parent must stretch so sticky has room */}
 					<aside className="hidden lg:block self-stretch">
 						<div className="sticky top-0 px-4">
-							<div className="h-[100vh] overflow-hidden">{props.right}</div>
+							<div className="relative h-[100vh] overflow-hidden">
+								{props.right}
+
+								<div className="absolute bottom-4 left-0">
+									<Footer />
+								</div>
+							</div>
 						</div>
 					</aside>
 				</div>
@@ -59,5 +65,26 @@ export default function Layout(props: {
 
 			{props.modal}
 		</>
+	)
+}
+
+function Footer() {
+	return (
+		<footer className="p-4">
+			<nav aria-label="Footer Navigation">
+				<ul className="flex justify-center gap-6 ">
+					<li>
+						<a
+							href="https://discord.gg/FfmuN25GjE"
+							target="_blank"
+							rel="noopener noreferrer"
+							className="hover:underline transition-colors text-sm text-neutral-400"
+						>
+							Discord
+						</a>
+					</li>
+				</ul>
+			</nav>
+		</footer>
 	)
 }
