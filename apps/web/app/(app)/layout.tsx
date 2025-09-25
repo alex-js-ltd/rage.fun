@@ -113,6 +113,21 @@ function Footer() {
 							Twitter
 						</a>
 					</li>
+
+					<li>
+						<div className="w-[1px] h-3 bg-neutral-400" />
+					</li>
+
+					<li>
+						<a
+							href="https://www.reddit.com/r/letsrage"
+							target="_blank"
+							rel="noopener noreferrer"
+							className="hover:underline transition-colors text-sm text-neutral-400"
+						>
+							Reddit
+						</a>
+					</li>
 				</ul>
 			</nav>
 		</footer>
