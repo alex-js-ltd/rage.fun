@@ -50,7 +50,9 @@ export default function Layout(props: {
 
 					{/* RIGHT — parent must stretch so sticky has room */}
 					<aside className="hidden lg:block self-stretch">
-						<div className="sticky top-0 px-4">{props.right}</div>
+						<div className="sticky top-0 px-4">
+							<div className="h-[100vh] overflow-hidden">{props.right}</div>
+						</div>
 					</aside>
 				</div>
 			</div>
