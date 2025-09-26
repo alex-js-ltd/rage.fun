@@ -10,7 +10,7 @@ export default function Layout({ children }: { children: ReactNode }) {
 							Frequently Asked Questions
 						</h1>
 						<p className="mt-5 text-center text-lg text-zinc-600">
-							Get answers to common questions about magicmint.fun.
+							Get answers to common questions about letsrage.fun.
 						</p>
 					</div>
 				</div>
@@ -19,7 +19,7 @@ export default function Layout({ children }: { children: ReactNode }) {
 						{children}
 					</article>
 					<div className="mt-10 w-full border-t border-zinc-200 pt-10 text-center">
-						<p className="text-zinc-500">Last updated: March 3rd, 2025</p>
+						<p className="text-zinc-500">Last updated: September 3rd, 2025</p>
 					</div>
 				</div>
 			</div>
