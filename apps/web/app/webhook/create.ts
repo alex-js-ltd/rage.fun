@@ -136,7 +136,7 @@ export async function processCreateEvents(createEvents: EventData<'createEvent'>
 		try {
 			await DiscordAlerts.publishCreateAlert(alert.event, alert.token)
 		} catch (err) {
-			console.error(`🔥 Error processing swap alert for ${alert.event.signature}:`, err)
+			console.error(`🔥 Error processing create alert for ${alert.event.signature}:`, err)
 		}
 	}
 }
