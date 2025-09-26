@@ -1,11 +1,11 @@
 {
   "crons": [
     {
-      "path": "/api/buy",
+      "path": "/api/cron/buy",
       "schedule": "0 0 * * *"
     },
     {
-      "path": "/api/sell",
+      "path": "/api/cron/sell",
       "schedule": "0 0 * * *"
     }
   ]
