@@ -1,15 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { PublicKey, LAMPORTS_PER_SOL } from '@solana/web3.js'
-import { getSellTokenIx, getBuyTokenIx, buildTransaction, sendAndConfirm } from '@repo/rage'
+import { getBuyTokenIx, buildTransaction } from '@repo/rage'
 import { program, connection } from '@/app/utils/setup'
 import { getBotWallets } from '@/app/webhook/bot'
 import { BN } from '@coral-xyz/anchor'
 import { getRandomToken } from '@/app/data/get_random_token'
-import { delay } from '@/app/utils/misc'
-
 import 'server-only'
-
-const SHOULD_SELL_PROB = 0.5
 
 export async function GET(req: NextRequest) {
 	const bots = await getBotWallets()
@@ -19,38 +15,6 @@ export async function GET(req: NextRequest) {
 
 	const signer = chosen.keypair
 	const payer = chosen.keypair.publicKey
-
-	if (Math.random() > SHOULD_SELL_PROB) {
-		for (const w of chosen.wallet) {
-			const mint = new PublicKey(w.mint)
-			const decimals = w.tokenAmount.decimals
-			const uiAmount = getUiAmountForSell(w.tokenAmount.uiAmountString, decimals)
-
-			const ix = await getSellTokenIx({
-				program,
-				payer,
-				mint,
-				uiAmount,
-				decimals,
-				minOutput: new BN(0),
-			})
-
-			const tx = await buildTransaction({
-				connection,
-				payer,
-				instructions: [ix],
-				signers: [],
-			})
-
-			tx.sign([signer])
-
-			const sig = await connection.sendTransaction(tx)
-			console.log(`🔗 Transaction sig: ${sig} for sell instruction`)
-		}
-	}
-
-	const ms = Math.floor(Math.random() * (5000 - 1000 + 1)) + 1000
-	await delay(ms)
 
 	const token = await getRandomToken()
 	const mint = new PublicKey(token.id)
@@ -105,20 +69,4 @@ async function getUiAmountForBuy(wallet: PublicKey) {
 	const uiAmount = portion / LAMPORTS_PER_SOL
 
 	return uiAmount.toFixed(9)
-}
-
-function getUiAmountForSell(one: string, decimals: number) {
-	const whole = Number(one)
-	const half = Number(one) / 2
-	const quarter = Number(one) / 4
-
-	// fractions we allow
-	const fractions = [whole, half, quarter] // 10%, 25%, 50%, 12.5%
-
-	// pick one at random
-	const randomFraction = fractions[Math.floor(Math.random() * fractions.length)]
-
-	const uiAmount = randomFraction
-
-	return uiAmount.toFixed(decimals)
 }
