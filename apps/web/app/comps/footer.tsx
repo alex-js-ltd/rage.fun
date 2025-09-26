@@ -8,7 +8,7 @@ export function Footer() {
 			<nav aria-label="Footer Navigation">
 				<ul className="flex justify-center items-center gap-4">
 					<li>
-						<Link href="/fag" className="hover:underline transition-colors text-sm text-neutral-400">
+						<Link href="/faq" className="hover:underline transition-colors text-sm text-neutral-400">
 							FAQ
 						</Link>
 					</li>
