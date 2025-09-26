@@ -16,6 +16,8 @@ export default function Layout({ children }: { children: ReactNode }) {
 				</div>
 				<div className="mx-auto flex max-w-screen-md flex-col items-center px-4 py-10 sm:px-6 sm:pt-20 lg:px-8">
 					<article className="prose-headings:font-display prose prose-gray max-w-none transition-all prose-headings:relative prose-headings:scroll-mt-20 prose-headings:font-semibold pb-64">
+						<p className="text-left text-lg text-zinc-600">How do fees compare?</p>
+
 						<table>
 							<thead>
 								<tr>
@@ -43,7 +45,6 @@ export default function Layout({ children }: { children: ReactNode }) {
 								</tr>
 							</tbody>
 						</table>
-
 						{children}
 					</article>
 					<div className="mt-10 w-full border-t border-zinc-200 pt-10 text-center">
