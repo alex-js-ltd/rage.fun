@@ -4,47 +4,60 @@ import Link from 'next/link'
 
 export function Footer() {
 	return (
-		<footer className="sr-only fixed bottom-0 right-0 z-50 items-center justify-between px-4 pt-1 text-white hidden sm:inline-flex pb-2">
-			<nav className="flex items-center gap-2.5 rounded-full text-xs font-medium">
-				<Link className="text-text-100 hover:text-text-200 transition duration-300 ease-in-out" href="/faq">
-					FAQ
-				</Link>
+		<footer className="px-4">
+			<nav aria-label="Footer Navigation">
+				<ul className="flex justify-center items-center gap-4">
+					<li>
+						<Link href="/fag" className="hover:underline transition-colors text-sm text-neutral-400">
+							FAQ
+						</Link>
+					</li>
 
-				<Link
-					href={`https://x.com/magicmint_fun`}
-					target="_blank"
-					rel="noopener noreferrer"
-					className="size-6 flex items-center justify-center transition duration-300 ease-in-out"
-				>
-					<Icon
-						name="twitter"
-						className="size-3 text-text-100 hover:text-gray-200 transition duration-300 ease-in-out"
-					/>
-				</Link>
+					<li>
+						<div className="w-[1px] h-3 bg-neutral-400" />
+					</li>
 
-				<Link
-					href={`https://t.me/magicmintdotfun`}
-					target="_blank"
-					rel="noopener noreferrer"
-					className="size-6 flex items-center justify-center transition duration-300 ease-in-out"
-				>
-					<Icon
-						name="telegram"
-						className="size-4 text-text-100 hover:text-[#0088CC] hover:bg-white overflow-hidden rounded-full transition duration-300 ease-in-out"
-					/>
-				</Link>
+					<li>
+						<a
+							href="https://discord.gg/FfmuN25GjE"
+							target="_blank"
+							rel="noopener noreferrer"
+							className="hover:underline transition-colors text-sm text-neutral-400"
+						>
+							Discord
+						</a>
+					</li>
 
-				<Link
-					href={`https://discord.gg/F66a7SbBD8`}
-					target="_blank"
-					rel="noopener noreferrer"
-					className="size-6 flex items-center justify-center transition duration-300 ease-in-out"
-				>
-					<Icon
-						name="discord"
-						className="size-4 text-text-100 hover:text-[#5865F2] overflow-hidden rounded-full transition duration-300 ease-in-out"
-					/>
-				</Link>
+					<li>
+						<div className="w-[1px] h-3 bg-neutral-400" />
+					</li>
+
+					<li>
+						<a
+							href="https://t.me/+oHFpt8HM6EAyODFk"
+							target="_blank"
+							rel="noopener noreferrer"
+							className="hover:underline transition-colors text-sm text-neutral-400"
+						>
+							Telegram
+						</a>
+					</li>
+
+					<li>
+						<div className="w-[1px] h-3 bg-neutral-400" />
+					</li>
+
+					<li>
+						<a
+							href="https://discord.gg/FfmuN25GjE"
+							target="_blank"
+							rel="noopener noreferrer"
+							className="hover:underline transition-colors text-sm text-neutral-400 pointer-events-none"
+						>
+							Twitter
+						</a>
+					</li>
+				</ul>
 			</nav>
 		</footer>
 	)

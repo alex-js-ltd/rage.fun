@@ -2,7 +2,7 @@
 
 import { usePathname, useSelectedLayoutSegment } from 'next/navigation'
 import { cn } from '@/app/utils/misc'
-import { PublicKey } from '@solana/web3.js'
+import { Footer } from '@/app/comps/footer'
 
 export default function Layout(props: {
 	children: React.ReactNode
@@ -65,71 +65,5 @@ export default function Layout(props: {
 
 			{props.modal}
 		</>
-	)
-}
-
-function Footer() {
-	return (
-		<footer className="px-4">
-			<nav aria-label="Footer Navigation">
-				<ul className="flex justify-center items-center gap-4">
-					<li>
-						<a
-							href="https://discord.gg/FfmuN25GjE"
-							target="_blank"
-							rel="noopener noreferrer"
-							className="hover:underline transition-colors text-sm text-neutral-400"
-						>
-							Discord
-						</a>
-					</li>
-
-					<li>
-						<div className="w-[1px] h-3 bg-neutral-400" />
-					</li>
-
-					<li>
-						<a
-							href="https://t.me/+oHFpt8HM6EAyODFk"
-							target="_blank"
-							rel="noopener noreferrer"
-							className="hover:underline transition-colors text-sm text-neutral-400"
-						>
-							Telegram
-						</a>
-					</li>
-
-					<li>
-						<div className="w-[1px] h-3 bg-neutral-400" />
-					</li>
-
-					<li>
-						<a
-							href="https://discord.gg/FfmuN25GjE"
-							target="_blank"
-							rel="noopener noreferrer"
-							className="hover:underline transition-colors text-sm text-neutral-400 pointer-events-none"
-						>
-							Twitter
-						</a>
-					</li>
-
-					<li>
-						<div className="w-[1px] h-3 bg-neutral-400" />
-					</li>
-
-					<li>
-						<a
-							href="https://www.reddit.com/r/letsrage"
-							target="_blank"
-							rel="noopener noreferrer"
-							className="hover:underline transition-colors text-sm text-neutral-400"
-						>
-							Reddit
-						</a>
-					</li>
-				</ul>
-			</nav>
-		</footer>
 	)
 }
