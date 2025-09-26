@@ -17,7 +17,8 @@ const schema = z.object({
 
 	PINATA_JWT: z.string(),
 
-	DISCORD_WEBHOOK_URL: z.string(),
+	DISCORD_WEBHOOK_ALERT_URL: z.string(),
+	DISCORD_WEBHOOK_CHAT_URL: z.string(),
 
 	TELEGRAM_BOT_TOKEN: z.string(),
 	TELEGRAM_CHAT_ID: z.string(),
@@ -68,7 +69,8 @@ export function getServerEnv() {
 		ABLY_API_KEY: process.env.ABLY_API_KEY,
 		PINATA_JWT: process.env.PINATA_JWT,
 
-		DISCORD_WEBHOOK_URL: process.env.DISCORD_WEBHOOK_URL,
+		DISCORD_WEBHOOK_ALERT_URL: process.env.DISCORD_WEBHOOK_ALERT_URL,
+		DISCORD_WEBHOOK_CHAT_URL: process.env.DISCORD_WEBHOOK_CHAT_URL,
 
 		TELEGRAM_BOT_TOKEN: process.env.TELEGRAM_BOT_TOKEN,
 		TELEGRAM_CHAT_ID: process.env.TELEGRAM_CHAT_ID,
