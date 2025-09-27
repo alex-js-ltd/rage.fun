@@ -13,33 +13,30 @@ const defaultOptions = [
 	{ label: '100%', uiAmount: '' },
 ]
 
+const TX_FEE_BUFFER = BigInt(5_000_000)
+
 export async function getQuickBuyOptions(signer?: string | undefined): Promise<QuickOption[]> {
-	if (!signer) {
-		return defaultOptions
-	}
+	if (!signer) return defaultOptions
 
 	const lamports = await connection.getBalance(new PublicKey(signer), 'confirmed')
 
-	if (lamports < 10) {
-		return defaultOptions
-	}
-
-	const TX_FEE_BUFFER = BigInt(155_000) // ~0.000155 SOL for base + priority
+	if (lamports < 10) return defaultOptions
 
 	const balance = BigInt(lamports)
 
+	// Subtract buffer so we never overspend
 	const effective = balance > TX_FEE_BUFFER ? balance - TX_FEE_BUFFER : BigInt(0)
 
+	const quarter = effective / BigInt(4)
+	const half = effective / BigInt(2)
 	const full = effective
-	const half = balance / BigInt('2')
-	const quarter = balance / BigInt('4')
 
 	const decimals = 9
 
 	const options = [
 		{ label: '25%', uiAmount: fromLamports(new BN(quarter.toString()), decimals).toFixed(decimals) },
 		{ label: '50%', uiAmount: fromLamports(new BN(half.toString()), decimals).toFixed(decimals) },
-		{ label: '100%', uiAmount: fromLamports(new BN(full.toString()), decimals).toFixed(decimals) },
+		{ label: 'MAX', uiAmount: fromLamports(new BN(full.toString()), decimals).toFixed(decimals) },
 	]
 
 	return options
