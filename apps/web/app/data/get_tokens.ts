@@ -4,8 +4,6 @@ import { prisma } from '@/app/utils/db'
 import { Prisma } from '@prisma/client'
 import { getCachedSolPrice } from '@/app/data/get_sol_price'
 import { createTokenFeedSchema } from '@/app/utils/schemas'
-import { getVolumeRecord } from './get_volume_record'
-import { getTransactionRecord } from '@/app/data/get_transaction_record'
 import 'server-only'
 
 export async function getTokens(searchParams: SearchParams) {
