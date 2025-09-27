@@ -30,9 +30,16 @@ export async function authenticate(publicKey: string) {
 
 	const pathname = await getCurrentPathname()
 
+	console.log('pathname', pathname)
+
 	if (pathname === '/yield') {
 		revalidatePath('/yield', 'layout')
 		redirect('/yield') // forces a rebuild with new cookies
+	}
+
+	if (pathname.startsWith('/token')) {
+		revalidatePath(pathname, 'layout')
+		redirect(pathname) // forces a rebuild with new cookies
 	}
 }
 
@@ -44,5 +51,10 @@ export async function disconnect() {
 	if (pathname === '/yield') {
 		revalidatePath('/yield', 'layout')
 		redirect('/yield') // forces a rebuild with new cookies
+	}
+
+	if (pathname.startsWith('/token')) {
+		revalidatePath(pathname, 'layout')
+		redirect(pathname) // forces a rebuild with new cookies
 	}
 }
