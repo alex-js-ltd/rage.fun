@@ -46,10 +46,10 @@ export default auth(async function middleware(req: NextRequest & { auth: Session
 	const authorization = requestHeaders.get('authorization')
 	const ip = ipAddress(req) || '127.0.0.1'
 
-	const isApiBucket = req.nextUrl.pathname.startsWith('/api/wasm')
+	const path = req.nextUrl.pathname
 
-	const isApiWindow = req.nextUrl.pathname.startsWith('/api') && !!req.nextUrl.pathname.startsWith('/api/wasm')
-
+	const isApiBucket = path.startsWith('/api/wasm') // token bucket
+	const isApiWindow = path.startsWith('/api') && !isApiBucket // sliding window
 	const isApi = isApiBucket || isApiWindow
 
 	const ratelimit = isApiBucket ? apiBucket : isApiWindow ? apiWindow : pageLimit
