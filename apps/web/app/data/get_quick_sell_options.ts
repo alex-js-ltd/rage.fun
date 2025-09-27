@@ -9,8 +9,16 @@ import 'server-only'
 
 export const dynamic = 'force-dynamic'
 
+const defaultOptions = [
+	{ label: '25%', uiAmount: '' },
+	{ label: '50%', uiAmount: '' },
+	{ label: '100%', uiAmount: '' },
+]
+
 export async function getQuickSellOptions(mint: string, signer?: string | undefined): Promise<QuickOption[]> {
-	if (!signer) return []
+	if (!signer) {
+		return defaultOptions
+	}
 
 	const token0SignerAta = await getAssociatedTokenAddress(
 		new PublicKey(mint),

@@ -7,8 +7,16 @@ import 'server-only'
 
 export const dynamic = 'force-dynamic'
 
+const defaultOptions = [
+	{ label: '25%', uiAmount: '' },
+	{ label: '50%', uiAmount: '' },
+	{ label: '100%', uiAmount: '' },
+]
+
 export async function getQuickBuyOptions(signer?: string | undefined): Promise<QuickOption[]> {
-	if (!signer) return []
+	if (!signer) {
+		return defaultOptions
+	}
 
 	const lamports = await connection.getBalance(new PublicKey(signer), 'confirmed')
 
