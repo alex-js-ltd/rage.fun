@@ -18,7 +18,7 @@ import { buildTransaction, getSellTokenIx } from '@repo/rage'
 import { parseWithZod } from '@conform-to/zod'
 import { DialectMetadataSchema, DialectSwapSchema } from '@/app/utils/schemas'
 import { getCachedTokenMetadata } from '@/app/data/get_token_metadata'
-import { getCachedDecimals } from '@/app/data/get_decimals'
+import { getDecimals } from '@/app/data/get_decimals'
 import { BN } from '@coral-xyz/anchor'
 // CAIP-2 format for Solana
 const blockchain = BLOCKCHAIN_IDS.mainnet
@@ -103,7 +103,7 @@ export async function POST(req: NextRequest) {
 	const { mint, amount } = submission.value
 
 	try {
-		const decimals = await getCachedDecimals(mint.toBase58())
+		const decimals = await getDecimals(mint.toBase58())
 
 		const buy = await getSellTokenIx({
 			program,

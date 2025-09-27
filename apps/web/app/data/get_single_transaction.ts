@@ -2,7 +2,7 @@ import { prisma } from '@/app/utils/db'
 import { Prisma, SwapEvent } from '@prisma/client'
 import { type TransactionTableType, createTransactionTableSchema } from '@/app/utils/schemas'
 import { getCachedSolPrice } from '@/app/data/get_sol_price'
-import { getCachedDecimals } from './get_decimals'
+import { getDecimals } from './get_decimals'
 import 'server-only'
 
 export async function getSingleTransaction(signature: string): Promise<TransactionTableType> {
@@ -25,7 +25,7 @@ export async function getSingleTransaction(signature: string): Promise<Transacti
 
 	const swapEvent = await prisma.swapEvent.findUniqueOrThrow(query)
 
-	const decimals = await getCachedDecimals(swapEvent.tokenId)
+	const decimals = await getDecimals(swapEvent.tokenId)
 	const solPrice = await getCachedSolPrice()
 
 	const TransactionTableSchema = createTransactionTableSchema({ decimals, solPrice })
@@ -41,7 +41,7 @@ export async function getSingleTransaction(signature: string): Promise<Transacti
 }
 
 export async function getTransaction(swapEvent: SwapEvent) {
-	const decimals = await getCachedDecimals(swapEvent.tokenId)
+	const decimals = await getDecimals(swapEvent.tokenId)
 	const solPrice = await getCachedSolPrice()
 
 	const TransactionTableSchema = createTransactionTableSchema({ decimals, solPrice })
