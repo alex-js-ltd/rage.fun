@@ -355,7 +355,7 @@ function Form({
 						{badge}
 					</div>
 
-					<Suspense>
+					<Suspense fallback={<QuickOptionsFallback />}>
 						<QuickOptions quickOptionsPromise={quickOptionsPromise} control={control} />
 					</Suspense>
 
@@ -447,6 +447,18 @@ function QuickOptions({
 	)
 }
 
+function QuickOptionsFallback() {
+	return (
+		<ul className="flex gap-2 items-center">
+			{Array.from({ length: 4 }, (_, i) => (
+				<li key={`loading-option-${i}`} className="flex-1">
+					<Loading className="w-full rounded-full h-6" i={i} />
+				</li>
+			))}
+		</ul>
+	)
+}
+
 export function SwapFormFallback() {
 	const tab = 'buy'
 
@@ -455,13 +467,13 @@ export function SwapFormFallback() {
 			<Tabs value={tab} className="relative flex flex-col gap-4 ">
 				<List className="relative flex items-center gap-2 justify-between border border-white border-opacity-[0.125] rounded-full h-[40px]">
 					<Trigger value="buy" asChild className="flex-1">
-						<button className="data-[state=active]:text-emerald-400 font-semibold text-white/70 cursor-pointer ">
+						<button className="data-[state=active]:text-emerald-400 font-semibold text-white/70 cursor-pointer pointer-events-none ">
 							Buy
 						</button>
 					</Trigger>
 
 					<Trigger value="sell" asChild className="flex-1">
-						<button className="data-[state=active]:text-red-400 text-white/70 cursor-pointer font-semibold">
+						<button className="data-[state=active]:text-red-400 text-white/70 cursor-pointer font-semibold pointer-events-none">
 							Sell
 						</button>
 					</Trigger>
@@ -487,6 +499,8 @@ export function SwapFormFallback() {
 
 								<Loading i={0} className="size-6 rounded-full mr-2" />
 							</div>
+
+							<QuickOptionsFallback />
 
 							<Button type="submit" variant="trade">
 								Place Trade
