@@ -37,10 +37,10 @@ export async function authenticate(publicKey: string) {
 		redirect('/yield') // forces a rebuild with new cookies
 	}
 
-	// if (pathname.startsWith('/token')) {
-	// 	revalidatePath(`${pathname}?interval=86400000`, 'layout')
-	// 	redirect(`${pathname}?interval=86400000`) // forces a rebuild with new cookies
-	// }
+	if (pathname.startsWith('/token')) {
+		revalidatePath(`${pathname}?interval=86400000`, 'layout')
+		redirect(`${pathname}?interval=86400000`) // forces a rebuild with new cookies
+	}
 }
 
 export async function disconnect() {
@@ -53,8 +53,8 @@ export async function disconnect() {
 		redirect('/yield') // forces a rebuild with new cookies
 	}
 
-	// if (pathname.startsWith('/token')) {
-	// 	revalidatePath(`${pathname}?interval=86400000`, 'layout')
-	// 	redirect(`${pathname}?interval=86400000`) // forces a rebuild with new cookies
-	// }
+	if (pathname.startsWith('/token')) {
+		revalidatePath(`${pathname}?interval=86400000`, 'layout')
+		redirect(`${pathname}?interval=86400000`) // forces a rebuild with new cookies
+	}
 }
