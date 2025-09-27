@@ -20,7 +20,7 @@ export async function getQuickBuyOptions(signer?: string | undefined): Promise<Q
 
 	const lamports = await connection.getBalance(new PublicKey(signer), 'confirmed')
 
-	if (lamports === 0) {
+	if (lamports < 10) {
 		return defaultOptions
 	}
 
