@@ -24,9 +24,13 @@ export async function getQuickBuyOptions(signer?: string | undefined): Promise<Q
 		return defaultOptions
 	}
 
+	const TX_FEE_BUFFER = BigInt(155_000) // ~0.000155 SOL for base + priority
+
 	const balance = BigInt(lamports)
 
-	const full = balance
+	const effective = balance > TX_FEE_BUFFER ? balance - TX_FEE_BUFFER : BigInt(0)
+
+	const full = effective
 	const half = balance / BigInt('2')
 	const quarter = balance / BigInt('4')
 
