@@ -5,13 +5,10 @@ import { PublicKey } from '@solana/web3.js'
 import Decimal, { Decimal as _Decimal } from 'decimal.js'
 import { BN } from '@coral-xyz/anchor'
 import { Prisma, $Enums } from '@prisma/client'
-import dayjs from 'dayjs'
-import { calculatePercentageDifference, catchError } from './misc'
 import { fromLamports } from '@repo/rage'
 import { formatCompactNumber } from '@/app/utils/misc'
 import { calculatePercentage } from './misc'
 import { OhlcData } from 'lightweight-charts'
-import { metadata } from '../layout'
 
 const MAX_UPLOAD_SIZE = 1024 * 1024 * 1 // 1MB
 
@@ -411,3 +408,10 @@ export function isOhlcData(data: unknown): data is OhlcData {
 		typeof (data as OhlcData).close === 'number'
 	)
 }
+
+export const SwapOptionSchema = z.object({
+	mint: Mint,
+	swapType: z.nativeEnum($Enums.SwapType),
+	amount: z.enum(['0%', '25%', '50%', '100%']),
+	signer: Wallet,
+})
