@@ -3,7 +3,7 @@
 
 import { useEffect, Fragment } from 'react'
 
-export default function GlobalError({ error, reset }: { error: Error & { digest?: string }; reset: () => void }) {
+export default function Error({ error, reset }: { error: Error & { digest?: string }; reset: () => void }) {
 	useEffect(() => {
 		// Log to console for debugging
 		console.error('[GlobalError]', error)
