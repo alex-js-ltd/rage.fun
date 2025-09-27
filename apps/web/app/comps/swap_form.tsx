@@ -182,6 +182,10 @@ function Buy({ token, quickOptions }: { token: TokenFeedType; quickOptions: Quic
 				connectorWeight,
 				decimals,
 			}
+
+			if (uiAmount === '') {
+				return '0'
+			}
 			const quote = await calculateBuyAmount(params)
 
 			return quote
@@ -243,6 +247,10 @@ function Sell({ token, quickOptions }: { token: TokenFeedType; quickOptions: Qui
 				targetSupply,
 				connectorWeight,
 				decimals,
+			}
+
+			if (uiAmount === '') {
+				return '0'
 			}
 			const quote = await calculateSellPrice(params)
 			return quote
@@ -323,7 +331,7 @@ function Form({
 	const [uiAmount] = useDebounceValue(input, 300)
 
 	useEffect(() => {
-		if (!uiAmount || typeof uiAmount !== 'string') return
+		if (typeof uiAmount !== 'string') return
 
 		const promise = getQuote(uiAmount)
 
@@ -420,7 +428,7 @@ function QuickOptions({
 				<Button
 					type="button"
 					onClick={() => {
-						control.change('0')
+						control.change('')
 					}}
 					variant="interval"
 					className="bg-background-100 w-full"
