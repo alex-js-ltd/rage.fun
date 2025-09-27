@@ -341,7 +341,7 @@ function Form({
 		run(promise)
 	}, [uiAmount, getQuote, run])
 
-	useRevalidate(swap.isSuccess, `@right/(.)token/${mint}`)
+	useRevalidate(swap.isSuccess, [`@right/(.)token/${mint}`, `/token/${mint}`])
 
 	return (
 		<FormProvider context={form.context}>
