@@ -356,7 +356,7 @@ function Form({
 					</div>
 
 					<Suspense>
-						<QuickOptions quickOptionsPromise={quickOptionsPromise} />
+						<QuickOptions quickOptionsPromise={quickOptionsPromise} control={control} />
 					</Suspense>
 
 					{payer ? (
@@ -404,12 +404,47 @@ function TokenBadge(props: ImageProps) {
 	)
 }
 
-function QuickOptions({ quickOptionsPromise }: { quickOptionsPromise: Promise<QuickOption[]> }) {
+function QuickOptions({
+	quickOptionsPromise,
+	control,
+}: {
+	quickOptionsPromise: Promise<QuickOption[]>
+	control: ReturnType<typeof useInputControl<string>>
+}) {
 	const quickOptions = use(quickOptionsPromise)
 
 	console.log(quickOptions)
 
-	return <></>
+	return (
+		<ul className="flex gap-2 items-center">
+			<li className="flex-1">
+				<Button
+					type="button"
+					onClick={() => {
+						control.change('0')
+					}}
+					variant="interval"
+					className="bg-background-100 w-full"
+				>
+					Reset
+				</Button>
+			</li>
+			{quickOptions.map(o => (
+				<li key={o.label} className="flex-1">
+					<Button
+						type="button"
+						onClick={() => {
+							control.change(o.uiAmount)
+						}}
+						variant="interval"
+						className="bg-background-100 w-full"
+					>
+						{o.label}
+					</Button>
+				</li>
+			))}
+		</ul>
+	)
 }
 
 export function SwapFormFallback() {

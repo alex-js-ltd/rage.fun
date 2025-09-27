@@ -21,9 +21,9 @@ export async function getQuickBuyOptions(signer?: string | undefined): Promise<Q
 	const decimals = 9
 
 	const options = [
-		{ label: '100%', uiAmount: fromLamports(new BN(full.toString()), decimals).toFixed(decimals) },
-		{ label: '50%', uiAmount: fromLamports(new BN(half.toString()), decimals).toFixed(decimals) },
 		{ label: '25%', uiAmount: fromLamports(new BN(quarter.toString()), decimals).toFixed(decimals) },
+		{ label: '50%', uiAmount: fromLamports(new BN(half.toString()), decimals).toFixed(decimals) },
+		{ label: '100%', uiAmount: fromLamports(new BN(full.toString()), decimals).toFixed(decimals) },
 	]
 
 	return options
