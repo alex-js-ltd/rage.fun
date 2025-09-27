@@ -433,6 +433,7 @@ function QuickOptions({
 					<Button
 						type="button"
 						onClick={() => {
+							if (o.uiAmount === '') return
 							control.change(o.uiAmount)
 						}}
 						variant="interval"
