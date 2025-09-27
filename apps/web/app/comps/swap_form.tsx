@@ -34,6 +34,7 @@ import { formatCompactNumber } from '../utils/misc'
 import { fromLamports } from '@repo/rage'
 import { BN } from '@coral-xyz/anchor'
 import { amountToUiAmount } from '@repo/rage'
+import { useRevalidate } from '@/app/hooks/use_revalidate'
 
 export type QuickOption = {
 	label: string
@@ -339,6 +340,8 @@ function Form({
 
 		run(promise)
 	}, [uiAmount, getQuote, run])
+
+	useRevalidate(swap.isSuccess, `@right/(.)token/${mint}`)
 
 	return (
 		<FormProvider context={form.context}>

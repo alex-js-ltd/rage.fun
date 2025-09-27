@@ -22,7 +22,6 @@ export function useSignAndSendTx(tx?: Uint8Array) {
 
 		const correctProgramId = isRage(deserializedTx)
 
-		console.log(await connection.simulateTransaction(deserializedTx))
 		if (!correctProgramId) {
 			throw new Error('incorrect program id')
 		}
