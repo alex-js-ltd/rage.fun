@@ -29,10 +29,6 @@ import { getComments } from '@/app/data/get_comments'
 import { Comments } from '@/app/comps/comments'
 import { ReplyForm } from '@/app/comps/reply_form'
 
-import { getWallet } from '@/app/data/get_wallet'
-import { PublicKey } from '@solana/web3.js'
-import { auth } from '@/app/auth'
-
 export const dynamic = 'force-dynamic'
 
 type Props = {
@@ -45,8 +41,6 @@ export default async function Page(props: Props) {
 
 	const interval = searchParams.interval ?? '86400000'
 
-	const session = await auth()
-
 	const ohlcPromise = getCandlstickData(mint, interval)
 
 	const tokenPromise = getTokenWithRelations(mint)
@@ -56,8 +50,6 @@ export default async function Page(props: Props) {
 	const holdersPromise = getTopHolders(mint)
 
 	const commentsPromise = getComments(mint)
-
-	const walletPromise = getWallet(session?.user?.id)
 
 	return (
 		<div className="flex flex-col w-full min-h-[100vh] border-x border-white border-opacity-[0.125] bg-background-100">

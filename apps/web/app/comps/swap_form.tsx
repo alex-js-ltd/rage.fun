@@ -1,6 +1,6 @@
 'use client'
 
-import { type ReactNode, useActionState, use, useEffect, useState, useCallback } from 'react'
+import { type ReactNode, useActionState, use, useEffect, useState, useCallback, Suspense } from 'react'
 
 import { Tabs, List, Trigger, Content } from '@/app/comps/tabs'
 import { Button } from '@/app/comps/button'
@@ -13,7 +13,6 @@ import { buyAction, sellAction } from '@/app/actions/swap_action'
 import { Input } from '@/app/comps/input'
 
 import { type ImageProps, TokenLogo, getTokenLogoProps, solLogoProps } from './token_logo'
-import { type SubmitButtonProps, SubmitButton } from '@/app/comps/submit_button'
 
 import { Loading } from '@/app/comps/loading'
 import { Toast } from '@/app/comps/toast'
@@ -22,10 +21,9 @@ import { useSignAndSendTx } from '@/app/hooks/use_sign_and_send_tx'
 
 import { type TokenFeedType } from '@/app/utils/schemas'
 
-import { useDebounceCallback, useDebounceValue } from 'usehooks-ts'
+import { useDebounceValue } from 'usehooks-ts'
 import { useAsync } from '@/app/hooks/use_async'
 import { client } from '@/app/utils/client'
-import { useLatestRef } from '@/app/hooks/use_latest_ref'
 
 import * as Ably from 'ably'
 import { useChannel } from 'ably/react'
@@ -37,8 +35,15 @@ import { fromLamports } from '@repo/rage'
 import { BN } from '@coral-xyz/anchor'
 import { amountToUiAmount } from '@repo/rage'
 
+export type QuickOption = {
+	label: string
+	uiAmount: string
+}
+
 export interface SwapFormProps {
 	tokenPromise: Promise<TokenFeedType>
+	quickBuyOptionsPromise: Promise<QuickOption[]>
+	quickSellOptionsPromise: Promise<QuickOption[]>
 }
 
 interface FormProps {
@@ -52,6 +57,8 @@ interface FormProps {
 
 	getQuote: (uiAmount: string) => Promise<string>
 	displayQuote: (amount: string) => string
+
+	quickOptionsPromise: Promise<QuickOption[]>
 }
 
 async function calculateBuyAmount(params: WasmType): Promise<string> {
@@ -76,7 +83,7 @@ async function calculateSellPrice(params: WasmType): Promise<string> {
 	})
 }
 
-export function SwapForm({ tokenPromise }: SwapFormProps) {
+export function SwapForm({ tokenPromise, quickBuyOptionsPromise, quickSellOptionsPromise }: SwapFormProps) {
 	const token = use(tokenPromise)
 
 	const [state, setState] = useState(token)
@@ -123,7 +130,7 @@ export function SwapForm({ tokenPromise }: SwapFormProps) {
 					forceMount
 					className="data-[state=inactive]:hidden data-[state=inactive]:absolute data-[state=inactive]:pointer-events-none"
 				>
-					<Buy token={state} />
+					<Buy token={state} quickOptionsPromise={quickBuyOptionsPromise} />
 				</Content>
 
 				<Content
@@ -131,7 +138,7 @@ export function SwapForm({ tokenPromise }: SwapFormProps) {
 					forceMount
 					className="data-[state=inactive]:hidden data-[state=inactive]:absolute data-[state=inactive]:pointer-events-none"
 				>
-					<Sell token={state} />
+					<Sell token={state} quickOptionsPromise={quickSellOptionsPromise} />
 				</Content>
 			</Tabs>
 
@@ -144,7 +151,7 @@ export function SwapForm({ tokenPromise }: SwapFormProps) {
 	)
 }
 
-function Buy({ token }: { token: TokenFeedType }) {
+function Buy({ token, quickOptionsPromise }: { token: TokenFeedType; quickOptionsPromise: Promise<QuickOptions[]> }) {
 	const { id: mint } = token
 	const { symbol } = token.metadata
 
@@ -201,11 +208,12 @@ function Buy({ token }: { token: TokenFeedType }) {
 				const uiAmount = amountToUiAmount(new BN(quote), decimals)
 				return formatCompactNumber(Number(uiAmount))
 			}}
+			quickOptionsPromise={quickOptionsPromise}
 		/>
 	)
 }
 
-function Sell({ token }: { token: TokenFeedType }) {
+function Sell({ token, quickOptionsPromise }: { token: TokenFeedType; quickOptionsPromise: Promise<QuickOptions[]> }) {
 	const { id: mint } = token
 	const { symbol } = token.metadata
 
@@ -261,11 +269,22 @@ function Sell({ token }: { token: TokenFeedType }) {
 				const uiAmount = fromLamports(new BN(quote), 9)
 				return uiAmount.toFixed(9)
 			}}
+			quickOptionsPromise={quickOptionsPromise}
 		/>
 	)
 }
 
-function Form({ badge, decimals, mint, action, toastConfig, receive, getQuote, displayQuote }: FormProps) {
+function Form({
+	badge,
+	decimals,
+	mint,
+	action,
+	toastConfig,
+	receive,
+	getQuote,
+	displayQuote,
+	quickOptionsPromise,
+}: FormProps) {
 	const [lastResult, formAction, isPending] = useActionState(action, undefined)
 
 	const [form, fields] = useForm({
@@ -336,6 +355,10 @@ function Form({ badge, decimals, mint, action, toastConfig, receive, getQuote, d
 						{badge}
 					</div>
 
+					<Suspense>
+						<QuickOptions quickOptionsPromise={quickOptionsPromise} />
+					</Suspense>
+
 					{payer ? (
 						<Button
 							className={uiAmount ? 'bg-background-600' : undefined}
@@ -379,6 +402,14 @@ function TokenBadge(props: ImageProps) {
 			<TokenLogo {...props} className="size-6 rounded-full" />
 		</div>
 	)
+}
+
+function QuickOptions({ quickOptionsPromise }: { quickOptionsPromise: Promise<QuickOption[]> }) {
+	const quickOptions = use(quickOptionsPromise)
+
+	console.log(quickOptions)
+
+	return <></>
 }
 
 export function SwapFormFallback() {
