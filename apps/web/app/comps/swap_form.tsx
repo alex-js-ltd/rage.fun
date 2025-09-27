@@ -212,6 +212,7 @@ function Buy({ token, quickOptions }: { token: TokenFeedType; quickOptions: Quic
 			receive={symbol}
 			getQuote={getQuote}
 			displayQuote={(quote: string) => {
+				if (!quote) return `0`
 				const uiAmount = amountToUiAmount(new BN(quote), decimals)
 				return formatCompactNumber(Number(uiAmount))
 			}}
@@ -277,6 +278,7 @@ function Sell({ token, quickOptions }: { token: TokenFeedType; quickOptions: Qui
 			receive="SOL"
 			getQuote={getQuote}
 			displayQuote={(quote: string) => {
+				if (!quote) return `0`
 				const uiAmount = fromLamports(new BN(quote), 9)
 				return uiAmount.toFixed(9)
 			}}
