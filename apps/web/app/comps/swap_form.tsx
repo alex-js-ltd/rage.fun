@@ -58,7 +58,7 @@ interface FormProps {
 	getQuote: (uiAmount: string) => Promise<string>
 	displayQuote: (amount: string) => string
 
-	quickOptionsPromise: Promise<QuickOption[]>
+	quickOptions: QuickOption[]
 }
 
 async function calculateBuyAmount(params: WasmType): Promise<string> {
@@ -85,6 +85,9 @@ async function calculateSellPrice(params: WasmType): Promise<string> {
 
 export function SwapForm({ tokenPromise, quickBuyOptionsPromise, quickSellOptionsPromise }: SwapFormProps) {
 	const token = use(tokenPromise)
+
+	const quickBuyOptions = use(quickBuyOptionsPromise)
+	const quickSellOptions = use(quickSellOptionsPromise)
 
 	const [state, setState] = useState(token)
 
@@ -130,7 +133,7 @@ export function SwapForm({ tokenPromise, quickBuyOptionsPromise, quickSellOption
 					forceMount
 					className="data-[state=inactive]:hidden data-[state=inactive]:absolute data-[state=inactive]:pointer-events-none"
 				>
-					<Buy token={state} quickOptionsPromise={quickBuyOptionsPromise} />
+					<Buy token={state} quickOptions={quickBuyOptions} />
 				</Content>
 
 				<Content
@@ -138,7 +141,7 @@ export function SwapForm({ tokenPromise, quickBuyOptionsPromise, quickSellOption
 					forceMount
 					className="data-[state=inactive]:hidden data-[state=inactive]:absolute data-[state=inactive]:pointer-events-none"
 				>
-					<Sell token={state} quickOptionsPromise={quickSellOptionsPromise} />
+					<Sell token={state} quickOptions={quickSellOptions} />
 				</Content>
 			</Tabs>
 
@@ -151,7 +154,7 @@ export function SwapForm({ tokenPromise, quickBuyOptionsPromise, quickSellOption
 	)
 }
 
-function Buy({ token, quickOptionsPromise }: { token: TokenFeedType; quickOptionsPromise: Promise<QuickOption[]> }) {
+function Buy({ token, quickOptions }: { token: TokenFeedType; quickOptions: QuickOption[] }) {
 	const { id: mint } = token
 	const { symbol } = token.metadata
 
@@ -208,12 +211,12 @@ function Buy({ token, quickOptionsPromise }: { token: TokenFeedType; quickOption
 				const uiAmount = amountToUiAmount(new BN(quote), decimals)
 				return formatCompactNumber(Number(uiAmount))
 			}}
-			quickOptionsPromise={quickOptionsPromise}
+			quickOptions={quickOptions}
 		/>
 	)
 }
 
-function Sell({ token, quickOptionsPromise }: { token: TokenFeedType; quickOptionsPromise: Promise<QuickOption[]> }) {
+function Sell({ token, quickOptions }: { token: TokenFeedType; quickOptions: QuickOption[] }) {
 	const { id: mint } = token
 	const { symbol } = token.metadata
 
@@ -269,7 +272,7 @@ function Sell({ token, quickOptionsPromise }: { token: TokenFeedType; quickOptio
 				const uiAmount = fromLamports(new BN(quote), 9)
 				return uiAmount.toFixed(9)
 			}}
-			quickOptionsPromise={quickOptionsPromise}
+			quickOptions={quickOptions}
 		/>
 	)
 }
@@ -283,7 +286,7 @@ function Form({
 	receive,
 	getQuote,
 	displayQuote,
-	quickOptionsPromise,
+	quickOptions,
 }: FormProps) {
 	const [lastResult, formAction, isPending] = useActionState(action, undefined)
 
@@ -355,9 +358,7 @@ function Form({
 						{badge}
 					</div>
 
-					<Suspense fallback={<QuickOptionsFallback />}>
-						<QuickOptions quickOptionsPromise={quickOptionsPromise} control={control} />
-					</Suspense>
+					<QuickOptions quickOptions={quickOptions} control={control} />
 
 					{payer ? (
 						<Button
@@ -405,14 +406,12 @@ function TokenBadge(props: ImageProps) {
 }
 
 function QuickOptions({
-	quickOptionsPromise,
+	quickOptions,
 	control,
 }: {
-	quickOptionsPromise: Promise<QuickOption[]>
+	quickOptions: QuickOption[]
 	control: ReturnType<typeof useInputControl<string>>
 }) {
-	const quickOptions = use(quickOptionsPromise)
-
 	console.log(quickOptions)
 
 	return (
