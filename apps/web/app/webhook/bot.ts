@@ -34,7 +34,7 @@ export async function getBotWallets() {
 
 		const keypair = Keypair.fromSecretKey(new Uint8Array(arr))
 
-		const wallet = await getWallet(keypair.publicKey)
+		const wallet = await getWallet(keypair.publicKey.toBase58())
 
 		return { keypair, wallet }
 	})

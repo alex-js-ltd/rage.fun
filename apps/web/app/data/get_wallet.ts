@@ -18,8 +18,10 @@ interface TokenAccount {
 	tokenAmount: TokenAmount
 }
 
-export async function getWallet(wallet?: PublicKey) {
-	if (!wallet) return []
+export async function getWallet(id?: string | undefined) {
+	if (!id) return []
+
+	const wallet = new PublicKey(id)
 
 	const accounts = await connection.getParsedTokenAccountsByOwner(wallet, {
 		programId: TOKEN_2022_PROGRAM_ID,
