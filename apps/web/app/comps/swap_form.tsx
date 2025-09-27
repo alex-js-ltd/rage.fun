@@ -151,7 +151,7 @@ export function SwapForm({ tokenPromise, quickBuyOptionsPromise, quickSellOption
 	)
 }
 
-function Buy({ token, quickOptionsPromise }: { token: TokenFeedType; quickOptionsPromise: Promise<QuickOptions[]> }) {
+function Buy({ token, quickOptionsPromise }: { token: TokenFeedType; quickOptionsPromise: Promise<QuickOption[]> }) {
 	const { id: mint } = token
 	const { symbol } = token.metadata
 
@@ -213,7 +213,7 @@ function Buy({ token, quickOptionsPromise }: { token: TokenFeedType; quickOption
 	)
 }
 
-function Sell({ token, quickOptionsPromise }: { token: TokenFeedType; quickOptionsPromise: Promise<QuickOptions[]> }) {
+function Sell({ token, quickOptionsPromise }: { token: TokenFeedType; quickOptionsPromise: Promise<QuickOption[]> }) {
 	const { id: mint } = token
 	const { symbol } = token.metadata
 
