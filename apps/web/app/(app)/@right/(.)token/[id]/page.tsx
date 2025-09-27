@@ -1,7 +1,6 @@
 import { Suspense } from 'react'
 import { type QuickOption, SwapForm, SwapFormFallback } from '@/app/comps/swap_form'
 import { getTokenWithRelations } from '@/app/data/get_token'
-import { Interval, IntervalPanel } from '@/app/comps/interval_panel'
 import { getQuickSellOptions } from '@/app/data/get_quick_sell_options'
 import { getQuickBuyOptions } from '@/app/data/get_quick_buy_options'
 import { auth } from '@/app/auth'
