@@ -36,7 +36,7 @@ export async function getQuickBuyOptions(signer?: string | undefined): Promise<Q
 	const options = [
 		{ label: '25%', uiAmount: fromLamports(new BN(quarter.toString()), decimals).toFixed(decimals) },
 		{ label: '50%', uiAmount: fromLamports(new BN(half.toString()), decimals).toFixed(decimals) },
-		{ label: 'MAX', uiAmount: fromLamports(new BN(full.toString()), decimals).toFixed(decimals) },
+		{ label: 'Max', uiAmount: fromLamports(new BN(full.toString()), decimals).toFixed(decimals) },
 	]
 
 	return options
