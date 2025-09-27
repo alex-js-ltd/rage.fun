@@ -9,8 +9,6 @@ import { CandlestickChart } from '@/app/comps/candlestick_chart'
 
 import { getTokenWithRelations } from '@/app/data/get_token'
 
-import { SwapForm, SwapFormFallback } from '@/app/comps/swap_form'
-
 import { Tabs, List, Trigger, Content } from '@/app/comps/tabs'
 import { Button } from '@/app/comps/button'
 
@@ -19,9 +17,6 @@ import { getTransactionData } from '@/app/data/get_transaction_data'
 import { HoldersTable } from '@/app/comps/holders_table'
 import { getTopHolders } from '@/app/data/get_top_holders'
 
-import type { Metadata, ResolvingMetadata } from 'next'
-import { getCachedTokenMetadata } from '@/app/data/get_token_metadata'
-import { generateSolanaBlink } from '@/app/utils/misc'
 import { TokenPair, TokenPairFallback } from '@/app/comps/token_pair'
 import { Back } from '@/app/comps/back'
 
