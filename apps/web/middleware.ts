@@ -6,7 +6,6 @@ import { type NextRequest, NextResponse, type NextFetchEvent } from 'next/server
 import { NextURL } from 'next/dist/server/web/next-url'
 import NextAuth, { type Session } from 'next-auth'
 import { authConfig } from '@/app/auth.config'
-import { isOgUser } from '@/app/utils/misc'
 import { getServerEnv } from '@/app/utils/env'
 
 const { HELIUS_SECRET } = getServerEnv()
@@ -16,9 +15,19 @@ export const config = {
 }
 
 // Rate limiter for APIs (tighter)
-const apiLimit = new Ratelimit({
+const apiWindow = new Ratelimit({
 	redis: kv,
-	limiter: Ratelimit.slidingWindow(15, '10 s'),
+	limiter: Ratelimit.slidingWindow(10, '10 s'),
+})
+
+export const apiBucket = new Ratelimit({
+	redis: kv,
+	prefix: 'rl:w:',
+	limiter: Ratelimit.tokenBucket(
+		3, // refillRate: 3 tokens per interval
+		'10 s', // interval: every 10 seconds
+		30, // maxTokens: bucket can hold up to 30 for bursts
+	),
 })
 
 // Rate limiter for pages (looser)
@@ -37,9 +46,13 @@ export default auth(async function middleware(req: NextRequest & { auth: Session
 	const authorization = requestHeaders.get('authorization')
 	const ip = ipAddress(req) || '127.0.0.1'
 
-	const isApi = req.nextUrl.pathname.startsWith(`/api`)
+	const isApiBucket = req.nextUrl.pathname.startsWith('/api/wasm')
 
-	const ratelimit = isApi ? apiLimit : pageLimit
+	const isApiWindow = req.nextUrl.pathname.startsWith('/api') && !!req.nextUrl.pathname.startsWith('/api/wasm')
+
+	const isApi = isApiBucket || isApiWindow
+
+	const ratelimit = isApiBucket ? apiBucket : isApiWindow ? apiWindow : pageLimit
 
 	const blockedIp = await getBlockedIp<{ reason: string; time: number }>(ip)
 
