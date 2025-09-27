@@ -2,7 +2,7 @@ import { connection } from '@/app/utils/setup'
 import { PublicKey } from '@solana/web3.js'
 import { QuickOption } from '@/app/comps/swap_form'
 import { getAccount, getAssociatedTokenAddress, TOKEN_2022_PROGRAM_ID } from '@solana/spl-token'
-import { getCachedDecimals } from '@/app/data/get_decimals'
+import { getDecimals } from '@/app/data/get_decimals'
 import { fromLamports } from '@repo/rage'
 import { BN } from '@coral-xyz/anchor'
 import 'server-only'
@@ -39,7 +39,7 @@ export async function getQuickSellOptions(mint: string, signer?: string | undefi
 	const half = account.amount / BigInt('2')
 	const quarter = account.amount / BigInt('4')
 
-	const decimals = await getCachedDecimals(mint)
+	const decimals = await getDecimals(mint)
 
 	const options: QuickOption[] = [
 		{ label: '25%', uiAmount: fromLamports(new BN(quarter.toString()), decimals).toFixed(decimals) },
