@@ -38,8 +38,8 @@ export async function authenticate(publicKey: string) {
 	}
 
 	if (pathname.startsWith('/token')) {
-		revalidatePath(pathname, 'layout')
-		redirect(pathname) // forces a rebuild with new cookies
+		revalidatePath(`${pathname}?interval=86400000`, 'layout')
+		redirect(`${pathname}?interval=86400000`) // forces a rebuild with new cookies
 	}
 }
 
@@ -54,7 +54,7 @@ export async function disconnect() {
 	}
 
 	if (pathname.startsWith('/token')) {
-		revalidatePath(pathname, 'layout')
-		redirect(pathname) // forces a rebuild with new cookies
+		revalidatePath(`${pathname}?interval=86400000`, 'layout')
+		redirect(`${pathname}?interval=86400000`) // forces a rebuild with new cookies
 	}
 }
