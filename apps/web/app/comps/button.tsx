@@ -59,7 +59,7 @@ const buttonVariants = cva(undefined, {
 				'border font-medium outline-none ring-blue-600 transition-all',
 				'focus-visible:ring-2 focus-visible:ring-offset-1 disabled:pointer-events-none disabled:cursor-not-allowed',
 				'disabled:bg-gray-100 disabled:text-gray-400 disabled:ring-0 has-[:focus-visible]:ring-2',
-				'aria-disabled:pointer-events-none aria-disabled:cursor-not-allowed aria-disabled:bg-gray-100',
+				'aria-disabled:pointer-events-none aria-disabled:cursor-not-allowed',
 				'aria-disabled:text-gray-400 aria-disabled:ring-0 [&>svg]:pointer-events-none [&>svg]:size-4',
 				'[&_svg]:shrink-0 text-text-200 h-6 px-2 text-xs has-[>kbd]:gap-2 has-[>svg]:px-1',
 				'has-[>kbd]:pr-1 rounded-full gap-0.5 has-[>svg]:pl-1.5 border',
