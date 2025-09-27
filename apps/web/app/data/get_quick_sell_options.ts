@@ -27,6 +27,12 @@ export async function getQuickSellOptions(mint: string, signer?: string | undefi
 		TOKEN_2022_PROGRAM_ID,
 	)
 
+	const info = await connection.getAccountInfo(token0SignerAta, 'confirmed')
+	if (!info) {
+		// account doesn’t exist → just return defaults
+		return defaultOptions
+	}
+
 	const account = await getAccount(connection, token0SignerAta, 'confirmed', TOKEN_2022_PROGRAM_ID)
 
 	const full = account.amount
