@@ -34,11 +34,9 @@ import { formatCompactNumber } from '../utils/misc'
 import { fromLamports } from '@repo/rage'
 import { BN } from '@coral-xyz/anchor'
 import { amountToUiAmount } from '@repo/rage'
-import { useRevalidate } from '@/app/hooks/use_revalidate'
 
 export interface SwapFormProps {
 	tokenPromise: Promise<TokenFeedType>
-	signer?: string | undefined
 }
 
 interface FormProps {
@@ -90,7 +88,7 @@ async function getQuickOptionForSell(params: URLSearchParams): Promise<string> {
 	})
 }
 
-export function SwapForm({ tokenPromise, signer }: SwapFormProps) {
+export function SwapForm({ tokenPromise }: SwapFormProps) {
 	const token = use(tokenPromise)
 
 	const [state, setState] = useState(token)
@@ -137,7 +135,7 @@ export function SwapForm({ tokenPromise, signer }: SwapFormProps) {
 					forceMount
 					className="data-[state=inactive]:hidden data-[state=inactive]:absolute data-[state=inactive]:pointer-events-none"
 				>
-					<Buy token={state} signer={signer} />
+					<Buy token={state} />
 				</Content>
 
 				<Content
@@ -145,7 +143,7 @@ export function SwapForm({ tokenPromise, signer }: SwapFormProps) {
 					forceMount
 					className="data-[state=inactive]:hidden data-[state=inactive]:absolute data-[state=inactive]:pointer-events-none"
 				>
-					<Sell token={state} signer={signer} />
+					<Sell token={state} />
 				</Content>
 			</Tabs>
 
@@ -158,7 +156,7 @@ export function SwapForm({ tokenPromise, signer }: SwapFormProps) {
 	)
 }
 
-function Buy({ token, signer }: { token: TokenFeedType; signer?: string | undefined }) {
+function Buy({ token }: { token: TokenFeedType }) {
 	const { id: mint } = token
 	const { symbol } = token.metadata
 
@@ -225,7 +223,7 @@ function Buy({ token, signer }: { token: TokenFeedType; signer?: string | undefi
 	)
 }
 
-function Sell({ token, signer }: { token: TokenFeedType; signer?: string | undefined }) {
+function Sell({ token }: { token: TokenFeedType }) {
 	const { id: mint } = token
 	const { symbol } = token.metadata
 
