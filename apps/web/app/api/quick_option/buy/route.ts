@@ -33,7 +33,6 @@ export async function GET(req: NextRequest) {
 	const lamports = await connection.getBalance(signer, 'confirmed')
 
 	const balance = BigInt(lamports)
-
 	// Subtract buffer so we never overspend
 	const effective = balance > TX_FEE_BUFFER ? balance - TX_FEE_BUFFER : BigInt(0)
 
