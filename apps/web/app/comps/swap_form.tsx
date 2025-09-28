@@ -358,7 +358,11 @@ function Form({
 
 			const v = await getQuickOption(params) // server-calculated uiAmount string
 
-			control.change(v) // single source of truth
+			if (v === '0') {
+				control.change('')
+			} else {
+				control.change(v) // single source of truth
+			}
 		},
 		[control, getQuickOption, mint, payer],
 	)
