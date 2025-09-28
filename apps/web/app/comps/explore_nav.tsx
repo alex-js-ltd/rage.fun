@@ -17,7 +17,14 @@ export function ExploreNav({ searchParams }: { searchParams: SearchParams }) {
 				}}
 				replace
 			>
-				<span className="font-medium text-text-200 text-[15px]">Created At</span>
+				<span
+					className={cn(
+						'font-medium text-text-200 text-[15px]',
+						searchParams.sortType === 'createdAt' && 'text-text-100',
+					)}
+				>
+					Created At
+				</span>
 
 				<div
 					className={cn(
@@ -37,7 +44,14 @@ export function ExploreNav({ searchParams }: { searchParams: SearchParams }) {
 				}}
 				replace
 			>
-				<span className="font-medium text-text-200 text-[15px]">Last Trade</span>
+				<span
+					className={cn(
+						'font-medium text-text-200 text-[15px]',
+						searchParams.sortType === 'lastTrade' && 'text-text-100',
+					)}
+				>
+					Last Trade
+				</span>
 
 				<div
 					className={cn(
@@ -57,7 +71,14 @@ export function ExploreNav({ searchParams }: { searchParams: SearchParams }) {
 				}}
 				replace
 			>
-				<span className="font-medium text-text-200 text-[15px]">Market Cap</span>
+				<span
+					className={cn(
+						'font-medium text-text-200 text-[15px]',
+						searchParams.sortType === 'marketCap' && 'text-text-100',
+					)}
+				>
+					Market Cap
+				</span>
 
 				<div
 					className={cn(
@@ -77,7 +98,11 @@ export function ExploreNav({ searchParams }: { searchParams: SearchParams }) {
 				}}
 				replace
 			>
-				<span className="font-medium text-text-200 text-[15px]">Volume</span>
+				<span
+					className={cn('font-medium text-text-200 text-[15px]', searchParams.sortType === 'volume' && 'text-text-100')}
+				>
+					Volume
+				</span>
 
 				<div
 					className={cn(
