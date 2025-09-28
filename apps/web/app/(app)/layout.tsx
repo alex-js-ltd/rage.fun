@@ -27,6 +27,8 @@ export default function Layout(props: {
 
 	console.log('seg', segment)
 
+	const isOnTokenSegement = segment === 'token'
+
 	return (
 		<>
 			<div className="flex justify-center">
@@ -47,10 +49,8 @@ export default function Layout(props: {
 					<main className={cn('relative w-full max-w-[600px]')}>
 						<div className={cn(hide && 'absolute top-0 overflow-y-hidden h-[100vh] opacity-0')}>{props.children}</div>
 
-						{props.token && (
-							<div className={cn('', isOnCreate && 'absolute top-0 inset-0', segment === 'token' && 'hidden')}>
-								{props.token}
-							</div>
+						{isOnTokenSegement ? null : (
+							<div className={cn('', isOnCreate && 'absolute top-0 inset-0')}>{props.token}</div>
 						)}
 					</main>
 
