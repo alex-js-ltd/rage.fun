@@ -6,10 +6,19 @@ import { BN } from '@coral-xyz/anchor'
 import { fromLamports } from '@repo/rage'
 import { getAccount, getAssociatedTokenAddress, TOKEN_2022_PROGRAM_ID } from '@solana/spl-token'
 import { getDecimals } from '@/app/data/get_decimals'
-
+import { auth } from '@/app/auth'
+import { PublicKey } from '@solana/web3.js'
 import 'server-only'
 
 export async function GET(req: NextRequest) {
+	const session = await auth()
+
+	if (!session?.user?.id) {
+		return NextResponse.json({ error: 'unauthorized' }, { status: 403 })
+	}
+
+	const signer = new PublicKey(session.user.id)
+
 	const searchParams = req.nextUrl.searchParams
 
 	const submission = parseWithZod(searchParams, {
@@ -20,19 +29,16 @@ export async function GET(req: NextRequest) {
 		return NextResponse.json(submission.reply(), { status: 404 })
 	}
 
-	const { percent, signer, mint } = submission.value
+	const { percent, mint } = submission.value
 
 	const token0SignerAta = await getAssociatedTokenAddress(mint, signer, true, TOKEN_2022_PROGRAM_ID)
 
 	const info = await connection.getAccountInfo(token0SignerAta, 'confirmed')
 
 	if (!info) {
-		const zero = 0
-
 		return NextResponse.json(
-			{
-				zero,
-			},
+			'0',
+
 			{ status: 200 },
 		)
 	}
@@ -48,9 +54,8 @@ export async function GET(req: NextRequest) {
 	const result = fromLamports(amount, decimals).toFixed(decimals)
 
 	return NextResponse.json(
-		{
-			result,
-		},
+		result,
+
 		{ status: 200 },
 	)
 }

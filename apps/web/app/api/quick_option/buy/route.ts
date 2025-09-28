@@ -4,10 +4,20 @@ import { parseWithZod } from '@conform-to/zod'
 import { connection } from '@/app/utils/setup'
 import { BN } from '@coral-xyz/anchor'
 import { fromLamports } from '@repo/rage'
+import { auth } from '@/app/auth'
+import { PublicKey } from '@solana/web3.js'
 
 const TX_FEE_BUFFER = BigInt(5_000_000)
 
 export async function GET(req: NextRequest) {
+	const session = await auth()
+
+	if (!session?.user?.id) {
+		return NextResponse.json({ error: 'unauthorized' }, { status: 403 })
+	}
+
+	const signer = new PublicKey(session.user.id)
+
 	const searchParams = req.nextUrl.searchParams
 
 	const submission = parseWithZod(searchParams, {
@@ -18,7 +28,7 @@ export async function GET(req: NextRequest) {
 		return NextResponse.json(submission.reply(), { status: 404 })
 	}
 
-	const { percent, signer } = submission.value
+	const { percent } = submission.value
 
 	const lamports = await connection.getBalance(signer, 'confirmed')
 
@@ -28,12 +38,9 @@ export async function GET(req: NextRequest) {
 	const effective = balance > TX_FEE_BUFFER ? balance - TX_FEE_BUFFER : BigInt(0)
 
 	if (effective < BigInt(100)) {
-		const zero = 0
-
 		return NextResponse.json(
-			{
-				zero,
-			},
+			'0',
+
 			{ status: 200 },
 		)
 	}
@@ -43,9 +50,8 @@ export async function GET(req: NextRequest) {
 	const result = fromLamports(amount, 9).toFixed(9)
 
 	return NextResponse.json(
-		{
-			result,
-		},
+		result,
+
 		{ status: 200 },
 	)
 }

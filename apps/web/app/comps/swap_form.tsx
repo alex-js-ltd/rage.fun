@@ -36,15 +36,9 @@ import { BN } from '@coral-xyz/anchor'
 import { amountToUiAmount } from '@repo/rage'
 import { useRevalidate } from '@/app/hooks/use_revalidate'
 
-export type QuickOption = {
-	label: string
-	uiAmount: string
-}
-
 export interface SwapFormProps {
 	tokenPromise: Promise<TokenFeedType>
-	quickBuyOptionsPromise: Promise<QuickOption[]>
-	quickSellOptionsPromise: Promise<QuickOption[]>
+	signer?: string | undefined
 }
 
 interface FormProps {
@@ -59,7 +53,7 @@ interface FormProps {
 	getQuote: (uiAmount: string) => Promise<string>
 	displayQuote: (amount: string) => string
 
-	quickOptions: QuickOption[]
+	getQuickOption: (percent: number) => Promise<string>
 }
 
 async function calculateBuyAmount(params: WasmType): Promise<string> {
@@ -84,11 +78,30 @@ async function calculateSellPrice(params: WasmType): Promise<string> {
 	})
 }
 
-export function SwapForm({ tokenPromise, quickBuyOptionsPromise, quickSellOptionsPromise }: SwapFormProps) {
-	const token = use(tokenPromise)
+async function getQuickOptionForBuy(params: { mint: string; percent: number }): Promise<string> {
+	const query = new URLSearchParams({
+		mint: params.mint,
+		percent: params.percent.toString(),
+	})
 
-	const quickBuyOptions = use(quickBuyOptionsPromise)
-	const quickSellOptions = use(quickSellOptionsPromise)
+	return client<string>(`/api/quick_option/buy?${query}`, {
+		method: 'GET',
+	})
+}
+
+async function getQuickOptionForSell(params: { mint: string; percent: number }): Promise<string> {
+	const query = new URLSearchParams({
+		mint: params.mint,
+		percent: params.percent.toString(),
+	})
+
+	return client<string>(`/api/quick_option/sell?${query}`, {
+		method: 'GET',
+	})
+}
+
+export function SwapForm({ tokenPromise, signer }: SwapFormProps) {
+	const token = use(tokenPromise)
 
 	const [state, setState] = useState(token)
 
@@ -134,7 +147,7 @@ export function SwapForm({ tokenPromise, quickBuyOptionsPromise, quickSellOption
 					forceMount
 					className="data-[state=inactive]:hidden data-[state=inactive]:absolute data-[state=inactive]:pointer-events-none"
 				>
-					<Buy token={state} quickOptions={quickBuyOptions} />
+					<Buy token={state} signer={signer} />
 				</Content>
 
 				<Content
@@ -142,7 +155,7 @@ export function SwapForm({ tokenPromise, quickBuyOptionsPromise, quickSellOption
 					forceMount
 					className="data-[state=inactive]:hidden data-[state=inactive]:absolute data-[state=inactive]:pointer-events-none"
 				>
-					<Sell token={state} quickOptions={quickSellOptions} />
+					<Sell token={state} signer={signer} />
 				</Content>
 			</Tabs>
 
@@ -155,7 +168,7 @@ export function SwapForm({ tokenPromise, quickBuyOptionsPromise, quickSellOption
 	)
 }
 
-function Buy({ token, quickOptions }: { token: TokenFeedType; quickOptions: QuickOption[] }) {
+function Buy({ token, signer }: { token: TokenFeedType; signer?: string | undefined }) {
 	const { id: mint } = token
 	const { symbol } = token.metadata
 
@@ -203,6 +216,25 @@ function Buy({ token, quickOptions }: { token: TokenFeedType; quickOptions: Quic
 		],
 	)
 
+	const getQuickOption = useCallback(
+		async (percent: number) => {
+			const params = {
+				mint,
+				percent,
+			}
+
+			if (percent === 0 || !signer) {
+				return '0'
+			}
+
+			const option = await getQuickOptionForBuy(params)
+
+			console.log('option', option)
+			return option
+		},
+		[signer, mint],
+	)
+
 	return (
 		<Form
 			badge={<TokenBadge {...solLogoProps} />}
@@ -217,12 +249,12 @@ function Buy({ token, quickOptions }: { token: TokenFeedType; quickOptions: Quic
 				const uiAmount = amountToUiAmount(new BN(quote), decimals)
 				return formatCompactNumber(Number(uiAmount))
 			}}
-			quickOptions={quickOptions}
+			getQuickOption={getQuickOption}
 		/>
 	)
 }
 
-function Sell({ token, quickOptions }: { token: TokenFeedType; quickOptions: QuickOption[] }) {
+function Sell({ token, signer }: { token: TokenFeedType; signer?: string | undefined }) {
 	const { id: mint } = token
 	const { symbol } = token.metadata
 
@@ -269,6 +301,25 @@ function Sell({ token, quickOptions }: { token: TokenFeedType; quickOptions: Qui
 		],
 	)
 
+	const getQuickOption = useCallback(
+		async (percent: number) => {
+			const params = {
+				mint,
+				percent,
+			}
+
+			if (percent === 0 || !signer) {
+				return '0'
+			}
+
+			const option = await getQuickOptionForSell(params)
+
+			console.log('option', option)
+			return option
+		},
+		[signer, mint],
+	)
+
 	return (
 		<Form
 			badge={<TokenBadge {...getTokenLogoProps(token.metadata)} className="size-8 rounded-full" />}
@@ -283,7 +334,7 @@ function Sell({ token, quickOptions }: { token: TokenFeedType; quickOptions: Qui
 				const uiAmount = fromLamports(new BN(quote), 9)
 				return uiAmount.toFixed(9)
 			}}
-			quickOptions={quickOptions}
+			getQuickOption={getQuickOption}
 		/>
 	)
 }
@@ -297,7 +348,7 @@ function Form({
 	receive,
 	getQuote,
 	displayQuote,
-	quickOptions,
+	getQuickOption,
 }: FormProps) {
 	const [lastResult, formAction, isPending] = useActionState(action, undefined)
 
@@ -341,8 +392,6 @@ function Form({
 		run(promise)
 	}, [uiAmount, getQuote, run])
 
-	useRevalidate(swap.isSuccess, [`@right/(.)token/${mint}`, `@right/token/${mint}`])
-
 	return (
 		<FormProvider context={form.context}>
 			<div className="relative z-10 flex w-full flex-col divide-zinc-600 ">
@@ -371,7 +420,7 @@ function Form({
 						{badge}
 					</div>
 
-					<QuickOptions quickOptions={quickOptions} control={control} />
+					<QuickOptions getQuickOption={getQuickOption} control={control} />
 
 					{payer ? (
 						<Button
@@ -418,35 +467,38 @@ function TokenBadge(props: ImageProps) {
 	)
 }
 
+const quickOptions = [
+	{
+		label: 'reset',
+		value: 0,
+	},
+	{ label: '25%', value: 25 },
+	{ label: '50%', value: 50 },
+	{ label: 'Max', value: 100 },
+]
+
 function QuickOptions({
-	quickOptions,
+	getQuickOption,
 	control,
 }: {
-	quickOptions: QuickOption[]
+	getQuickOption: (percent: number) => Promise<string>
 	control: ReturnType<typeof useInputControl<string>>
 }) {
-	console.log(quickOptions)
+	const { run, data } = useAsync<string>()
 
 	return (
 		<ul className="flex gap-2 items-center">
-			<li className="flex-1">
-				<Button
-					type="button"
-					onClick={() => {
-						control.change('')
-					}}
-					variant="interval"
-					className="bg-background-100 w-full"
-				>
-					Reset
-				</Button>
-			</li>
 			{quickOptions.map(o => (
 				<li key={o.label} className="flex-1">
 					<Button
 						type="button"
 						onClick={() => {
-							control.change(o.uiAmount)
+							const promise = getQuickOption(o.value).then(res => {
+								control.change(res)
+								return res
+							})
+
+							run(promise)
 						}}
 						variant="interval"
 						className="bg-background-100 w-full"
