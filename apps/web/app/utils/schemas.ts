@@ -412,6 +412,6 @@ export function isOhlcData(data: unknown): data is OhlcData {
 export const SwapOptionSchema = z.object({
 	mint: Mint,
 	swapType: z.nativeEnum($Enums.SwapType),
-	amount: z.enum(['0%', '25%', '50%', '100%']),
+	percent: z.number(),
 	signer: Wallet,
 })
