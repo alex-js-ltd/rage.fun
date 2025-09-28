@@ -97,7 +97,7 @@ export function useLightweightChart(data: OhlcData[], mint: string, interval: In
 			priceFormat: {
 				type: 'custom',
 				formatter: (val: number) => {
-					return val.toFixed(12)
+					return val.toFixed(9)
 				},
 			},
 		})
