@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { HeliusSchema } from '@/app/utils/schemas'
-import { connection, program } from '@/app/utils/setup'
+import { program } from '@/app/utils/setup'
+import { Connection } from '@solana/web3.js'
 import { fetchAllEvents, groupEvents } from '@repo/rage'
 import { getServerEnv } from '@/app/utils/env'
 import { processSwapEvents } from '@/app/webhook/swap'
@@ -9,7 +10,9 @@ import { processCreateEvents } from '@/app/webhook/create'
 import { processHarvestEvents } from '@/app/webhook/harvest'
 import { processRaydiumEvents } from '@/app/webhook/raydium'
 
-const { HELIUS_SECRET } = getServerEnv()
+const { HELIUS_SECRET, RPC_URL } = getServerEnv()
+
+const connection = new Connection(RPC_URL, 'confirmed')
 
 export async function POST(request: NextRequest) {
 	const requestHeaders = new Headers(request.headers)

@@ -1,11 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { Connection } from '@solana/web3.js'
 import { getServerEnv } from '@/app/utils/env'
 import * as Ably from 'ably'
 
 import * as AblyEvents from '@/app/webhook/ably'
-import { connection } from '@/app/utils/setup'
 
-const { HELIUS_SECRET, ABLY_API_KEY } = getServerEnv()
+const { HELIUS_SECRET, RPC_URL, ABLY_API_KEY } = getServerEnv()
+
+const connection = new Connection(RPC_URL, 'confirmed')
 
 export async function POST(request: NextRequest) {
 	const requestHeaders = new Headers(request.headers)

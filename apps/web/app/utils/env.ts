@@ -9,6 +9,8 @@ const schema = z.object({
 	HELIUS_SECRET: z.string(),
 	HELIUS_API_KEY: z.string(),
 
+	RPC_URL: z.string(),
+
 	KV_URL: z.string(),
 	KV_REST_API_URL: z.string(),
 	KV_REST_API_TOKEN: z.string(),
@@ -61,6 +63,7 @@ export function getServerEnv() {
 
 		HELIUS_SECRET: process.env.HELIUS_SECRET,
 		HELIUS_API_KEY: process.env.HELIUS_API_KEY,
+		RPC_URL: process.env.RPC_URL,
 
 		KV_URL: process.env.KV_URL,
 		KV_REST_API_URL: process.env.KV_REST_API_URL,
