@@ -39,14 +39,9 @@ export function useLightweightChart(data: OhlcData[], mint: string, interval: In
 				background: { color: 'hsl(200, 4%, 15%)', type: ColorType.Solid },
 				textColor: '#a1a1aa',
 			},
-			// grid: {
-			// 	vertLines: { color: '#FFFFFF20', visible: true, style: 1 },
-			// 	horzLines: { color: '#FFFFFF20', visible: true, style: 1 },
-			// },
-
 			grid: {
-				vertLines: { color: '#FFFFFF22', visible: true, style: 0 },
-				horzLines: { color: '#FFFFFF22', visible: true, style: 0 },
+				vertLines: { color: '#FFFFFF20', visible: true, style: 1 },
+				horzLines: { color: '#FFFFFF20', visible: true, style: 1 },
 			},
 
 			height: 255,
@@ -64,7 +59,7 @@ export function useLightweightChart(data: OhlcData[], mint: string, interval: In
 			},
 
 			crosshair: {
-				mode: 1,
+				mode: 2,
 				vertLine: { width: 1, color: '#ffffff55', style: 0, labelBackgroundColor: '#000000AA' },
 				horzLine: { width: 1, color: '#ffffff55', style: 0, labelBackgroundColor: '#000000AA' },
 			},
@@ -78,13 +73,7 @@ export function useLightweightChart(data: OhlcData[], mint: string, interval: In
 		chartRef.current = chart
 		chart.timeScale().fitContent()
 
-		// Setting the border color for the horizontal axis
-		chart.timeScale().applyOptions({
-			borderColor: '#71649C',
-		})
-
 		chart.priceScale('right').applyOptions({
-			borderColor: '#71649C',
 			scaleMargins: {
 				top: 0.1,
 				bottom: 0.0,
