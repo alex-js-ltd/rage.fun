@@ -12,7 +12,6 @@ import { processRaydiumEvents } from '@/app/webhook/raydium'
 
 const { HELIUS_SECRET, RPC_URL } = getServerEnv()
 console.log(RPC_URL)
-const connection = new Connection(RPC_URL, 'confirmed')
 
 export async function POST(request: NextRequest) {
 	const requestHeaders = new Headers(request.headers)
@@ -32,6 +31,8 @@ export async function POST(request: NextRequest) {
 	}
 
 	const signatureList = result.data.map(el => el.signature)
+
+	const connection = new Connection(RPC_URL, 'confirmed')
 
 	const events = await fetchAllEvents({ program, signatureList, connection })
 

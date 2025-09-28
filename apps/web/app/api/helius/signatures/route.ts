@@ -7,8 +7,6 @@ import * as AblyEvents from '@/app/webhook/ably'
 
 const { HELIUS_SECRET, RPC_URL, ABLY_API_KEY } = getServerEnv()
 
-const connection = new Connection(RPC_URL, 'confirmed')
-
 export async function POST(request: NextRequest) {
 	const requestHeaders = new Headers(request.headers)
 	const authorization = requestHeaders.get('authorization')
@@ -19,6 +17,8 @@ export async function POST(request: NextRequest) {
 
 	// Parse the request body
 	const body: Array<RawTransaction> = await request.json()
+
+	const connection = new Connection(RPC_URL, 'confirmed')
 
 	const client = new Ably.Rest(ABLY_API_KEY)
 	const sigChannel = client.channels.get('signatureEvent')
