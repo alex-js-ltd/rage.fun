@@ -68,10 +68,17 @@ export function useLightweightChart(data: OhlcData[], mint: string, interval: In
 		const chart = createChart(chartContainerRef.current, chartOptions)
 
 		// Setting the border color for the horizontal axis
-		chart.timeScale().applyOptions({ barSpacing: 0, minBarSpacing: 0 })
+		// chart.timeScale().applyOptions({ barSpacing: 0, minBarSpacing: 0 })
+
+		chart.timeScale().applyOptions({
+			barSpacing: 1, // smaller number = candles closer together
+			rightOffset: 5, // keep some breathing room on the right
+			fixLeftEdge: false, // allow chart to pan
+			lockVisibleTimeRangeOnResize: true,
+			minBarSpacing: 1,
+		})
 
 		chartRef.current = chart
-		chart.timeScale().fitContent()
 
 		chart.priceScale('right').applyOptions({
 			scaleMargins: {
@@ -82,15 +89,21 @@ export function useLightweightChart(data: OhlcData[], mint: string, interval: In
 			mode: 1,
 		})
 
+		chart.timeScale().fitContent()
+
 		const upColor = '#34d399'
 		const downColor = '#f87171'
 
 		const newSeries = chart.addCandlestickSeries({
-			borderVisible: false,
+			borderVisible: true,
 			upColor,
 			downColor,
 			wickUpColor: upColor,
 			wickDownColor: downColor,
+
+			borderUpColor: upColor,
+			borderDownColor: downColor,
+
 			priceLineVisible: true,
 			wickVisible: true,
 			priceFormat: {
