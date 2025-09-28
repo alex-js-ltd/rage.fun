@@ -68,7 +68,6 @@ export default function Layout(props: {
 					</aside>
 				</div>
 			</div>
-
 			{props.modal}
 		</>
 	)
