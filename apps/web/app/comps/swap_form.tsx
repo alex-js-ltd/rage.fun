@@ -53,7 +53,7 @@ interface FormProps {
 	getQuote: (uiAmount: string) => Promise<string>
 	displayQuote: (amount: string) => string
 
-	getQuickOption: (percent: number) => Promise<string>
+	getQuickOption: (params: URLSearchParams) => Promise<string>
 }
 
 async function calculateBuyAmount(params: WasmType): Promise<string> {
@@ -78,24 +78,14 @@ async function calculateSellPrice(params: WasmType): Promise<string> {
 	})
 }
 
-async function getQuickOptionForBuy(params: { mint: string; percent: number }): Promise<string> {
-	const query = new URLSearchParams({
-		mint: params.mint,
-		percent: params.percent.toString(),
-	})
-
-	return client<string>(`/api/quick_option/buy?${query}`, {
+async function getQuickOptionForBuy(params: URLSearchParams): Promise<string> {
+	return client<string>(`/api/quick_option/buy?${params}`, {
 		method: 'GET',
 	})
 }
 
-async function getQuickOptionForSell(params: { mint: string; percent: number }): Promise<string> {
-	const query = new URLSearchParams({
-		mint: params.mint,
-		percent: params.percent.toString(),
-	})
-
-	return client<string>(`/api/quick_option/sell?${query}`, {
+async function getQuickOptionForSell(params: URLSearchParams): Promise<string> {
+	return client<string>(`/api/quick_option/sell?${params}`, {
 		method: 'GET',
 	})
 }
@@ -216,25 +206,6 @@ function Buy({ token, signer }: { token: TokenFeedType; signer?: string | undefi
 		],
 	)
 
-	const getQuickOption = useCallback(
-		async (percent: number) => {
-			const params = {
-				mint,
-				percent,
-			}
-
-			if (percent === 0 || !signer) {
-				return '0'
-			}
-
-			const option = await getQuickOptionForBuy(params)
-
-			console.log('option', option)
-			return option
-		},
-		[signer, mint],
-	)
-
 	return (
 		<Form
 			badge={<TokenBadge {...solLogoProps} />}
@@ -249,7 +220,7 @@ function Buy({ token, signer }: { token: TokenFeedType; signer?: string | undefi
 				const uiAmount = amountToUiAmount(new BN(quote), decimals)
 				return formatCompactNumber(Number(uiAmount))
 			}}
-			getQuickOption={getQuickOption}
+			getQuickOption={getQuickOptionForBuy}
 		/>
 	)
 }
@@ -301,25 +272,6 @@ function Sell({ token, signer }: { token: TokenFeedType; signer?: string | undef
 		],
 	)
 
-	const getQuickOption = useCallback(
-		async (percent: number) => {
-			const params = {
-				mint,
-				percent,
-			}
-
-			if (percent === 0 || !signer) {
-				return '0'
-			}
-
-			const option = await getQuickOptionForSell(params)
-
-			console.log('option', option)
-			return option
-		},
-		[signer, mint],
-	)
-
 	return (
 		<Form
 			badge={<TokenBadge {...getTokenLogoProps(token.metadata)} className="size-8 rounded-full" />}
@@ -334,7 +286,7 @@ function Sell({ token, signer }: { token: TokenFeedType; signer?: string | undef
 				const uiAmount = fromLamports(new BN(quote), 9)
 				return uiAmount.toFixed(9)
 			}}
-			getQuickOption={getQuickOption}
+			getQuickOption={getQuickOptionForSell}
 		/>
 	)
 }
@@ -392,6 +344,27 @@ function Form({
 		run(promise)
 	}, [uiAmount, getQuote, run])
 
+	// One place that decides what “reset/25/50/100” means for the input
+	const onQuickOptionSelect = useCallback(
+		async (percent: number) => {
+			if (percent === 0 || !payer) {
+				// reset
+				control.change('')
+				return
+			}
+
+			const params = new URLSearchParams({
+				mint,
+				percent: percent.toString(),
+			})
+
+			const v = await getQuickOption(params) // server-calculated uiAmount string
+
+			control.change(v) // single source of truth
+		},
+		[control, getQuickOption, mint, payer],
+	)
+
 	return (
 		<FormProvider context={form.context}>
 			<div className="relative z-10 flex w-full flex-col divide-zinc-600 ">
@@ -420,7 +393,7 @@ function Form({
 						{badge}
 					</div>
 
-					<QuickOptions getQuickOption={getQuickOption} control={control} />
+					<QuickOptions onQuickOptionSelect={onQuickOptionSelect} />
 
 					{payer ? (
 						<Button
@@ -477,14 +450,8 @@ const quickOptions = [
 	{ label: 'Max', value: 100 },
 ]
 
-function QuickOptions({
-	getQuickOption,
-	control,
-}: {
-	getQuickOption: (percent: number) => Promise<string>
-	control: ReturnType<typeof useInputControl<string>>
-}) {
-	const { run, data } = useAsync<string>()
+function QuickOptions({ onQuickOptionSelect }: { onQuickOptionSelect: (percent: number) => Promise<void> }) {
+	const { run, data } = useAsync<void>()
 
 	return (
 		<ul className="flex gap-2 items-center">
@@ -493,11 +460,7 @@ function QuickOptions({
 					<Button
 						type="button"
 						onClick={() => {
-							const promise = getQuickOption(o.value).then(res => {
-								control.change(res)
-								return res
-							})
-
+							const promise = onQuickOptionSelect(o.value)
 							run(promise)
 						}}
 						variant="interval"
