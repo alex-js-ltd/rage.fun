@@ -77,6 +77,10 @@ export default auth(async function middleware(req: NextRequest & { auth: Session
 		return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 	}
 
+	if (!req.auth?.user?.id && req.nextUrl.pathname.startsWith('/api/quick_option')) {
+		return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+	}
+
 	if (req.nextUrl.pathname.startsWith('/blocked')) {
 		return NextResponse.next()
 	}
