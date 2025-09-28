@@ -453,13 +453,14 @@ const quickOptions = [
 ]
 
 function QuickOptions({ onQuickOptionSelect }: { onQuickOptionSelect: (percent: number) => Promise<void> }) {
-	const { run, data } = useAsync<void>()
+	const { run, isLoading } = useAsync<void>()
 
 	return (
 		<ul className="flex gap-2 items-center">
 			{quickOptions.map(o => (
 				<li key={o.label} className="flex-1">
 					<Button
+						disabled={isLoading}
 						type="button"
 						onClick={() => {
 							const promise = onQuickOptionSelect(o.value)
