@@ -11,7 +11,7 @@ import { processHarvestEvents } from '@/app/webhook/harvest'
 import { processRaydiumEvents } from '@/app/webhook/raydium'
 
 const { HELIUS_SECRET, RPC_URL } = getServerEnv()
-
+console.log(RPC_URL)
 const connection = new Connection(RPC_URL, 'confirmed')
 
 export async function POST(request: NextRequest) {
