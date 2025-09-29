@@ -93,9 +93,11 @@ export function useLightweightChart(data: OhlcData[], mint: string, interval: In
 
 		chart.timeScale().fitContent()
 
-		const upColor = '#34d399'
-		const downColor = '#f87171'
+		const green = '#34d399'
+		const red = '#f87171'
 
+		const upColor = '#4a6cf6'
+		const downColor = '#ea3e75'
 		const newSeries = chart.addCandlestickSeries({
 			borderVisible: true,
 			upColor,
@@ -111,7 +113,7 @@ export function useLightweightChart(data: OhlcData[], mint: string, interval: In
 			priceFormat: {
 				type: 'custom',
 				formatter: (val: number) => {
-					return val.toFixed(8)
+					return val.toFixed(9)
 				},
 			},
 		})
