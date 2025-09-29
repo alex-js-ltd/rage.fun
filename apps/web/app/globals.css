@@ -33,13 +33,13 @@
 		--text-400: 240, 6%, 3%;
 		--text-500: 223, 5%, 71%;
 
-		/* Buy / Bullish (orange spectrum) */
-		--buy-100: 24, 100%, 50%; /* vivid orange (#FF6B00) */
-		--buy-200: 24, 100%, 45%; /* deeper orange for hover/active */
+		/* Buy / Bullish (lime green) */
+		--buy-100: 95, 100%, 50%; /* #7FFF00 (neon lime green) */
+		--buy-200: 95, 100%, 40%; /* darker lime for hover/active */
 
-		/* Sell / Bearish (burnt orange / red-orange) */
-		--sell-100: 12, 90%, 55%; /* red-orange (#FF3B1F) */
-		--sell-200: 12, 90%, 45%; /* darker tone for contrast */
+		/* Sell / Bearish (orange) */
+		--sell-100: 24, 100%, 50%; /* #FF6B00 (vivid orange) */
+		--sell-200: 24, 100%, 40%; /* deeper orange for hover/active */
 	}
 
 	.light {
