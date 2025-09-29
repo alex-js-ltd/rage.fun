@@ -140,13 +140,13 @@ const config: Config = {
 
 				buy: {
 					'0%': { backgroundColor: 'transparent' },
-					'50%': { backgroundColor: 'rgb(52 211 153 / 0.1)' },
+					'50%': { backgroundColor: 'rgb(141 240 204 / 0.1)' }, // #8DF0CC with 10% opacity
 					'100%': { backgroundColor: 'transparent' },
 				},
 
 				sell: {
 					'0%': { backgroundColor: 'transparent' },
-					'50%': { backgroundColor: 'rgb(248 113 113 / 0.1)' },
+					'50%': { backgroundColor: 'rgb(229 152 155 / 0.1)' }, // #E5989B with 10% opacity
 					'100%': { backgroundColor: 'transparent' },
 				},
 			},
