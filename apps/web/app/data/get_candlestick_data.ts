@@ -18,7 +18,7 @@ function generateCandlestickData(events: SwapEvent[], interval: Interval) {
 
 	const groupedEvents = sortedEvents.map(e => ({
 		...e,
-		time: (e.time - (e.time % interval)) as UTCTimestamp,
+		time: (Math.floor(e.time / interval) * interval) as UTCTimestamp,
 	}))
 
 	const allTimes = [...new Set(groupedEvents.map(e => e.time))]

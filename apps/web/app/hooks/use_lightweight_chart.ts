@@ -45,6 +45,7 @@ export function useLightweightChart(data: OhlcData[], mint: string, interval: In
 			},
 
 			height: 255,
+			width: 600,
 			rightPriceScale: { borderColor: '#FFFFFF20' },
 			timeScale: {
 				tickMarkFormatter: (time: number, _tickMarkType: TickMarkType) => {
@@ -71,11 +72,11 @@ export function useLightweightChart(data: OhlcData[], mint: string, interval: In
 		// chart.timeScale().applyOptions({ barSpacing: 0, minBarSpacing: 0 })
 
 		chart.timeScale().applyOptions({
-			barSpacing: 1, // smaller number = candles closer together
-			rightOffset: 5, // keep some breathing room on the right
+			barSpacing: 0, // smaller number = candles closer together
+			rightOffset: 0, // keep some breathing room on the right
 			fixLeftEdge: false, // allow chart to pan
-			lockVisibleTimeRangeOnResize: true,
-			minBarSpacing: 1,
+			lockVisibleTimeRangeOnResize: false,
+			minBarSpacing: 0,
 		})
 
 		chartRef.current = chart
@@ -86,7 +87,8 @@ export function useLightweightChart(data: OhlcData[], mint: string, interval: In
 				bottom: 0.0,
 			},
 
-			mode: 1,
+			mode: 0,
+			autoScale: true,
 		})
 
 		chart.timeScale().fitContent()
