@@ -72,9 +72,9 @@ function TokenCard({
 							aria-label={`View ${name}`}
 							href={{
 								pathname: `/token/${mint}`,
-								query: { interval: '86400000' },
+								query: { interval: '300000' },
 							}}
-							as={`/token/${mint}?interval=86400000`}
+							as={`/token/${mint}?interval=300000`}
 							scroll={true}
 							onClick={e => {
 								e.stopPropagation()
