@@ -110,13 +110,13 @@ export function SwapForm({ tokenPromise }: SwapFormProps) {
 			<Tabs value={tab} onValueChange={v => setTab(v as 'buy' | 'sell')} className="relative flex flex-col gap-4 ">
 				<List className="relative flex items-center gap-2 justify-between border border-white border-opacity-[0.125] rounded-full h-[40px]">
 					<Trigger value="buy" asChild className="flex-1">
-						<button className="data-[state=active]:text-[#A5EECE] font-semibold text-white/70 cursor-pointer ">
+						<button className="data-[state=active]:text-buy-100 font-semibold text-white/70 cursor-pointer ">
 							Buy
 						</button>
 					</Trigger>
 
 					<Trigger value="sell" asChild className="flex-1">
-						<button className="data-[state=active]:text-[#E645A6] text-white/70 cursor-pointer font-semibold">
+						<button className="data-[state=active]:text-sell-100 text-white/70 cursor-pointer font-semibold">
 							Sell
 						</button>
 					</Trigger>

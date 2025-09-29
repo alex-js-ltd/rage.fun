@@ -32,6 +32,14 @@
 		--text-300: 220, 12%, 90%;
 		--text-400: 240, 6%, 3%;
 		--text-500: 223, 5%, 71%;
+
+		/* Buy / Bullish (orange spectrum) */
+		--buy-100: 24, 100%, 50%; /* vivid orange (#FF6B00) */
+		--buy-200: 24, 100%, 45%; /* deeper orange for hover/active */
+
+		/* Sell / Bearish (burnt orange / red-orange) */
+		--sell-100: 12, 90%, 55%; /* red-orange (#FF3B1F) */
+		--sell-200: 12, 90%, 45%; /* darker tone for contrast */
 	}
 
 	.light {

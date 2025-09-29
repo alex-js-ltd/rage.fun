@@ -96,9 +96,8 @@ export function useLightweightChart(data: OhlcData[], mint: string, interval: In
 		const green = '#34d399'
 		const red = '#f87171'
 
-		// Rage.fun neon theme
-		const upColor = '#A5EECE' // toxic neon green (bullish)
-		const downColor = '#E645A6' // hot neon pink (bearish)
+		const upColor = '#FF6B00' // vibrant orange (bullish, energetic, attention-grabbing)
+		const downColor = '#6E6E6E' // sleek medium gray (bearish, neutral, industrial)
 
 		const newSeries = chart.addCandlestickSeries({
 			borderVisible: true,

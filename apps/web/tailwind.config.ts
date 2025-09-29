@@ -27,6 +27,12 @@ const config: Config = {
 
 				'accent-1': '#eaeaea' /* Bright Gold */,
 				'accent-2': '#999' /* Platinum */,
+
+				'buy-100': 'hsl(var(--buy-100))',
+				'buy-200': 'hsl(var(--buy-200))',
+
+				'sell-100': 'hsl(var(--sell-100))',
+				'sell-200': 'hsl(var(--sell-200))',
 			},
 			fontFamily: {
 				sans: ['var(--font-geist-sans)'],
