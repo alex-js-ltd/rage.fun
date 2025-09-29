@@ -1,13 +1,15 @@
 'use client'
 
-import { type ReactNode, useMemo } from 'react'
+import { type ReactNode, useMemo, useEffect, useCallback } from 'react'
 import { UnifiedWalletProvider } from '@jup-ag/wallet-adapter'
 import { PhantomWalletAdapter, CoinbaseWalletAdapter, TrustWalletAdapter } from '@solana/wallet-adapter-wallets'
 import { getEnv } from '@/app/utils/env'
 import { authenticate, disconnect } from '@/app/actions/authenticate'
 import { Adapter } from '@solana/wallet-adapter-base'
 import { useIsMobile } from '@/app/hooks/use_is_mobile'
-import { useRouter, usePathname } from 'next/navigation'
+import { useRouter, usePathname, useSearchParams } from 'next/navigation'
+import { useLatestRef } from '@/app/hooks/use_latest_ref'
+import { PublicKey } from '@solana/web3.js'
 
 const { CLUSTER } = getEnv()
 
@@ -62,22 +64,26 @@ export function WalletProvider({ children }: { children: ReactNode }) {
 
 	const router = useRouter()
 	const pathname = usePathname()
+	const searchParams = useSearchParams()
 
-	console.log(pathname)
+	const refUrl = useLatestRef(() => {
+		const p = new URLSearchParams(searchParams)
+
+		const url = `${pathname}?${p.toString()}`
+		return url
+	})
 
 	async function onConnect({ publicKey }: { publicKey: string }) {
-		await authenticate(publicKey)
+		if (!refUrl.current) return
 
-		if (pathname === '/yield') {
-			router.refresh()
-		}
+		const url = refUrl.current()
+		await authenticate(publicKey, url)
 	}
 
 	async function onDisconnect() {
-		await disconnect()
-		if (pathname === '/yield') {
-			router.refresh()
-		}
+		if (!refUrl.current) return
+		const url = refUrl.current()
+		await disconnect(url)
 	}
 
 	return <UnifiedWalletProvider {...params}>{children}</UnifiedWalletProvider>
