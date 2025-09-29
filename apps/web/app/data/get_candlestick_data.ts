@@ -45,7 +45,7 @@ function generateCandlestickData(events: SwapEvent[], interval: Interval) {
 		return acc
 	}, start)
 
-	return output
+	return stitchCandles(output)
 }
 
 export async function getCandlstickData(mint: string, interval: Interval) {
@@ -68,4 +68,27 @@ export async function getCandlstickData(mint: string, interval: Interval) {
 	const data = generateCandlestickData(swapEvents, interval)
 
 	return data
+}
+
+/** Visual-only post-processing: force open[i] = close[i-1] */
+export function stitchCandles(candles: OhlcData[]): OhlcData[] {
+	if (!candles.length) return candles
+
+	let prevClose = candles[0].close
+	const out: OhlcData[] = [{ ...candles[0], open: candles[0].open }] // keep first as-is
+
+	for (let i = 1; i < candles.length; i++) {
+		const c = candles[i]
+		const open = prevClose
+		const close = c.close
+
+		// keep the real range but include the new open
+		const high = Math.max(c.high, open, close)
+		const low = Math.min(c.low, open, close)
+
+		out.push({ time: c.time as UTCTimestamp, open, high, low, close })
+		prevClose = close
+	}
+
+	return out
 }
