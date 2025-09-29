@@ -97,8 +97,8 @@ export function useLightweightChart(data: OhlcData[], mint: string, interval: In
 		const red = '#f87171'
 
 		// Candle bodies
-		const upColor = '#7FFF00' // lime green (buy candle fill)
-		const downColor = '#FF6B00' // vivid orange (sell candle fill)
+		const upColor = '#8DF0CC' // lime green (buy candle fill)
+		const downColor = '#E5989B'
 
 		const newSeries = chart.addCandlestickSeries({
 			borderVisible: true,

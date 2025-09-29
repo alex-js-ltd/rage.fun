@@ -34,11 +34,11 @@
 		--text-500: 223, 5%, 71%;
 
 		/* Buy / Bullish (lime green) */
-		--buy-100: 95, 100%, 50%; /* #7FFF00 (neon lime green) */
+		--buy-100: 158, 77%, 75%; /* #7FFF00 (neon lime green) */
 		--buy-200: 95, 100%, 40%; /* darker lime for hover/active */
 
 		/* Sell / Bearish (orange) */
-		--sell-100: 24, 100%, 50%; /* #FF6B00 (vivid orange) */
+		--sell-100: 358, 60%, 75%; /* #FF6B00 (vivid orange) */
 		--sell-200: 24, 100%, 40%; /* deeper orange for hover/active */
 	}
 
