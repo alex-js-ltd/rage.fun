@@ -100,16 +100,12 @@ export function useLightweightChart(data: OhlcData[], mint: string, interval: In
 		const upColor = '#A5EECE' // toxic neon green (bullish)
 		const downColor = '#E645A6' // hot neon pink (bearish)
 
-		// Optional semi-transparent wick colors (for a glow effect)
-		const upWick = 'rgba(0, 255, 157, 0.6)'
-		const downWick = 'rgba(255, 0, 127, 0.6)'
-
 		const newSeries = chart.addCandlestickSeries({
 			borderVisible: true,
 			upColor,
 			downColor,
-			wickUpColor: upWick,
-			wickDownColor: downWick,
+			wickUpColor: upColor,
+			wickDownColor: downColor,
 
 			borderUpColor: upColor,
 			borderDownColor: downColor,
