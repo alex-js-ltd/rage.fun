@@ -38,7 +38,7 @@ export default async function Page(props: Props) {
 	const parse = TokenSearchParamsSchema.safeParse(searchParams)
 
 	if (parse.error) {
-		return <>incorrect search params</>
+		return <div>incorrect search params</div>
 	}
 
 	const interval = parse.data.interval
