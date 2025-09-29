@@ -23,8 +23,7 @@ export default async function Page(props: Props) {
 			<Events />
 
 			<div
-				className="sticky top-0 h-[52px] border-x border-white border-opacity-[0.125] flex items-center z-40 w-full
-                  bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60
+				className="sticky top-0 h-[52px] border-x border-white border-opacity-[0.125] flex items-center z-40 w-full backdrop-blur 
                   border-b border-white/10 max-w-[600px] frost"
 			>
 				<ExploreNav searchParams={{ sortType, sortOrder, query }} />

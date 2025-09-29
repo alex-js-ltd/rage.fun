@@ -2,7 +2,7 @@
 
 import { SearchParams } from '@/app/utils/schemas'
 import Link from 'next/link'
-import { cn } from '../utils/misc'
+import { cn } from '@/app/utils/misc'
 
 export function ExploreNav({ searchParams }: { searchParams: SearchParams }) {
 	return (
