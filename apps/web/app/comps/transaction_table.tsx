@@ -116,6 +116,6 @@ function TableRow({ row, animate }: { row: TransactionTableType; animate: boolea
 }
 
 function SwapType({ swapType }: { swapType: TransactionTableType['swapType'] }) {
-	const color = swapType === 'Buy' ? 'text-emerald-400' : 'text-red-400'
+	const color = swapType === 'Buy' ? 'text-[#A5EECE]' : 'text-[#E645A6]'
 	return <div className={cn('inline-flex items-center rounded px-1 py-0.5 text-xs font-medium', color)}>{swapType}</div>
 }
