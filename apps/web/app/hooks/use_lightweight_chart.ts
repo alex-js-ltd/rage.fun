@@ -158,9 +158,11 @@ export function useLightweightChart(data: OhlcData[], mint: string, interval: In
 
 			newSeries?.setData(newData)
 		} else {
+			const prevClose = lastCandle?.close
+
 			const newCandle: OhlcData = {
 				time: roundedTime as UTCTimestamp,
-				open: formattedEvent.value,
+				open: prevClose ? prevClose : formattedEvent.value,
 				high: formattedEvent.value,
 				low: formattedEvent.value,
 				close: formattedEvent.value,
