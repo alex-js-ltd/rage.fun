@@ -8,7 +8,7 @@ export function ExploreNav({ searchParams }: { searchParams: SearchParams }) {
 	return (
 		<div className="flex items-center w-full h-full overflow-x-scroll scrollbar-hide">
 			<Link
-				className={cn('relative h-full w-fit flex items-center px-6 hover:bg-white/10 whitespace-nowrap')}
+				className={cn('relative h-full w-fit flex items-center px-4 hover:bg-white/10 whitespace-nowrap')}
 				href={{
 					pathname: `/home`,
 					query: {
@@ -35,7 +35,7 @@ export function ExploreNav({ searchParams }: { searchParams: SearchParams }) {
 			</Link>
 
 			<Link
-				className={cn('relative h-full w-fit flex items-center px-6 hover:bg-white/10 whitespace-nowrap')}
+				className={cn('relative h-full w-fit flex items-center px-4 hover:bg-white/10 whitespace-nowrap')}
 				href={{
 					pathname: `/home`,
 					query: {
@@ -62,7 +62,7 @@ export function ExploreNav({ searchParams }: { searchParams: SearchParams }) {
 			</Link>
 
 			<Link
-				className={cn('relative h-full w-fit flex items-center px-6 hover:bg-white/10 whitespace-nowrap')}
+				className={cn('relative h-full w-fit flex items-center px-4 hover:bg-white/10 whitespace-nowrap')}
 				href={{
 					pathname: `/home`,
 					query: {
@@ -89,7 +89,7 @@ export function ExploreNav({ searchParams }: { searchParams: SearchParams }) {
 			</Link>
 
 			<Link
-				className={cn('relative h-full w-fit flex items-center px-6 hover:bg-white/10')}
+				className={cn('relative h-full w-fit flex items-center px-4 hover:bg-white/10')}
 				href={{
 					pathname: `/home`,
 					query: {
