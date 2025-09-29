@@ -4,7 +4,6 @@ import { AppProviders } from '@/app/context'
 import { GeistSans } from 'geist/font/sans'
 import { GeistMono } from 'geist/font/mono'
 import { Analytics } from '@vercel/analytics/next'
-import { ScrollArea } from '@/app/comps/scroll_area'
 import './globals.css'
 
 export const metadata: Metadata = {
