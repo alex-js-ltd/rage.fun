@@ -56,7 +56,7 @@ function TokenCard({
 	const disableCreatorLink = pathname !== '/home'
 
 	return (
-		<article className="group relative flex flex-col w-full min-h-[178px] border-b border-white border-opacity-[0.125] hover:bg-background-300 bg-background-200">
+		<article className="group relative flex flex-col w-full min-h-[178px] border-b border-white border-opacity-[0.125] hover:bg-background-200 bg-background-100">
 			<div
 				className={cn(
 					'absolute inset-0',
