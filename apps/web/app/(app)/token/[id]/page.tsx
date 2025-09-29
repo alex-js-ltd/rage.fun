@@ -18,18 +18,25 @@ import { Back } from '@/app/comps/back'
 import { getComments } from '@/app/data/get_comments'
 import { Comments } from '@/app/comps/comments'
 import { ReplyForm } from '@/app/comps/reply_form'
+import { TokenSearchParamsSchema } from '@/app/utils/schemas'
 
 export const dynamic = 'force-dynamic'
 
 type Props = {
 	params: Promise<{ id: string }>
-	searchParams: Promise<{ interval: Interval }>
+	searchParams: { [key: string]: string | string[] | undefined }
 }
 
 export default async function Page(props: Props) {
 	const [{ id: mint }, searchParams] = await Promise.all([props.params, props.searchParams])
 
-	const interval = searchParams.interval ?? '86400000'
+	const parse = TokenSearchParamsSchema.safeParse(searchParams)
+
+	if (parse.error) {
+		return <>incorrect search params</>
+	}
+
+	const interval = parse.data.interval
 
 	const ohlcPromise = getCandlstickData(mint, interval)
 
@@ -38,8 +45,6 @@ export default async function Page(props: Props) {
 	const transactionPromise = getTransactionData(mint)
 
 	const holdersPromise = getTopHolders(mint)
-
-	const blink = generateSolanaBlink(mint)
 
 	const commentsPromise = getComments(mint)
 

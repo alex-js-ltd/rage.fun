@@ -165,10 +165,6 @@ export const CommentSchema = z.object({
 	tokenId: z.string(),
 })
 
-export const TokenSearchParams = z.object({
-	interval: z.enum(['60000', '300000', '900000', '3600000']).transform(Number),
-})
-
 export const HarvestYieldSchema = z.object({
 	creator: Wallet,
 	mint: Mint,
@@ -412,4 +408,8 @@ export function isOhlcData(data: unknown): data is OhlcData {
 export const SwapOptionSchema = z.object({
 	mint: Mint,
 	percent: z.number(),
+})
+
+export const TokenSearchParamsSchema = z.object({
+	interval: z.enum(['300000', '3600000', '21600000', '86400000']).transform(Number),
 })
