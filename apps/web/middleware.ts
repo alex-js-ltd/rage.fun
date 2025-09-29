@@ -33,7 +33,7 @@ export const apiBucket = new Ratelimit({
 // Rate limiter for pages (looser)
 const pageLimit = new Ratelimit({
 	redis: kv,
-	limiter: Ratelimit.slidingWindow(15, '10 s'),
+	limiter: Ratelimit.slidingWindow(20, '10 s'),
 })
 
 // 2. Wrapped middleware option
