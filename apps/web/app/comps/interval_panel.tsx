@@ -29,7 +29,7 @@ export function IntervalPanel({ mint }: { mint: string }) {
 			{intervals.map(([label, value]) => (
 				<NavLink replace key={label} href={`/token/${mint}?interval=${value}`}>
 					{({ isActive }) => (
-						<Button variant="interval" className={isActive ? 'bg-background-300' : undefined}>
+						<Button variant="interval" className={isActive ? 'bg-white/10' : undefined}>
 							{label}
 
 							<Icon name="interval" className="size-4" />

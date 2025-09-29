@@ -36,7 +36,7 @@ export function useLightweightChart(data: OhlcData[], mint: string, interval: In
 
 		const chartOptions: DeepPartial<ChartOptions> = {
 			layout: {
-				background: { color: 'hsl(200, 2%, 11%)', type: ColorType.Solid },
+				background: { color: 'hsl(199, 28%, 9%)', type: ColorType.Solid },
 				textColor: '#a1a1aa',
 			},
 			grid: {
