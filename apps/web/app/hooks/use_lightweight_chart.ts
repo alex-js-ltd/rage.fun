@@ -96,8 +96,9 @@ export function useLightweightChart(data: OhlcData[], mint: string, interval: In
 		const green = '#34d399'
 		const red = '#f87171'
 
-		const upColor = '#4a6cf6'
-		const downColor = '#ea3e75'
+		const upColor = '#a855f7' // vivid purple (Tailwind violet-500)
+		const downColor = '#facc15' // bright yellow (Tailwind yellow-400)
+
 		const newSeries = chart.addCandlestickSeries({
 			borderVisible: true,
 			upColor,
