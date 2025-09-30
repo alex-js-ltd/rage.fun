@@ -21,13 +21,12 @@ import { useChannel } from 'ably/react'
 
 import { BN } from '@coral-xyz/anchor'
 
-import { Interval } from '@/app/comps/interval_panel'
 import { SwapEventType } from '@/app/utils/schemas'
 import Decimal from 'decimal.js'
 
 dayjs.extend(utc)
 
-export function useLightweightChart(data: OhlcData[], mint: string, interval: Interval) {
+export function useLightweightChart(data: OhlcData[], mint: string, interval: number) {
 	const chartContainerRef = useRef<HTMLDivElement | null>(null)
 	const chartRef = useRef<IChartApi | null>(null)
 	const seriesRef = useRef<ISeriesApi<'Candlestick'> | null>(null)

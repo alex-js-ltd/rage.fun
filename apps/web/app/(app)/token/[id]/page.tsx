@@ -1,7 +1,7 @@
 import { Suspense, Fragment, cache, use } from 'react'
 import type { Metadata, ResolvingMetadata } from 'next'
 import { getCachedTokenMetadata } from '@/app/data/get_token_metadata'
-import { Interval, IntervalPanel } from '@/app/comps/interval_panel'
+import { IntervalPanel } from '@/app/comps/interval_panel'
 import { Loading } from '@/app/comps/loading'
 import { getCandlstickData } from '@/app/data/get_candlestick_data'
 import { CandlestickChart } from '@/app/comps/candlestick_chart'

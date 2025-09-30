@@ -1,5 +1,5 @@
 import { Suspense, Fragment, cache, use } from 'react'
-import { Interval, IntervalPanel } from '@/app/comps/interval_panel'
+import { IntervalPanel } from '@/app/comps/interval_panel'
 import { Loading } from '@/app/comps/loading'
 import { Icon } from '@/app/comps/_icon'
 import Link from 'next/link'

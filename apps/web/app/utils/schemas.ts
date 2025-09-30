@@ -410,6 +410,19 @@ export const SwapOptionSchema = z.object({
 	percent: z.number(),
 })
 
-export const TokenSearchParamsSchema = z.object({
-	interval: z.enum(['300000', '3600000', '21600000', '86400000']).transform(Number),
-})
+export const TokenSearchParamsSchema = z
+	.object({
+		interval: z.enum(['5m', '1h', '6h', '24h']),
+	})
+	.transform(data => {
+		switch (data.interval) {
+			case '5m':
+				return { interval: 300000 }
+			case '1h':
+				return { interval: 3600000 }
+			case '6h':
+				return { interval: 21600000 }
+			case '24h':
+				return { interval: 86400000 }
+		}
+	})

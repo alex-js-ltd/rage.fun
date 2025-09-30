@@ -1,13 +1,12 @@
 import { prisma } from '@/app/utils/db'
 import { Prisma } from '@prisma/client'
-import { Interval } from '@/app/comps/interval_panel'
 import { UTCTimestamp, OhlcData } from 'lightweight-charts'
 import { SwapEvent } from '@prisma/client'
 import { isOhlcData } from '@/app/utils/schemas'
 import { Decimal } from '@prisma/client/runtime/library'
 import 'server-only'
 
-function generateCandlestickData(events: SwapEvent[], interval: Interval) {
+function generateCandlestickData(events: SwapEvent[], interval: number) {
 	console.log(events)
 	const formattedEvents = events.map(e => ({
 		time: new Decimal(e.time.toString()).mul(1000).toNumber(),
@@ -48,7 +47,7 @@ function generateCandlestickData(events: SwapEvent[], interval: Interval) {
 	return stitchCandles(output)
 }
 
-export async function getCandlstickData(mint: string, interval: Interval) {
+export async function getCandlstickData(mint: string, interval: number) {
 	const query = Prisma.validator<Prisma.SwapEventFindManyArgs>()({
 		where: {
 			tokenId: mint,
