@@ -10,6 +10,8 @@ export async function GET(req: NextRequest) {
 	const requestHeaders = new Headers(req.headers)
 	const authorization = requestHeaders.get('authorization')
 
+	console.log(authorization)
+	console.log(CRON_SECRET)
 	if (authorization !== CRON_SECRET) {
 		return NextResponse.json('💩', { status: 401 })
 	}
