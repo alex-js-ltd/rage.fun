@@ -18,5 +18,5 @@ export async function getSolPrice() {
 }
 
 export const getCachedSolPrice = unstable_cache(getSolPrice, ['sol-price-usd'], {
-	revalidate: 300,
+	revalidate: 3600,
 })
