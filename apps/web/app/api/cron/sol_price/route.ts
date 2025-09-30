@@ -12,7 +12,7 @@ export async function GET(req: NextRequest) {
 
 	console.log(authorization)
 	console.log(CRON_SECRET)
-	if (authorization !== CRON_SECRET) {
+	if (authorization !== `Bearer ${CRON_SECRET}`) {
 		return NextResponse.json('💩', { status: 401 })
 	}
 
