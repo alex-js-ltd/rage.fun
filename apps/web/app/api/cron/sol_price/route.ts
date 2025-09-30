@@ -39,7 +39,7 @@ export async function GET(req: NextRequest) {
 	// Return a success response
 	return NextResponse.json(
 		{
-			data: [],
+			success: true,
 		},
 		{ status: 200 },
 	)
