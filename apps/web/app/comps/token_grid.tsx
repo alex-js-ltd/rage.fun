@@ -122,7 +122,7 @@ function TokenCard({
 							label={''}
 							value={
 								<div className="flex gap-2">
-									<div className="text-emerald-400">{buyCount}</div> / <div className="text-red-400">{sellCount}</div>
+									<div className="text-buy-100">{buyCount}</div> / <div className="text-sell-100">{sellCount}</div>
 								</div>
 							}
 							tooltip="TXNS"
