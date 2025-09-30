@@ -1,22 +1,11 @@
-import { CoinGeckoClient } from 'coingecko-api-v3'
-import { unstable_cache } from 'next/cache'
+import { kv } from '@vercel/kv'
 
-export async function getSolPrice() {
-	const client = new CoinGeckoClient({
-		timeout: 10000,
-		autoRetry: true,
-	})
-
-	const data = await client.simplePrice({
-		ids: 'solana', // CoinGecko ID for Solana
-		vs_currencies: 'usd', // Get price in USD
-	})
-
-	const solPrice = data.solana.usd
-
-	return solPrice
+export async function getSolPrice<DataType>(): Promise<{ usd: number } | null> {
+	try {
+		const res = await kv.get<{ usd: number }>(`sol_price`)
+		return res
+	} catch (err) {
+		console.error(`❌ Failed to fetch sol price`, err)
+		return null
+	}
 }
-
-export const getCachedSolPrice = unstable_cache(getSolPrice, ['sol-price-usd'], {
-	revalidate: 3600,
-})

@@ -8,7 +8,7 @@ import { type TokenFeedType, SwapEventType } from '@/app/utils/schemas'
 import { BN } from '@coral-xyz/anchor'
 import { formatTokenAmount } from '@/app/utils/misc'
 import { type TopHolderType } from '@/app/utils/schemas'
-import { getCachedSolPrice } from '@/app/data/get_sol_price'
+import { getSolPrice } from '@/app/data/get_sol_price'
 
 import { client } from '@/app/utils/client'
 import { HarvestEvent } from '@prisma/client'
@@ -103,7 +103,13 @@ async function getRefund(event: SwapEventType) {
 		return ['']
 	}
 
-	const solPrice = await getCachedSolPrice()
+	const res = await getSolPrice()
+
+	if (!res) {
+		throw new Error('failed to fetch sol price')
+	}
+
+	const solPrice = res.usd
 
 	const refundInLamports = fromLamports(new BN(event.rentAmount), 9)
 

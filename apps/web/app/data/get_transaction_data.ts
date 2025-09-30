@@ -1,7 +1,7 @@
 import { prisma } from '@/app/utils/db'
 import { Prisma } from '@prisma/client'
 import { type TransactionTableType, createTransactionTableSchema } from '@/app/utils/schemas'
-import { getCachedSolPrice } from '@/app/data/get_sol_price'
+import { getSolPrice } from '@/app/data/get_sol_price'
 import 'server-only'
 
 export async function getTransactionData(mint: string) {
@@ -52,7 +52,13 @@ export async function getTransactionData(mint: string) {
 		throw new Error('poop')
 	}
 
-	const solPrice = await getCachedSolPrice()
+	const res = await getSolPrice()
+
+	if (!res) {
+		throw new Error('failed to fetch sol price')
+	}
+
+	const solPrice = res.usd
 
 	const TransactionTableSchema = createTransactionTableSchema({ decimals, solPrice })
 

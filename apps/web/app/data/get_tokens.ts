@@ -1,8 +1,7 @@
-import { parseWithZod } from '@conform-to/zod'
 import { type SearchParams, SearchSchema } from '@/app/utils/schemas'
 import { prisma } from '@/app/utils/db'
 import { Prisma } from '@prisma/client'
-import { getCachedSolPrice } from '@/app/data/get_sol_price'
+import { getSolPrice } from '@/app/data/get_sol_price'
 import { createTokenFeedSchema } from '@/app/utils/schemas'
 import 'server-only'
 
@@ -25,7 +24,13 @@ export async function getTokens(searchParams: SearchParams) {
 		orderBy: [...getOrderBy({ sortType, sortOrder })],
 	})
 
-	const solPrice = await getCachedSolPrice()
+	const res = await getSolPrice()
+
+	if (!res) {
+		throw new Error('failed to fetch sol price')
+	}
+
+	const solPrice = res.usd
 
 	const data = tokens.map(token => {
 		const TokenFeedSchema = createTokenFeedSchema({
