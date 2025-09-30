@@ -19,6 +19,8 @@ const schema = z.object({
 
 	PINATA_JWT: z.string(),
 
+	CRON_SECRET: z.string(),
+
 	DISCORD_WEBHOOK_ALERT_URL: z.string(),
 	DISCORD_WEBHOOK_CHAT_URL: z.string(),
 
@@ -71,6 +73,8 @@ export function getServerEnv() {
 
 		ABLY_API_KEY: process.env.ABLY_API_KEY,
 		PINATA_JWT: process.env.PINATA_JWT,
+
+		CRON_SECRET: process.env.CRON_SECRET,
 
 		DISCORD_WEBHOOK_ALERT_URL: process.env.DISCORD_WEBHOOK_ALERT_URL,
 		DISCORD_WEBHOOK_CHAT_URL: process.env.DISCORD_WEBHOOK_CHAT_URL,
