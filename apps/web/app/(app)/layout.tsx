@@ -21,7 +21,7 @@ export default function Layout(props: {
 
 	const profile = segment && segment?.length > 20
 
-	const isTokenFeed = segment === 'home' || segment === 'yield' || profile
+	const isTokenFeed = segment === 'home' || segment === 'earn' || profile
 
 	const hide = isOnToken && isTokenFeed
 

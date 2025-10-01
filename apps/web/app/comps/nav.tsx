@@ -20,9 +20,9 @@ export function Nav() {
 		},
 		{ href: { pathname: '/create', query: {} }, scroll: false, label: 'Create', icon: 'face-plus' },
 		{
-			href: { pathname: '/yield', query: {} },
+			href: { pathname: '/earn', query: {} },
 			scroll: true,
-			label: 'Yield',
+			label: 'Earn',
 			icon: 'dollar',
 		},
 	] as const satisfies readonly NavItemProps[]
