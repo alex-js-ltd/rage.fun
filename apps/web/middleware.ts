@@ -8,7 +8,7 @@ import NextAuth, { type Session } from 'next-auth'
 import { authConfig } from '@/app/auth.config'
 import { getServerEnv } from '@/app/utils/env'
 
-const { HELIUS_SECRET } = getServerEnv()
+const { HELIUS_SECRET, CRON_SECRET } = getServerEnv()
 
 export const config = {
 	matcher: ['/((?!_next/static|_next/image|.*\\.webp$).*)'], // Allow middleware to run on API routes
@@ -74,6 +74,15 @@ export default auth(async function middleware(req: NextRequest & { auth: Session
 
 		console.warn(`🚨 PERMA-BLOCKED IP: ${ip} tried /api/helius`)
 
+		return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+	}
+
+	if (authorization === `Bearer ${CRON_SECRET} ` && req.nextUrl.pathname.startsWith('/api/cron')) {
+		const res = NextResponse.next()
+		return res
+	}
+
+	if (authorization !== `Bearer ${CRON_SECRET} ` && req.nextUrl.pathname.startsWith('/api/cron')) {
 		return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 	}
 
