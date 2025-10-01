@@ -256,7 +256,7 @@ export function TokenGrid({
 
 	const pathname = usePathname()
 
-	const isYieldPage = pathname === '/yield' && !!creatorId
+	const isYieldPage = pathname === '/earn' && !!creatorId
 
 	return (
 		<div className="grid">
