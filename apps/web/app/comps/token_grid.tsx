@@ -256,7 +256,7 @@ export function TokenGrid({
 
 	const pathname = usePathname()
 
-	const isYieldPage = pathname === '/earn' && !!creatorId
+	const isEarnPage = pathname === '/earn' && !!creatorId
 
 	return (
 		<div className="grid">
@@ -271,14 +271,14 @@ export function TokenGrid({
 							className="space-y-4 w-full"
 						>
 							<TokenCard token={token} pathname={pathname}>
-								{isYieldPage ? <HarvestYieldForm token={token} /> : null}
+								{isEarnPage ? <HarvestYieldForm token={token} /> : null}
 							</TokenCard>
 						</li>
 					)
 				})}
 
 				{/* Show loader card while fetching */}
-				{isLoading ? <TokenGridFallback isYieldPage={isYieldPage} /> : null}
+				{isLoading ? <TokenGridFallback isEarnPage={isEarnPage} /> : null}
 			</ul>
 
 			<form
@@ -362,13 +362,13 @@ export function TokenCardFallback({ i, children }: { i: number; children?: React
 	)
 }
 
-export function TokenGridFallback({ count = 12, isYieldPage }: { count?: number; isYieldPage?: boolean }) {
+export function TokenGridFallback({ count = 12, isEarnPage }: { count?: number; isEarnPage?: boolean }) {
 	return (
 		<>
 			{Array.from({ length: count }, (_, i) => (
 				<li key={`loading-card-${i}`} className="space-y-4 w-full">
 					<TokenCardFallback i={i}>
-						{isYieldPage && <Loading className="w-[74px] h-[34px] rounded-full" i={i} />}
+						{isEarnPage && <Loading className="w-[74px] h-[34px] rounded-full" i={i} />}
 					</TokenCardFallback>
 				</li>
 			))}
