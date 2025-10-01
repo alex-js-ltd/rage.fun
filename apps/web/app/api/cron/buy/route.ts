@@ -5,9 +5,19 @@ import { program, connection } from '@/app/utils/setup'
 import { getBotWallets } from '@/app/webhook/bot'
 import { BN } from '@coral-xyz/anchor'
 import { getRandomToken } from '@/app/data/get_random_token'
+import { getServerEnv } from '@/app/utils/env'
 import 'server-only'
 
 export async function GET(req: NextRequest) {
+	const { CRON_SECRET } = getServerEnv()
+
+	const requestHeaders = new Headers(req.headers)
+	const authorization = requestHeaders.get('authorization')
+
+	if (authorization !== `Bearer ${CRON_SECRET}`) {
+		return NextResponse.json('💩', { status: 401 })
+	}
+
 	const bots = await getBotWallets()
 
 	const randomIndex = Math.floor(Math.random() * bots.length)
