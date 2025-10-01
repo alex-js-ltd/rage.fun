@@ -103,13 +103,7 @@ async function getRefund(event: SwapEventType) {
 		return ['']
 	}
 
-	const res = await getSolPrice()
-
-	if (!res) {
-		throw new Error('failed to fetch sol price')
-	}
-
-	const solPrice = res.usd
+	const solPrice = await getSolPrice()
 
 	const refundInLamports = fromLamports(new BN(event.rentAmount), 9)
 

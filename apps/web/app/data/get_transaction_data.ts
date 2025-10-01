@@ -52,13 +52,7 @@ export async function getTransactionData(mint: string) {
 		throw new Error('poop')
 	}
 
-	const res = await getSolPrice()
-
-	if (!res) {
-		throw new Error('failed to fetch sol price')
-	}
-
-	const solPrice = res.usd
+	const solPrice = await getSolPrice()
 
 	const TransactionTableSchema = createTransactionTableSchema({ decimals, solPrice })
 

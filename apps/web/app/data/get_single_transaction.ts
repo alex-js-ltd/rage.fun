@@ -26,13 +26,7 @@ export async function getSingleTransaction(signature: string): Promise<Transacti
 	const swapEvent = await prisma.swapEvent.findUniqueOrThrow(query)
 
 	const decimals = await getDecimals(swapEvent.tokenId)
-	const res = await getSolPrice()
-
-	if (!res) {
-		throw new Error('failed to fetch sol price')
-	}
-
-	const solPrice = res.usd
+	const solPrice = await getSolPrice()
 
 	const TransactionTableSchema = createTransactionTableSchema({ decimals, solPrice })
 
@@ -48,13 +42,7 @@ export async function getSingleTransaction(signature: string): Promise<Transacti
 
 export async function getTransaction(swapEvent: SwapEvent) {
 	const decimals = await getDecimals(swapEvent.tokenId)
-	const res = await getSolPrice()
-
-	if (!res) {
-		throw new Error('failed to fetch sol price')
-	}
-
-	const solPrice = res.usd
+	const solPrice = await getSolPrice()
 
 	const TransactionTableSchema = createTransactionTableSchema({ decimals, solPrice })
 

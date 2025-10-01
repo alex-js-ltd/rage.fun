@@ -13,13 +13,7 @@ export async function getTokenWithRelations(mint: string) {
 		include: { metadata: true, bondingCurve: true, marketData: true },
 	})
 
-	const res = await getSolPrice()
-
-	if (!res) {
-		throw new Error('failed to fetch sol price')
-	}
-
-	const solPrice = res.usd
+	const solPrice = await getSolPrice()
 
 	const TokenFeedSchema = createTokenFeedSchema({
 		solPrice,

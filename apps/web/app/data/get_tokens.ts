@@ -24,13 +24,7 @@ export async function getTokens(searchParams: SearchParams) {
 		orderBy: [...getOrderBy({ sortType, sortOrder })],
 	})
 
-	const res = await getSolPrice()
-
-	if (!res) {
-		throw new Error('failed to fetch sol price')
-	}
-
-	const solPrice = res.usd
+	const solPrice = await getSolPrice()
 
 	const data = tokens.map(token => {
 		const TokenFeedSchema = createTokenFeedSchema({
