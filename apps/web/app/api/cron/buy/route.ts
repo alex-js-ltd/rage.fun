@@ -14,6 +14,8 @@ export async function GET(req: NextRequest) {
 	const requestHeaders = new Headers(req.headers)
 	const authorization = requestHeaders.get('authorization')
 
+	console.log('authorization ', authorization)
+
 	if (authorization !== `Bearer ${CRON_SECRET}`) {
 		return NextResponse.json('💩', { status: 401 })
 	}
