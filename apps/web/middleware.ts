@@ -77,15 +77,6 @@ export default auth(async function middleware(req: NextRequest & { auth: Session
 		return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 	}
 
-	if (authorization === `Bearer ${CRON_SECRET} ` && req.nextUrl.pathname.startsWith('/api/cron')) {
-		const res = NextResponse.next()
-		return res
-	}
-
-	if (authorization !== `Bearer ${CRON_SECRET} ` && req.nextUrl.pathname.startsWith('/api/cron')) {
-		return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-	}
-
 	if (!req.auth?.user?.id && req.nextUrl.pathname.startsWith('/api/quick_option')) {
 		return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 	}
