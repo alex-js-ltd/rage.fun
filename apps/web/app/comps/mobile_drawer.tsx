@@ -1,12 +1,12 @@
 'use client'
 
-import { ReactNode, useRef, useEffect } from 'react'
+import { ReactNode, useRef, useEffect, useState } from 'react'
 import { DialogRoot, DialogContent, DialogPortal, DialogTitle, DialogTrigger, DialogClose } from './dialog'
 import { useMediaQuery } from 'usehooks-ts'
 import { Icon } from './_icon'
 
 export function MobileDrawer({ trigger, children }: { trigger: ReactNode; children: ReactNode }) {
-	const matches = useMediaQuery('(min-width: 768px)')
+	const matches = useMediaQuery('(min-width: 640px)')
 
 	const buttonRef = useRef<HTMLButtonElement>(null)
 
@@ -16,8 +16,10 @@ export function MobileDrawer({ trigger, children }: { trigger: ReactNode; childr
 		buttonRef?.current?.click()
 	}, [matches])
 
+	const [open, setOpen] = useState(false)
+
 	return (
-		<DialogRoot modal={false}>
+		<DialogRoot modal={false} open={open} onOpenChange={setOpen}>
 			<DialogTrigger asChild>{trigger}</DialogTrigger>
 
 			<DialogContent
@@ -25,7 +27,8 @@ export function MobileDrawer({ trigger, children }: { trigger: ReactNode; childr
 				onInteractOutside={e => {
 					const t = e.target as HTMLElement
 
-					e.preventDefault()
+					// e.preventDefault()
+					setOpen(true)
 				}}
 			>
 				<DialogTitle className="sr-only">Drawer</DialogTitle>
@@ -39,7 +42,7 @@ export function MobileDrawer({ trigger, children }: { trigger: ReactNode; childr
 					</button>
 				</DialogClose>
 
-				{children}
+				<div className="max-w-[320px] grid mx-auto w-full">{children}</div>
 			</DialogContent>
 		</DialogRoot>
 	)
