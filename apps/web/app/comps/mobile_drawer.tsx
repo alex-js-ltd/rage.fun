@@ -1,12 +1,21 @@
 'use client'
 
-import { ReactNode } from 'react'
+import { ReactNode, useRef, useEffect } from 'react'
 import { DialogRoot, DialogContent, DialogPortal, DialogTitle, DialogTrigger, DialogClose } from './dialog'
-import { useWallet } from '@jup-ag/wallet-adapter'
+import { useMediaQuery } from 'usehooks-ts'
 import { Icon } from './_icon'
 
 export function MobileDrawer({ trigger, children }: { trigger: ReactNode; children: ReactNode }) {
-	const { publicKey } = useWallet()
+	const matches = useMediaQuery('(min-width: 768px)')
+
+	const buttonRef = useRef<HTMLButtonElement>(null)
+
+	useEffect(() => {
+		if (!buttonRef.current) return
+
+		buttonRef?.current?.click()
+	}, [matches])
+
 	return (
 		<DialogRoot modal={false}>
 			<DialogTrigger asChild>{trigger}</DialogTrigger>
@@ -22,7 +31,10 @@ export function MobileDrawer({ trigger, children }: { trigger: ReactNode; childr
 				<DialogTitle className="sr-only">Drawer</DialogTitle>
 
 				<DialogClose asChild>
-					<button className="absolute top-2 right-2 rounded-full hover:bg-white/10 flex items-center justify-center  p-1 size-[30px]">
+					<button
+						ref={buttonRef}
+						className="absolute top-2 right-2 rounded-full hover:bg-white/10 flex items-center justify-center  p-1 size-[30px]"
+					>
 						<Icon className="size-[20px] text-text-100 " name="close" />
 					</button>
 				</DialogClose>
