@@ -120,11 +120,6 @@ export default async function Page(props: Props) {
 			</Suspense>
 
 			<MobileDrawer
-				content={
-					<Suspense>
-						<SwapForm tokenPromise={tokenPromise} />
-					</Suspense>
-				}
 				trigger={
 					<div className="fixed bottom-[calc(52px+16px)] right-8 sm:hidden">
 						<Button className="pointer-events-auto rounded-full border border-white border-opacity-[0.125] bg-background-100">
@@ -132,7 +127,11 @@ export default async function Page(props: Props) {
 						</Button>
 					</div>
 				}
-			/>
+			>
+				<Suspense>
+					<SwapForm tokenPromise={tokenPromise} />
+				</Suspense>
+			</MobileDrawer>
 		</div>
 	)
 }
