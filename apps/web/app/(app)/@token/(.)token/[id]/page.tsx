@@ -3,6 +3,7 @@ import { IntervalPanel } from '@/app/comps/interval_panel'
 import { Loading } from '@/app/comps/loading'
 import { Icon } from '@/app/comps/_icon'
 import Link from 'next/link'
+import Image from 'next/image'
 
 import { getCandlstickData } from '@/app/data/get_candlestick_data'
 import { CandlestickChart } from '@/app/comps/candlestick_chart'
@@ -117,6 +118,15 @@ export default async function Page(props: Props) {
 			<Suspense>
 				<Comments mint={mint} commentsPromise={commentsPromise} />
 			</Suspense>
+
+			{/* Floating buy button, aligned with center column exactly like your nav */}
+			<div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-[min(100vw,600px)] z-50 pointer-events-none sm:hidden">
+				<div className="relative w-full">
+					<Button className="pointer-events-auto absolute bottom-[calc(52px+env(safe-area-inset-bottom)+32px)] right-8 w-[56px] h-[56px] rounded-full border border-white border-opacity-[0.125] bg-background-100">
+						<Image src="/rage.png" alt="logo" width={56} height={56} />
+					</Button>
+				</div>
+			</div>
 		</div>
 	)
 }
