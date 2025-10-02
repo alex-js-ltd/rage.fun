@@ -1,8 +1,6 @@
 import { Suspense, Fragment, cache, use } from 'react'
 import { IntervalPanel } from '@/app/comps/interval_panel'
 import { Loading } from '@/app/comps/loading'
-import { Icon } from '@/app/comps/_icon'
-import Link from 'next/link'
 import Image from 'next/image'
 
 import { getCandlstickData } from '@/app/data/get_candlestick_data'
@@ -25,6 +23,8 @@ import { getComments } from '@/app/data/get_comments'
 import { Comments } from '@/app/comps/comments'
 import { ReplyForm } from '@/app/comps/reply_form'
 import { TokenSearchParamsSchema } from '@/app/utils/schemas'
+import { MobileDrawer } from '@/app/comps/mobile_drawer'
+import { SwapForm } from '@/app/comps/swap_form'
 
 export const dynamic = 'force-dynamic'
 
@@ -55,7 +55,7 @@ export default async function Page(props: Props) {
 	const commentsPromise = getComments(mint)
 
 	return (
-		<div className="flex flex-col w-full min-h-[100vh] border-x border-white border-opacity-[0.125] bg-background-100">
+		<div className="flex flex-col w-full min-h-[100vh] border-x border-white border-opacity-[0.125] bg-background-100 relative">
 			<div
 				className="sticky top-0 h-[52px] flex items-center z-50 w-full
 							  bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60
@@ -119,14 +119,20 @@ export default async function Page(props: Props) {
 				<Comments mint={mint} commentsPromise={commentsPromise} />
 			</Suspense>
 
-			{/* Floating buy button, aligned with center column exactly like your nav */}
-			<div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-[min(100vw,600px)] z-50 pointer-events-none sm:hidden">
-				<div className="relative w-full">
-					<Button className="pointer-events-auto absolute bottom-[calc(52px+env(safe-area-inset-bottom)+32px)] right-8 w-[56px] h-[56px] rounded-full border border-white border-opacity-[0.125] bg-background-100">
-						<Image src="/rage.png" alt="logo" width={56} height={56} />
-					</Button>
-				</div>
-			</div>
+			<MobileDrawer
+				content={
+					<Suspense>
+						<SwapForm tokenPromise={tokenPromise} />
+					</Suspense>
+				}
+				trigger={
+					<div className="fixed bottom-[calc(52px+16px)] right-8 sm:hidden">
+						<Button className="pointer-events-auto rounded-full border border-white border-opacity-[0.125] bg-background-100">
+							<Image src="/rage.png" alt="logo" width={56} height={56} />
+						</Button>
+					</div>
+				}
+			/>
 		</div>
 	)
 }

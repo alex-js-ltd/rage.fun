@@ -49,7 +49,7 @@ export default async function Page(props: Props) {
 	const commentsPromise = getComments(mint)
 
 	return (
-		<div className="flex flex-col w-full min-h-[100vh] border-x border-white border-opacity-[0.125] bg-background-100">
+		<div className="flex flex-col w-full min-h-[100vh] border-x border-white border-opacity-[0.125] bg-background-100 relative">
 			<div
 				className="sticky top-0 h-[52px] flex items-center z-50 w-full
 							  bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60
