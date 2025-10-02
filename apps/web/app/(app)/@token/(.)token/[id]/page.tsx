@@ -41,7 +41,7 @@ export default async function Page(props: Props) {
 		return <div>incorrect search params</div>
 	}
 
-	const interval = parse.data.interval
+	const { interval } = parse.data
 
 	const ohlcPromise = getCandlstickData(mint, interval)
 
