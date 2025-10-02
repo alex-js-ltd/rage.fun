@@ -12,7 +12,7 @@ export function MobileDrawer({ trigger, children }: { trigger: ReactNode; childr
 			<DialogTrigger asChild>{trigger}</DialogTrigger>
 
 			<DialogContent
-				className="absolute bottom-[52px] sm:bottom-0 w-full max-w-[600px] h-auto frost z-50 p-10"
+				className="absolute bottom-[52px] sm:bottom-0 w-full max-w-[600px] h-auto frost z-50 p-10 data-[state=open]:animate-slideFromBottom data-[state=close]:animate-slideToBottom"
 				onInteractOutside={e => {
 					const t = e.target as HTMLElement
 

@@ -87,13 +87,13 @@ const config: Config = {
 				},
 
 				slideFromBottom: {
-					'0%': { transform: 'translate3d(-50%, 100%, 0)' },
-					'100%': { transform: 'translate3d(-50%, 0, 0)' },
+					'0%': { transform: 'translate3d(0%, 100%, 0)' },
+					'100%': { transform: 'translate3d(0%, 0, 0)' },
 				},
 
 				slideToBottom: {
-					'0%': { transform: 'translate3d(-50%, 0%, 0)' },
-					'100%': { transform: 'translate3d(-50%, 100%, 0)' },
+					'0%': { transform: 'translate3d(0%, 0%, 0)' },
+					'100%': { transform: 'translate3d(0%, 100%, 0)' },
 				},
 
 				hide: {
