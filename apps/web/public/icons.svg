@@ -5,10 +5,7 @@
     <symbol id="submit" stroke-linejoin="round" viewBox="0 0 16 16" style="color: currentcolor;">
       <path fill-rule="evenodd" clip-rule="evenodd" d="M8.70711 1.39644C8.31659 1.00592 7.68342 1.00592 7.2929 1.39644L2.21968 6.46966L1.68935 6.99999L2.75001 8.06065L3.28034 7.53032L7.25001 3.56065V14.25V15H8.75001V14.25V3.56065L12.7197 7.53032L13.25 8.06065L14.3107 6.99999L13.7803 6.46966L8.70711 1.39644Z" fill="currentColor"></path>
     </symbol>
-    <!-- Close -->
-    <symbol id="close" fill="currentColor" viewBox="0 0 256 256">
-      <path d="M205.66 194.34a8 8 0 0 1-11.32 11.32L128 139.31l-66.34 66.35a8 8 0 0 1-11.32-11.32L116.69 128 50.34 61.66a8 8 0 0 1 11.32-11.32L128 116.69l66.34-66.35a8 8 0 0 1 11.32 11.32L139.31 128Z"></path>
-    </symbol>
+  
     <!-- Upload -->
     <symbol id="upload" fill="none" viewBox="0 0 16 16">
       <g clip-path="url(#a)">
@@ -165,4 +162,8 @@
 
   <!-- More -->
   <symbol id="more-horizontal" viewBox="0 0 24 24" aria-hidden="true" fill="currentColor" ><g><path d="M3 12c0-1.1.9-2 2-2s2 .9 2 2-.9 2-2 2-2-.9-2-2zm9 2c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm7 0c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2z"></path></g></symbol>
+
+
+ <!-- Close -->
+  <symbol viewBox="0 0 24 24" aria-hidden="true" id="close" fill="currentColor"><g><path d="M10.59 12L4.54 5.96l1.42-1.42L12 10.59l6.04-6.05 1.42 1.42L13.41 12l6.05 6.04-1.42 1.42L12 13.41l-6.04 6.05-1.42-1.42L10.59 12z"></path></g></symbol>
 </svg>
