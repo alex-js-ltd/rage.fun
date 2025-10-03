@@ -22,10 +22,17 @@ export function MobileDrawer({ trigger, children }: { trigger: ReactNode; childr
 
 			<DialogContent
 				forceMount
-				className="absolute bottom-[52px] sm:bottom-0  w-full max-w-[600px] h-auto frost z-10 p-10  data-[state=open]:translate-y-0
+				className="
+    absolute bottom-[52px] sm:bottom-0 w-full max-w-[600px] h-auto frost z-10 p-10
+    transition-all  duration-300
+
+    data-[state=open]:translate-y-0
+    data-[state=open]:opacity-100
+
     data-[state=closed]:translate-y-full
+    data-[state=closed]:opacity-0
     data-[state=closed]:pointer-events-none
-  transition-transform duration-300"
+  "
 				onInteractOutside={e => {
 					const t = e.target as HTMLElement
 					e.preventDefault()
