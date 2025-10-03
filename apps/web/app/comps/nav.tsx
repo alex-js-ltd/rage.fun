@@ -71,10 +71,10 @@ export function Nav() {
 		return (
 			<nav
 				className="sm:hidden h-[52px]
-          fixed bottom-0
-          w-[100vw] z-40
-          border-t border-white/10 bg-background/80 backdrop-blur
-          [padding-bottom:max(0px,env(safe-area-inset-bottom))]"
+    fixed bottom-0 left-1/2 -translate-x-1/2
+    max-w-[600px] w-full z-40
+    border-t border-white/10 bg-background/80 backdrop-blur
+    [padding-bottom:max(0px,env(safe-area-inset-bottom))]"
 			>
 				<div className="flex gap-1 w-full items-center justify-between">
 					{NAV_ITEMS.map(l => (

@@ -34,6 +34,8 @@ export default function Layout(props: {
 					className={cn(
 						'grid min-h-screen items-stretch',
 						'grid-cols-1',
+
+						'xs:[grid-template-columns:minmax(0px,600px)]',
 						'sm:[grid-template-columns:minmax(70px,70px)_minmax(0px,600px)]',
 						'md:[grid-template-columns:minmax(70px,70px)_600px]',
 						'lg:[grid-template-columns:minmax(0,259px)_600px_minmax(290px,350px)]',
