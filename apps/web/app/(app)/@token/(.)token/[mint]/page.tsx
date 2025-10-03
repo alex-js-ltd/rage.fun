@@ -59,7 +59,7 @@ export default async function Page(props: Props) {
 			<div className="sticky top-0 h-[52px] flex items-center z-50 w-full backdrop-blur">
 				<Back />
 			</div>
-			<div className="relative overflow-y-hidden flex-1 overflow-x-hidden">
+			<div className="relative overflow-y-hidden flex-1 overflow-x-hidden pb-40">
 				<div className="border-t border-white border-opacity-[0.125] h-fit min-h-[255px] w-full">
 					<div className="flex items-center justify-between p-3 border-b border-white border-opacity-[0.125]">
 						<Suspense fallback={<TokenPairFallback />}>
@@ -117,7 +117,7 @@ export default async function Page(props: Props) {
 
 				<MobileDrawer
 					trigger={
-						<div className="fixed bottom-[calc(52px+16px)] right-8 sm:hidden">
+						<div className="fixed bottom-[calc(52px+16px)] right-8 sm:hidden z-50">
 							<Button className="pointer-events-auto rounded-full border border-white border-opacity-[0.125] bg-background-100">
 								<Image src="/rage.png" alt="logo" width={56} height={56} />
 							</Button>
