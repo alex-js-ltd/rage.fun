@@ -24,7 +24,7 @@ import { revalidateTag, revalidatePath } from 'next/cache'
 import { getServerEnv } from '@/app/utils/env'
 import * as Ably from 'ably'
 import { SwapEventSchema, SwapEventType, TokenFeedType, TopHolderType } from '@/app/utils/schemas'
-import { getTokenWithRelations } from '@/app/data/get_token'
+import { getTokenFeed } from '@/app/data/get_token_feed'
 import { getSigner } from '@/app/utils/misc'
 import { getTransaction } from '@/app/data/get_single_transaction'
 import { getTopHolders } from '@/app/data/get_top_holders'
@@ -209,8 +209,12 @@ export async function processSwapEvents(swapEvents: EventData<'swapEvent'>[]) {
 
 			const tokenId = parsed.data.tokenId
 
+			revalidateTag(`feed-${tokenId}`)
+			revalidatePath(`@token/(.)token/${tokenId}`)
+			revalidatePath(`/token/${tokenId}`)
+
 			const transaction = await getTransaction(swapEvent)
-			const token = await getTokenWithRelations(tokenId)
+			const token = await getTokenFeed(tokenId)
 
 			await AblyEvents.publishUpdateEvent(updateChannel, token, parsed.data.swapType)
 			await AblyEvents.publishSwapEvent(swapChannel, parsed.data)
@@ -223,10 +227,6 @@ export async function processSwapEvents(swapEvents: EventData<'swapEvent'>[]) {
 			if (curve.status === 'Complete') {
 				await deployToRaydium({ program, mint: event.data.mint, payer })
 			}
-
-			revalidateTag(tokenId)
-			revalidatePath(`@token/(.)token/${tokenId}`)
-			revalidatePath(`/token/${tokenId}`)
 
 			const socialAlert: { swapEvent: SwapEventType; token: TokenFeedType; topHolders: TopHolderType[] } = {
 				swapEvent: parsed.data,

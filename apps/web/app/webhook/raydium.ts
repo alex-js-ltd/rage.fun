@@ -1,7 +1,7 @@
 import { program } from '@/app/utils/setup'
 import { type EventData, fetchBondingCurveState, getBondingCurveState } from '@repo/rage'
 
-import { getTokenWithRelations } from '@/app/data/get_token'
+import { getTokenFeed } from '@/app/data/get_token_feed'
 import { PublicKey } from '@solana/web3.js'
 import { prisma } from '@/app/utils/db'
 import { Prisma, SwapType, SwapEvent, $Enums } from '@prisma/client'
@@ -37,7 +37,7 @@ export async function processRaydiumEvents(raydiumEvents: EventData<'raydiumEven
 	for await (const event of raydiumEvents) {
 		try {
 			await updateBondingCurveSupply(event.data.mint)
-			const token = await getTokenWithRelations(event.data.mint.toBase58())
+			const token = await getTokenFeed(event.data.mint.toBase58())
 		} catch (err) {
 			console.error('processRaydiumEvents error', {
 				signature: event.signature,

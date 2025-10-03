@@ -7,7 +7,7 @@ import { updateBondingCurveState, updateMarketData } from '@/app/webhook/swap'
 
 import { getServerEnv } from '@/app/utils/env'
 import * as Ably from 'ably'
-import { getTokenWithRelations } from '@/app/data/get_token'
+import { getTokenFeed } from '@/app/data/get_token_feed'
 import { program } from '@/app/utils/setup'
 import { fetchBondingCurveState } from '@repo/rage'
 
@@ -64,7 +64,7 @@ export async function processHarvestEvents(harvestEvents: EventData<'harvestEven
 			await updateBondingCurveState(state)
 			await updateMarketData(state)
 
-			const token = await getTokenWithRelations(harvestAlert.tokenId)
+			const token = await getTokenFeed(harvestAlert.tokenId)
 
 			await AblyEvents.publishUpdateEvent(updateChannel, token, 'Harvest')
 		} catch (err) {

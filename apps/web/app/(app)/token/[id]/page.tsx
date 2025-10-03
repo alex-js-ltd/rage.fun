@@ -5,7 +5,7 @@ import { IntervalPanel } from '@/app/comps/interval_panel'
 import { Loading } from '@/app/comps/loading'
 import { getCandlstickData } from '@/app/data/get_candlestick_data'
 import { CandlestickChart } from '@/app/comps/candlestick_chart'
-import { getTokenWithRelations } from '@/app/data/get_token'
+import { getCachedTokenFeed } from '@/app/data/get_token_feed'
 import { Tabs, List, Trigger, Content } from '@/app/comps/tabs'
 import { Button } from '@/app/comps/button'
 import { TransactionTable } from '@/app/comps/transaction_table'
@@ -40,7 +40,7 @@ export default async function Page(props: Props) {
 
 	const ohlcPromise = getCandlstickData(mint, interval)
 
-	const tokenPromise = getTokenWithRelations(mint)
+	const tokenPromise = getCachedTokenFeed(mint)
 
 	const transactionPromise = getTransactionData(mint)
 

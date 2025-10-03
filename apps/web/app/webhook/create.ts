@@ -4,7 +4,7 @@ import { program } from '@/app/utils/setup'
 import { prisma } from '@/app/utils/db'
 import { Prisma, $Enums, BondingCurve } from '@prisma/client'
 import { getServerEnv } from '@/app/utils/env'
-import { getTokenWithRelations } from '@/app/data/get_token'
+import { getTokenFeed } from '@/app/data/get_token_feed'
 import * as AblyEvents from '@/app/webhook/ably'
 import { type SwapEventType, type TokenFeedType, type TopHolderType } from '@/app/utils/schemas'
 import { revalidateTag } from 'next/cache'
@@ -114,7 +114,7 @@ export async function processCreateEvents(createEvents: EventData<'createEvent'>
 
 			await createMarketData(state)
 
-			const token = await getTokenWithRelations(event.data.mint.toBase58())
+			const token = await getTokenFeed(event.data.mint.toBase58())
 
 			await AblyEvents.publishUpdateEvent(channel, token, 'Create')
 
