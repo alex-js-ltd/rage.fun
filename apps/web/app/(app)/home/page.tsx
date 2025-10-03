@@ -19,7 +19,7 @@ export default async function Page(props: Props) {
 	const tokenPromise = getTokens({ sortOrder, sortType, cursorId })
 
 	return (
-		<div className="flex-1">
+		<div className="w-full max-w-[600px]">
 			<Events />
 
 			<div

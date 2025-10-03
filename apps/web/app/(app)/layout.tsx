@@ -33,10 +33,10 @@ export default function Layout(props: {
 				<div
 					className={cn(
 						'grid min-h-screen items-stretch',
-						'grid-cols-1',
+						'grid-cols-1 w-full max-w-[600px]',
 
 						'xs:[grid-template-columns:minmax(0px,600px)]',
-						'sm:[grid-template-columns:minmax(70px,70px)_minmax(0px,600px)]',
+						'sm:[grid-template-columns:minmax(70px,70px)_minmax(0px,600px)] sm:max-w-none sm:w-fit',
 						'md:[grid-template-columns:minmax(70px,70px)_600px]',
 						'lg:[grid-template-columns:minmax(0,259px)_600px_minmax(290px,350px)]',
 						'xl:[grid-template-columns:minmax(0,259px)_600px_minmax(350px,350px)]',
