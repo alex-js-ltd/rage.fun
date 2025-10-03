@@ -6,7 +6,7 @@ import Image from 'next/image'
 import { getCandlstickData } from '@/app/data/get_candlestick_data'
 import { CandlestickChart } from '@/app/comps/candlestick_chart'
 
-import { getCachedTokenFeed } from '@/app/data/get_token_feed'
+import { getTokenFeed } from '@/app/data/get_token_feed'
 
 import { Tabs, List, Trigger, Content } from '@/app/comps/tabs'
 import { Button } from '@/app/comps/button'
@@ -46,7 +46,7 @@ export default async function Page(props: Props) {
 
 	const ohlcPromise = getCandlstickData(mint, interval)
 
-	const tokenPromise = getCachedTokenFeed(mint)
+	const tokenPromise = getTokenFeed(mint)
 
 	const transactionPromise = getTransactionData(mint)
 
