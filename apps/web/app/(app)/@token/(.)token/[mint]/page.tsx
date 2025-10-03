@@ -1,4 +1,4 @@
-import { Suspense, Fragment, cache, use } from 'react'
+import { Suspense } from 'react'
 import { IntervalPanel } from '@/app/comps/interval_panel'
 import { Loading } from '@/app/comps/loading'
 import Image from 'next/image'
@@ -56,11 +56,7 @@ export default async function Page(props: Props) {
 
 	return (
 		<div className="flex flex-col w-full min-h-[100vh] border-x border-white border-opacity-[0.125] bg-background-100 relative">
-			<div
-				className="sticky top-0 h-[52px] flex items-center z-50 w-full
-							  bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60
-							  max-w-[600px] "
-			>
+			<div className="sticky top-0 h-[52px] flex items-center z-50 w-full backdrop-blur max-w-[600px]">
 				<Back />
 			</div>
 
