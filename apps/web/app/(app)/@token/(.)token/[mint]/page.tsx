@@ -115,7 +115,7 @@ export default async function Page(props: Props) {
 					<Comments mint={mint} commentsPromise={commentsPromise} />
 				</Suspense>
 
-				{/* <MobileDrawer
+				<MobileDrawer
 					trigger={
 						<div className="fixed bottom-[calc(52px+16px)] right-8 sm:hidden">
 							<Button className="pointer-events-auto rounded-full border border-white border-opacity-[0.125] bg-background-100">
@@ -127,7 +127,7 @@ export default async function Page(props: Props) {
 					<Suspense>
 						<SwapForm tokenPromise={tokenPromise} />
 					</Suspense>
-				</MobileDrawer> */}
+				</MobileDrawer>
 			</div>
 		</div>
 	)
