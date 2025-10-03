@@ -10,7 +10,7 @@ const config: Config = {
 	theme: {
 		extend: {
 			screens: {
-				xs: '500px', // custom breakpoint smaller than sm
+				xs: '600px', // custom breakpoint smaller than sm
 			},
 			colors: {
 				'background-100': 'hsl(var(--background-100))',
