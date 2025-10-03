@@ -23,7 +23,7 @@ export function MobileDrawer({ trigger, children }: { trigger: ReactNode; childr
 			<DialogContent
 				forceMount
 				className="
-fixed bottom-[0px] sm:bottom-0 w-full max-w-[600px] h-auto frost z-50 p-10
+fixed bottom-[0px] sm:bottom-0 w-full max-w-[600px] h-auto min-h-[381.5px] frost z-50 p-10
     transition-all  duration-300
 
     data-[state=open]:translate-y-0

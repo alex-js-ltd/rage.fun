@@ -29,7 +29,7 @@ export default function Layout(props: {
 
 	return (
 		<>
-			<div className="flex justify-center">
+			<div className="flex justify-center w-full">
 				<div
 					className={cn(
 						'grid min-h-screen items-stretch',

@@ -24,7 +24,7 @@ import { Comments } from '@/app/comps/comments'
 import { ReplyForm } from '@/app/comps/reply_form'
 import { TokenSearchParamsSchema } from '@/app/utils/schemas'
 import { MobileDrawer } from '@/app/comps/mobile_drawer'
-import { SwapForm } from '@/app/comps/swap_form'
+import { SwapForm, SwapFormFallback } from '@/app/comps/swap_form'
 
 export const dynamic = 'force-dynamic'
 
@@ -55,11 +55,11 @@ export default async function Page(props: Props) {
 	const commentsPromise = getComments(mint)
 
 	return (
-		<div className="flex flex-col w-full min-h-[100vh] border-x border-white border-opacity-[0.125] bg-background-100 relative">
+		<div className="flex flex-col w-full min-h-[100vh] border-x border-white border-opacity-[0.125] bg-background-100 relative max-w-[600px]">
 			<div className="sticky top-0 h-[52px] flex items-center z-50 w-full backdrop-blur">
 				<Back />
 			</div>
-			<div className="relative overflow-y-hidden flex-1 overflow-x-hidden pb-40">
+			<div className="relative overflow-y-hidden flex-1 overflow-x-hidden pb-40 w-full">
 				<div className="border-t border-white border-opacity-[0.125] h-fit min-h-[255px] w-full">
 					<div className="flex items-center justify-between p-3 border-b border-white border-opacity-[0.125]">
 						<Suspense fallback={<TokenPairFallback />}>
@@ -68,7 +68,7 @@ export default async function Page(props: Props) {
 						<IntervalPanel mint={mint} />
 					</div>
 
-					<Suspense fallback={<Loading i={0} className="h-[255px] w-full" />}>
+					<Suspense fallback={<Loading i={0} className="h-[255px] w-[600px]" />}>
 						<CandlestickChart ohlcPromise={ohlcPromise} mint={mint} interval={interval} />
 					</Suspense>
 				</div>
@@ -124,7 +124,7 @@ export default async function Page(props: Props) {
 						</div>
 					}
 				>
-					<Suspense>
+					<Suspense fallback={<SwapFormFallback />}>
 						<SwapForm tokenPromise={tokenPromise} />
 					</Suspense>
 				</MobileDrawer>

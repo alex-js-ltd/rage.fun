@@ -19,5 +19,5 @@ export function CandlestickChart({ ohlcPromise, mint, interval }: CandlestickCha
 
 	const { ref } = useLightweightChart(data, mint, interval)
 
-	return <div ref={ref} className="relative col-span-2 w-full overflow-hidden min-h-[255px]" />
+	return <div ref={ref} className="relative w-full max-w-[600px] overflow-hidden min-h-[255px]" />
 }
