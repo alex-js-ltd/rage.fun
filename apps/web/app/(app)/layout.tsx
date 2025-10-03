@@ -33,7 +33,7 @@ export default function Layout(props: {
 				<div
 					className={cn(
 						'grid min-h-screen items-stretch',
-						'[grid-template-columns:minmax(0,600px)]',
+						'grid-cols-1',
 						'sm:[grid-template-columns:minmax(70px,70px)_minmax(0px,600px)]',
 						'md:[grid-template-columns:minmax(70px,70px)_600px]',
 						'lg:[grid-template-columns:minmax(0,259px)_600px_minmax(290px,350px)]',
@@ -45,7 +45,7 @@ export default function Layout(props: {
 
 					{/* CENTER (your Page renders here) */}
 					<main className={cn('relative w-full max-w-[600px]')}>
-						<div className={cn(hide && 'absolute top-0 overflow-y-hidden h-[100vh] opacity-0')}>{props.children}</div>
+						<div className={cn(hide && 'sr-only')}>{props.children}</div>
 
 						<div className={cn('', isOnCreate && 'absolute top-0 inset-0')}>{props.token}</div>
 					</main>

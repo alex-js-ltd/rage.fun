@@ -56,10 +56,10 @@ export default async function Page(props: Props) {
 
 	return (
 		<div className="flex flex-col w-full min-h-[100vh] border-x border-white border-opacity-[0.125] bg-background-100 relative">
-			<div className="sticky top-0 h-[52px] flex items-center z-50 w-full backdrop-blur max-w-[600px]">
+			<div className="sticky top-0 h-[52px] flex items-center z-50 w-full backdrop-blur">
 				<Back />
 			</div>
-			<div className="relative overflow-y-hidden flex-1">
+			<div className="relative overflow-y-hidden flex-1 overflow-x-hidden">
 				<div className="border-t border-white border-opacity-[0.125] h-fit min-h-[255px] w-full">
 					<div className="flex items-center justify-between p-3 border-b border-white border-opacity-[0.125]">
 						<Suspense fallback={<TokenPairFallback />}>
@@ -115,7 +115,7 @@ export default async function Page(props: Props) {
 					<Comments mint={mint} commentsPromise={commentsPromise} />
 				</Suspense>
 
-				<MobileDrawer
+				{/* <MobileDrawer
 					trigger={
 						<div className="fixed bottom-[calc(52px+16px)] right-8 sm:hidden">
 							<Button className="pointer-events-auto rounded-full border border-white border-opacity-[0.125] bg-background-100">
@@ -127,7 +127,7 @@ export default async function Page(props: Props) {
 					<Suspense>
 						<SwapForm tokenPromise={tokenPromise} />
 					</Suspense>
-				</MobileDrawer>
+				</MobileDrawer> */}
 			</div>
 		</div>
 	)

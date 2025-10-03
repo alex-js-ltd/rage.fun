@@ -71,8 +71,8 @@ export function Nav() {
 		return (
 			<nav
 				className="sm:hidden h-[52px]
-          fixed bottom-0 left-1/2 -translate-x-1/2
-          w-[min(100vw,600px)] z-40
+          fixed bottom-0
+          w-[100vw] z-40
           border-t border-white/10 bg-background/80 backdrop-blur
           [padding-bottom:max(0px,env(safe-area-inset-bottom))]"
 			>
