@@ -33,6 +33,8 @@ const config: Config = {
 
 				'sell-100': 'hsl(var(--sell-100))',
 				'sell-200': 'hsl(var(--sell-200))',
+
+				'rage-100': 'hsl(var(--rage-100))',
 			},
 			fontFamily: {
 				sans: ['var(--font-geist-sans)'],
