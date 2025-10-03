@@ -59,75 +59,76 @@ export default async function Page(props: Props) {
 			<div className="sticky top-0 h-[52px] flex items-center z-50 w-full backdrop-blur max-w-[600px]">
 				<Back />
 			</div>
+			<div className="relative overflow-y-hidden flex-1">
+				<div className="border-t border-white border-opacity-[0.125] h-fit min-h-[255px] w-full">
+					<div className="flex items-center justify-between p-3 border-b border-white border-opacity-[0.125]">
+						<Suspense fallback={<TokenPairFallback />}>
+							<TokenPair tokenPromise={tokenPromise} />
+						</Suspense>
+						<IntervalPanel mint={mint} />
+					</div>
 
-			<div className="border-t border-white border-opacity-[0.125] h-fit min-h-[255px] w-full">
-				<div className="flex items-center justify-between p-3 border-b border-white border-opacity-[0.125]">
-					<Suspense fallback={<TokenPairFallback />}>
-						<TokenPair tokenPromise={tokenPromise} />
+					<Suspense fallback={<Loading i={0} className="h-[255px] w-full" />}>
+						<CandlestickChart ohlcPromise={ohlcPromise} mint={mint} interval={interval} />
 					</Suspense>
-					<IntervalPanel mint={mint} />
 				</div>
 
-				<Suspense fallback={<Loading i={0} className="h-[255px] w-full" />}>
-					<CandlestickChart ohlcPromise={ohlcPromise} mint={mint} interval={interval} />
-				</Suspense>
-			</div>
+				<Tabs className="relative z-0 flex flex-col">
+					<List className="flex items-center px-2 h-[40px]">
+						<Trigger value="tab1" asChild>
+							<Button className="data-[state=active]:border-white border-b border-transparent" variant="chart">
+								Transactions
+							</Button>
+						</Trigger>
 
-			<Tabs className="relative z-0 flex flex-col">
-				<List className="flex items-center px-2 h-[40px]">
-					<Trigger value="tab1" asChild>
-						<Button className="data-[state=active]:border-white border-b border-transparent" variant="chart">
-							Transactions
-						</Button>
-					</Trigger>
+						<Trigger value="tab2" asChild>
+							<Button className="data-[state=active]:border-white border-b border-transparent" variant="chart">
+								Holders
+							</Button>
+						</Trigger>
+					</List>
 
-					<Trigger value="tab2" asChild>
-						<Button className="data-[state=active]:border-white border-b border-transparent" variant="chart">
-							Holders
-						</Button>
-					</Trigger>
-				</List>
+					<Content
+						value="tab1"
+						forceMount
+						className="data-[state=inactive]:hidden data-[state=inactive]:absolute data-[state=inactive]:pointer-events-none max-h-[172px]"
+					>
+						<Suspense fallback={<Loading i={1} className="w-full h-[172px] " />}>
+							<TransactionTable transactionPromise={transactionPromise} tokenPromise={tokenPromise} />
+						</Suspense>
+					</Content>
 
-				<Content
-					value="tab1"
-					forceMount
-					className="data-[state=inactive]:hidden data-[state=inactive]:absolute data-[state=inactive]:pointer-events-none max-h-[172px]"
-				>
-					<Suspense fallback={<Loading i={1} className="w-full h-[172px] " />}>
-						<TransactionTable transactionPromise={transactionPromise} tokenPromise={tokenPromise} />
-					</Suspense>
-				</Content>
+					<Content
+						value="tab2"
+						forceMount
+						className="data-[state=inactive]:hidden data-[state=inactive]:absolute data-[state=inactive]:pointer-events-none max-h-[172px]"
+					>
+						<Suspense fallback={<Loading i={2} className="w-full h-[172px] overflow-hidden " />}>
+							<HoldersTable holdersPromise={holdersPromise} />
+						</Suspense>
+					</Content>
+				</Tabs>
 
-				<Content
-					value="tab2"
-					forceMount
-					className="data-[state=inactive]:hidden data-[state=inactive]:absolute data-[state=inactive]:pointer-events-none max-h-[172px]"
-				>
-					<Suspense fallback={<Loading i={2} className="w-full h-[172px] overflow-hidden " />}>
-						<HoldersTable holdersPromise={holdersPromise} />
-					</Suspense>
-				</Content>
-			</Tabs>
+				<ReplyForm mint={mint} />
 
-			<ReplyForm mint={mint} />
-
-			<Suspense>
-				<Comments mint={mint} commentsPromise={commentsPromise} />
-			</Suspense>
-
-			<MobileDrawer
-				trigger={
-					<div className="fixed bottom-[calc(52px+16px)] right-8 sm:hidden">
-						<Button className="pointer-events-auto rounded-full border border-white border-opacity-[0.125] bg-background-100">
-							<Image src="/rage.png" alt="logo" width={56} height={56} />
-						</Button>
-					</div>
-				}
-			>
 				<Suspense>
-					<SwapForm tokenPromise={tokenPromise} />
+					<Comments mint={mint} commentsPromise={commentsPromise} />
 				</Suspense>
-			</MobileDrawer>
+
+				<MobileDrawer
+					trigger={
+						<div className="fixed bottom-[calc(52px+16px)] right-8 sm:hidden">
+							<Button className="pointer-events-auto rounded-full border border-white border-opacity-[0.125] bg-background-100">
+								<Image src="/rage.png" alt="logo" width={56} height={56} />
+							</Button>
+						</div>
+					}
+				>
+					<Suspense>
+						<SwapForm tokenPromise={tokenPromise} />
+					</Suspense>
+				</MobileDrawer>
+			</div>
 		</div>
 	)
 }

@@ -44,7 +44,7 @@ export default function Layout(props: {
 					<aside className="z-50">{props.nav}</aside>
 
 					{/* CENTER (your Page renders here) */}
-					<main className={cn('relative w-full max-w-[600px] overflow-y-hidden')}>
+					<main className={cn('relative w-full max-w-[600px]')}>
 						<div className={cn(hide && 'absolute top-0 overflow-y-hidden h-[100vh] opacity-0')}>{props.children}</div>
 
 						<div className={cn('', isOnCreate && 'absolute top-0 inset-0')}>{props.token}</div>
