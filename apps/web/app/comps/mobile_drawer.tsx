@@ -8,15 +8,13 @@ import { Icon } from './_icon'
 export function MobileDrawer({ trigger, children }: { trigger: ReactNode; children: ReactNode }) {
 	const matches = useMediaQuery('(min-width: 640px)')
 
-	const buttonRef = useRef<HTMLButtonElement>(null)
+	const [open, setOpen] = useState(false)
 
 	useEffect(() => {
-		if (!buttonRef.current) return
-
-		buttonRef?.current?.click()
+		if (matches) {
+			setOpen(false)
+		}
 	}, [matches])
-
-	const [open, setOpen] = useState(false)
 
 	return (
 		<DialogRoot modal={false} open={open} onOpenChange={setOpen}>
@@ -32,10 +30,7 @@ export function MobileDrawer({ trigger, children }: { trigger: ReactNode; childr
 				<DialogTitle className="sr-only">Drawer</DialogTitle>
 
 				<DialogClose asChild>
-					<button
-						ref={buttonRef}
-						className="absolute top-2 right-2 rounded-full hover:bg-white/10 flex items-center justify-center  p-1 size-[30px]"
-					>
+					<button className="absolute top-2 right-2 rounded-full hover:bg-white/10 flex items-center justify-center  p-1 size-[30px]">
 						<Icon className="size-[20px] text-text-100 " name="close" />
 					</button>
 				</DialogClose>
