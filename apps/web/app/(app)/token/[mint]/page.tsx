@@ -1,40 +1,37 @@
 import { Suspense, Fragment, cache, use } from 'react'
+import type { Metadata, ResolvingMetadata } from 'next'
+import { getCachedTokenMetadata } from '@/app/data/get_token_metadata'
 import { IntervalPanel } from '@/app/comps/interval_panel'
 import { Loading } from '@/app/comps/loading'
-import Image from 'next/image'
-
 import { getCandlstickData } from '@/app/data/get_candlestick_data'
 import { CandlestickChart } from '@/app/comps/candlestick_chart'
-
 import { getCachedTokenFeed } from '@/app/data/get_token_feed'
-
 import { Tabs, List, Trigger, Content } from '@/app/comps/tabs'
 import { Button } from '@/app/comps/button'
-
 import { TransactionTable } from '@/app/comps/transaction_table'
 import { getTransactionData } from '@/app/data/get_transaction_data'
 import { HoldersTable } from '@/app/comps/holders_table'
 import { getTopHolders } from '@/app/data/get_top_holders'
-
+import { generateSolanaBlink } from '@/app/utils/misc'
 import { TokenPair, TokenPairFallback } from '@/app/comps/token_pair'
 import { Back } from '@/app/comps/back'
-
 import { getComments } from '@/app/data/get_comments'
 import { Comments } from '@/app/comps/comments'
 import { ReplyForm } from '@/app/comps/reply_form'
 import { TokenSearchParamsSchema } from '@/app/utils/schemas'
 import { MobileDrawer } from '@/app/comps/mobile_drawer'
 import { SwapForm } from '@/app/comps/swap_form'
+import Image from 'next/image'
 
 export const dynamic = 'force-dynamic'
 
 type Props = {
-	params: Promise<{ id: string }>
+	params: Promise<{ mint: string }>
 	searchParams: Promise<{ [key: string]: string }>
 }
 
 export default async function Page(props: Props) {
-	const [{ id: mint }, searchParams] = await Promise.all([props.params, props.searchParams])
+	const [{ mint }, searchParams] = await Promise.all([props.params, props.searchParams])
 
 	const parse = TokenSearchParamsSchema.safeParse(searchParams)
 
@@ -134,4 +131,33 @@ export default async function Page(props: Props) {
 			</MobileDrawer>
 		</div>
 	)
+}
+
+export async function generateMetadata({ params, searchParams }: Props, parent: ResolvingMetadata): Promise<Metadata> {
+	const id = (await params).mint
+
+	// fetch post information
+	const meta = await getCachedTokenMetadata(id)
+
+	return {
+		title: meta.name,
+		description: meta.description,
+
+		openGraph: {
+			title: meta.name,
+			description: meta.description,
+			images: [
+				{
+					url: meta.image, // Replace with your actual image URL
+				},
+			],
+			type: 'website',
+		},
+		twitter: {
+			card: 'summary_large_image',
+			title: meta.name,
+			description: meta.description,
+			images: [meta.image], // Replace with your actual image URL
+		},
+	}
 }

@@ -3,11 +3,11 @@ import { SwapForm, SwapFormFallback } from '@/app/comps/swap_form'
 import { getCachedTokenFeed } from '@/app/data/get_token_feed'
 
 type Props = {
-	params: Promise<{ id: string }>
+	params: Promise<{ mint: string }>
 }
 
 export default async function Page(props: Props) {
-	const { id: mint } = await props.params
+	const { mint } = await props.params
 
 	const tokenPromise = getCachedTokenFeed(mint)
 
