@@ -6,7 +6,7 @@ import { useMediaQuery } from 'usehooks-ts'
 import { Icon } from './_icon'
 
 export function MobileDrawer({ trigger, children }: { trigger: ReactNode; children: ReactNode }) {
-	const matches = useMediaQuery('(min-width: 640px)')
+	const matches = useMediaQuery('(min-width: 1040px)')
 
 	const [open, setOpen] = useState(false)
 
@@ -23,7 +23,7 @@ export function MobileDrawer({ trigger, children }: { trigger: ReactNode; childr
 			<DialogContent
 				forceMount
 				className="
-    absolute bottom-[52px] sm:bottom-0 w-full max-w-[600px] h-auto frost z-10 p-10
+fixed bottom-[0px] sm:bottom-0 w-full max-w-[600px] h-auto frost z-50 p-10
     transition-all  duration-300
 
     data-[state=open]:translate-y-0
