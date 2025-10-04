@@ -96,7 +96,12 @@ function TableRow({ row, animate }: { row: TransactionTableType; animate: boolea
 			<td className="px-3 text-center capitalize max-lg:hidden">
 				<SwapType swapType={row.swapType} />
 			</td>
-			<td className="px-3 text-right font-medium">{`$${formatNumberSmart(row.price)}`}</td>
+			<td
+				className={cn(
+					'px-3 text-right font-medium sm:text-text-100',
+					row.swapType === 'Buy' ? 'text-buy-100' : 'text-sell-100',
+				)}
+			>{`$${formatNumberSmart(row.price)}`}</td>
 			<td className="px-3 text-right font-medium">{`$${formatNumberSmart(row.volume)}`}</td>
 			<td className="px-3 text-right font-medium">{row.uiAmount}</td>
 			<td className="px-3 max-sm:hidden">
