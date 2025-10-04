@@ -27,6 +27,8 @@ export default function Layout(props: {
 
 	console.log('seg', segment)
 
+	const isOnTokenSegment = segment === 'token'
+
 	return (
 		<>
 			<div className="flex justify-center w-full">
@@ -49,7 +51,9 @@ export default function Layout(props: {
 					<main className={cn('relative w-full max-w-[600px]')}>
 						<div className={cn(hide && 'sr-only')}>{props.children}</div>
 
-						<div className={cn('', isOnCreate && 'absolute top-0 inset-0')}>{props.token}</div>
+						{isOnTokenSegment ? null : (
+							<div className={cn('', isOnCreate && 'absolute top-0 inset-0')}>{props.token}</div>
+						)}
 					</main>
 
 					{/* RIGHT — parent must stretch so sticky has room */}
