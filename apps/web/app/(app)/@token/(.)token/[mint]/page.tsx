@@ -124,7 +124,7 @@ export default async function Page(props: Props) {
   "
 					>
 						<div className="flex justify-end pr-8">
-							<Button className="ml-auto pointer-events-auto rounded-full border border-white border-opacity-[0.125] bg-background-100">
+							<Button className="ml-auto pointer-events-auto rounded-full border border-white border-opacity-[0.125] bg-rage-100">
 								<Image src="/rage.png" alt="logo" width={56} height={56} />
 							</Button>
 						</div>
