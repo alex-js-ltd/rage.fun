@@ -98,7 +98,7 @@ function TableRow({ row, animate }: { row: TransactionTableType; animate: boolea
 			</td>
 			<td
 				className={cn(
-					'px-3 text-right font-medium sm:text-text-100',
+					'px-3 text-right font-medium md:text-text-100',
 					row.swapType === 'Buy' ? 'text-buy-100' : 'text-sell-100',
 				)}
 			>{`$${formatNumberSmart(row.price)}`}</td>
