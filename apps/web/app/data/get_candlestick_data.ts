@@ -7,7 +7,6 @@ import { Decimal } from '@prisma/client/runtime/library'
 import 'server-only'
 
 function generateCandlestickData(events: SwapEvent[], interval: number) {
-	console.log(events)
 	const formattedEvents = events.map(e => ({
 		time: new Decimal(e.time.toString()).mul(1000).toNumber(),
 		value: e.price.toNumber(),
