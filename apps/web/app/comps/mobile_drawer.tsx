@@ -16,6 +16,8 @@ export function MobileDrawer({ trigger, children }: { trigger: ReactNode; childr
 		}
 	}, [matches])
 
+	useBodyScrollLock(open)
+
 	return (
 		<DialogRoot modal={false} open={open} onOpenChange={setOpen}>
 			<DialogTrigger asChild>{trigger}</DialogTrigger>
@@ -50,4 +52,28 @@ fixed bottom-[0px] sm:bottom-0 w-full max-w-[600px] h-auto min-h-[381.5px] frost
 			</DialogContent>
 		</DialogRoot>
 	)
+}
+
+export function useBodyScrollLock(locked: boolean) {
+	useEffect(() => {
+		const body = document.body
+		const prevOverflow = body.style.overflow
+		const prevPaddingRight = body.style.paddingRight
+		const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth
+
+		if (locked) {
+			body.style.overflow = 'hidden'
+			if (scrollbarWidth > 0) {
+				body.style.paddingRight = `${scrollbarWidth}px`
+			}
+		} else {
+			body.style.overflow = prevOverflow
+			body.style.paddingRight = prevPaddingRight
+		}
+
+		return () => {
+			body.style.overflow = prevOverflow
+			body.style.paddingRight = prevPaddingRight
+		}
+	}, [locked])
 }
