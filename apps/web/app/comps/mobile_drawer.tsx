@@ -1,25 +1,32 @@
 'use client'
 
-import { ReactNode, useRef, useEffect, useState } from 'react'
+import { ReactNode, useRef, useEffect, useState, useLayoutEffect } from 'react'
 import { DialogRoot, DialogContent, DialogPortal, DialogTitle, DialogTrigger, DialogClose } from './dialog'
-import { useMediaQuery } from 'usehooks-ts'
+import { useMediaQuery, useScrollLock } from 'usehooks-ts'
 import { Icon } from './_icon'
 
 export function MobileDrawer({ trigger, children }: { trigger: ReactNode; children: ReactNode }) {
-	const matches = useMediaQuery('(min-width: 1040px)')
-
+	const { lock, unlock } = useScrollLock({ autoLock: false })
 	const [open, setOpen] = useState(false)
 
-	useEffect(() => {
-		if (matches) {
-			setOpen(false)
-		}
-	}, [matches])
+	function onOpenChange(next: boolean) {
+		// keep the handler dumb: just update state
+		setOpen(next)
+	}
 
-	useBodyScrollLock(open)
+	useLayoutEffect(() => {
+		// layout effect avoids a frame where the page can scroll before the lock applies
+		if (open) lock()
+		else unlock()
+
+		return () => {
+			// ensure we never leave the page locked on unmount
+			unlock()
+		}
+	}, [open, lock, unlock])
 
 	return (
-		<DialogRoot modal={false} open={open} onOpenChange={setOpen}>
+		<DialogRoot modal={false} open={open} onOpenChange={onOpenChange}>
 			<DialogTrigger asChild>{trigger}</DialogTrigger>
 
 			<DialogContent
@@ -34,6 +41,8 @@ fixed bottom-[0px] sm:bottom-0 w-full max-w-[600px] h-auto min-h-[381.5px] frost
     data-[state=closed]:translate-y-full
     data-[state=closed]:opacity-0
     data-[state=closed]:pointer-events-none
+
+	lg:hidden
   "
 				onInteractOutside={e => {
 					const t = e.target as HTMLElement
@@ -52,28 +61,4 @@ fixed bottom-[0px] sm:bottom-0 w-full max-w-[600px] h-auto min-h-[381.5px] frost
 			</DialogContent>
 		</DialogRoot>
 	)
-}
-
-export function useBodyScrollLock(locked: boolean) {
-	useEffect(() => {
-		const body = document.body
-		const prevOverflow = body.style.overflow
-		const prevPaddingRight = body.style.paddingRight
-		const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth
-
-		if (locked) {
-			body.style.overflow = 'hidden'
-			if (scrollbarWidth > 0) {
-				body.style.paddingRight = `${scrollbarWidth}px`
-			}
-		} else {
-			body.style.overflow = prevOverflow
-			body.style.paddingRight = prevPaddingRight
-		}
-
-		return () => {
-			body.style.overflow = prevOverflow
-			body.style.paddingRight = prevPaddingRight
-		}
-	}, [locked])
 }
