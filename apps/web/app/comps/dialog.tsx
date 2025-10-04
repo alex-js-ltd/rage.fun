@@ -20,6 +20,10 @@ export function DialogPortal(props: DialogPrimitive.DialogPortalProps) {
 	return <DialogPrimitive.Portal {...props} />
 }
 
+export function DialogOverlay(props: DialogPrimitive.DialogOverlayProps) {
+	return <DialogPrimitive.Overlay {...props} />
+}
+
 export function DialogTitle(props: DialogPrimitive.DialogTitleProps) {
 	return <DialogPrimitive.Title {...props} />
 }
