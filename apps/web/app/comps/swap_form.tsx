@@ -210,7 +210,7 @@ function Buy({ token }: { token: TokenFeedType }) {
 			mint={mint}
 			decimals={9}
 			action={buyAction}
-			toastConfig={{ loading: `Minting ${symbol} 🌿`, success: `Mint confirmed ✅` }}
+			toastConfig={{ loading: `Minting ${symbol}`, success: `Mint confirmed` }}
 			receive={symbol}
 			getQuote={getQuote}
 			displayQuote={(quote: string) => {
@@ -276,7 +276,7 @@ function Sell({ token }: { token: TokenFeedType }) {
 			mint={mint}
 			decimals={decimals}
 			action={sellAction}
-			toastConfig={{ loading: `Burning ${symbol} 🔥`, success: `Burn confirmed ✅` }}
+			toastConfig={{ loading: `Burning ${symbol}`, success: `Burn confirmed` }}
 			receive="SOL"
 			getQuote={getQuote}
 			displayQuote={(quote: string) => {
