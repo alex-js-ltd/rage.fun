@@ -25,6 +25,12 @@ export function MobileDrawer({ trigger, children }: { trigger: ReactNode; childr
 		}
 	}, [open, lock, unlock])
 
+	const matches = useMediaQuery('(min-width: 1040px)')
+
+	useEffect(() => {
+		if (matches) setOpen(false)
+	}, [matches])
+
 	return (
 		<DialogRoot modal={false} open={open} onOpenChange={onOpenChange}>
 			<DialogTrigger asChild>{trigger}</DialogTrigger>
@@ -42,7 +48,7 @@ fixed bottom-[0px] sm:bottom-0 w-full max-w-[600px] h-auto min-h-[381.5px] frost
     data-[state=closed]:opacity-0
     data-[state=closed]:pointer-events-none
 
-	lg:hidden
+	
   "
 				onInteractOutside={e => {
 					const t = e.target as HTMLElement
