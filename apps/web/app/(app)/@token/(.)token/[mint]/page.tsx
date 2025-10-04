@@ -114,21 +114,27 @@ export default async function Page(props: Props) {
 				<Suspense>
 					<Comments mint={mint} commentsPromise={commentsPromise} />
 				</Suspense>
+			</div>
 
-				<MobileDrawer
-					trigger={
-						<div className="fixed bottom-[calc(52px+16px)] right-8 sm:hidden z-50">
-							<Button className="pointer-events-auto rounded-full border border-white border-opacity-[0.125] bg-background-100">
+			<MobileDrawer
+				trigger={
+					<div
+						className="sticky bottom-[calc(52px+32px)] w-full lg:hidden
+
+  "
+					>
+						<div className="flex justify-end pr-8">
+							<Button className="ml-auto pointer-events-auto rounded-full border border-white border-opacity-[0.125] bg-background-100">
 								<Image src="/rage.png" alt="logo" width={56} height={56} />
 							</Button>
 						</div>
-					}
-				>
-					<Suspense fallback={<SwapFormFallback />}>
-						<SwapForm tokenPromise={tokenPromise} />
-					</Suspense>
-				</MobileDrawer>
-			</div>
+					</div>
+				}
+			>
+				<Suspense fallback={<SwapFormFallback />}>
+					<SwapForm tokenPromise={tokenPromise} />
+				</Suspense>
+			</MobileDrawer>
 		</div>
 	)
 }
