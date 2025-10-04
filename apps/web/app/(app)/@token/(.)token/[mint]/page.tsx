@@ -119,7 +119,7 @@ export default async function Page(props: Props) {
 			<MobileDrawer
 				trigger={
 					<div
-						className="sticky bottom-[calc(52px+32px)] w-full lg:hidden
+						className="z-40 sticky bottom-[calc(52px+32px)] w-full lg:hidden
 
   "
 					>
