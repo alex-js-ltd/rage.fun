@@ -4,6 +4,7 @@ import { ReactNode, useRef, useEffect, useState, useLayoutEffect } from 'react'
 import { DialogRoot, DialogContent, DialogPortal, DialogTitle, DialogTrigger, DialogClose } from './dialog'
 import { useMediaQuery, useScrollLock } from 'usehooks-ts'
 import { Icon } from './_icon'
+import { useSwipeable } from 'react-swipeable'
 
 export function MobileDrawer({ trigger, children }: { trigger: ReactNode; children: ReactNode }) {
 	const { lock, unlock } = useScrollLock({ autoLock: false })
@@ -31,6 +32,15 @@ export function MobileDrawer({ trigger, children }: { trigger: ReactNode; childr
 		if (matches) setOpen(false)
 	}, [matches])
 
+	const handlers = useSwipeable({
+		onSwipedDown: () => {
+			setOpen(false)
+		},
+		preventScrollOnSwipe: true,
+		trackTouch: true,
+		trackMouse: false,
+	})
+
 	return (
 		<DialogRoot modal={false} open={open} onOpenChange={onOpenChange}>
 			<DialogTrigger asChild>{trigger}</DialogTrigger>
@@ -57,11 +67,17 @@ fixed bottom-[0px] sm:bottom-0 w-full max-w-[600px] h-auto min-h-[381.5px] frost
 			>
 				<DialogTitle className="sr-only">Drawer</DialogTitle>
 
-				<DialogClose asChild className="data-[state=closed]:hidden">
-					<button className="absolute top-2 right-2 rounded-full hover:bg-white/10 flex items-center justify-center  p-1 size-[30px]">
-						<Icon className="size-[20px] text-text-100 " name="close" />
-					</button>
-				</DialogClose>
+				<div
+					{...handlers}
+					onClick={() => setOpen(false)}
+					className="
+		absolute inset-x-0 top-0
+		flex items-center justify-center py-2
+		after:h-1.5 after:w-14 after:rounded-full after:bg-gray-300 cursor-pointer
+		
+	"
+					data-modal-handle=""
+				></div>
 
 				<div className="max-w-[320px] grid mx-auto w-full">{children}</div>
 			</DialogContent>
