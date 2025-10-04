@@ -120,10 +120,16 @@ export default async function Page(props: Props) {
 
 				<MobileDrawer
 					trigger={
-						<div className="fixed bottom-[calc(52px+16px)] right-8 sm:hidden z-50">
-							<Button className="pointer-events-auto rounded-full border border-white border-opacity-[0.125] bg-background-100">
-								<Image src="/rage.png" alt="logo" width={56} height={56} />
-							</Button>
+						<div
+							className="sticky bottom-[calc(52px+32px)] w-full lg:hidden
+		
+		  "
+						>
+							<div className="flex justify-end pr-8">
+								<Button className="ml-auto pointer-events-auto rounded-full border border-white border-opacity-[0.125] bg-background-100">
+									<Image src="/rage.png" alt="logo" width={56} height={56} />
+								</Button>
+							</div>
 						</div>
 					}
 				>
