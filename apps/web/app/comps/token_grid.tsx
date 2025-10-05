@@ -102,7 +102,7 @@ function TokenCard({
 							href={{
 								pathname: `/${creatorId}`,
 							}}
-							className="text-xs text-text-200 w-fit"
+							className="text-xs text-text-200 w-fit font-mono"
 						>
 							{shortenWallet(creatorId)}
 						</Link>
