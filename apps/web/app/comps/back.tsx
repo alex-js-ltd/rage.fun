@@ -15,10 +15,9 @@ export function Back() {
 					router.push('/home') // fallback page
 				}
 			}}
-			className="group flex items-center gap-1.5 text-sm text-gray-500 hover:cursor-pointer h-[52px] ml-2"
+			className="group flex items-center justify-center  hover:cursor-pointer size-[34px] -ml-2 rounded-full border border-red-500"
 		>
-			<Icon name="back" className="size-4 text-gray-500" />
-			<span>Back</span>
+			<Icon name="back" className="size-5 text-text-200" />
 		</button>
 	)
 }

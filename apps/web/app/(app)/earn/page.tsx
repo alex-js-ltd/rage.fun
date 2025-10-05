@@ -9,6 +9,7 @@ import { getIsCreator } from '@/app/data/get_is_creator'
 import { auth } from '@/app/auth'
 
 import { Back } from '@/app/comps/back'
+import { Header } from '@/app/comps/header'
 
 export const dynamic = 'force-dynamic'
 
@@ -30,16 +31,10 @@ export default async function Page(props: Props) {
 	const tokenPromise = getTokens({ sortType, sortOrder, cursorId, creatorId })
 
 	return (
-		<div className="flex-1">
-			<div
-				className="sticky top-0 h-[52px] border-x border-white border-opacity-[0.125] flex items-center z-40 w-full
-                  bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60
-                  border-b border-white/10 max-w-[600px] frost"
-			>
-				<Back />
-			</div>
+		<div className="flex-1 border-white border-x border-opacity-[0.125]">
+			<Header />
 
-			<div className="relative mx-auto flex max-w-[600px] flex-col pb-0 border-x border-white border-opacity-[0.125] min-h-[calc(100vh-52px)]">
+			<div className="relative mx-auto flex max-w-[600px] flex-col pb-0 border-t border-white border-opacity-[0.125] min-h-[calc(100vh-52px)]">
 				<section className="p-0 ">
 					{isCreator ? (
 						<Suspense

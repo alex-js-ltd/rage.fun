@@ -8,7 +8,7 @@ const intervals = ['5m', '1h', '6h', '24h']
 
 export function IntervalPanel({ mint }: { mint: string }) {
 	return (
-		<div className="flex gap-2 justify-end z-50">
+		<div className="flex gap-2 justify-end z-40">
 			{intervals.map(interval => (
 				<NavLink replace key={interval} href={`/token/${mint}?interval=${interval}`}>
 					{({ isActive }) => (

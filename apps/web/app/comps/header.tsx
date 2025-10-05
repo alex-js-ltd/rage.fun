@@ -1,19 +1,33 @@
-import { ConnectWallet } from '@/app/comps/connect_wallet'
-import { Button } from './button'
+'use client'
 
+import { useRouter } from 'next/navigation'
 import { Icon } from './_icon'
+import { ReactNode } from 'react'
 
-export function Header() {
+export function Header({ children }: { children?: ReactNode }) {
 	return (
-		<div className="sticky top-0 z-20">
-			<header className="flex w-full flex-col gap-3 bg-secondary-background/95 p-3 backdrop-blur supports-[backdrop-filter]:bg-secondary-background/60 md:h-16 md:flex-row md:items-center lg:px-4">
-				<div className="flex w-full items-center gap-8">
-					<div className="flex items-center gap-2"></div>
-					<div className="ml-auto flex items-center gap-2 sm:gap-4 px-3 overflow-hidden [&>*]:overflow-hidden">
-						<ConnectWallet overrideContent={<Button variant="connect">Connect</Button>} currentUserClassName="button" />
-					</div>
-				</div>
-			</header>
+		<div className="sticky top-0 h-[52px] flex items-center z-50 w-full backdrop-blur px-4">
+			<Back />
+			{children}
 		</div>
+	)
+}
+
+export function Back() {
+	const router = useRouter()
+
+	return (
+		<button
+			onClick={() => {
+				if (window.history.length > 1) {
+					router.back()
+				} else {
+					router.push('/home') // fallback page
+				}
+			}}
+			className="group flex items-center justify-center  hover:cursor-pointer size-[32px] -ml-2 rounded-full hover:bg-white/10 overflow-hidden"
+		>
+			<Icon name="back" className="size-5 text-text-200" />
+		</button>
 	)
 }

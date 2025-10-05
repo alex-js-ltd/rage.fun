@@ -25,6 +25,7 @@ import { ReplyForm } from '@/app/comps/reply_form'
 import { TokenSearchParamsSchema } from '@/app/utils/schemas'
 import { MobileDrawer } from '@/app/comps/mobile_drawer'
 import { SwapForm, SwapFormFallback } from '@/app/comps/swap_form'
+import { Header } from '@/app/comps/header'
 
 export const dynamic = 'force-dynamic'
 
@@ -56,9 +57,7 @@ export default async function Page(props: Props) {
 
 	return (
 		<div className="flex flex-col w-full min-h-[100vh] border-x border-white border-opacity-[0.125] bg-background-100 relative max-w-[600px]">
-			<div className="sticky top-0 h-[52px] flex items-center z-50 w-full backdrop-blur">
-				<Back />
-			</div>
+			<Header />
 			<div className="relative overflow-y-hidden flex-1 overflow-x-hidden pb-40 w-full">
 				<div className="border-t border-white border-opacity-[0.125] h-fit min-h-[255px] w-full">
 					<div className="flex items-center justify-between p-3 border-b border-white border-opacity-[0.125]">
