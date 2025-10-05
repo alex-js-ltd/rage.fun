@@ -19,7 +19,7 @@ export const metadata: Metadata = {
 		card: 'summary_large_image',
 		title: 'letsrage.fun on Discord',
 		description: 'Rage against the fee machine 🔥',
-		images: ['https://magicmint.fun/rage.png'], // Replace with your actual image URL
+		images: ['https://letsrage.fun/rage.png'], // Replace with your actual image URL
 	},
 }
 
