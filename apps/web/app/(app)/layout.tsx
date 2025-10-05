@@ -52,7 +52,7 @@ export default function Layout(props: {
 						<div className={cn(hide && 'sr-only')}>{props.children}</div>
 
 						{isOnTokenSegment ? null : (
-							<div className={cn('', isOnCreate && 'absolute top-0 inset-0')}>{props.token}</div>
+							<div className={cn('', isOnCreate && 'fixed sm:absolute inset-0')}>{props.token}</div>
 						)}
 					</main>
 
