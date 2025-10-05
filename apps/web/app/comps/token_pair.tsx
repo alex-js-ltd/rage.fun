@@ -16,7 +16,10 @@ export function TokenPair({ tokenPromise, className, ...props }: TokenPairProps)
 			<TokenLogo {...getTokenLogoProps(token.metadata)} />
 			<TokenLogo className="-translate-x-2" {...solLogoProps} />
 
-			<span className="text-text-200 uppercase  text-xs text-nowrap">{token.metadata.symbol} / SOL</span>
+			<span className="text-text-200 uppercase text-xs text-nowrap">
+				{token.metadata.symbol}
+				<span className="hidden sm:inline"> / SOL</span>
+			</span>
 		</div>
 	)
 }
