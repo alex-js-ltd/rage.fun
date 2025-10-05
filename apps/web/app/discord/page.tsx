@@ -1,5 +1,5 @@
 import { Metadata } from 'next'
-import { redirect, RedirectType } from 'next/navigation'
+import { permanentRedirect, RedirectType } from 'next/navigation'
 
 export const metadata: Metadata = {
 	title: 'letsrage.fun on Discord',
@@ -24,5 +24,5 @@ export const metadata: Metadata = {
 }
 
 export default async function Page() {
-	redirect('https://discord.gg/FfmuN25GjE')
+	permanentRedirect('https://discord.gg/FfmuN25GjE')
 }
