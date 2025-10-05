@@ -5,10 +5,6 @@ import { Icon } from '@/app/comps/_icon'
 import { Wallet } from './wallet'
 import Image from 'next/image'
 
-import * as ThumbHash from 'thumbhash'
-
-import { createPngDataUri } from 'unlazy/thumbhash'
-
 interface NavItemProps extends LinkProps {
 	label: string
 	icon: string
@@ -45,8 +41,6 @@ export function Nav() {
 										fill={true}
 										priority
 										className="object-contain"
-										blurDataURL={createPngDataUri('F0iBBQA0aFiLhmYK1jufUgzGaGh4iHB5uA==')}
-										placeholder="blur"
 									/>
 								</div>
 							</Link>
