@@ -28,7 +28,7 @@ export default async function Page(props: Props) {
 		<div className="flex-1 border-x border-white border-opacity-[0.125]">
 			<Header>
 				<div className="ml-4 flex flex-col ">
-					<h2 className="text-text-200 font-semibold text-lg">Creator</h2>
+					<h2 className="font-medium text-text-200 text-[15px]">Creator</h2>
 
 					{/* <span className="text-text-200 font-mono">{shortenWallet(creatorId)}</span> */}
 				</div>
