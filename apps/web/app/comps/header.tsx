@@ -6,7 +6,7 @@ import { ReactNode } from 'react'
 
 export function Header({ children }: { children?: ReactNode }) {
 	return (
-		<div className="sticky top-0 h-[52px] flex items-center z-50 w-full backdrop-blur px-4">
+		<div className="sticky top-0 h-[52px] flex items-center z-50 w-full bg-background-100/75 backdrop-blur-md  px-4">
 			<Back />
 			{children}
 		</div>

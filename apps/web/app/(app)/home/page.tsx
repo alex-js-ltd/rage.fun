@@ -19,17 +19,14 @@ export default async function Page(props: Props) {
 	const tokenPromise = getTokens({ sortOrder, sortType, cursorId })
 
 	return (
-		<div className="w-full max-w-[600px] border-white border-x-1 border-opacity-[0.125]">
+		<div className="w-full max-w-[600px] border-white border-x border-opacity-[0.125] bg-background-100">
 			<Events />
 
-			<div
-				className="sticky top-0 h-[52px]  flex items-center z-40 w-full backdrop-blur 
-                  max-w-[600px] frost"
-			>
+			<div className="sticky top-0 h-[52px] flex items-center z-50 w-full bg-background-100/75 backdrop-blur-md  border-b border-white border-opacity-[0.125]  ">
 				<ExploreNav searchParams={{ sortType, sortOrder, query }} />
 			</div>
 
-			<div className="relative mx-auto flex max-w-[600px] flex-col pb-0 border-x border-white border-opacity-[0.125]">
+			<div className="relative mx-auto flex max-w-[600px] flex-col pb-0">
 				<section className="p-0 ">
 					<Suspense
 						key={[sortType, sortOrder].toString()}

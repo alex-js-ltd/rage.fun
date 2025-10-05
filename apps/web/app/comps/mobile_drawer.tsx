@@ -58,6 +58,8 @@ fixed bottom-[0px] sm:bottom-0 w-full max-w-[598px] h-auto min-h-[381.5px] frost
     data-[state=closed]:opacity-0
     data-[state=closed]:pointer-events-none
 
+	bg-black/50
+
 	
   "
 				onInteractOutside={e => {
