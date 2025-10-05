@@ -6,6 +6,7 @@ import { getTokens } from '@/app/data/get_tokens'
 import { TokenGrid, TokenGridFallback } from '@/app/comps/token_grid'
 
 import { Header } from '@/app/comps/header'
+import { shortenWallet } from '@/app/utils/misc'
 
 export const dynamic = 'force-dynamic'
 
@@ -25,7 +26,13 @@ export default async function Page(props: Props) {
 
 	return (
 		<div className="flex-1 border-x border-white border-opacity-[0.125]">
-			<Header></Header>
+			<Header>
+				<div className="ml-4 flex flex-col ">
+					<h2 className="text-text-200  font-medium ">Creator</h2>
+
+					{/* <span className="text-text-200 font-mono">{shortenWallet(creatorId)}</span> */}
+				</div>
+			</Header>
 
 			<div className="relative mx-auto flex max-w-[600px] flex-col pb-0 border-t border-white border-opacity-[0.125] min-h-[calc(100vh-52px)]">
 				<section className="p-0 ">
