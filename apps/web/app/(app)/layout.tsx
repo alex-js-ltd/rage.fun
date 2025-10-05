@@ -23,7 +23,7 @@ export default function Layout(props: {
 
 	const isTokenFeed = segment === 'home' || segment === 'earn' || profile
 
-	const hide = (isOnToken && isTokenFeed) || (isOnCreate && isTokenFeed && props.token !== null)
+	const hide = isOnToken && isTokenFeed
 
 	console.log('seg', segment)
 
