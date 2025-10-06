@@ -45,11 +45,17 @@ export function useLightweightChart(data: OhlcData[], mint: string, interval: nu
 
 			height: 255,
 			width: 600,
-			rightPriceScale: { borderColor: '#FFFFFF20' },
+			rightPriceScale: { borderColor: '#FFFFFF20', mode: 1 },
 			timeScale: {
 				tickMarkFormatter: (time: number, _tickMarkType: TickMarkType) => {
 					return dayjs(time).utc().format('H:mm')
 				},
+
+				visible: true, // ✅ Must be true
+				borderVisible: true,
+				timeVisible: true, // ✅ Show timestamps
+				secondsVisible: true,
+				borderColor: '#FFFFFF20',
 			},
 
 			localization: {
