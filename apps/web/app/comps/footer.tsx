@@ -49,10 +49,10 @@ export function Footer() {
 
 					<li className="flex-1">
 						<a
-							href="https://discord.gg/FfmuN25GjE"
+							href="https://x.com/letsragedotfun"
 							target="_blank"
 							rel="noopener noreferrer"
-							className="hover:underline transition-colors text-sm text-neutral-400 pointer-events-none"
+							className="hover:underline transition-colors text-sm text-neutral-400 "
 						>
 							Twitter
 						</a>
