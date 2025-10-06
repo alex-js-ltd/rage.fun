@@ -33,7 +33,7 @@ export function Events() {
 			reset()
 
 			timerRef.current = null // Clean up reference
-		}, 10000)
+		}, 3000)
 	})
 
 	const open = current ? true : false
@@ -52,7 +52,7 @@ export function Events() {
 				<Link
 					href={{
 						pathname: `/token/${current.id}`,
-						query: { interval: '86400000' },
+						query: { interval: '5m' },
 					}}
 					as={`/token/${current.id}?interval=86400000`}
 					className="text-text-100 relative w-fit"
