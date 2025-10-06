@@ -105,7 +105,7 @@ export async function POST(req: NextRequest) {
 	try {
 		const decimals = await getDecimals(mint.toBase58())
 
-		const buy = await getSellTokenIx({
+		const sell = await getSellTokenIx({
 			program,
 			payer,
 			mint,
@@ -117,9 +117,18 @@ export async function POST(req: NextRequest) {
 		const transaction = await buildTransaction({
 			connection,
 			payer,
-			instructions: [buy],
+			instructions: [sell],
 			signers: [],
 		})
+
+		const sim = await connection.simulateTransaction(transaction)
+
+		if (sim.value.err !== null) {
+			return new Response('Transaction simulation failed', {
+				status: 500,
+				headers,
+			})
+		}
 
 		const payload: ActionPostResponse = await createPostResponse({
 			fields: {

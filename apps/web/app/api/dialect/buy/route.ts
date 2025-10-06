@@ -119,6 +119,15 @@ export async function POST(req: NextRequest) {
 			signers: [],
 		})
 
+		const sim = await connection.simulateTransaction(transaction)
+
+		if (sim.value.err !== null) {
+			return new Response('Transaction simulation failed', {
+				status: 500,
+				headers,
+			})
+		}
+
 		const payload: ActionPostResponse = await createPostResponse({
 			fields: {
 				transaction,
