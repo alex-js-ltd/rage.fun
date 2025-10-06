@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 		template: '%s | Lets Rage',
 		default: 'Lets Rage',
 	},
-	description: 'Rage against platform fees. Launch a token with one click & trade with zero extraction.',
+	description: 'Launch a token and trade with zero extraction.',
 	metadataBase: new URL('https://www.letsrage.fun'),
 }
 
