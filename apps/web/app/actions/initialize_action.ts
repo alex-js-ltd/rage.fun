@@ -121,6 +121,15 @@ export async function initializeAction(_prevState: State, formData: FormData) {
 		signers: [],
 	})
 
+	const sim = await connection.simulateTransaction(tx)
+
+	if (sim.value.err !== null) {
+		return {
+			...submission.reply(),
+			serializedTx: undefined,
+		}
+	}
+
 	return {
 		...submission.reply(),
 		serializedTx: tx.serialize(),
