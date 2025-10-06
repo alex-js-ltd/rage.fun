@@ -39,11 +39,7 @@ export default async function Page(props: Props) {
 
 	const parse = TokenSearchParamsSchema.safeParse(searchParams)
 
-	if (parse.error) {
-		return <div>incorrect search params</div>
-	}
-
-	const { interval } = parse.data
+	const interval = parse.error ? 300000 : parse.data.interval
 
 	const ohlcPromise = getCandlstickData(mint, interval)
 
