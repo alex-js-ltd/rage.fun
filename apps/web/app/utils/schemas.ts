@@ -424,5 +424,8 @@ export const TokenSearchParamsSchema = z
 				return { interval: 21600000 }
 			case '24h':
 				return { interval: 86400000 }
+
+			default:
+				return { interval: 300000 } // default fallback (1h)
 		}
 	})

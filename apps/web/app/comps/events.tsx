@@ -54,7 +54,7 @@ export function Events() {
 						pathname: `/token/${current.id}`,
 						query: { interval: '5m' },
 					}}
-					as={`/token/${current.id}?interval=86400000`}
+					as={`/token/${current.id}?interval=5m`}
 					className="text-text-100 relative w-fit"
 					prefetch={false}
 				>
