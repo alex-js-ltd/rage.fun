@@ -1,6 +1,6 @@
 // app/discord/page.tsx
 import { Metadata } from 'next'
-import { redirect } from 'next/navigation'
+import { Redirect } from '@/app/comps/redirect'
 
 export const metadata: Metadata = {
 	title: 'letsrage.fun on Discord',
@@ -24,6 +24,6 @@ export const metadata: Metadata = {
 	},
 }
 
-export default function Page() {
-	redirect('https://discord.gg/FfmuN25GjE')
+export default async function Page() {
+	return <Redirect url="https://discord.gg/FfmuN25GjE" />
 }
