@@ -4,7 +4,7 @@ import { SubmissionResult } from '@conform-to/react'
 import { parseWithZod } from '@conform-to/zod'
 import { SwapSchema } from '@/app/utils/schemas'
 import { program, connection } from '@/app/utils/setup'
-import { getBuyTokenIx, getSellTokenIx, buildTransaction } from '@repo/rage'
+import { getBuyTokenIx, getSellTokenIx, buildTransaction, uiAmountToAmount } from '@repo/rage'
 
 import { auth } from '@/app/auth'
 import { PublicKey } from '@solana/web3.js'
@@ -34,6 +34,14 @@ export async function buyAction(_prevState: State, formData: FormData) {
 
 	const payer = new PublicKey(session?.user?.id)
 
+	const balance = await connection.getBalance(payer)
+
+	if (balance < uiAmountToAmount(amount, 9).toNumber()) {
+		return {
+			...submission.reply(),
+			serializedTx: undefined,
+		}
+	}
 	const buy = await getBuyTokenIx({
 		program,
 		payer,
