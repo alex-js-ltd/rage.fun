@@ -36,14 +36,6 @@ export async function buyAction(_prevState: State, formData: FormData) {
 
 	const payer = new PublicKey(session?.user?.id)
 
-	const balance = await connection.getBalance(payer)
-
-	if (balance < uiAmountToAmount(amount, 9).toNumber()) {
-		return {
-			...submission.reply(),
-			serializedTx: undefined,
-		}
-	}
 	const buy = await getBuyTokenIx({
 		program,
 		payer,
@@ -59,6 +51,15 @@ export async function buyAction(_prevState: State, formData: FormData) {
 		instructions: [buy],
 		signers: [],
 	})
+
+	const sim = await connection.simulateTransaction(transaction)
+
+	if (sim.value.err !== null) {
+		return {
+			...submission.reply(),
+			serializedTx: undefined,
+		}
+	}
 
 	return {
 		...submission.reply(),
@@ -84,28 +85,6 @@ export async function sellAction(_prevState: State, formData: FormData) {
 
 	const payer = new PublicKey(session?.user?.id)
 
-	const token0SignerAta = await getAssociatedTokenAddress(mint, payer, true, TOKEN_2022_PROGRAM_ID)
-
-	const info = await connection.getAccountInfo(token0SignerAta, 'confirmed')
-
-	if (!info) {
-		return {
-			...submission.reply(),
-			serializedTx: undefined,
-		}
-	}
-
-	const account = await getAccount(connection, token0SignerAta, 'confirmed', TOKEN_2022_PROGRAM_ID)
-
-	const full = account.amount
-
-	if (full < uiAmountToAmount(amount, decimals).toNumber()) {
-		return {
-			...submission.reply(),
-			serializedTx: undefined,
-		}
-	}
-
 	const ix = await getSellTokenIx({
 		program,
 		payer,
@@ -121,6 +100,15 @@ export async function sellAction(_prevState: State, formData: FormData) {
 		instructions: [ix],
 		signers: [],
 	})
+
+	const sim = await connection.simulateTransaction(transaction)
+
+	if (sim.value.err !== null) {
+		return {
+			...submission.reply(),
+			serializedTx: undefined,
+		}
+	}
 
 	return {
 		...submission.reply(),
