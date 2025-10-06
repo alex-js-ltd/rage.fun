@@ -10,6 +10,8 @@ import { auth } from '@/app/auth'
 import { PublicKey } from '@solana/web3.js'
 import { BN } from '@coral-xyz/anchor'
 
+import { getAssociatedTokenAddress, getAccount, TOKEN_2022_PROGRAM_ID } from '@solana/spl-token'
+
 export type State =
 	| (SubmissionResult<string[]> & {
 			serializedTx?: Uint8Array
@@ -81,6 +83,28 @@ export async function sellAction(_prevState: State, formData: FormData) {
 	const { mint, amount, decimals } = submission.value
 
 	const payer = new PublicKey(session?.user?.id)
+
+	const token0SignerAta = await getAssociatedTokenAddress(mint, payer, true, TOKEN_2022_PROGRAM_ID)
+
+	const info = await connection.getAccountInfo(token0SignerAta, 'confirmed')
+
+	if (!info) {
+		return {
+			...submission.reply(),
+			serializedTx: undefined,
+		}
+	}
+
+	const account = await getAccount(connection, token0SignerAta, 'confirmed', TOKEN_2022_PROGRAM_ID)
+
+	const full = account.amount
+
+	if (full < uiAmountToAmount(amount, decimals).toNumber()) {
+		return {
+			...submission.reply(),
+			serializedTx: undefined,
+		}
+	}
 
 	const ix = await getSellTokenIx({
 		program,
