@@ -48,8 +48,6 @@ export default async function Page(props: Props) {
 						</Suspense>
 					) : (
 						<div className="p-4 flex flex-col gap-4">
-							<p className="text-sm text-text-200">Take your fees back ✊</p>
-
 							<p className="text-sm text-text-200">
 								Launch a token and own <strong>100% of swap fees</strong> from your bonding curve — no middlemen, no
 								extraction.
