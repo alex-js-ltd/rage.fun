@@ -53,7 +53,7 @@ export async function buyAction(_prevState: State, formData: FormData) {
 	})
 
 	const sim = await connection.simulateTransaction(transaction)
-
+	console.log(sim)
 	if (sim.value.err !== null) {
 		return {
 			...submission.reply(),
@@ -102,6 +102,8 @@ export async function sellAction(_prevState: State, formData: FormData) {
 	})
 
 	const sim = await connection.simulateTransaction(transaction)
+
+	console.log(sim)
 
 	if (sim.value.err !== null) {
 		return {

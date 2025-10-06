@@ -45,7 +45,7 @@ export function useLightweightChart(data: OhlcData[], mint: string, interval: nu
 
 			height: 255,
 			width: 600,
-			rightPriceScale: { borderColor: '#FFFFFF20', mode: 1 },
+			rightPriceScale: { borderColor: '#FFFFFF20', mode: 1, visible: true, borderVisible: true },
 			timeScale: {
 				tickMarkFormatter: (time: number, _tickMarkType: TickMarkType) => {
 					return dayjs(time).utc().format('H:mm')

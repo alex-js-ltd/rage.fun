@@ -33,7 +33,7 @@ export async function publishSwapEvent(event: SwapEventType, token: TokenFeedTyp
 	const formattedAmount = formatTokenAmount(amount)
 
 	const solScanUrl = `https://solscan.io/tx/${event.id}`
-	const rageUrl = `https://www.letsrage.fun/token/${token.id}?interval=86400000`
+	const rageUrl = `https://www.letsrage.fun/token/${token.id}?interval=5m`
 	// const dialectUrl = generateSolanaBlink(token.id)
 
 	const topHolderLines = topHolders
@@ -119,7 +119,7 @@ export async function publishCreateAlert(event: EventData<'createEvent'>, token:
 
 	const mint = event.data.mint.toBase58()
 	const solScanUrl = `https://solscan.io/tx/${event.signature}`
-	const letsRageUrl = `https://www.letsrage.fun/token/${mint}?interval=86400000`
+	const letsRageUrl = `https://www.letsrage.fun/token/${mint}?interval=5m`
 	const dialectUrl = generateSolanaBlink(mint)
 
 	const caption = [
