@@ -21,7 +21,6 @@ import { HoldersTable } from '@/app/comps/holders_table'
 import { getTopHolders } from '@/app/data/get_top_holders'
 
 import { TokenPair, TokenPairFallback } from '@/app/comps/token_pair'
-import { Back } from '@/app/comps/back'
 
 import { getComments } from '@/app/data/get_comments'
 import { Comments } from '@/app/comps/comments'
@@ -156,16 +155,20 @@ export async function generateMetadata({ params, searchParams }: Props, parent: 
 			description: meta.description,
 			images: [
 				{
-					url: meta.image, // Replace with your actual image URL
+					url: meta.image,
+					width: 1200, // <-- recommended for proper sizing
+					height: 630,
+					alt: meta.name,
 				},
 			],
 			type: 'website',
 		},
+
 		twitter: {
 			card: 'summary_large_image',
 			title: meta.name,
 			description: meta.description,
-			images: [meta.image], // Replace with your actual image URL
+			images: [meta.image],
 		},
 	}
 }
