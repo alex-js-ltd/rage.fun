@@ -189,3 +189,11 @@ export function formatNumberSmart(num: number): string {
 	// fallback for ultra tiny numbers
 	return num.toExponential(2) // scientific notation
 }
+
+const PERCENTAGE_SCALE = new BN(1_000_000_000) // 10^9
+
+export function takePercentage(balance: BN, percent: number): BN {
+	// Convert the percent (which can be a float) to a scaled integer
+	const scaledPercent = new BN(Math.round(percent * 1_000_000_000)) // keep 9 decimals
+	return balance.mul(scaledPercent).div(PERCENTAGE_SCALE.mul(new BN(100)))
+}

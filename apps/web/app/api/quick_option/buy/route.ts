@@ -6,6 +6,7 @@ import { BN } from '@coral-xyz/anchor'
 import { fromLamports } from '@repo/rage'
 import { auth } from '@/app/auth'
 import { PublicKey } from '@solana/web3.js'
+import { takePercentage } from '@/app/utils/misc'
 
 const TX_FEE_BUFFER = BigInt(5_000_000)
 
@@ -53,8 +54,4 @@ export async function GET(req: NextRequest) {
 
 		{ status: 200 },
 	)
-}
-
-function takePercentage(balance: BN, percent: number): BN {
-	return balance.mul(new BN(percent)).div(new BN(100))
 }

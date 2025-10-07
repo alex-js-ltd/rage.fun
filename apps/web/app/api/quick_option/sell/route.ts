@@ -8,6 +8,7 @@ import { getAccount, getAssociatedTokenAddress, TOKEN_2022_PROGRAM_ID } from '@s
 import { getDecimals } from '@/app/data/get_decimals'
 import { auth } from '@/app/auth'
 import { PublicKey } from '@solana/web3.js'
+import { takePercentage } from '@/app/utils/misc'
 import 'server-only'
 
 export async function GET(req: NextRequest) {
@@ -58,8 +59,4 @@ export async function GET(req: NextRequest) {
 
 		{ status: 200 },
 	)
-}
-
-function takePercentage(balance: BN, percent: number): BN {
-	return balance.mul(new BN(percent)).div(new BN(100))
 }
