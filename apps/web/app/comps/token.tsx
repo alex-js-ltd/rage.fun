@@ -61,7 +61,7 @@ export async function Token(props: Props) {
 						<IntervalPanel key={interval} interval={searchParams.interval} mint={mint} />
 					</div>
 
-					<Suspense key={interval} fallback={<Loading i={0} className="h-[255px] w-[600px]" />}>
+					<Suspense key={interval} fallback={<Loading i={1} className="h-[255px] w-[600px]" />}>
 						<CandlestickChart ohlcPromise={ohlcPromise} mint={mint} interval={interval} />
 					</Suspense>
 				</div>
