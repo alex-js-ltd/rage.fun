@@ -45,7 +45,7 @@ export default auth(async function middleware(req: NextRequest & { auth: Session
 	const requestHeaders = new Headers(req.headers)
 	const authorization = requestHeaders.get('authorization')
 	const ip = ipAddress(req) || '127.0.0.1'
-
+	console.log('authorization', authorization)
 	const path = req.nextUrl.pathname
 
 	const isApiBucket = path.startsWith('/api/wasm') // token bucket
