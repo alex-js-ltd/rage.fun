@@ -35,7 +35,7 @@ export function IntervalPanel() {
 					side="bottom"
 					align="start"
 					sideOffset={1}
-					className="relative w-[--radix-select-trigger-width] min-w-[--radix-select-trigger-width] overflow-hidden bg-background-100  z-10  h-auto data-[state=open]:animate-scale-in-95 data-[state=closed]:animate-scale-out-50 border-l border-white border-opacity-[0.125] border-b"
+					className="relative w-[--radix-select-trigger-width] min-w-[--radix-select-trigger-width] overflow-hidden bg-background-100  z-10  h-auto data-[state=open]:animate-scale-in-95 data-[state=closed]:animate-scale-out-50 "
 				>
 					<SelectPrimitive.Viewport>
 						<SelectPrimitive.Group>
