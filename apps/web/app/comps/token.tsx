@@ -1,4 +1,4 @@
-import { Suspense, use } from 'react'
+import { Suspense } from 'react'
 import { IntervalPanel } from '@/app/comps/interval_panel'
 import { Loading } from '@/app/comps/loading'
 import Image from 'next/image'
@@ -26,14 +26,13 @@ import { MobileDrawer } from '@/app/comps/mobile_drawer'
 import { SwapForm, SwapFormFallback } from '@/app/comps/swap_form'
 import { Header } from '@/app/comps/header'
 
-
 type Props = {
 	params: Promise<{ mint: string }>
 	searchParams: Promise<{ [key: string]: string }>
 }
 
 export async function Token(props: Props) {
-	const [{ mint }, searchParams] = await Promise.all([props.params, props.searchParams]))
+	const [{ mint }, searchParams] = await Promise.all([props.params, props.searchParams])
 
 	const parse = TokenSearchParamsSchema.safeParse(searchParams)
 
@@ -59,7 +58,9 @@ export async function Token(props: Props) {
 							<TokenPair tokenPromise={tokenPromise} />
 						</Suspense>
 
-						<IntervalPanel key={`${mint}-${interval}`}  mint={mint} searchParams={searchParams} />
+						<Suspense fallback={null}>
+							<IntervalPanel key={`${mint}-${interval}`} mint={mint} searchParams={searchParams} />
+						</Suspense>
 					</div>
 
 					<Suspense key={`${mint}-${interval}`} fallback={<Loading i={1} className="z-50 h-[255px] w-[600px]" />}>
