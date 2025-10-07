@@ -34,8 +34,7 @@ export function IntervalPanel() {
 		<SelectPrimitive.Root
 			value={interval}
 			onValueChange={value => {
-				router.replace(pathname + '?' + createQueryString('interval', value))
-				router.refresh()
+				router.replace(pathname + '?' + createQueryString('interval', value), { scroll: false })
 			}}
 		>
 			<SelectPrimitive.Trigger className="text-text-100 text-xs flex items-center gap-2 h-full px-3 focus:outline-none">
