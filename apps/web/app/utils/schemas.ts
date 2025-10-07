@@ -347,11 +347,12 @@ export const AccountSchema = z.object({
 		.bigint()
 		.refine(a => a > BigInt('0'), { message: 'Amount must be greater than 0' })
 		.transform(a => a.toString()),
+	isCreator: z.boolean().optional(),
 })
 
 export function createTopHolderSchema(decimals: number, totalSupply: BN) {
 	return AccountSchema.transform(data => {
-		const { owner, address, amount } = data
+		const { owner, address, amount, isCreator } = data
 
 		const uiResult = fromLamports(new BN(amount), decimals)
 
@@ -359,7 +360,7 @@ export function createTopHolderSchema(decimals: number, totalSupply: BN) {
 
 		const percentageOwned = calculatePercentage(new BN(amount), totalSupply, decimals).toFixed(3)
 
-		return { owner, address, uiAmount, percentageOwned }
+		return { owner, address, uiAmount, percentageOwned, isCreator }
 	})
 }
 

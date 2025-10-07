@@ -2,12 +2,17 @@ import { type TopHolderType, createTopHolderSchema } from '@/app/utils/schemas'
 import { connection } from '@/app/utils/setup'
 import { PublicKey } from '@solana/web3.js'
 import { program } from '@/app/utils/setup'
-import { TOKEN_2022_PROGRAM_ID, getAccount } from '@solana/spl-token'
+import { TOKEN_2022_PROGRAM_ID, getAccount, getAssociatedTokenAddress } from '@solana/spl-token'
 import { fetchBondingCurveState } from '@repo/rage'
+import { getCreatorId } from '@/app/data/get_creator_id'
 import 'server-only'
 
 export async function getTopHolders(address: string): Promise<TopHolderType[]> {
+	const creatorId = await getCreatorId(address)
+
 	const mint = new PublicKey(address)
+
+	const token0CreatorAta = await getAssociatedTokenAddress(mint, new PublicKey(creatorId), true, TOKEN_2022_PROGRAM_ID)
 
 	const accounts = await connection.getTokenLargestAccounts(mint, 'confirmed')
 
@@ -22,7 +27,9 @@ export async function getTopHolders(address: string): Promise<TopHolderType[]> {
 	)
 
 	const result = accountData.reduce<TopHolderType[]>((acc, curr) => {
-		const parsed = TopHolderSchema.safeParse(curr)
+		const isCreator = curr.address.toBase58() === token0CreatorAta.toBase58()
+
+		const parsed = TopHolderSchema.safeParse({ ...curr, isCreator })
 
 		if (parsed.success) {
 			acc.push(parsed.data)
