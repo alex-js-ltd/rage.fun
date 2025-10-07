@@ -1,13 +1,12 @@
 'use client'
 
-import { SearchParams } from '@/app/utils/schemas'
-import Link from 'next/link'
 import { cn } from '@/app/utils/misc'
+import { NavLink } from './nav_link'
 
-export function ExploreNav({ searchParams }: { searchParams: SearchParams }) {
+export function ExploreNav() {
 	return (
 		<div className="flex items-center w-full h-full overflow-x-scroll scrollbar-hide">
-			<Link
+			<NavLink
 				className={cn('relative h-full w-fit flex items-center px-4 hover:bg-white/10 whitespace-nowrap')}
 				href={{
 					pathname: `/home`,
@@ -15,26 +14,21 @@ export function ExploreNav({ searchParams }: { searchParams: SearchParams }) {
 						sortType: 'createdAt',
 					},
 				}}
+				as={`/home?sortType=createdAt`}
 				replace
 			>
-				<span
-					className={cn(
-						'font-medium text-text-200 text-[15px]',
-						searchParams.sortType === 'createdAt' && 'text-text-100',
-					)}
-				>
-					Created At
-				</span>
+				{({ isActive }) => (
+					<>
+						<span className={cn('font-medium text-text-200 text-[15px]', isActive && 'text-white')}>Created At</span>
 
-				<div
-					className={cn(
-						'absolute bottom-0 left-4 right-4 h-[1px]',
-						searchParams.sortType === 'createdAt' && 'border-2 border-text-200 rounded',
-					)}
-				/>
-			</Link>
+						<div
+							className={cn('absolute bottom-0 left-4 right-4 h-[1px]', isActive && 'border-2 border-rage-100 rounded')}
+						/>
+					</>
+				)}
+			</NavLink>
 
-			<Link
+			<NavLink
 				className={cn('relative h-full w-fit flex items-center px-4 hover:bg-white/10 whitespace-nowrap')}
 				href={{
 					pathname: `/home`,
@@ -42,26 +36,21 @@ export function ExploreNav({ searchParams }: { searchParams: SearchParams }) {
 						sortType: 'lastTrade',
 					},
 				}}
+				as={`/home?sortType=lastTrade`}
 				replace
 			>
-				<span
-					className={cn(
-						'font-medium text-text-200 text-[15px]',
-						searchParams.sortType === 'lastTrade' && 'text-text-100',
-					)}
-				>
-					Last Trade
-				</span>
+				{({ isActive }) => (
+					<>
+						<span className={cn('font-medium text-text-200 text-[15px]', isActive && 'text-white')}>Last Trade</span>
 
-				<div
-					className={cn(
-						'absolute bottom-0 left-4 right-4 h-[1px]',
-						searchParams.sortType === 'lastTrade' && 'border-2 border-text-200 rounded',
-					)}
-				/>
-			</Link>
+						<div
+							className={cn('absolute bottom-0 left-4 right-4 h-[1px]', isActive && 'border-2 border-rage-100 rounded')}
+						/>
+					</>
+				)}
+			</NavLink>
 
-			<Link
+			<NavLink
 				className={cn('relative h-full w-fit flex items-center px-4 hover:bg-white/10 whitespace-nowrap')}
 				href={{
 					pathname: `/home`,
@@ -69,48 +58,41 @@ export function ExploreNav({ searchParams }: { searchParams: SearchParams }) {
 						sortType: 'marketCap',
 					},
 				}}
+				as={`/home?sortType=marketCap`}
 				replace
 			>
-				<span
-					className={cn(
-						'font-medium text-text-200 text-[15px]',
-						searchParams.sortType === 'marketCap' && 'text-text-100',
-					)}
-				>
-					Market Cap
-				</span>
+				{({ isActive }) => (
+					<>
+						<span className={cn('font-medium text-text-200 text-[15px]', isActive && 'text-white')}>Market Cap</span>
 
-				<div
-					className={cn(
-						'absolute bottom-0 left-4 right-4 h-[1px]',
-						searchParams.sortType === 'marketCap' && 'border-2 border-text-200 rounded',
-					)}
-				/>
-			</Link>
+						<div
+							className={cn('absolute bottom-0 left-4 right-4 h-[1px]', isActive && 'border-2 border-rage-100 rounded')}
+						/>
+					</>
+				)}
+			</NavLink>
 
-			<Link
-				className={cn('relative h-full w-fit flex items-center px-4 hover:bg-white/10')}
+			<NavLink
+				className={cn('relative h-full w-fit flex items-center px-4 hover:bg-white/10 whitespace-nowrap')}
 				href={{
 					pathname: `/home`,
 					query: {
 						sortType: 'volume',
 					},
 				}}
+				as={`/home?sortType=volume`}
 				replace
 			>
-				<span
-					className={cn('font-medium text-text-200 text-[15px]', searchParams.sortType === 'volume' && 'text-text-100')}
-				>
-					Volume
-				</span>
+				{({ isActive }) => (
+					<>
+						<span className={cn('font-medium text-text-200 text-[15px]', isActive && 'text-white')}>Volume</span>
 
-				<div
-					className={cn(
-						'absolute bottom-0 left-4 right-4 h-[1px]',
-						searchParams.sortType === 'volume' && 'border-2 border-text-200 rounded',
-					)}
-				/>
-			</Link>
+						<div
+							className={cn('absolute bottom-0 left-4 right-4 h-[1px]', isActive && 'border-2 border-rage-100 rounded')}
+						/>
+					</>
+				)}
+			</NavLink>
 		</div>
 	)
 }

@@ -7,10 +7,9 @@ export type NavLinkRenderProps = {
 	isActive: boolean
 }
 
-interface NavLinkProps
-	extends Omit<LinkProps, 'className' | 'style' | 'children'> {
+interface NavLinkProps extends Omit<LinkProps, 'className' | 'style' | 'children'> {
 	children?: React.ReactNode | ((props: NavLinkRenderProps) => React.ReactNode)
-	className?: string | ((props: NavLinkRenderProps) => string | undefined)
+	className?: string
 }
 
 export function NavLink({ href, children, className, ...props }: NavLinkProps) {
@@ -20,14 +19,14 @@ export function NavLink({ href, children, className, ...props }: NavLinkProps) {
 	const url = `${pathname}?${searchParams}`
 
 	// Determine if the current URL matches the href
-	const isActive = url === href
+	const isActive = url === props.as
 
 	let renderProps = {
 		isActive,
 	}
 
 	return (
-		<Link href={href} {...props}>
+		<Link className={className} href={href} {...props}>
 			{typeof children === 'function' ? children(renderProps) : children}
 		</Link>
 	)
