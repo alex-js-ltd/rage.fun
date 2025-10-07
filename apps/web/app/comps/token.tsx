@@ -53,11 +53,12 @@ export async function Token(props: Props) {
 			<Header />
 			<div className="relative overflow-y-hidden flex-1 overflow-x-hidden pb-40 w-full">
 				<div className="border-t border-white border-opacity-[0.125] h-fit min-h-[255px] w-full">
-					<div className="flex items-center justify-between p-3 border-b border-white border-opacity-[0.125]">
+					<div className="flex items-center justify-between h-[52px] border-b border-white border-opacity-[0.125] pl-3">
 						<Suspense fallback={<TokenPairFallback />}>
 							<TokenPair tokenPromise={tokenPromise} />
 						</Suspense>
-						<IntervalPanel mint={mint} />
+
+						<IntervalPanel key={interval} interval={searchParams.interval} mint={mint} />
 					</div>
 
 					<Suspense fallback={<Loading i={0} className="h-[255px] w-[600px]" />}>
