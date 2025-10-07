@@ -1,11 +1,19 @@
 'use client'
 
-import Link, { type LinkProps } from 'next/link'
+import Link from 'next/link'
+import type { LinkProps } from 'next/link'
 import { Icon } from '@/app/comps/_icon'
 import { Wallet } from './wallet'
 import Image from 'next/image'
+import { NavLink, type NavLinkProps } from './nav_link'
+import { cn } from '@/app/utils/misc'
 
-interface NavItemProps extends LinkProps {
+// Only the fields you put in NAV_ITEMS, plus label/icon
+type NavItem = {
+	href: LinkProps['href']
+	scroll?: LinkProps['scroll']
+	as?: LinkProps['as']
+	ignoreSearch?: NavLinkProps['ignoreSearch']
 	label: string
 	icon: string
 }
@@ -17,15 +25,26 @@ export function Nav() {
 			scroll: true,
 			label: 'Home',
 			icon: 'home',
+			as: '/home',
+			ignoreSearch: true,
 		},
-		{ href: { pathname: '/create', query: {} }, scroll: false, label: 'Create', icon: 'face-plus' },
 		{
-			href: { pathname: '/earn', query: {} },
+			href: { pathname: '/create' },
+			scroll: false,
+			label: 'Create',
+			icon: 'face-plus',
+			as: '/create',
+			ignoreSearch: false,
+		},
+		{
+			href: { pathname: '/earn' },
 			scroll: true,
 			label: 'Earn',
 			icon: 'dollar',
+			as: '/earn',
+			ignoreSearch: false,
 		},
-	] as const satisfies readonly NavItemProps[]
+	] as const satisfies readonly NavItem[]
 
 	function Desktop() {
 		return (
@@ -45,16 +64,24 @@ export function Nav() {
 								</div>
 							</Link>
 							{NAV_ITEMS.map(l => (
-								<Link
+								<NavLink
 									key={l.href.pathname}
 									href={l.href}
 									className="flex items-center gap-2 rounded-full hover:bg-white/10 w-fit h-[50.25px] p-3 text-text-200 hover:text-white "
 									scroll={l.scroll}
+									as={l.as}
+									ignoreSearch={l.ignoreSearch}
 								>
-									<Icon className="size-6 " name={l.icon} />
+									{({ isActive }) => (
+										<>
+											<Icon className={cn('size-6', isActive && 'text-white')} name={l.icon} />
 
-									<span className="hidden xl:block  font-semibold text-lg">{l.label}</span>
-								</Link>
+											<span className={cn('hidden xl:block  font-semibold text-lg', isActive && 'text-white')}>
+												{l.label}
+											</span>
+										</>
+									)}
+								</NavLink>
 							))}
 
 							<div className="w-fit mt-auto">
