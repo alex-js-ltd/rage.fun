@@ -19,7 +19,7 @@ export function IntervalPanel({ mint, searchParams }: { mint: string; searchPara
 	return (
 		<Form ref={formRef} action={`/token/${mint}`} replace>
 			{/* Hidden field the server will read */}
-			<input ref={hiddenRef} type="hidden" name="interval" defaultValue={interval} />
+			<input ref={hiddenRef} type="hidden" name="interval" />
 
 			<SelectPrimitive.Root
 				value={interval}
