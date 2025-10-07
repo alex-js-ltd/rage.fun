@@ -1,8 +1,9 @@
 'use client'
-
+import { useCallback } from 'react'
 import * as SelectPrimitive from '@radix-ui/react-select'
 import { ChevronDownIcon } from '@radix-ui/react-icons'
 import { useChangeSearchParams } from '@/app/hooks/use_change_search_params'
+import { useRouter, usePathname, useSearchParams } from 'next/navigation'
 
 const seconds = ['1s', '15s', '30s'] as const
 
@@ -11,7 +12,21 @@ const minutes = ['1m', '5m', '15m', '30m'] as const
 const hours = ['1h', '4h', '6h', '12h', '24h'] as const
 
 export function IntervalPanel() {
-	const { createQueryString, searchParams } = useChangeSearchParams('interval')
+	const router = useRouter()
+	const pathname = usePathname()
+	const searchParams = useSearchParams()
+
+	// Get a new searchParams string by merging the current
+	// searchParams with a provided key/value pair
+	const createQueryString = useCallback(
+		(name: string, value: string) => {
+			const params = new URLSearchParams(searchParams.toString())
+			params.set(name, value)
+
+			return params.toString()
+		},
+		[searchParams],
+	)
 
 	const interval = searchParams.get('interval') || ''
 
@@ -19,7 +34,8 @@ export function IntervalPanel() {
 		<SelectPrimitive.Root
 			value={interval}
 			onValueChange={value => {
-				createQueryString(value)
+				router.replace(pathname + '?' + createQueryString('interval', value))
+				router.refresh()
 			}}
 		>
 			<SelectPrimitive.Trigger className="text-text-100 text-xs flex items-center gap-2 h-full px-3 focus:outline-none">
