@@ -31,7 +31,7 @@ export function useLightweightChart(data: OhlcData[], mint: string, interval: nu
 	const chartRef = useRef<IChartApi | null>(null)
 	const seriesRef = useRef<ISeriesApi<'Candlestick'> | null>(null)
 	useEffect(() => {
-		if (!chartContainerRef.current || !data) return
+		if (!chartContainerRef.current || !data || !interval) return
 
 		const chartOptions: DeepPartial<ChartOptions> = {
 			layout: {
@@ -133,7 +133,7 @@ export function useLightweightChart(data: OhlcData[], mint: string, interval: nu
 				chartRef.current.remove()
 			}
 		}
-	}, [data])
+	}, [data, interval])
 
 	const { channel } = useChannel('swapEvent', (message: Ably.Message) => {
 		const swapEvent: SwapEventType = message.data
