@@ -10,7 +10,7 @@ export function ExploreNav() {
 				className={cn('relative h-full w-fit flex items-center px-4 hover:bg-white/10 whitespace-nowrap')}
 				href={{
 					pathname: `/home`,
-					query: {},
+					query: { sortType: '' },
 				}}
 				as={`/home`}
 				replace

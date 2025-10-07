@@ -16,7 +16,7 @@ export function NavLink({ href, children, className, ...props }: NavLinkProps) {
 	const pathname = usePathname()
 	const searchParams = useSearchParams()
 
-	const url = `${pathname}?${searchParams}`
+	const url = searchParams.size === 0 ? pathname : `${pathname}?${searchParams}`
 
 	// Determine if the current URL matches the href
 	const isActive = url === props.as
