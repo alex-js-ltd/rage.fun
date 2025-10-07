@@ -23,11 +23,12 @@ import { client } from '@/app/utils/client'
 
 import { SquareProgress } from './square_progress'
 import { shortenWallet } from '@/app/utils/misc'
-import { type TooltipContentProps, Tooltip, TooltipContent, TooltipTrigger } from '@/app/comps/tooltip'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/app/comps/tooltip'
 
 import { useInView } from 'react-intersection-observer'
 import { HarvestYieldForm } from '@/app/comps/harvest_yield_form'
 import { usePathname } from 'next/navigation'
+import { motion } from 'motion/react'
 
 export type InitialState = {
 	tokens: TokenFeedType[]
@@ -56,7 +57,15 @@ function TokenCard({
 	const disableCreatorLink = pathname !== '/home'
 
 	return (
-		<article className="group relative flex flex-col w-full min-h-[178px] border-b border-white border-opacity-[0.125] hover:bg-white/10 bg-background-100">
+		<motion.article
+			layout
+			transition={{
+				type: 'spring',
+				visualDuration: 0.2,
+				bounce: 0.2,
+			}}
+			className="group relative flex flex-col w-full min-h-[178px] border-b border-white border-opacity-[0.125] hover:bg-white/10 bg-background-100"
+		>
 			<div
 				className={cn(
 					'absolute inset-0',
@@ -132,7 +141,7 @@ function TokenCard({
 					<div className="xs:ml-auto">{children ? children : null}</div>
 				</div>
 			</div>
-		</article>
+		</motion.article>
 	)
 }
 
