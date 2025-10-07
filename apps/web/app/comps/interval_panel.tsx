@@ -10,10 +10,11 @@ const minutes = ['1m', '5m', '15m', '30m'] as const
 
 const hours = ['1h', '4h', '6h', '12h', '24h'] as const
 
-export function IntervalPanel({ mint }: { mint: string }) {
+export function IntervalPanel() {
 	const { createQueryString, searchParams } = useChangeSearchParams('interval')
 
 	const interval = searchParams.get('interval') || ''
+
 	return (
 		<SelectPrimitive.Root
 			value={interval}
