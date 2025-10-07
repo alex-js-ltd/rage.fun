@@ -58,7 +58,7 @@ export async function Token(props: Props) {
 							<TokenPair tokenPromise={tokenPromise} />
 						</Suspense>
 
-						<IntervalPanel />
+						<IntervalPanel key={interval} />
 					</div>
 
 					<Suspense key={interval} fallback={<Loading i={1} className="h-[255px] w-[600px]" />}>
