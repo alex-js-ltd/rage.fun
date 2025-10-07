@@ -55,6 +55,14 @@ export function HoldersTable({ holdersPromise }: HoldersTableProps) {
 											<span className="text-text-200">{`#${i + 1} `}</span>
 											<span>{shortAddress(row.owner)}</span>
 										</a>
+
+										{row.isCreator && (
+											<span
+												className={`ml-1 px-1.5 py-0.5 text-[10px] font-semibold uppercase rounded tracking-wide bg-purple-500/20 text-purple-300`}
+											>
+												Creator
+											</span>
+										)}
 									</div>
 								</td>
 
