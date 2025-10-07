@@ -412,20 +412,38 @@ export const SwapOptionSchema = z.object({
 
 export const TokenSearchParamsSchema = z
 	.object({
-		interval: z.enum(['5m', '1h', '6h', '24h']),
+		interval: z.enum(['1s', '15s', '30s', '1m', '5m', '15m', '30m', '1h', '4h', '6h', '12h', '24h']),
 	})
 	.transform(data => {
 		switch (data.interval) {
+			case '1s':
+				return { interval: 1000 }
+			case '15s':
+				return { interval: 15000 }
+			case '30s':
+				return { interval: 30000 }
+
+			case '1m':
+				return { interval: 60000 }
 			case '5m':
 				return { interval: 300000 }
+			case '15m':
+				return { interval: 900000 }
+			case '30m':
+				return { interval: 1800000 }
+
 			case '1h':
 				return { interval: 3600000 }
+			case '4h':
+				return { interval: 14400000 }
 			case '6h':
 				return { interval: 21600000 }
+			case '12h':
+				return { interval: 43200000 }
 			case '24h':
 				return { interval: 86400000 }
 
 			default:
-				return { interval: 300000 } // default fallback (1h)
+				return { interval: 300000 } // fallback to 5m
 		}
 	})

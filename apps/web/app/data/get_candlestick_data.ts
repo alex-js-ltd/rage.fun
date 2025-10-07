@@ -47,6 +47,7 @@ function generateCandlestickData(events: SwapEvent[], interval: number) {
 }
 
 export async function getCandlstickData(mint: string, interval: number) {
+	console.log('get candle stick data for interval:', interval)
 	const query = Prisma.validator<Prisma.SwapEventFindManyArgs>()({
 		where: {
 			tokenId: mint,

@@ -11,7 +11,6 @@ export function useChangeSearchParams(name: string) {
 	const createQueryString = useCallback(
 		(value: string) => {
 			const params = new URLSearchParams(searchParams)
-			params.delete('cursorId')
 			params.set(name, value)
 
 			replace(`${pathname}?${params.toString()}`, { scroll: false })
@@ -19,5 +18,5 @@ export function useChangeSearchParams(name: string) {
 		[searchParams],
 	)
 
-	return { createQueryString }
+	return { createQueryString, searchParams }
 }
