@@ -48,12 +48,12 @@ export function Nav() {
 								<Link
 									key={l.href.pathname}
 									href={l.href}
-									className="flex items-center gap-2 rounded-full hover:bg-white/10 w-fit h-[50.25px] p-3 "
+									className="flex items-center gap-2 rounded-full hover:bg-white/10 w-fit h-[50.25px] p-3 text-text-200 hover:text-white "
 									scroll={l.scroll}
 								>
-									<Icon className="size-6 text-text-200" name={l.icon} />
+									<Icon className="size-6 " name={l.icon} />
 
-									<span className="hidden xl:block text-text-200 font-semibold text-lg">{l.label}</span>
+									<span className="hidden xl:block  font-semibold text-lg">{l.label}</span>
 								</Link>
 							))}
 
