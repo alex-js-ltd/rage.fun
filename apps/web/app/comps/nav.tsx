@@ -7,16 +7,10 @@ import { Wallet } from './wallet'
 import Image from 'next/image'
 import { NavLink, type NavLinkProps } from './nav_link'
 import { cn } from '@/app/utils/misc'
+import { usePathname } from 'next/navigation'
 
 // Only the fields you put in NAV_ITEMS, plus label/icon
-type NavItem = {
-	href: LinkProps['href']
-	scroll?: LinkProps['scroll']
-	as?: LinkProps['as']
-	ignoreSearch?: NavLinkProps['ignoreSearch']
-	label: string
-	icon: string
-}
+type NavItem = NavLinkProps & { label: string; icon: string }
 
 export function Nav() {
 	const NAV_ITEMS = [
@@ -26,7 +20,6 @@ export function Nav() {
 			label: 'Home',
 			icon: 'home',
 			as: '/home',
-			ignoreSearch: true,
 		},
 		{
 			href: { pathname: '/create' },
@@ -34,7 +27,6 @@ export function Nav() {
 			label: 'Create',
 			icon: 'face-plus',
 			as: '/create',
-			ignoreSearch: false,
 		},
 		{
 			href: { pathname: '/earn' },
@@ -42,7 +34,6 @@ export function Nav() {
 			label: 'Earn',
 			icon: 'dollar',
 			as: '/earn',
-			ignoreSearch: false,
 		},
 	] as const satisfies readonly NavItem[]
 
@@ -70,7 +61,6 @@ export function Nav() {
 									className="flex items-center gap-2 rounded-full hover:bg-white/10 w-fit h-[50.25px] p-3 text-text-200 hover:text-white "
 									scroll={l.scroll}
 									as={l.as}
-									ignoreSearch={l.ignoreSearch}
 								>
 									{({ isActive }) => (
 										<>

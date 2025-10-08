@@ -28,7 +28,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '@/app/comps/tooltip'
 import { useInView } from 'react-intersection-observer'
 import { HarvestYieldForm } from '@/app/comps/harvest_yield_form'
 import { usePathname } from 'next/navigation'
-import { Reorder } from 'framer-motion'
+import { motion } from 'motion/react'
 
 export type InitialState = {
 	tokens: TokenFeedType[]
@@ -259,40 +259,28 @@ export function TokenGrid({
 
 	const isEarnPage = pathname === '/earn' && !!creatorId
 
-	// Reorder helper: map ordered ids -> token objects
-	const reorderByIds = (ids: string[]) => {
-		const byId = new Map(tokens.map(t => [t.id, t]))
-		return ids.map(id => byId.get(id)!).filter(Boolean)
-	}
-
 	return (
 		<div className="grid">
-			<Reorder.Group
-				className="mx-auto grid w-full grid-cols-1 gap-0"
-				axis="y"
-				onReorder={(newIds: string[]) => setState(prev => ({ ...prev, tokens: reorderByIds(newIds) }))}
-				values={tokens.map(t => t.id)}
-			>
-				{state.tokens.map((token, i) => {
+			<ul className="mx-auto grid w-full grid-cols-1 gap-0">
+				{tokens.map((token, i) => {
 					const isPenultimate = i === tokens.length - 2
 
 					return (
-						<Reorder.Item
+						<li
 							key={token.id}
 							ref={isPenultimate && !isLastPage && !isLoading ? ref : undefined}
 							className="space-y-4 w-full"
-							value={token.id}
 						>
 							<TokenCard token={token} pathname={pathname}>
 								{isEarnPage ? <HarvestYieldForm token={token} /> : null}
 							</TokenCard>
-						</Reorder.Item>
+						</li>
 					)
 				})}
 
 				{/* Show loader card while fetching */}
 				{isLoading ? <TokenGridFallback isEarnPage={isEarnPage} /> : null}
-			</Reorder.Group>
+			</ul>
 
 			<form
 				ref={formRef}
