@@ -16,7 +16,7 @@ export function Toast({ open, onOpenChange, className, description, duration }: 
 		>
 			<ToastPrimitive.Description
 				className={cn(
-					'bg-background-200 text-text-100 border-0 overflow whitespace-nowrap text-xs h-auto flex items-center p-4 rounded-md',
+					'bg-white/10 text-text-100 border-0 overflow whitespace-nowrap text-xs h-auto flex items-center p-4 rounded-md',
 					className,
 				)}
 			>
