@@ -105,6 +105,7 @@ const buttonVariants = cva(undefined, {
 				'font-semibold',
 				'rounded-full',
 				'bg-background-500 hover:bg-background-600',
+				'cursor-pointer z-50',
 			].join(' '),
 		},
 	},

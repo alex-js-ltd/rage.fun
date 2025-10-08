@@ -302,6 +302,8 @@ function Form({
 }: FormProps) {
 	const [lastResult, formAction, isPending] = useActionState(action, undefined)
 
+	const { serializedTx, errMessage, ...rest } = lastResult || {}
+
 	const [form, fields] = useForm({
 		// Reuse the validation logic on the client
 		onValidate: ({ formData }) => parseWithZod(formData, { schema: SwapSchema }),
@@ -309,14 +311,12 @@ function Form({
 		// Validate the form on blur event triggered
 		shouldValidate: 'onInput',
 		shouldRevalidate: 'onInput',
-		lastResult,
+		lastResult: rest,
 
 		defaultValue: {
 			amount: '',
 		},
 	})
-
-	const { serializedTx, errMessage } = lastResult || {}
 
 	console.log('errMessage', errMessage)
 
@@ -324,11 +324,11 @@ function Form({
 
 	const { setError } = swap
 
-	useEffect(() => {
-		if (errMessage) {
-			setError(errMessage)
-		}
-	}, [setError, errMessage])
+	// useEffect(() => {
+	// 	if (errMessage) {
+	// 		setError(errMessage)
+	// 	}
+	// }, [setError, errMessage])
 
 	const { getToastProps } = useToast(swap)
 
@@ -377,6 +377,10 @@ function Form({
 		[control, getQuickOption, mint, payer],
 	)
 
+	const disabled = isPending || isLoading
+
+	console.log('disabled', disabled)
+
 	return (
 		<FormProvider context={form.context}>
 			<div className="relative z-10 flex w-full flex-col divide-zinc-600 ">
@@ -410,9 +414,10 @@ function Form({
 					{payer ? (
 						<Button
 							className={uiAmount ? 'bg-background-600' : undefined}
-							disabled={isPending || isLoading}
+							disabled={disabled}
 							type="submit"
 							variant="trade"
+							onClick={reset}
 						>
 							Place Trade
 						</Button>
