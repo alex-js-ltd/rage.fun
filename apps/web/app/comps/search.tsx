@@ -28,10 +28,12 @@ export function SearchField({}) {
 	}, 300)
 
 	return (
-		<div className="h-[40px] w-full relative flex items-center justify-between border border-white rounded-full border-opacity-[0.125] px-3">
-			<Icon name="search" className="size-4 text-text-100" />
+		<div className="h-[40px] w-full relative flex items-center">
+			<Icon name="search" className="absolute left-4 size-4 text-text-200" />
 			<input
-				className="h-full resize-none overflow-auto w-full flex-1 bg-transparent text-sm outline-none ring-0 placeholder:text-text-300 text-text-300 items-center px-2"
+				className="w-full h-full rounded-full border border-white/10 bg-background-100 text-white placeholder-text-text-200
+         focus:border-rage-100 focus:ring-1 focus:ring-rage-100/40 focus:outline-none
+         caret-rage-100 transition-all duration-150 px-10"
 				placeholder="Search symbol..."
 				onChange={e => {
 					handleSearch(e.target.value)
