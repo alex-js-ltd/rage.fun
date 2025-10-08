@@ -49,8 +49,8 @@ export default async function Page(props: Props) {
 					) : (
 						<div className="p-4 flex flex-col gap-4">
 							<p className="text-sm text-text-200">
-								Launch a token on a <strong>decentralised bonding curve</strong> and own{' '}
-								<strong>100% of swap fees</strong> — no middlemen, no extraction.
+								Launch a token on a <strong>decentralized bonding curve. </strong>
+								Earn 1% from every trade, instantly — no middlemen, no extraction.
 							</p>
 						</div>
 					)}
