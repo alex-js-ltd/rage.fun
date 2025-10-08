@@ -45,7 +45,7 @@ export function Nav() {
 			<nav className="hidden sm:block sticky top-0 ">
 				<div className="h-[52px] flex items-center w-full ">
 					<div className="xl:ml-0 ml-auto w-[70px] h-[52px] flex items-center justify-center">
-						<Image className="" src="/rage.png" alt="logo" width={60} height={52} />
+						<Image className="" src="/rage.png" alt="logo" width={56} height={56} />
 					</div>
 				</div>
 
