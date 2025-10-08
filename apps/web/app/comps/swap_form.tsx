@@ -306,8 +306,6 @@ function Form({
 
 	const [amount, setAmount] = useState('')
 
-	console.log('errMessage', errMessage)
-
 	const swap = useSignAndSendTx(serializedTx)
 
 	const { setError } = swap
@@ -316,7 +314,7 @@ function Form({
 		if (errMessage) {
 			setError(errMessage)
 		}
-	}, [setError, requestId, errMessage])
+	}, [errMessage, setError, requestId])
 
 	const { getToastProps } = useToast(swap)
 
@@ -361,8 +359,6 @@ function Form({
 		[amount, getQuickOption, mint, payer],
 	)
 
-	const disabled = isPending || isLoading
-
 	return (
 		<>
 			<div className="relative z-10 flex w-full flex-col divide-zinc-600 ">
@@ -392,7 +388,7 @@ function Form({
 					{payer ? (
 						<Button
 							className={uiAmount ? 'bg-background-600' : undefined}
-							disabled={disabled}
+							disabled={isPending || isLoading}
 							type="submit"
 							variant="trade"
 						>
