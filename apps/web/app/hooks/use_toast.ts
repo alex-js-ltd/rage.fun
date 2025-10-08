@@ -21,18 +21,18 @@ export function useToast(async: AsyncState) {
 	const timerRef = useRef<NodeJS.Timeout | null>(null)
 
 	useEffect(() => {
-		if (isLoading) {
+		if (isLoading || isError) {
 			setOpen(true)
 		}
 
 		if (isSuccess || isError) {
-			timerRef.current = setTimeout(() => setOpen(false), 5000)
+			timerRef.current = setTimeout(() => setOpen(false), 8000)
 		}
 
 		return () => {
 			if (timerRef.current) clearTimeout(timerRef.current)
 		}
-	}, [isLoading, isSuccess, isError])
+	}, [isLoading, isSuccess, isError, error])
 
 	function onOpenChange(open: boolean) {
 		setOpen(open)

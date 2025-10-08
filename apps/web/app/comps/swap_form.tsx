@@ -322,6 +322,14 @@ function Form({
 
 	const swap = useSignAndSendTx(serializedTx)
 
+	const { setError } = swap
+
+	useEffect(() => {
+		if (errMessage) {
+			setError(errMessage)
+		}
+	}, [setError, errMessage])
+
 	const { getToastProps } = useToast(swap)
 
 	const { reset, isLoading } = swap
