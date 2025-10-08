@@ -64,6 +64,7 @@ export function Nav() {
 									className="flex items-center gap-2 rounded-full hover:bg-white/10 w-fit h-[50.25px] p-3 text-text-200 hover:text-white "
 									scroll={l.scroll}
 									as={l.as}
+									prefetch={l.prefetch}
 								>
 									{({ isActive }) => (
 										<>
