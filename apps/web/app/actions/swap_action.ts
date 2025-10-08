@@ -17,21 +17,26 @@ export type State =
 	| (SubmissionResult<string[]> & {
 			serializedTx?: Uint8Array
 			errMessage?: string
+			requestId?: string
 	  })
 	| undefined
 
 export async function buyAction(_prevState: State, formData: FormData) {
+	const requestId = crypto.randomUUID()
 	const session = await auth()
 
 	const submission = parseWithZod(formData, {
 		schema: SwapSchema,
 	})
 
+	console.log(submission)
+
 	if (submission.status !== 'success' || !session?.user?.id) {
 		return {
 			...submission.reply(),
 			serializedTx: undefined,
 			errMessage: undefined,
+			requestId,
 		}
 	}
 
@@ -56,12 +61,13 @@ export async function buyAction(_prevState: State, formData: FormData) {
 	})
 
 	const sim = await connection.simulateTransaction(transaction)
-
+	console.log(sim)
 	if (sim.value.err !== null && !isInstructionError(sim.value.err)) {
 		return {
 			...submission.reply(),
 			serializedTx: undefined,
 			errMessage: 'unknown error',
+			requestId,
 		}
 	} else if (sim.value.err !== null && isInstructionError(sim.value.err)) {
 		const code = sim.value.err.InstructionError[1].Custom
@@ -71,6 +77,7 @@ export async function buyAction(_prevState: State, formData: FormData) {
 			...submission.reply(),
 			serializedTx: undefined,
 			errMessage,
+			requestId,
 		}
 	}
 
@@ -78,21 +85,26 @@ export async function buyAction(_prevState: State, formData: FormData) {
 		...submission.reply(),
 		serializedTx: transaction.serialize(),
 		errMessage: undefined,
+		requestId,
 	}
 }
 
 export async function sellAction(_prevState: State, formData: FormData) {
+	const requestId = crypto.randomUUID()
 	const session = await auth()
 
 	const submission = parseWithZod(formData, {
 		schema: SwapSchema,
 	})
 
+	console.log(submission)
+
 	if (submission.status !== 'success' || !session?.user?.id) {
 		return {
 			...submission.reply(),
 			serializedTx: undefined,
 			errMessage: undefined,
+			requestId,
 		}
 	}
 
@@ -117,12 +129,13 @@ export async function sellAction(_prevState: State, formData: FormData) {
 	})
 
 	const sim = await connection.simulateTransaction(transaction)
-
+	console.log(sim)
 	if (sim.value.err !== null && !isInstructionError(sim.value.err)) {
 		return {
 			...submission.reply(),
 			serializedTx: undefined,
 			errMessage: 'unknown error',
+			requestId,
 		}
 	} else if (sim.value.err !== null && isInstructionError(sim.value.err)) {
 		const code = sim.value.err.InstructionError[1].Custom
@@ -132,6 +145,7 @@ export async function sellAction(_prevState: State, formData: FormData) {
 			...submission.reply(),
 			serializedTx: undefined,
 			errMessage,
+			requestId,
 		}
 	}
 
@@ -139,5 +153,6 @@ export async function sellAction(_prevState: State, formData: FormData) {
 		...submission.reply(),
 		serializedTx: transaction.serialize(),
 		errMessage: undefined,
+		requestId,
 	}
 }

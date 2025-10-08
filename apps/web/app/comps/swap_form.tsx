@@ -302,21 +302,9 @@ function Form({
 }: FormProps) {
 	const [lastResult, formAction, isPending] = useActionState(action, undefined)
 
-	const { serializedTx, errMessage, ...rest } = lastResult || {}
+	const { serializedTx, errMessage, requestId, ...rest } = lastResult || {}
 
-	const [form, fields] = useForm({
-		// Reuse the validation logic on the client
-		onValidate: ({ formData }) => parseWithZod(formData, { schema: SwapSchema }),
-
-		// Validate the form on blur event triggered
-		shouldValidate: 'onInput',
-		shouldRevalidate: 'onInput',
-		lastResult,
-
-		defaultValue: {
-			amount: '',
-		},
-	})
+	const [amount, setAmount] = useState('')
 
 	console.log('errMessage', errMessage)
 
@@ -324,11 +312,11 @@ function Form({
 
 	const { setError } = swap
 
-	// useEffect(() => {
-	// 	if (errMessage) {
-	// 		setError(errMessage)
-	// 	}
-	// }, [setError, errMessage])
+	useEffect(() => {
+		if (errMessage) {
+			setError(errMessage)
+		}
+	}, [setError, requestId, errMessage])
 
 	const { getToastProps } = useToast(swap)
 
@@ -336,13 +324,9 @@ function Form({
 
 	const payer = usePayer()
 
-	const control = useInputControl(fields.amount)
-
 	const { run, data: quote, setData } = useAsync<string | null>()
 
-	const input = control.value
-
-	const [uiAmount] = useDebounceValue(input, 300)
+	const [uiAmount] = useDebounceValue(amount, 300)
 
 	useEffect(() => {
 		if (typeof uiAmount !== 'string') return
@@ -357,7 +341,7 @@ function Form({
 		async (percent: number) => {
 			if (percent === 0 || !payer) {
 				// reset
-				control.change('')
+				setAmount('')
 				return
 			}
 
@@ -369,37 +353,36 @@ function Form({
 			const v = await getQuickOption(params) // server-calculated uiAmount string
 
 			if (v === '0') {
-				control.change('')
+				setAmount('')
 			} else {
-				control.change(v) // single source of truth
+				setAmount(v)
 			}
 		},
-		[control, getQuickOption, mint, payer],
+		[amount, getQuickOption, mint, payer],
 	)
 
 	const disabled = isPending || isLoading
 
-	console.log('disabled', disabled)
-
 	return (
-		<FormProvider context={form.context}>
+		<>
 			<div className="relative z-10 flex w-full flex-col divide-zinc-600 ">
-				<form
-					className="relative transition-colors flex w-full flex-col gap-4"
-					key={form.key}
-					{...getFormProps(form)}
-					action={(formData: FormData) => {
-						// probe 1: server action got called
-						console.log('[ACTION] fields:', Object.fromEntries(formData.entries()))
-						return formAction(formData)
-					}}
-				>
+				<form className="relative transition-colors flex w-full flex-col gap-4" action={formAction}>
 					<input name="payer" type="hidden" defaultValue={payer} />
 					<input name="mint" type="hidden" defaultValue={mint} />
 					<input name="decimals" type="hidden" defaultValue={decimals} />
 					{quote && <input name="quote" type="hidden" defaultValue={quote} />}
 					<div className="relative transition-colors flex gap-2 items-center rounded-full border border-white border-opacity-[0.125] cursor-default">
-						<Input variant="amount" {...getPlaceholder(decimals)} type="number" name="amount" inputMode="numeric" />
+						<Input
+							variant="amount"
+							{...getPlaceholder(decimals)}
+							type="number"
+							name="amount"
+							inputMode="numeric"
+							value={amount}
+							onChange={e => {
+								setAmount(e.target.value)
+							}}
+						/>
 
 						{badge}
 					</div>
@@ -412,7 +395,6 @@ function Form({
 							disabled={disabled}
 							type="submit"
 							variant="trade"
-							onClick={reset}
 						>
 							Place Trade
 						</Button>
@@ -434,7 +416,7 @@ function Form({
 			</div>
 
 			<Toast {...getToastProps(toastConfig)} />
-		</FormProvider>
+		</>
 	)
 }
 

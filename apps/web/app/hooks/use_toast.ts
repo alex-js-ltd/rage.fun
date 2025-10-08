@@ -14,10 +14,11 @@ export interface ToastDescription {
 }
 
 export function useToast(async: AsyncState) {
-	const { isIdle, isLoading, isSuccess, isError, error } = async
+	console.log(async)
+	const { isIdle, isLoading, isSuccess, isError, error, reset } = async
 
 	const [open, setOpen] = useState(false)
-
+	console.log('open', open)
 	const timerRef = useRef<NodeJS.Timeout | null>(null)
 
 	useEffect(() => {
@@ -26,13 +27,16 @@ export function useToast(async: AsyncState) {
 		}
 
 		if (isSuccess || isError) {
-			timerRef.current = setTimeout(() => setOpen(false), 8000)
+			timerRef.current = setTimeout(() => {
+				setOpen(false)
+				reset()
+			}, 8000)
 		}
 
 		return () => {
 			if (timerRef.current) clearTimeout(timerRef.current)
 		}
-	}, [isLoading, isSuccess, isError, error])
+	}, [isLoading, isSuccess, isError, error, reset])
 
 	function onOpenChange(open: boolean) {
 		setOpen(open)
