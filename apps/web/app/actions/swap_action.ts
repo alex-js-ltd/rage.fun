@@ -97,8 +97,6 @@ export async function sellAction(_prevState: State, formData: FormData) {
 		schema: SwapSchema,
 	})
 
-	console.log(submission)
-
 	if (submission.status !== 'success' || !session?.user?.id) {
 		return {
 			...submission.reply(),
@@ -134,7 +132,7 @@ export async function sellAction(_prevState: State, formData: FormData) {
 		return {
 			...submission.reply(),
 			serializedTx: undefined,
-			errMessage: 'Insufficent token balance',
+			errMessage: 'Insufficient token balance.',
 			requestId,
 		}
 	} else if (sim.value.err !== null && isInstructionError(sim.value.err)) {
