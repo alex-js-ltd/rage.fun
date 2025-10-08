@@ -25,6 +25,7 @@ import { TokenSearchParamsSchema } from '@/app/utils/schemas'
 import { MobileDrawer } from '@/app/comps/mobile_drawer'
 import { SwapForm, SwapFormFallback } from '@/app/comps/swap_form'
 import { Header } from '@/app/comps/header'
+import { Events } from './events'
 
 type Props = {
 	params: Promise<{ mint: string }>
@@ -51,6 +52,7 @@ export async function Token(props: Props) {
 	return (
 		<div className="flex flex-col w-full min-h-[100vh] border-x border-white border-opacity-[0.125] bg-background-100 relative max-w-[600px]">
 			<Header />
+
 			<div className="relative overflow-y-hidden flex-1 overflow-x-hidden pb-40 w-full">
 				<div className="border-t border-white border-opacity-[0.125] h-fit min-h-[255px] w-full">
 					<div className="flex items-center justify-between h-[52px] border-b border-white border-opacity-[0.125] pl-3">

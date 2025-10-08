@@ -6,7 +6,7 @@ export function Footer() {
 	return (
 		<footer className="px-4">
 			<nav aria-label="Footer Navigation">
-				<ul className="flex  items-center gap-4">
+				<ul className="flex  items-center justify-between gap-4">
 					<li className="flex-1">
 						<Link scroll={true} href="/faq" className="hover:underline transition-colors text-sm text-neutral-400">
 							FAQ

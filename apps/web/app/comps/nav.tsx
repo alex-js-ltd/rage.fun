@@ -49,7 +49,7 @@ export function Nav() {
 					</div>
 				</div>
 
-				<div className="ml-auto xl:ml-0 w-[70px] xl:w-full items-center xl:items-start flex flex-col gap-1  h-[calc(100vh-52px)] pb-4">
+				<div className="ml-auto xl:ml-0 w-[70px] xl:w-full items-center xl:items-start flex flex-col gap-1  h-[calc(100vh-52px)] pb-3">
 					{NAV_ITEMS.map(l => (
 						<NavLink
 							key={l.href.pathname}
