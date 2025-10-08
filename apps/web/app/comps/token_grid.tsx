@@ -57,15 +57,7 @@ function TokenCard({
 	const disableCreatorLink = pathname !== '/home'
 
 	return (
-		<motion.article
-			layout
-			transition={{
-				type: 'spring',
-				visualDuration: 0.2,
-				bounce: 0.2,
-			}}
-			className="group relative flex flex-col w-full min-h-[178px] border-b border-white border-opacity-[0.125] hover:bg-white/10 bg-background-100"
-		>
+		<article className="group relative flex flex-col w-full min-h-[178px] border-b border-white border-opacity-[0.125] hover:bg-white/10 bg-background-100">
 			<div
 				className={cn(
 					'absolute inset-0',
@@ -141,7 +133,7 @@ function TokenCard({
 					<div className="xs:ml-auto">{children ? children : null}</div>
 				</div>
 			</div>
-		</motion.article>
+		</article>
 	)
 }
 
