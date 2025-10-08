@@ -42,46 +42,37 @@ export function Nav() {
 
 	function Desktop() {
 		return (
-			<nav className="hidden sm:block sticky top-0">
-				<div className="relative h-[52px] sm:h-[100vh] bg-black sm:w-full sm:bg-transparent w-[100vw] ">
-					<div className="z-40 flex flex-col gap-1 sm:pb-4 sm:pt-[0px] h-full">
-						<div className="sm:ml-auto flex sm:flex-col gap-1 w-full sm:w-[70px] items-center xl:w-full xl:items-start overflow-hidden h-full">
-							<Link href={'/home'} className="flex items-center gap-2 rounded-full w-fit h-[50.25px] py-3 ">
-								<div className="relative overflow-hidden h-[50.25px] w-[70px]">
-									<Image
-										src="/rage.png" // prefer SVG if you have it
-										alt="RAGE"
-										fill={true}
-										priority
-										className="object-contain"
-									/>
-								</div>
-							</Link>
-							{NAV_ITEMS.map(l => (
-								<NavLink
-									key={l.href.pathname}
-									href={l.href}
-									className="flex items-center gap-2 rounded-full hover:bg-white/10 w-fit h-[50.25px] p-3 text-text-200 hover:text-white "
-									scroll={l.scroll}
-									as={l.as}
-									prefetch={l.prefetch}
-								>
-									{({ isActive }) => (
-										<>
-											<Icon className={cn('size-6', isActive && 'text-white')} name={l.icon} />
+			<nav className="hidden sm:block sticky top-0 ">
+				<div className="h-[52px] flex items-center w-full ">
+					<div className="xl:ml-0 ml-auto w-[70px] h-[52px] flex items-center justify-center">
+						<Image className="" src="/rage.png" alt="logo" width={60} height={52} />
+					</div>
+				</div>
 
-											<span className={cn('hidden xl:block  font-semibold text-lg', isActive && 'text-white')}>
-												{l.label}
-											</span>
-										</>
-									)}
-								</NavLink>
-							))}
+				<div className="ml-auto xl:ml-0 w-[70px] xl:w-full items-center xl:items-start flex flex-col gap-1  h-[calc(100vh-52px)] pb-4">
+					{NAV_ITEMS.map(l => (
+						<NavLink
+							key={l.href.pathname}
+							href={l.href}
+							className="flex items-center gap-2 rounded-full hover:bg-white/10 w-fit h-[50.25px] p-3 text-text-200 hover:text-white "
+							scroll={l.scroll}
+							as={l.as}
+							prefetch={l.prefetch}
+						>
+							{({ isActive }) => (
+								<>
+									<Icon className={cn('size-6', isActive && 'text-white')} name={l.icon} />
 
-							<div className="w-fit mt-auto">
-								<Wallet />
-							</div>
-						</div>
+									<span className={cn('hidden xl:block  font-semibold text-lg', isActive && 'text-white')}>
+										{l.label}
+									</span>
+								</>
+							)}
+						</NavLink>
+					))}
+
+					<div className="w-fit mt-auto">
+						<Wallet />
 					</div>
 				</div>
 			</nav>
