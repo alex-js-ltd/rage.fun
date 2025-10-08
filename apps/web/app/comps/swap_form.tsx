@@ -311,7 +311,7 @@ function Form({
 		// Validate the form on blur event triggered
 		shouldValidate: 'onInput',
 		shouldRevalidate: 'onInput',
-		lastResult: rest,
+		lastResult,
 
 		defaultValue: {
 			amount: '',
@@ -386,25 +386,20 @@ function Form({
 			<div className="relative z-10 flex w-full flex-col divide-zinc-600 ">
 				<form
 					className="relative transition-colors flex w-full flex-col gap-4"
-					action={formAction}
 					key={form.key}
 					{...getFormProps(form)}
+					action={(formData: FormData) => {
+						// probe 1: server action got called
+						console.log('[ACTION] fields:', Object.fromEntries(formData.entries()))
+						return formAction(formData)
+					}}
 				>
 					<input name="payer" type="hidden" defaultValue={payer} />
 					<input name="mint" type="hidden" defaultValue={mint} />
 					<input name="decimals" type="hidden" defaultValue={decimals} />
 					{quote && <input name="quote" type="hidden" defaultValue={quote} />}
 					<div className="relative transition-colors flex gap-2 items-center rounded-full border border-white border-opacity-[0.125] cursor-default">
-						<Input
-							variant="amount"
-							{...getPlaceholder(decimals)}
-							type="number"
-							name="amount"
-							onChange={e => {
-								control.change(e.target.value)
-							}}
-							inputMode="numeric"
-						/>
+						<Input variant="amount" {...getPlaceholder(decimals)} type="number" name="amount" inputMode="numeric" />
 
 						{badge}
 					</div>
