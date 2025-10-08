@@ -9,12 +9,14 @@ import { getBuyTokenIx, getSellTokenIx, buildTransaction, uiAmountToAmount } fro
 import { auth } from '@/app/auth'
 import { PublicKey } from '@solana/web3.js'
 import { BN } from '@coral-xyz/anchor'
+import { isInstructionError, getErrorMessage } from '@/app/utils/setup'
 
 import { getAssociatedTokenAddress, getAccount, TOKEN_2022_PROGRAM_ID } from '@solana/spl-token'
 
 export type State =
 	| (SubmissionResult<string[]> & {
 			serializedTx?: Uint8Array
+			errMessage?: string
 	  })
 	| undefined
 
@@ -29,6 +31,7 @@ export async function buyAction(_prevState: State, formData: FormData) {
 		return {
 			...submission.reply(),
 			serializedTx: undefined,
+			errMessage: undefined,
 		}
 	}
 
@@ -53,17 +56,28 @@ export async function buyAction(_prevState: State, formData: FormData) {
 	})
 
 	const sim = await connection.simulateTransaction(transaction)
-	console.log(sim)
-	if (sim.value.err !== null) {
+
+	if (sim.value.err !== null && !isInstructionError(sim.value.err)) {
 		return {
 			...submission.reply(),
 			serializedTx: undefined,
+			errMessage: 'unknown error',
+		}
+	} else if (sim.value.err !== null && isInstructionError(sim.value.err)) {
+		const code = sim.value.err.InstructionError[1].Custom
+		const errMessage = getErrorMessage(code)
+
+		return {
+			...submission.reply(),
+			serializedTx: undefined,
+			errMessage,
 		}
 	}
 
 	return {
 		...submission.reply(),
 		serializedTx: transaction.serialize(),
+		errMessage: undefined,
 	}
 }
 
@@ -78,6 +92,7 @@ export async function sellAction(_prevState: State, formData: FormData) {
 		return {
 			...submission.reply(),
 			serializedTx: undefined,
+			errMessage: undefined,
 		}
 	}
 
@@ -103,17 +118,26 @@ export async function sellAction(_prevState: State, formData: FormData) {
 
 	const sim = await connection.simulateTransaction(transaction)
 
-	console.log(sim)
-
-	if (sim.value.err !== null) {
+	if (sim.value.err !== null && !isInstructionError(sim.value.err)) {
 		return {
 			...submission.reply(),
 			serializedTx: undefined,
+			errMessage: 'unknown error',
+		}
+	} else if (sim.value.err !== null && isInstructionError(sim.value.err)) {
+		const code = sim.value.err.InstructionError[1].Custom
+		const errMessage = getErrorMessage(code)
+
+		return {
+			...submission.reply(),
+			serializedTx: undefined,
+			errMessage,
 		}
 	}
 
 	return {
 		...submission.reply(),
 		serializedTx: transaction.serialize(),
+		errMessage: undefined,
 	}
 }

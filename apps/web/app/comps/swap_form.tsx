@@ -316,7 +316,9 @@ function Form({
 		},
 	})
 
-	const { serializedTx } = lastResult || {}
+	const { serializedTx, errMessage } = lastResult || {}
+
+	console.log('errMessage', errMessage)
 
 	const swap = useSignAndSendTx(serializedTx)
 
