@@ -20,6 +20,7 @@ export function Nav() {
 			label: 'Home',
 			icon: 'home',
 			as: '/home',
+			prefetch: true,
 		},
 		{
 			href: { pathname: '/create' },
@@ -27,6 +28,7 @@ export function Nav() {
 			label: 'Create',
 			icon: 'face-plus',
 			as: '/create',
+			prefetch: true,
 		},
 		{
 			href: { pathname: '/earn' },
@@ -34,6 +36,7 @@ export function Nav() {
 			label: 'Earn',
 			icon: 'dollar',
 			as: '/earn',
+			prefetch: true,
 		},
 	] as const satisfies readonly NavItem[]
 

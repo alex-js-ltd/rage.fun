@@ -14,6 +14,7 @@ export function ExploreNav() {
 				}}
 				as={`/home`}
 				replace
+				prefetch={true}
 			>
 				{({ isActive }) => (
 					<>
@@ -36,6 +37,7 @@ export function ExploreNav() {
 				}}
 				as={`/home?sortType=lastTrade`}
 				replace
+				prefetch={true}
 			>
 				{({ isActive }) => (
 					<>
@@ -58,6 +60,7 @@ export function ExploreNav() {
 				}}
 				as={`/home?sortType=marketCap`}
 				replace
+				prefetch={true}
 			>
 				{({ isActive }) => (
 					<>
@@ -80,6 +83,7 @@ export function ExploreNav() {
 				}}
 				as={`/home?sortType=volume`}
 				replace
+				prefetch={true}
 			>
 				{({ isActive }) => (
 					<>
