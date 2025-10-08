@@ -3,7 +3,8 @@
 import { cn } from '@/app/utils/misc'
 import { NavLink } from './nav_link'
 
-export function ExploreNav() {
+export function ExploreNav({ searchParams }: { searchParams: { sortType: string } }) {
+	const { sortType } = searchParams
 	return (
 		<div className="flex items-center w-full h-full overflow-x-scroll scrollbar-hide">
 			<NavLink
@@ -20,10 +21,15 @@ export function ExploreNav() {
 			>
 				{({ isActive }) => (
 					<div className="relative w-fit h-full flex items-center">
-						<span className={cn('font-medium text-text-200 text-[15px]', isActive && 'text-white')}>Created At</span>
+						<span className={cn('font-medium text-text-200 text-[15px]', sortType === 'createdAt' && 'text-white')}>
+							Created At
+						</span>
 
 						<div
-							className={cn('absolute bottom-0 left-0 right-0 h-[1px]', isActive && 'border-2 border-rage-100 rounded')}
+							className={cn(
+								'absolute bottom-0 left-0 right-0 h-[1px]',
+								sortType === 'createdAt' && 'border-2 border-rage-100 rounded',
+							)}
 						/>
 					</div>
 				)}
@@ -45,10 +51,15 @@ export function ExploreNav() {
 			>
 				{({ isActive }) => (
 					<div className="relative w-fit h-full flex items-center">
-						<span className={cn('font-medium text-text-200 text-[15px]', isActive && 'text-white')}>Last Trade</span>
+						<span className={cn('font-medium text-text-200 text-[15px]', sortType === 'lastTrade' && 'text-white')}>
+							Last Trade
+						</span>
 
 						<div
-							className={cn('absolute bottom-0 left-0 right-0 h-[1px]', isActive && 'border-2 border-rage-100 rounded')}
+							className={cn(
+								'absolute bottom-0 left-0 right-0 h-[1px]',
+								sortType === 'lastTrade' && 'border-2 border-rage-100 rounded',
+							)}
 						/>
 					</div>
 				)}
@@ -70,10 +81,15 @@ export function ExploreNav() {
 			>
 				{({ isActive }) => (
 					<div className="relative w-fit h-full flex items-center">
-						<span className={cn('font-medium text-text-200 text-[15px]', isActive && 'text-white')}>Market Cap</span>
+						<span className={cn('font-medium text-text-200 text-[15px]', sortType === 'marketCap' && 'text-white')}>
+							Market Cap
+						</span>
 
 						<div
-							className={cn('absolute bottom-0 left-0 right-0 h-[1px]', isActive && 'border-2 border-rage-100 rounded')}
+							className={cn(
+								'absolute bottom-0 left-0 right-0 h-[1px]',
+								sortType === 'marketCap' && 'border-2 border-rage-100 rounded',
+							)}
 						/>
 					</div>
 				)}

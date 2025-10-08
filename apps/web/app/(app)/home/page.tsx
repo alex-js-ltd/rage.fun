@@ -21,7 +21,7 @@ export default async function Page(props: Props) {
 			<Events />
 
 			<div className="sticky top-0 h-[52px] flex items-center z-50 w-full bg-background-100/75 backdrop-blur-md  border-b border-white border-opacity-[0.125]  ">
-				<ExploreNav />
+				<ExploreNav searchParams={{ sortType }} />
 			</div>
 
 			<div className="relative mx-auto flex max-w-[600px] flex-col pb-0">
