@@ -7,7 +7,9 @@ export function ExploreNav() {
 	return (
 		<div className="flex items-center w-full h-full overflow-x-scroll scrollbar-hide">
 			<NavLink
-				className={cn('relative h-full w-fit flex items-center px-4 hover:bg-white/10 whitespace-nowrap')}
+				className={cn(
+					'flex-1 relative h-full w-fit flex items-center justify-center px-4 hover:bg-white/10 whitespace-nowrap',
+				)}
 				href={{
 					pathname: `/home`,
 					query: { sortType: '' },
@@ -17,18 +19,20 @@ export function ExploreNav() {
 				prefetch={true}
 			>
 				{({ isActive }) => (
-					<>
+					<div className="relative w-fit h-full flex items-center">
 						<span className={cn('font-medium text-text-200 text-[15px]', isActive && 'text-white')}>Created At</span>
 
 						<div
-							className={cn('absolute bottom-0 left-4 right-4 h-[1px]', isActive && 'border-2 border-rage-100 rounded')}
+							className={cn('absolute bottom-0 left-0 right-0 h-[1px]', isActive && 'border-2 border-rage-100 rounded')}
 						/>
-					</>
+					</div>
 				)}
 			</NavLink>
 
 			<NavLink
-				className={cn('relative h-full w-fit flex items-center px-4 hover:bg-white/10 whitespace-nowrap')}
+				className={cn(
+					'flex-1 relative h-full w-fit flex items-center justify-center px-4 hover:bg-white/10 whitespace-nowrap',
+				)}
 				href={{
 					pathname: `/home`,
 					query: {
@@ -40,18 +44,20 @@ export function ExploreNav() {
 				prefetch={true}
 			>
 				{({ isActive }) => (
-					<>
+					<div className="relative w-fit h-full flex items-center">
 						<span className={cn('font-medium text-text-200 text-[15px]', isActive && 'text-white')}>Last Trade</span>
 
 						<div
-							className={cn('absolute bottom-0 left-4 right-4 h-[1px]', isActive && 'border-2 border-rage-100 rounded')}
+							className={cn('absolute bottom-0 left-0 right-0 h-[1px]', isActive && 'border-2 border-rage-100 rounded')}
 						/>
-					</>
+					</div>
 				)}
 			</NavLink>
 
 			<NavLink
-				className={cn('relative h-full w-fit flex items-center px-4 hover:bg-white/10 whitespace-nowrap')}
+				className={cn(
+					'flex-1 relative h-full w-fit flex items-center justify-center px-4 hover:bg-white/10 whitespace-nowrap ',
+				)}
 				href={{
 					pathname: `/home`,
 					query: {
@@ -63,36 +69,13 @@ export function ExploreNav() {
 				prefetch={true}
 			>
 				{({ isActive }) => (
-					<>
+					<div className="relative w-fit h-full flex items-center">
 						<span className={cn('font-medium text-text-200 text-[15px]', isActive && 'text-white')}>Market Cap</span>
 
 						<div
-							className={cn('absolute bottom-0 left-4 right-4 h-[1px]', isActive && 'border-2 border-rage-100 rounded')}
+							className={cn('absolute bottom-0 left-0 right-0 h-[1px]', isActive && 'border-2 border-rage-100 rounded')}
 						/>
-					</>
-				)}
-			</NavLink>
-
-			<NavLink
-				className={cn('relative h-full w-fit flex items-center px-4 hover:bg-white/10 whitespace-nowrap')}
-				href={{
-					pathname: `/home`,
-					query: {
-						sortType: 'volume',
-					},
-				}}
-				as={`/home?sortType=volume`}
-				replace
-				prefetch={true}
-			>
-				{({ isActive }) => (
-					<>
-						<span className={cn('font-medium text-text-200 text-[15px]', isActive && 'text-white')}>Volume</span>
-
-						<div
-							className={cn('absolute bottom-0 left-4 right-4 h-[1px]', isActive && 'border-2 border-rage-100 rounded')}
-						/>
-					</>
+					</div>
 				)}
 			</NavLink>
 		</div>
