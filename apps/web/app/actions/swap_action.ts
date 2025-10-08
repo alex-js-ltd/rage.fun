@@ -132,7 +132,7 @@ export async function sellAction(_prevState: State, formData: FormData) {
 		return {
 			...submission.reply(),
 			serializedTx: undefined,
-			errMessage: 'Insufficient token balance.',
+			errMessage: 'Insufficient balance',
 			requestId,
 		}
 	} else if (sim.value.err !== null && isInstructionError(sim.value.err)) {
