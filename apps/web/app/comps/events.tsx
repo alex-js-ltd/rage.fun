@@ -43,7 +43,7 @@ export function Events() {
 	return (
 		<Collapsible
 			open={open}
-			className="fixed top-[76px] left-1/2 -translate-x-1/2  z-50 flex items-center justify-center max-w-md w-full data-[state=closed]:opacity-0 data-[state=open]:opacity-100"
+			className="absolute top-[76px] left-1/2 -translate-x-1/2  z-50 flex items-center justify-center max-w-md w-full data-[state=closed]:opacity-0 data-[state=open]:opacity-100"
 		>
 			<CollapsibleContent
 				forceMount
