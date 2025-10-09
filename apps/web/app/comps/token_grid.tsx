@@ -181,39 +181,39 @@ export function TokenGrid({
 	const { tokens, isLastPage, nextCursorId, searchParams } = state || {}
 
 	const { channel } = useChannel('updateEvent', (message: Ably.Message) => {
-		const updateEvent: TokenFeedType = message.data
+		const e: TokenFeedType = message.data
 
-		if (!state || !updateEvent.updateType) return
+		if (!state || !e.updateType) return
 
-		if (updateEvent.updateType === 'Create' && pathname !== '/create') return
+		if (e.updateType === 'Create' && pathname !== '/create') return
 
-		// Create Event
-		if (updateEvent.updateType === 'Create' && searchParams?.sortType === 'createdAt') {
-			setState(prev => ({ ...prev, tokens: [updateEvent, ...prev.tokens].filter(t => t.id !== updateEvent.id) }))
-			return
-		}
+		setState(prev => {
+			if (!prev) return prev
+			const sortType = prev.searchParams?.sortType ?? 'createdAt'
 
-		if (searchParams?.sortType === 'lastTrade') {
-			setState(prev => ({ ...prev, tokens: [updateEvent, ...prev.tokens].filter(t => t.id !== updateEvent.id) }))
-
-			return
-		}
-
-		if (searchParams?.sortType === 'marketCap') {
-			setState(prev => {
-				const existingIndex = prev.tokens.findIndex(t => t.id === updateEvent.id)
-
-				if (existingIndex === -1) return prev
-
-				const newTokens = [...prev.tokens]
-
-				newTokens[existingIndex] = updateEvent
-
-				newTokens.sort((a, b) => b?.marketData?.marketCap - a?.marketData?.marketCap)
-
-				return { ...prev, tokens: [...newTokens] }
-			})
-		}
+			switch (sortType) {
+				case 'createdAt': {
+					if (e.updateType !== 'Create') return prev
+					const filtered = prev.tokens.filter(t => t.id !== e.id)
+					return { ...prev, tokens: [e, ...filtered] }
+				}
+				case 'lastTrade': {
+					if (!prev.tokens.some(t => t.id === e.id)) return prev
+					const filtered = prev.tokens.filter(t => t.id !== e.id)
+					return { ...prev, tokens: [e, ...filtered] }
+				}
+				case 'marketCap': {
+					const idx = prev.tokens.findIndex(t => t.id === e.id)
+					if (idx === -1) return prev
+					const next = prev.tokens.slice()
+					next[idx] = { ...next[idx], ...e }
+					next.sort((a, b) => b?.marketData?.marketCap - a?.marketData?.marketCap)
+					return { ...prev, tokens: next }
+				}
+				default:
+					return prev
+			}
+		})
 	})
 
 	const { run, isLoading } = useAsync<InitialState>()
