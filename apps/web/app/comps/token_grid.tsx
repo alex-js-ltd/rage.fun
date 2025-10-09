@@ -284,11 +284,18 @@ export function TokenGrid({
 								key={token.id}
 								ref={isPenultimate && !isLastPage && !isLoading ? ref : undefined}
 								className="space-y-4 w-full"
-								layout="position" // animate reordering only (faster)
+								layout="position"
+								initial={{ opacity: 0, y: 0 }}
+								animate={{ opacity: 1, y: 0 }}
 								exit={{ opacity: 0, y: 8 }}
 								transition={{
-									delay: i * 0.006,
-									layout: { type: 'tween', ease: 'easeOut', duration: 0.16 },
+									delay: i * 0.025,
+									layout: {
+										type: 'spring',
+										stiffness: 420,
+										damping: 32,
+										mass: 0.6,
+									},
 								}}
 							>
 								<TokenCard token={token} pathname={pathname}>
