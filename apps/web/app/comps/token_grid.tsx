@@ -96,7 +96,7 @@ function TokenCard({
 					</SquareProgress>
 
 					<div className="grid grid-cols-1 gap-1 w-full">
-						<div className="text text-text-200 w-full">{symbol}</div>
+						<div className="text text-text-100 w-full">{symbol}</div>
 
 						<Link
 							style={{ pointerEvents: disableCreatorLink ? 'none' : undefined }}
