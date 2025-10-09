@@ -57,7 +57,18 @@ function TokenCard({
 
 	const disableCreatorLink = pathname !== '/home'
 
-	const recent = dayjs().diff(dayjs.unix(Number(updatedAt)), 'second') < 10
+	const prevUpdatedAtRef = useRef(updatedAt)
+
+	const [animate, setAnimate] = useState(false)
+
+	useEffect(() => {
+		if (updatedAt !== prevUpdatedAtRef.current) {
+			prevUpdatedAtRef.current = updatedAt
+			// restart animation even if previous one is mid-flight
+			setAnimate(false)
+			requestAnimationFrame(() => setAnimate(true))
+		}
+	}, [updatedAt])
 
 	return (
 		<article
@@ -67,8 +78,8 @@ function TokenCard({
 			<div
 				className={cn(
 					'absolute inset-0',
-					updateType === 'Buy' && recent && 'animate-buy',
-					updateType === 'Sell' && recent && 'animate-sell',
+					updateType === 'Buy' && animate && 'animate-buy',
+					updateType === 'Sell' && animate && 'animate-sell',
 				)}
 			/>
 			<div className="relative p-4 grid grid-cols-1 gap-4">
