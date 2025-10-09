@@ -73,6 +73,7 @@ function TokenCard({
 	return (
 		<article className="group relative flex flex-col w-full min-h-[178px] border-b border-white border-opacity-[0.125] hover:bg-white/10 bg-background-100">
 			<div
+				onAnimationEnd={() => setAnimate(false)}
 				className={cn(
 					'absolute inset-0',
 					updateType === 'Buy' && animate && 'animate-buy',
@@ -97,7 +98,6 @@ function TokenCard({
 							prefetch={false}
 						>
 							<Image
-								priority
 								src={`${image}`}
 								alt={`${name}`}
 								className="object-cover object-center w-full h-full z-0"
