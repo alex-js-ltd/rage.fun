@@ -189,38 +189,30 @@ export function TokenGrid({
 			searchParams?.sortType === 'createdAt' &&
 			searchParams?.sortOrder === 'desc'
 		) {
-			const newTokens = [updateEvent, ...state.tokens]
-
-			setState({ ...state, tokens: newTokens })
+			setState(prev => ({ ...prev, tokens: [updateEvent, ...prev.tokens].filter(t => t.id !== updateEvent.id) }))
 			return
 		}
 
-		const existingIndex = state.tokens.findIndex(t => t.id === updateEvent.id)
+		if (searchParams?.sortType === 'lastTrade') {
+			setState(prev => ({ ...prev, tokens: [updateEvent, ...prev.tokens].filter(t => t.id !== updateEvent.id) }))
 
-		if (existingIndex !== -1) {
-			if (searchParams?.sortType === 'lastTrade') {
-				const newTokens = [...state.tokens]
-				newTokens[0] = updateEvent.id !== newTokens[0].id ? updateEvent : newTokens[0]
-				setState({ ...state, tokens: newTokens })
+			return
+		}
 
-				return
-			}
+		if (searchParams?.sortType === 'marketCap') {
+			setState(prev => {
+				const existingIndex = prev.tokens.findIndex(t => t.id === updateEvent.id)
 
-			if (searchParams?.sortType === 'marketCap') {
-				const newTokens = [...state.tokens]
+				if (existingIndex === -1) return prev
+
+				const newTokens = [...prev.tokens]
 
 				newTokens[existingIndex] = updateEvent
-				newTokens.sort((a, b) => {
-					const aMarketCap = a.marketData.marketCap
-					const bMarketCap = b.marketData.marketCap
 
-					return searchParams?.sortOrder === 'asc'
-						? aMarketCap - bMarketCap // oldest → newest
-						: bMarketCap - aMarketCap // newest → oldest
-				})
+				newTokens.sort((a, b) => b?.marketData?.marketCap - a?.marketData?.marketCap)
 
-				setState({ ...state, tokens: newTokens })
-			}
+				return { ...prev, tokens: [...newTokens] }
+			})
 		}
 	})
 
