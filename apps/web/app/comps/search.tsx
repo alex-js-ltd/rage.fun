@@ -8,8 +8,9 @@ import { PopoverContent, PopoverRoot, PopoverPortal, PopoverTrigger } from '@/ap
 import { TokenLogo, getTokenLogoProps } from '@/app/comps/token_logo'
 import Link from 'next/link'
 import { Icon } from './_icon'
+import { cn } from '@/app/utils/misc'
 
-export function SearchField({}) {
+export function SearchField() {
 	const searchParams = useSearchParams()
 	const { replace } = useRouter()
 	const pathname = usePathname()
@@ -27,18 +28,22 @@ export function SearchField({}) {
 		replace(`${pathname}?${params.toString()}`, { scroll: false })
 	}, 300)
 
+	const query = searchParams.get('query')
+
 	return (
 		<div className="h-[40px] w-full relative flex items-center">
 			<Icon name="search" className="absolute left-4 size-4 text-text-200" />
+
 			<input
-				className="w-full h-full rounded-full border border-white/10 bg-background-100 text-white placeholder-text-text-200
-         focus:border-rage-100 focus:ring-1 focus:ring-rage-100/40 focus:outline-none
-         caret-rage-100 transition-all duration-150 px-10"
+				className={cn(
+					'w-full h-full rounded-full border border-white/10 bg-background-100 text-white',
+					'placeholder-text-200 focus:border-rage-100 focus:ring-1 focus:ring-rage-100/40',
+					'focus:outline-none caret-rage-100 transition-all duration-150 px-10',
+					query && 'border-rage-100',
+				)}
 				placeholder="Search symbol..."
-				onChange={e => {
-					handleSearch(e.target.value)
-				}}
-				defaultValue={searchParams.get('query')?.toString()}
+				onChange={e => handleSearch(e.target.value)}
+				defaultValue={query?.toString()}
 			/>
 		</div>
 	)
