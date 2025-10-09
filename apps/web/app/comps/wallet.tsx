@@ -42,7 +42,7 @@ export function Wallet() {
 
 			<PopoverPortal>
 				<PopoverContent
-					className="w-fit z-50 h-[56px] p-4 rounded-xl border border-white/10 shadow-lg outline-none bg-background-200"
+					className="w-fit z-50 h-[56px] p-4 rounded-xl border border-white/0 shadow-lg outline-none bg-white/10"
 					side="top"
 					align="center"
 					sideOffset={4}
