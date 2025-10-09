@@ -29,8 +29,7 @@ export async function generateMetadata({ params, searchParams }: Props, parent: 
 			images: [
 				{
 					url: meta.image,
-					width: 1200, // <-- recommended for proper sizing
-					height: 630,
+
 					alt: meta.name,
 				},
 			],
