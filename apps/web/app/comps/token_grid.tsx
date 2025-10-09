@@ -207,10 +207,21 @@ export function TokenGrid({
 
 			switch (sortType) {
 				case 'createdAt': {
-					if (e.updateType !== 'Create') return prev
-					const filtered = prev.tokens.filter(t => t.id !== e.id)
+					if (e.updateType === 'Create') {
+						const filtered = prev.tokens.filter(t => t.id !== e.id)
 
-					const next = [e, ...filtered]
+						const next = [e, ...filtered]
+						const nextCursorId = next?.length ? next[next.length - 1]?.id : undefined
+
+						return { ...prev, tokens: next, nextCursorId }
+					}
+
+					const idx = prev.tokens.findIndex(t => t.id === e.id)
+					if (idx === -1) return prev
+
+					const next = prev.tokens.slice()
+					next[idx] = { ...e }
+
 					const nextCursorId = next?.length ? next[next.length - 1]?.id : undefined
 
 					return { ...prev, tokens: next, nextCursorId }
@@ -274,7 +285,7 @@ export function TokenGrid({
 
 	return (
 		<div className="grid">
-			<motion.ul className="mx-auto grid w-full grid-cols-1 gap-0">
+			<motion.ul initial={false} layout="position" className="mx-auto grid w-full grid-cols-1 gap-0">
 				<AnimatePresence initial={false}>
 					{tokens.map((token, i) => {
 						const isPenultimate = i === tokens.length - 2
@@ -285,8 +296,7 @@ export function TokenGrid({
 								ref={isPenultimate && !isLastPage && !isLoading ? ref : undefined}
 								className="space-y-4 w-full"
 								layout="position"
-								initial={{ opacity: 0.5, y: 0 }}
-								animate={{ opacity: 1, y: 0 }}
+								initial={false}
 								exit={{ opacity: 0, y: 8 }}
 								transition={{
 									delay: i * 0.025,
