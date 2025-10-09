@@ -198,21 +198,18 @@ export function TokenGrid({
 		const existingIndex = state.tokens.findIndex(t => t.id === updateEvent.id)
 
 		if (existingIndex !== -1) {
-			const newTokens = [...state.tokens]
-			newTokens[existingIndex] = updateEvent
-
 			if (searchParams?.sortType === 'lastTrade') {
-				newTokens.sort((a, b) => {
-					const aTime = dayjs(a.bondingCurve.updatedAt).valueOf()
-					const bTime = dayjs(b.bondingCurve.updatedAt).valueOf()
+				const newTokens = [...state.tokens]
+				newTokens[0] = updateEvent.id !== newTokens[0].id ? updateEvent : newTokens[0]
+				setState({ ...state, tokens: newTokens })
 
-					return searchParams?.sortOrder === 'asc'
-						? aTime - bTime // oldest → newest
-						: bTime - aTime // newest → oldest
-				})
+				return
 			}
 
 			if (searchParams?.sortType === 'marketCap') {
+				const newTokens = [...state.tokens]
+
+				newTokens[existingIndex] = updateEvent
 				newTokens.sort((a, b) => {
 					const aMarketCap = a.marketData.marketCap
 					const bMarketCap = b.marketData.marketCap
@@ -221,22 +218,9 @@ export function TokenGrid({
 						? aMarketCap - bMarketCap // oldest → newest
 						: bMarketCap - aMarketCap // newest → oldest
 				})
+
+				setState({ ...state, tokens: newTokens })
 			}
-
-			if (searchParams?.sortType === 'volume') {
-				newTokens.sort((a, b) => {
-					const aVolume = a.marketData.volume
-					const bVolume = b.marketData.volume
-
-					return searchParams?.sortOrder === 'asc'
-						? aVolume - bVolume // oldest → newest
-						: bVolume - aVolume // newest → oldest
-				})
-			}
-
-			const uniqueTokens = Array.from(new Map(newTokens.map(t => [t.id, t])).values())
-
-			setState({ ...state, tokens: uniqueTokens })
 		}
 	})
 
