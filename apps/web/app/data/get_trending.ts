@@ -1,5 +1,5 @@
 import { prisma } from '@/app/utils/db'
-import { type TransactionTableType, createTransactionTableSchema, createTokenFeedSchema } from '@/app/utils/schemas'
+import { createTokenFeedSchema } from '@/app/utils/schemas'
 import { getSolPrice } from '@/app/data/get_sol_price'
 import 'server-only'
 

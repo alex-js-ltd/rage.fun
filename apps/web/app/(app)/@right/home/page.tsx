@@ -3,6 +3,7 @@ import { SearchField, SearchResults } from '@/app/comps/search'
 import { searchTokens } from '@/app/data/search_tokens'
 import { type SearchParams } from '@/app/utils/schemas'
 import { getTrending } from '@/app/data/get_trending'
+import { Trending } from '@/app/comps/trending'
 
 export const dynamic = 'force-dynamic'
 
@@ -28,6 +29,10 @@ export default async function Page(props: Props) {
 
 				<Suspense>
 					<SearchResults searchPromise={searchPromise} />
+				</Suspense>
+
+				<Suspense>
+					<Trending trendingPromise={trendingPromise} />
 				</Suspense>
 			</div>
 		</div>
