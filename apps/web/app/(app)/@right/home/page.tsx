@@ -2,6 +2,7 @@ import { Suspense } from 'react'
 import { SearchField, SearchResults } from '@/app/comps/search'
 import { searchTokens } from '@/app/data/search_tokens'
 import { type SearchParams } from '@/app/utils/schemas'
+import { getTrending } from '@/app/data/get_trending'
 
 export const dynamic = 'force-dynamic'
 
@@ -15,6 +16,8 @@ export default async function Page(props: Props) {
 	const { sortType = 'createdAt', sortOrder = 'desc', cursorId = '', query = '' } = searchParams
 
 	const searchPromise = searchTokens(query)
+
+	const trendingPromise = getTrending()
 
 	return (
 		<div className="relative w-full">
