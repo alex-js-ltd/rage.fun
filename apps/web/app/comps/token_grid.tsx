@@ -172,6 +172,8 @@ export function TokenGrid({
 	tokenPromise: Promise<InitialState>
 	creatorId?: string | undefined
 }) {
+	const pathname = usePathname()
+
 	const initialState = use(tokenPromise)
 
 	const [state, setState] = useState<InitialState>(initialState)
@@ -183,12 +185,10 @@ export function TokenGrid({
 
 		if (!state || !updateEvent.updateType) return
 
+		if (updateEvent.updateType === 'Create' && pathname !== '/create') return
+
 		// Create Event
-		if (
-			updateEvent.updateType === 'Create' &&
-			searchParams?.sortType === 'createdAt' &&
-			searchParams?.sortOrder === 'desc'
-		) {
+		if (updateEvent.updateType === 'Create' && searchParams?.sortType === 'createdAt') {
 			setState(prev => ({ ...prev, tokens: [updateEvent, ...prev.tokens].filter(t => t.id !== updateEvent.id) }))
 			return
 		}
@@ -232,8 +232,6 @@ export function TokenGrid({
 			formRef.current?.requestSubmit()
 		}
 	}, [inView, isLoading, isLastPage])
-
-	const pathname = usePathname()
 
 	const isEarnPage = pathname === '/earn' && !!creatorId
 
