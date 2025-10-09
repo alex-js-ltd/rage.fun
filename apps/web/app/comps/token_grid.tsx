@@ -28,7 +28,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '@/app/comps/tooltip'
 import { useInView } from 'react-intersection-observer'
 import { HarvestYieldForm } from '@/app/comps/harvest_yield_form'
 import { usePathname } from 'next/navigation'
-import { motion } from 'motion/react'
+import { motion, AnimatePresence } from 'framer-motion'
 
 export type InitialState = {
 	tokens: TokenFeedType[]
@@ -254,26 +254,34 @@ export function TokenGrid({
 
 	return (
 		<div className="grid">
-			<ul className="mx-auto grid w-full grid-cols-1 gap-0">
-				{tokens.map((token, i) => {
-					const isPenultimate = i === tokens.length - 2
+			<motion.ul className="mx-auto grid w-full grid-cols-1 gap-0">
+				<AnimatePresence initial={false}>
+					{tokens.map((token, i) => {
+						const isPenultimate = i === tokens.length - 2
 
-					return (
-						<li
-							key={token.id}
-							ref={isPenultimate && !isLastPage && !isLoading ? ref : undefined}
-							className="space-y-4 w-full"
-						>
-							<TokenCard token={token} pathname={pathname}>
-								{isEarnPage ? <HarvestYieldForm token={token} /> : null}
-							</TokenCard>
-						</li>
-					)
-				})}
+						return (
+							<motion.li
+								key={token.id}
+								ref={isPenultimate && !isLastPage && !isLoading ? ref : undefined}
+								className="space-y-4 w-full"
+								layout="position" // animate reordering only (faster)
+								exit={{ opacity: 0, y: 8 }}
+								transition={{
+									delay: i * 0.006,
+									layout: { type: 'tween', ease: 'easeOut', duration: 0.16 },
+								}}
+							>
+								<TokenCard token={token} pathname={pathname}>
+									{isEarnPage ? <HarvestYieldForm token={token} /> : null}
+								</TokenCard>
+							</motion.li>
+						)
+					})}
 
-				{/* Show loader card while fetching */}
-				{isLoading ? <TokenGridFallback isEarnPage={isEarnPage} /> : null}
-			</ul>
+					{/* Show loader card while fetching */}
+					{isLoading ? <TokenGridFallback isEarnPage={isEarnPage} /> : null}
+				</AnimatePresence>
+			</motion.ul>
 
 			<form
 				ref={formRef}
