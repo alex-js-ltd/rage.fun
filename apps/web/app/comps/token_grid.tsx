@@ -71,10 +71,7 @@ function TokenCard({
 	}, [updatedAt])
 
 	return (
-		<article
-			key={`${mint}-${updatedAt}`}
-			className="group relative flex flex-col w-full min-h-[178px] border-b border-white border-opacity-[0.125] hover:bg-white/10 bg-background-100"
-		>
+		<article className="group relative flex flex-col w-full min-h-[178px] border-b border-white border-opacity-[0.125] hover:bg-white/10 bg-background-100">
 			<div
 				className={cn(
 					'absolute inset-0',
