@@ -19,7 +19,7 @@ export async function getTokens(searchParams: SearchParams) {
 		where: getWhere({ sortType, sortOrder, creatorId }),
 		select,
 		take: TAKE + 1,
-		skip: 0,
+		skip: cursorId ? 1 : 0,
 		cursor: getCursor(cursorId),
 		orderBy: [...getOrderBy({ sortType, sortOrder })],
 	})
@@ -41,14 +41,14 @@ export async function getTokens(searchParams: SearchParams) {
 		return parsed.data
 	})
 
-	// Determine if it's the last page by checking if we have fetched more than TAKE tokens
-	const isLastPage = tokens.length <= TAKE // If we have only TAKE tokens, it's the last page
+	const hasMore = data.length > TAKE
+	const section = hasMore ? data.slice(0, TAKE) : data
 
 	return {
-		tokens: data.slice(0, TAKE),
-		isLastPage,
+		tokens: section,
+		isLastPage: !hasMore,
 		searchParams,
-		nextCursorId: data?.length > 0 ? data[data.length - 1].id : undefined,
+		nextCursorId: hasMore ? section[section.length - 1].id : undefined, // ✅ from returned page
 		creatorId,
 	}
 }
