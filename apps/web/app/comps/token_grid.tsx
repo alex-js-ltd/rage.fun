@@ -214,8 +214,23 @@ export function TokenGrid({
 				case 'lastTrade': {
 					if (e.updateType !== 'Buy' && e.updateType !== 'Sell') return prev
 
-					const filtered = prev.tokens.filter(t => t.id !== e.id)
-					return { ...prev, tokens: [e, ...filtered] }
+					const idx = prev.tokens.findIndex(t => t.id === e.id)
+
+					if (idx === -1) {
+						const filtered = prev.tokens.filter(t => t.id !== e.id)
+						return { ...prev, tokens: [e, ...filtered] }
+					}
+
+					const next = prev.tokens.slice()
+					next[idx] = { ...e }
+
+					next.sort(
+						(a, b) =>
+							dayjs.unix(Number(b?.bondingCurve?.updatedAt)).valueOf() -
+							dayjs.unix(Number(a?.bondingCurve?.updatedAt)).valueOf(),
+					)
+
+					return { ...prev, tokens: next }
 				}
 				case 'marketCap': {
 					if (e.updateType !== 'Buy' && e.updateType !== 'Sell') return prev
