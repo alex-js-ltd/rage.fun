@@ -207,21 +207,10 @@ export function TokenGrid({
 
 			switch (sortType) {
 				case 'createdAt': {
-					if (e.updateType === 'Create') {
-						const filtered = prev.tokens.filter(t => t.id !== e.id)
+					if (e.updateType !== 'Create') return prev
+					const filtered = prev.tokens.filter(t => t.id !== e.id)
 
-						const next = [e, ...filtered]
-						const nextCursorId = next?.length ? next[next.length - 1]?.id : undefined
-
-						return { ...prev, tokens: next, nextCursorId }
-					}
-
-					const idx = prev.tokens.findIndex(t => t.id === e.id)
-					if (idx === -1) return prev
-
-					const next = prev.tokens.slice()
-					next[idx] = { ...e }
-
+					const next = [e, ...filtered]
 					const nextCursorId = next?.length ? next[next.length - 1]?.id : undefined
 
 					return { ...prev, tokens: next, nextCursorId }
@@ -259,7 +248,15 @@ export function TokenGrid({
 					return { ...prev, tokens: next, nextCursorId }
 				}
 				default:
-					return prev
+					const idx = prev.tokens.findIndex(t => t.id === e.id)
+					if (idx === -1) return prev
+
+					const next = prev.tokens.slice()
+					next[idx] = { ...e }
+
+					const nextCursorId = next?.length ? next[next.length - 1]?.id : undefined
+
+					return { ...prev, tokens: next, nextCursorId }
 			}
 		})
 	})
