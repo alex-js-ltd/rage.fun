@@ -214,15 +214,11 @@ export function TokenGrid({
 				case 'lastTrade': {
 					if (e.updateType !== 'Buy' && e.updateType !== 'Sell') return prev
 
-					const idx = prev.tokens.findIndex(t => t.id === e.id)
+					const first = prev.tokens[0]
 
-					if (idx === -1) {
-						const filtered = prev.tokens.filter(t => t.id !== e.id)
-						return { ...prev, tokens: [e, ...filtered] }
-					}
+					if (first.id === e.id) return prev
 
-					const next = prev.tokens.slice()
-					next[idx] = { ...e }
+					const next = [e, ...prev.tokens.filter(t => t.id !== e.id)]
 
 					next.sort(
 						(a, b) =>
