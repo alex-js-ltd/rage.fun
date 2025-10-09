@@ -57,7 +57,7 @@ function TokenCard({
 
 	const disableCreatorLink = pathname !== '/home'
 
-	const recent = dayjs().diff(dayjs.unix(Number(updatedAt)), 'second') < 3
+	const recent = dayjs().diff(dayjs.unix(Number(updatedAt)), 'second') < 10
 
 	return (
 		<article className="group relative flex flex-col w-full min-h-[178px] border-b border-white border-opacity-[0.125] hover:bg-white/10 bg-background-100">
