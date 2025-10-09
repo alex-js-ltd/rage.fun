@@ -204,15 +204,18 @@ export function TokenGrid({
 					return { ...prev, tokens: [e, ...filtered] }
 				}
 				case 'lastTrade': {
-					if (!prev.tokens.some(t => t.id === e.id)) return prev
+					if (e.updateType !== 'Buy' && e.updateType !== 'Sell') return prev
+
 					const filtered = prev.tokens.filter(t => t.id !== e.id)
 					return { ...prev, tokens: [e, ...filtered] }
 				}
 				case 'marketCap': {
+					if (e.updateType !== 'Buy' && e.updateType !== 'Sell') return prev
+
 					const idx = prev.tokens.findIndex(t => t.id === e.id)
 					if (idx === -1) return prev
 					const next = prev.tokens.slice()
-					next[idx] = { ...next[idx], ...e }
+					next[idx] = { ...e }
 					next.sort((a, b) => b?.marketData?.marketCap - a?.marketData?.marketCap)
 					return { ...prev, tokens: next }
 				}
