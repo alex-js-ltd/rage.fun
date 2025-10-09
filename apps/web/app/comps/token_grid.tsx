@@ -60,7 +60,10 @@ function TokenCard({
 	const recent = dayjs().diff(dayjs.unix(Number(updatedAt)), 'second') < 10
 
 	return (
-		<article className="group relative flex flex-col w-full min-h-[178px] border-b border-white border-opacity-[0.125] hover:bg-white/10 bg-background-100">
+		<article
+			key={`${mint}-${updatedAt}`}
+			className="group relative flex flex-col w-full min-h-[178px] border-b border-white border-opacity-[0.125] hover:bg-white/10 bg-background-100"
+		>
 			<div
 				className={cn(
 					'absolute inset-0',
