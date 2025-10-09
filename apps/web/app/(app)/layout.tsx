@@ -62,7 +62,7 @@ export default function Layout(props: {
 							<div className="relative h-[100vh] overflow-hidden">
 								{props.right}
 
-								<div className="absolute bottom-2 left-0">
+								<div className="absolute bottom-2 left-0 right-0">
 									<Footer />
 								</div>
 							</div>
