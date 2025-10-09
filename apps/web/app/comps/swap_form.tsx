@@ -308,7 +308,7 @@ function Form({
 
 	const swap = useSignAndSendTx(serializedTx)
 
-	const { setError } = swap
+	const { setError, reset, isLoading, isSuccess } = swap
 
 	useEffect(() => {
 		if (errMessage) {
@@ -316,9 +316,13 @@ function Form({
 		}
 	}, [errMessage, setError, requestId])
 
-	const { getToastProps } = useToast(swap)
+	useEffect(() => {
+		if (isSuccess) {
+			setAmount('')
+		}
+	}, [isSuccess])
 
-	const { reset, isLoading } = swap
+	const { getToastProps } = useToast(swap)
 
 	const payer = usePayer()
 
