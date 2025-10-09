@@ -209,7 +209,11 @@ export function TokenGrid({
 				case 'createdAt': {
 					if (e.updateType !== 'Create') return prev
 					const filtered = prev.tokens.filter(t => t.id !== e.id)
-					return { ...prev, tokens: [e, ...filtered] }
+
+					const next = [e, ...filtered]
+					const cursorId = next[next.length - 1]
+
+					return { ...prev, tokens: next, cursorId }
 				}
 				case 'lastTrade': {
 					if (e.updateType !== 'Buy' && e.updateType !== 'Sell') return prev
@@ -226,7 +230,9 @@ export function TokenGrid({
 							dayjs.unix(Number(a?.bondingCurve?.updatedAt)).valueOf(),
 					)
 
-					return { ...prev, tokens: next }
+					const cursorId = next[next.length - 1]
+
+					return { ...prev, tokens: next, cursorId }
 				}
 				case 'marketCap': {
 					if (e.updateType !== 'Buy' && e.updateType !== 'Sell') return prev
@@ -236,7 +242,10 @@ export function TokenGrid({
 					const next = prev.tokens.slice()
 					next[idx] = { ...e }
 					next.sort((a, b) => b?.marketData?.marketCap - a?.marketData?.marketCap)
-					return { ...prev, tokens: next }
+
+					const cursorId = next[next.length - 1]
+
+					return { ...prev, tokens: next, cursorId }
 				}
 				default:
 					return prev
