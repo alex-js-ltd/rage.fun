@@ -50,19 +50,22 @@ function TokenCard({
 		id: mint,
 		creatorId,
 		metadata: { name, symbol, image, thumbhash },
+		bondingCurve: { updatedAt },
 		marketData: { progress, price, marketCap, liquidity, volume, buyCount, sellCount },
 		updateType,
 	} = token
 
 	const disableCreatorLink = pathname !== '/home'
 
+	const recent = dayjs().diff(dayjs.unix(Number(updatedAt)), 'second') < 3
+
 	return (
 		<article className="group relative flex flex-col w-full min-h-[178px] border-b border-white border-opacity-[0.125] hover:bg-white/10 bg-background-100">
 			<div
 				className={cn(
 					'absolute inset-0',
-					updateType === 'Buy' && 'animate-buy',
-					updateType === 'Sell' && 'animate-sell',
+					updateType === 'Buy' && recent && 'animate-buy',
+					updateType === 'Sell' && recent && 'animate-sell',
 				)}
 			/>
 			<div className="relative p-4 grid grid-cols-1 gap-4">
