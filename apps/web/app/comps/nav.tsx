@@ -13,6 +13,7 @@ import { usePathname } from 'next/navigation'
 type NavItem = NavLinkProps & { label: string; icon: string }
 
 export function Nav() {
+	const pathname = usePathname()
 	const NAV_ITEMS = [
 		{
 			href: { pathname: '/home', query: {} },
@@ -54,7 +55,10 @@ export function Nav() {
 						<NavLink
 							key={l.href.pathname}
 							href={l.href}
-							className="flex items-center gap-2 rounded-full hover:bg-white/10 w-fit h-[50.25px] p-3 text-text-200 hover:text-white "
+							className={cn(
+								'flex items-center gap-2 rounded-full hover:bg-white/10 w-fit h-[50.25px] p-3 text-text-200 hover:text-white ',
+								pathname === '/home' && 'text-white',
+							)}
 							scroll={l.scroll}
 							as={l.as}
 							prefetch={l.prefetch}
