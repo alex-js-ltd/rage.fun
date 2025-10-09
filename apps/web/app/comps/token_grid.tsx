@@ -234,7 +234,9 @@ export function TokenGrid({
 				})
 			}
 
-			setState({ ...state, tokens: newTokens })
+			const uniqueTokens = Array.from(new Map(newTokens.map(t => [t.id, t])).values())
+
+			setState({ ...state, tokens: uniqueTokens })
 		}
 	})
 
