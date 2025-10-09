@@ -49,7 +49,7 @@ export default function Layout(props: {
 
 					{/* CENTER (your Page renders here) */}
 					<main className={cn('relative w-full max-w-[600px]')}>
-						<div className={cn(hide && 'sr-only')}>{props.children}</div>
+						<div className={cn(hide && 'hidden')}>{props.children}</div>
 
 						{isOnTokenSegment ? null : (
 							<div className={cn('', isOnCreate && 'fixed sm:absolute inset-0')}>{props.token}</div>
