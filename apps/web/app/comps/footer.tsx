@@ -8,7 +8,7 @@ export function Footer() {
 			<nav aria-label="Footer Navigation">
 				<ul className="flex  items-center justify-between gap-4">
 					<li className="flex-1">
-						<Link scroll={true} href="/faq" className="hover:underline transition-colors text-sm text-neutral-400">
+						<Link scroll={true} href="/faq" className="hover:underline transition-colors text-xs text-neutral-400">
 							FAQ
 						</Link>
 					</li>
@@ -22,7 +22,7 @@ export function Footer() {
 							href="https://discord.gg/FfmuN25GjE"
 							target="_blank"
 							rel="noopener noreferrer"
-							className="hover:underline transition-colors text-sm text-neutral-400"
+							className="hover:underline transition-colors text-xs text-neutral-400"
 						>
 							Discord
 						</a>
@@ -37,7 +37,7 @@ export function Footer() {
 							href="https://t.me/+oHFpt8HM6EAyODFk"
 							target="_blank"
 							rel="noopener noreferrer"
-							className="hover:underline transition-colors text-sm text-neutral-400"
+							className="hover:underline transition-colors text-xs text-neutral-400"
 						>
 							Telegram
 						</a>
@@ -52,7 +52,7 @@ export function Footer() {
 							href="https://x.com/letsragedotfun"
 							target="_blank"
 							rel="noopener noreferrer"
-							className="hover:underline transition-colors text-sm text-neutral-400 "
+							className="hover:underline transition-colors text-xs text-neutral-400 "
 						>
 							Twitter
 						</a>
