@@ -69,7 +69,7 @@ export function SearchResults({ searchPromise }: { searchPromise: Promise<TokenM
 			</PopoverTrigger>
 			<PopoverPortal>
 				<PopoverContent
-					className="w-[--radix-popover-trigger-width] z-50 p-0 rounded-md border border-white/10 shadow-lg outline-none"
+					className="w-[--radix-popover-trigger-width] z-50 p-0 rounded-md border border-white/10 shadow-lg outline-none bg-background-100"
 					side="bottom"
 					align="start"
 					sideOffset={0}
@@ -83,7 +83,7 @@ export function SearchResults({ searchPromise }: { searchPromise: Promise<TokenM
 										className="flex items-center gap-2"
 										href={{
 											pathname: `/token/${token.tokenId}`,
-											query: { interval: '300000' },
+											query: { interval: '5m' },
 										}}
 										as={`/token/${token.tokenId}?interval=5m`}
 									>

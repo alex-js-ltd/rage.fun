@@ -1,10 +1,11 @@
 import { prisma } from '@/app/utils/db'
 import { createTokenFeedSchema } from '@/app/utils/schemas'
 import { getSolPrice } from '@/app/data/get_sol_price'
+import dayjs from 'dayjs'
 import 'server-only'
 
 export async function getTrending() {
-	const since = new Date(Date.now() - 24 * 60 * 60 * 1000)
+	const since = dayjs().subtract(1, 'hour').toDate()
 
 	const rows = await prisma.token.findMany({
 		where: {

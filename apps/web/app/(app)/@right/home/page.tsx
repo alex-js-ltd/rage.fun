@@ -23,13 +23,15 @@ export default async function Page(props: Props) {
 	return (
 		<div className="relative w-full">
 			<div className="sticky top-0 z-40 flex flex-col">
-				<div className="flex h-[52px] items-center">
+				<div className="mt-[6px]">
 					<SearchField />
 				</div>
 
 				<Suspense>
 					<SearchResults searchPromise={searchPromise} />
 				</Suspense>
+
+				<div className="h-[2px] bg-white/[0.125] my-4" />
 
 				<Suspense>
 					<Trending trendingPromise={trendingPromise} />

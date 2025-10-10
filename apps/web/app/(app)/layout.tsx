@@ -36,7 +36,6 @@ export default function Layout(props: {
 					className={cn(
 						'grid min-h-screen items-stretch',
 						'grid-cols-1 w-full max-w-[600px]',
-
 						'xs:[grid-template-columns:minmax(0px,600px)]',
 						'sm:[grid-template-columns:minmax(70px,70px)_minmax(0px,600px)] sm:max-w-none sm:w-fit',
 						'md:[grid-template-columns:minmax(70px,70px)_600px]',
