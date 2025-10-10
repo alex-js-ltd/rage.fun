@@ -18,6 +18,8 @@ export function SearchResults({ searchPromise }: { searchPromise: Promise<TokenM
 
 	const [open, setOpen] = useState(false)
 
+	const pathname = usePathname()
+
 	useEffect(() => {
 		if (tokens.length > 0) {
 			setOpen(true)
@@ -25,6 +27,10 @@ export function SearchResults({ searchPromise }: { searchPromise: Promise<TokenM
 			setOpen(false)
 		}
 	}, [tokens])
+
+	useEffect(() => {
+		setOpen(false)
+	}, [pathname])
 
 	return (
 		<PopoverRoot open={open} onOpenChange={setOpen}>
