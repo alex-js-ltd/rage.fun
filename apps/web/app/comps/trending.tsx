@@ -44,7 +44,6 @@ export function Trending({ trendingPromise }: { trendingPromise: Promise<TokenFe
 									alt={t.metadata.name}
 									width={40}
 									height={40}
-									fill={true}
 									blurDataURL={createPngDataUri(t.metadata.thumbhash)}
 									placeholder="blur"
 								/>
