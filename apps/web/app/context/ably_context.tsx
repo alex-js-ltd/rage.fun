@@ -52,7 +52,7 @@ export function RealTime({ children }: { children: ReactNode }) {
 							<HoldersProvider>
 								<CommentProvider>
 									<TransactionProvider>
-										<TransactionProvider>{children}</TransactionProvider>
+										<TrendingProvider>{children}</TrendingProvider>
 									</TransactionProvider>
 								</CommentProvider>
 							</HoldersProvider>
