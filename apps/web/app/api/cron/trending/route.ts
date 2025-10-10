@@ -6,7 +6,12 @@ import { createTokenFeedSchema, type TokenFeedType } from '@/app/utils/schemas'
 import { getSolPrice } from '@/app/data/get_sol_price'
 import dayjs from 'dayjs'
 import { getTrendingTokens } from '@/app/data/get_trending_tokens'
+import * as Ably from 'ably'
+import * as AblyEvents from '@/app/webhook/ably'
+
 import 'server-only'
+
+const { ABLY_API_KEY } = getServerEnv()
 
 export async function GET(req: NextRequest) {
 	const { CRON_SECRET } = getServerEnv()
@@ -58,6 +63,11 @@ export async function GET(req: NextRequest) {
 	const trending = [...data, ...previous].slice(0, 3)
 
 	await kv.set('trending_tokens', trending)
+
+	const client = new Ably.Rest(ABLY_API_KEY)
+
+	const trendingChannel = client.channels.get('trendingEvent')
+	await AblyEvents.publishTrendingEvent(trendingChannel, trending)
 
 	// Return a success response
 	return NextResponse.json(

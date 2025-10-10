@@ -22,7 +22,7 @@ import { Program } from '@coral-xyz/anchor'
 import { revalidateTag, revalidatePath } from 'next/cache'
 
 import { getServerEnv } from '@/app/utils/env'
-import * as Ably from 'ably'
+
 import { SwapEventSchema, SwapEventType, TokenFeedType, TopHolderType } from '@/app/utils/schemas'
 import { getTokenFeed } from '@/app/data/get_token_feed'
 import { getSigner } from '@/app/utils/misc'
@@ -32,6 +32,7 @@ import { getVolume } from '@/app/data/get_volume'
 import { calculatePrice, calculateMarketCap } from './create'
 import { getTransactionCount } from '@/app/data/get_transaction_count'
 
+import * as Ably from 'ably'
 import * as AblyEvents from '@/app/webhook/ably'
 import * as DiscordAlerts from '@/app/webhook/discord'
 import * as TelegramAlerts from '@/app/webhook/telegram'
