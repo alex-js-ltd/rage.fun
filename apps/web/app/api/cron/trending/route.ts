@@ -57,7 +57,7 @@ export async function GET(req: NextRequest) {
 
 	const trending = [...data, ...previous].slice(0, 3)
 
-	await kv.set('trending_tokens', JSON.stringify(trending))
+	await kv.set('trending_tokens', trending)
 
 	// Return a success response
 	return NextResponse.json(
