@@ -15,9 +15,9 @@ export function Trending({ trendingPromise }: { trendingPromise: Promise<TokenFe
 	const [state, setState] = useState(data)
 
 	const { channel } = useChannel('trendingEvent', (message: Ably.Message) => {
-		const e: TokenFeedType[] = message.data
+		const e: { tokens: TokenFeedType[] } = message.data
 
-		setState(e)
+		setState(e.tokens)
 	})
 
 	return (

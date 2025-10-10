@@ -61,9 +61,9 @@ export async function publishCommentEvent(channel: Ably.Channel, comment: Commen
 	}
 }
 
-export async function publishTrendingEvent(channel: Ably.Channel, trending: TokenFeedType[]) {
+export async function publishTrendingEvent(channel: Ably.Channel, tokens: TokenFeedType[]) {
 	try {
-		await channel.publish('trendingEvent', trending)
+		await channel.publish('trendingEvent', { tokens })
 	} catch (error) {
 		console.error(error)
 	}
