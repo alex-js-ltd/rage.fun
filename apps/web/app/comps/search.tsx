@@ -1,6 +1,8 @@
 'use client'
 
-import { use, useState, useEffect } from 'react'
+import Form from 'next/form'
+import { useFormStatus } from 'react-dom'
+import { use, useState, useEffect, useRef } from 'react'
 import { useDebounceCallback } from 'usehooks-ts'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { type TokenMetadataType } from '@/app/utils/schemas'
@@ -9,45 +11,7 @@ import { TokenLogo, getTokenLogoProps } from '@/app/comps/token_logo'
 import Link from 'next/link'
 import { Icon } from './_icon'
 import { cn } from '@/app/utils/misc'
-
-export function SearchField() {
-	const searchParams = useSearchParams()
-	const { replace } = useRouter()
-	const pathname = usePathname()
-
-	const handleSearch = useDebounceCallback((term: string) => {
-		console.log(`Searching... ${term}`)
-
-		const params = new URLSearchParams(searchParams)
-
-		if (term) {
-			params.set('query', term)
-		} else {
-			params.delete('query')
-		}
-		replace(`${pathname}?${params.toString()}`, { scroll: false })
-	}, 300)
-
-	const query = searchParams.get('query')
-
-	return (
-		<div className="h-[40px] w-full relative flex items-center">
-			<Icon name="search" className="absolute left-4 size-4 text-text-200" />
-
-			<input
-				className={cn(
-					'w-full h-full rounded-full border border-white/10 bg-background-100 text-white',
-					'placeholder-text-200 focus:border-rage-100 focus:ring-1 focus:ring-rage-100/40',
-					'focus:outline-none caret-rage-100 transition-all duration-150 px-10',
-					query && 'border-rage-100',
-				)}
-				placeholder="Search symbol..."
-				onChange={e => handleSearch(e.target.value)}
-				defaultValue={query?.toString()}
-			/>
-		</div>
-	)
-}
+import { useBackpressure } from '@/app/hooks/use_backpressure'
 
 export function SearchResults({ searchPromise }: { searchPromise: Promise<TokenMetadataType[]> }) {
 	const tokens = use(searchPromise)
@@ -98,4 +62,65 @@ export function SearchResults({ searchPromise }: { searchPromise: Promise<TokenM
 			</PopoverPortal>
 		</PopoverRoot>
 	)
+}
+
+export function SearchBase({ initialQuery }: { initialQuery: string }) {
+	let pathname = usePathname()
+	let [inputValue, setInputValue] = useState(initialQuery)
+	let inputRef = useRef<HTMLInputElement>(null)
+	let { triggerUpdate, shouldSuspend, formRef } = useBackpressure()
+
+	async function handleSubmit(formData: FormData) {
+		let query = formData.get('search') as string
+		let newUrl = `${pathname}?search=${encodeURIComponent(query)}`
+		await triggerUpdate(newUrl)
+	}
+
+	function handleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
+		let newValue = e.target.value
+		setInputValue(newValue)
+		formRef.current?.requestSubmit()
+	}
+
+	useEffect(() => {
+		if (inputRef.current && inputValue) {
+			inputRef.current.focus()
+			inputRef.current.setSelectionRange(inputRef.current.value.length, inputRef.current.value.length)
+		}
+	}, [inputValue])
+
+	return (
+		<Form ref={formRef} action={handleSubmit} className="h-[40px] w-full relative flex items-center">
+			<label htmlFor="search" className="sr-only">
+				Search
+			</label>
+
+			<Icon name="search" className="absolute left-4 size-4 text-text-200" />
+
+			<input
+				className={cn(
+					'w-full h-full rounded-full border border-white/10 bg-background-100 text-white',
+					'placeholder-text-200 focus:border-rage-100 focus:ring-1 focus:ring-rage-100/40',
+					'focus:outline-none caret-rage-100 transition-all duration-150 px-10',
+					inputValue && 'border-rage-100',
+				)}
+				placeholder="Search symbol..."
+				value={inputValue}
+				ref={inputRef}
+				onChange={handleInputChange}
+				type="text"
+				name="search"
+				id="search"
+			/>
+		</Form>
+	)
+}
+
+export function SearchFallback() {
+	return <SearchBase initialQuery="" />
+}
+
+export function SearchField() {
+	let query = useSearchParams().get('search') ?? ''
+	return <SearchBase initialQuery={query} />
 }

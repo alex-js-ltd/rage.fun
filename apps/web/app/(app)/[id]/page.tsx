@@ -20,7 +20,7 @@ export default async function Page(props: Props) {
 
 	const { id: creatorId } = await props.params
 
-	const { sortType = 'createdAt', sortOrder = 'desc', cursorId = '', query = '' } = searchParams
+	const { sortType = 'createdAt', sortOrder = 'desc', cursorId = '', search = '' } = searchParams
 
 	const tokenPromise = getTokens({ sortType, sortOrder, cursorId, creatorId })
 

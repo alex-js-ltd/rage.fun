@@ -22,7 +22,7 @@ export default async function Page(props: Props) {
 
 	const session = await auth()
 
-	const { sortType = 'createdAt', sortOrder = 'desc', cursorId = '', query = '' } = searchParams
+	const { sortType = 'createdAt', sortOrder = 'desc', cursorId = '', search = '' } = searchParams
 
 	const creatorId = session?.user?.id
 
