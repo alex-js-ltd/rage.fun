@@ -38,6 +38,10 @@ export function TransactionProvider({ children }: { children: ReactNode }) {
 	return <ChannelProvider channelName="transactionEvent">{children}</ChannelProvider>
 }
 
+export function TrendingProvider({ children }: { children: ReactNode }) {
+	return <ChannelProvider channelName="trendingEvent">{children}</ChannelProvider>
+}
+
 export function RealTime({ children }: { children: ReactNode }) {
 	return (
 		<AblyProvider>
@@ -47,7 +51,9 @@ export function RealTime({ children }: { children: ReactNode }) {
 						<AirdropProvider>
 							<HoldersProvider>
 								<CommentProvider>
-									<TransactionProvider>{children}</TransactionProvider>
+									<TransactionProvider>
+										<TransactionProvider>{children}</TransactionProvider>
+									</TransactionProvider>
 								</CommentProvider>
 							</HoldersProvider>
 						</AirdropProvider>
