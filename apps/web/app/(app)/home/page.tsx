@@ -12,7 +12,7 @@ type Props = {
 export default async function Page(props: Props) {
 	const searchParams = await props.searchParams
 
-	const { sortType = 'createdAt', sortOrder = 'desc', cursorId = '', query = '' } = searchParams
+	const { sortType = 'createdAt', sortOrder = 'desc', cursorId = '', search = '' } = searchParams
 
 	const tokenPromise = getTokens({ sortOrder, sortType, cursorId })
 
