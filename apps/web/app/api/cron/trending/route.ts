@@ -60,7 +60,9 @@ export async function GET(req: NextRequest) {
 		return parsed.data
 	})
 
-	const trending = [...data, ...previous].slice(0, 3)
+	const merged = [...data, ...previous]
+	const deduped = merged.filter((item, index, self) => index === self.findIndex(t => t.id === item.id))
+	const trending = deduped.slice(0, 3)
 
 	await kv.set('trending_tokens', trending)
 
