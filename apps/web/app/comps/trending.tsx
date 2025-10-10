@@ -4,12 +4,21 @@ import { TokenFeedType } from '@/app/utils/schemas'
 
 import Image from 'next/image'
 import Link from 'next/link'
+import { createPngDataUri } from 'unlazy/thumbhash'
+
+import * as Ably from 'ably'
+import { useChannel } from 'ably/react'
 
 export function Trending({ trendingPromise }: { trendingPromise: Promise<TokenFeedType[]> }) {
 	const data = use(trendingPromise)
 
 	const [state, setState] = useState(data)
-	console.log('trending', state)
+
+	const { channel } = useChannel('trendingEvent', (message: Ably.Message) => {
+		const e: TokenFeedType[] = message.data
+
+		setState(e)
+	})
 
 	return (
 		<div className="border border-white border-opacity-[0.125] rounded-2xl w-full overflow-hidden">
@@ -30,7 +39,15 @@ export function Trending({ trendingPromise }: { trendingPromise: Promise<TokenFe
 							className="flex items-center justify-between h-full"
 						>
 							<div className="relative size-[40px] rounded-full overflow-hidden">
-								<Image src={t.metadata.image} alt={t.metadata.name} width={40} height={40} />
+								<Image
+									src={t.metadata.image}
+									alt={t.metadata.name}
+									width={40}
+									height={40}
+									fill={true}
+									blurDataURL={createPngDataUri(t.metadata.thumbhash)}
+									placeholder="blur"
+								/>
 							</div>
 
 							<span className="text-text-100 text-sm">{t.metadata.symbol}</span>
