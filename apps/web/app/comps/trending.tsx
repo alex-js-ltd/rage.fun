@@ -35,7 +35,7 @@ export function Trending({ trendingPromise }: { trendingPromise: Promise<TokenFe
 								query: { interval: '5m' },
 							}}
 							as={`/token/${t.id}?interval=5m`}
-							scroll={false}
+							scroll={true}
 							className="flex items-center justify-between h-full"
 						>
 							<div className="relative size-[40px] rounded-full overflow-hidden">

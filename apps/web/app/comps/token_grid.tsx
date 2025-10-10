@@ -92,9 +92,6 @@ function TokenCard({
 							}}
 							as={`/token/${mint}?interval=5m`}
 							scroll={true}
-							onClick={e => {
-								e.stopPropagation()
-							}}
 							prefetch={false}
 						>
 							<Image
