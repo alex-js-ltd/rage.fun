@@ -1,0 +1,69 @@
+import { NextRequest, NextResponse } from 'next/server'
+import { kv } from '@vercel/kv'
+import { getServerEnv } from '@/app/utils/env'
+import { prisma } from '@/app/utils/db'
+import { createTokenFeedSchema, type TokenFeedType } from '@/app/utils/schemas'
+import { getSolPrice } from '@/app/data/get_sol_price'
+import dayjs from 'dayjs'
+import { getTrendingTokens } from '@/app/data/get_trending_tokens'
+import 'server-only'
+
+export async function GET(req: NextRequest) {
+	const { CRON_SECRET } = getServerEnv()
+
+	const requestHeaders = new Headers(req.headers)
+	const authorization = requestHeaders.get('authorization')
+
+	console.log('authorization', authorization)
+	console.log('CRON_SECRET', CRON_SECRET)
+
+	if (authorization !== `Bearer ${CRON_SECRET}`) {
+		return NextResponse.json('💩', { status: 401 })
+	}
+
+	const previous = await getTrendingTokens()
+
+	const since = dayjs().subtract(1, 'hour').toDate()
+
+	const rows = await prisma.token.findMany({
+		where: {
+			marketData: {
+				is: { updatedAt: { gte: since } },
+			},
+			bondingCurve: { isNot: null },
+			metadata: { isNot: null },
+		},
+		include: { metadata: true, bondingCurve: true, marketData: true },
+		orderBy: { marketData: { volume: 'desc' } },
+		take: 3,
+	})
+
+	const solPrice = await getSolPrice()
+
+	const data = rows.map(token => {
+		const TokenFeedSchema = createTokenFeedSchema({
+			solPrice,
+		})
+
+		const parsed = TokenFeedSchema.safeParse(token)
+
+		if (!parsed.success) {
+			console.error(parsed.error.format())
+			throw new Error('Invalid token with relations')
+		}
+
+		return parsed.data
+	})
+
+	const trending = [...data, ...previous].slice(0, 3)
+
+	await kv.set('trending_tokens', JSON.stringify(trending))
+
+	// Return a success response
+	return NextResponse.json(
+		{
+			success: true,
+		},
+		{ status: 200 },
+	)
+}
