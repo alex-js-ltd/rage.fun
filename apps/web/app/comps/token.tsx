@@ -39,7 +39,7 @@ export async function Token(props: Props) {
 
 	const interval = parse.error ? 300000 : parse.data.interval
 
-	const ohlcPromise = getCandlstickData(mint, interval)
+	const chartPromise = getCandlstickData(mint, interval)
 
 	const tokenPromise = getTokenFeed(mint)
 
@@ -66,7 +66,7 @@ export async function Token(props: Props) {
 					</div>
 
 					<Suspense key={`${mint}-${interval}`} fallback={<Loading i={1} className="z-50 h-[255px] w-[600px]" />}>
-						<CandlestickChart key={`${mint}-${interval}`} ohlcPromise={ohlcPromise} mint={mint} interval={interval} />
+						<CandlestickChart key={`${mint}-${interval}`} chartPromise={chartPromise} mint={mint} interval={interval} />
 					</Suspense>
 				</div>
 

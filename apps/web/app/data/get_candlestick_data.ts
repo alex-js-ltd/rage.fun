@@ -1,8 +1,9 @@
 import { prisma } from '@/app/utils/db'
 import { Prisma } from '@prisma/client'
-import { UTCTimestamp, OhlcData, CandlestickData } from 'lightweight-charts'
+import { UTCTimestamp, OhlcData, CandlestickData, SeriesMarker } from 'lightweight-charts'
 import { SwapEvent } from '@prisma/client'
 import { Decimal } from '@prisma/client/runtime/library'
+import { getCreatorId } from '@/app/data/get_creator_id'
 import 'server-only'
 
 const green = '#8DF0CC' // lime green (buy candle fill)
@@ -55,8 +56,40 @@ function generateCandlestickData(events: SwapEvent[], interval: number) {
 	return output
 }
 
+export function generateMarkers(events: SwapEvent[], creatorId: string) {
+	const markers = events.reduce<Array<SeriesMarker<UTCTimestamp>>>((acc, curr) => {
+		if (curr.signer !== creatorId) return acc
+
+		const isBuy = curr.swapType === 'Buy'
+		const color = isBuy ? green : red
+		const position = 'aboveBar'
+		const shape = isBuy ? 'arrowUp' : 'arrowDown'
+
+		// timestamp → ms → UTCTimestamp
+		const timestamp = new Decimal(curr.time.toString()).mul(1000).toNumber() as UTCTimestamp
+
+		const text = isBuy ? `CB` : `CS`
+
+		// check if there's already a marker for this exact candle
+		const existing = acc.find(m => m.time === timestamp)
+		if (!existing) {
+			acc.push({
+				time: timestamp,
+				position,
+				shape: 'circle',
+				color,
+				text,
+				size: 1,
+			})
+		}
+
+		return acc
+	}, [])
+
+	return markers
+}
+
 export async function getCandlstickData(mint: string, interval: number) {
-	console.log('get candle stick data for interval:', interval)
 	const query = Prisma.validator<Prisma.SwapEventFindManyArgs>()({
 		where: {
 			tokenId: mint,
@@ -71,9 +104,10 @@ export async function getCandlstickData(mint: string, interval: number) {
 		},
 	})
 
-	const swapEvents = await prisma.swapEvent.findMany(query)
+	const [swapEvents, creatorId] = await Promise.all([prisma.swapEvent.findMany(query), getCreatorId(mint)])
 
 	const data = generateCandlestickData(swapEvents, interval)
+	const markers = generateMarkers(swapEvents, creatorId)
 
-	return data
+	return { data, markers }
 }

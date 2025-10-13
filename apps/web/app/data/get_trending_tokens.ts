@@ -4,7 +4,7 @@ import 'server-only'
 
 export async function getTrendingTokens(): Promise<TokenFeedType[]> {
 	const res = await kv.get<TokenFeedType[]>('trending_tokens')
-	console.log(res)
+
 	if (!res) {
 		return []
 	}

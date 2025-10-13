@@ -11,6 +11,7 @@ import {
 	ChartOptions,
 	UTCTimestamp,
 	CandlestickData,
+	SeriesMarker,
 } from 'lightweight-charts'
 import { useEffect, useRef } from 'react'
 import dayjs from 'dayjs'
@@ -27,7 +28,12 @@ import Decimal from 'decimal.js'
 
 dayjs.extend(utc)
 
-export function useLightweightChart(data: CandlestickData[], mint: string, interval: number) {
+export function useLightweightChart(
+	data: CandlestickData[],
+	markers: SeriesMarker<UTCTimestamp>[],
+	mint: string,
+	interval: number,
+) {
 	const chartContainerRef = useRef<HTMLDivElement | null>(null)
 	const chartRef = useRef<IChartApi | null>(null)
 	const seriesRef = useRef<ISeriesApi<'Candlestick'> | null>(null)
@@ -115,12 +121,14 @@ export function useLightweightChart(data: CandlestickData[], mint: string, inter
 		seriesRef.current = newSeries
 		newSeries.setData(data)
 
+		newSeries.setMarkers(markers)
+
 		return () => {
 			if (chartRef.current) {
 				chartRef.current.remove()
 			}
 		}
-	}, [data, interval])
+	}, [data, markers, interval])
 
 	const { channel } = useChannel('swapEvent', (message: Ably.Message) => {
 		const swapEvent: SwapEventType = message.data
