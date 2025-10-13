@@ -1,3 +1,4 @@
+import { cache } from 'react'
 import { type TopHolderType, createTopHolderSchema } from '@/app/utils/schemas'
 import { connection } from '@/app/utils/setup'
 import { PublicKey } from '@solana/web3.js'
@@ -7,7 +8,7 @@ import { fetchBondingCurveState } from '@repo/rage'
 import { getCreatorId } from '@/app/data/get_creator_id'
 import 'server-only'
 
-export async function getTopHolders(address: string): Promise<TopHolderType[]> {
+export const getTopHolders = cache(async (address: string): Promise<TopHolderType[]> => {
 	const creatorId = await getCreatorId(address)
 
 	const mint = new PublicKey(address)
@@ -40,4 +41,4 @@ export async function getTopHolders(address: string): Promise<TopHolderType[]> {
 	}, []) // Start with an already resolved empty array
 
 	return result
-}
+})
