@@ -76,11 +76,9 @@ const red = '#E5989B'
 export function stitchCandles(candles: OhlcData[]) {
 	if (!candles.length) return candles
 
-	let prev = candles[0]
+	let prev = { ...candles[0], color: green, wickColor: green, borderColor: green }
 
-	const out: Array<CandlestickData> = [
-		{ ...candles[0], open: candles[0].open, color: green, wickColor: green, borderColor: green },
-	] // keep first as-is
+	const out: Array<CandlestickData> = [prev] // keep first as-is
 
 	for (let i = 1; i < candles.length; i++) {
 		const c = candles[i]
@@ -91,7 +89,7 @@ export function stitchCandles(candles: OhlcData[]) {
 		const high = Math.max(c.high, open, close)
 		const low = Math.min(c.low, open, close)
 
-		const color = close === open ? out[out.length - 1].color : open > close ? red : green
+		const color = close === open ? prev.color : close > open ? green : red
 		const wickColor = color
 		const borderColor = color
 
