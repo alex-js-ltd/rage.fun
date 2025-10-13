@@ -29,8 +29,6 @@ export async function buyAction(_prevState: State, formData: FormData) {
 		schema: SwapSchema,
 	})
 
-	console.log(submission)
-
 	if (submission.status !== 'success' || !session?.user?.id) {
 		return {
 			...submission.reply(),
@@ -61,7 +59,7 @@ export async function buyAction(_prevState: State, formData: FormData) {
 	})
 
 	const sim = await connection.simulateTransaction(transaction)
-	console.log(sim)
+
 	if (sim.value.err !== null && !isInstructionError(sim.value.err)) {
 		return {
 			...submission.reply(),
