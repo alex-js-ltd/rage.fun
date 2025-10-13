@@ -76,7 +76,7 @@ export function generateMarkers(events: SwapEvent[], creatorId: string) {
 			acc.push({
 				time: timestamp,
 				position,
-				shape: 'circle',
+				shape,
 				color,
 				text,
 				size: 1,
