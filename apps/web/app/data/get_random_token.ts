@@ -16,8 +16,6 @@ export async function getRandomToken() {
 		where: { createdAt: { lt: fiveMinutesAgo } },
 		skip: randomIndex,
 		select: { id: true, createdAt: true }, // add fields as needed
-
-		take: 5,
 	})
 
 	return token
