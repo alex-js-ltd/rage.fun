@@ -2,11 +2,11 @@
   "crons": [
     {
       "path": "/api/cron/buy",
-      "schedule": "*/30 * * * *"
+      "schedule": "*/5 * * * *"
     },
     {
       "path": "/api/cron/sell",
-      "schedule": "15,45 * * * *"
+      "schedule": "2-59/5 * * * *"
     },
     {
       "path": "/api/cron/sol_price",
