@@ -20,6 +20,7 @@ import { DialectMetadataSchema, DialectSwapSchema } from '@/app/utils/schemas'
 import { getCachedTokenMetadata } from '@/app/data/get_token_metadata'
 import { getDecimals } from '@/app/data/get_decimals'
 import { BN } from '@coral-xyz/anchor'
+import { isInstructionError, getErrorMessage } from '@/app/utils/setup'
 // CAIP-2 format for Solana
 const blockchain = BLOCKCHAIN_IDS.mainnet
 
@@ -50,7 +51,16 @@ export async function GET(req: NextRequest) {
 	const token = await getCachedTokenMetadata(mint)
 
 	if (!token) {
-		return NextResponse.json({ error: 'failed to retrieve token metadata' }, { status: 500 })
+		const message = 'Failed to retrieve token metadata'
+		// Wrap message in an ActionError object so it can be shown in the Blink UI
+		const errorResponse: ActionError = {
+			message,
+		}
+
+		return new Response(JSON.stringify(errorResponse), {
+			status: 500,
+			headers,
+		})
 	}
 
 	const payload: ActionGetResponse = {
@@ -123,8 +133,17 @@ export async function POST(req: NextRequest) {
 
 		const sim = await connection.simulateTransaction(transaction)
 
-		if (sim.value.err !== null) {
-			return new Response('Transaction simulation failed', {
+		// EARLY THROW on simulation error
+		if (sim.value.err && isInstructionError(sim.value.err)) {
+			const code = sim.value.err.InstructionError[1].Custom
+			const message = getErrorMessage(code)
+
+			// Wrap message in an ActionError object so it can be shown in the Blink UI
+			const errorResponse: ActionError = {
+				message,
+			}
+
+			return new Response(JSON.stringify(errorResponse), {
 				status: 500,
 				headers,
 			})

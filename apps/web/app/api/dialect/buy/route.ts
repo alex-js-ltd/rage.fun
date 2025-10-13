@@ -49,7 +49,16 @@ export async function GET(req: NextRequest) {
 	const token = await getCachedTokenMetadata(mint)
 
 	if (!token) {
-		return NextResponse.json({ error: 'failed to retrieve token metadata' }, { status: 500 })
+		const message = 'Failed to retrieve token metadata'
+		// Wrap message in an ActionError object so it can be shown in the Blink UI
+		const errorResponse: ActionError = {
+			message,
+		}
+
+		return new Response(JSON.stringify(errorResponse), {
+			status: 500,
+			headers,
+		})
 	}
 
 	const payload: ActionGetResponse = {
