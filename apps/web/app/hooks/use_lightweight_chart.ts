@@ -177,9 +177,9 @@ export function useLightweightChart(data: CandlestickData[], mint: string, inter
 			const newCandle: CandlestickData = {
 				time: roundedTime as UTCTimestamp,
 				open,
-				high: open,
-				low: open,
-				close: open,
+				high: formattedEvent.value,
+				low: formattedEvent.value,
+				close: formattedEvent.value,
 				color,
 				wickColor,
 				borderColor,
