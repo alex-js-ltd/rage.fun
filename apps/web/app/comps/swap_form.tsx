@@ -436,7 +436,7 @@ function TokenBadge(props: ImageProps) {
 
 const quickOptions = [
 	{
-		label: 'reset',
+		label: 'Reset',
 		value: 0,
 	},
 	{ label: '25%', value: 25 },
