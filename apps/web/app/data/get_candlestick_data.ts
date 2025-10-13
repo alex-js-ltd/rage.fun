@@ -79,7 +79,7 @@ export function generateMarkers(events: SwapEvent[], creatorId: string) {
 				shape,
 				color,
 				text,
-				size: 1,
+				size: 0.5,
 			})
 		}
 

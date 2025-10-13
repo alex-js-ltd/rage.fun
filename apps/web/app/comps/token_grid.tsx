@@ -88,9 +88,9 @@ function TokenCard({
 							aria-label={`View ${name}`}
 							href={{
 								pathname: `/token/${mint}`,
-								query: { interval: '5m' },
+								query: { interval: '1m' },
 							}}
-							as={`/token/${mint}?interval=5m`}
+							as={`/token/${mint}?interval=1m`}
 							scroll={true}
 							prefetch={false}
 						>
