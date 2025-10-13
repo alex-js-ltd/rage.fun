@@ -1,6 +1,7 @@
 import { Suspense } from 'react'
 import { SwapForm, SwapFormFallback } from '@/app/comps/swap_form'
 import { getTokenFeed } from '@/app/data/get_token_feed'
+import { getTopHolders } from '@/app/data/get_top_holders'
 
 type Props = {
 	params: Promise<{ mint: string }>
@@ -10,6 +11,8 @@ export default async function Page(props: Props) {
 	const { mint } = await props.params
 
 	const tokenPromise = getTokenFeed(mint)
+
+	const holdersPromise = getTopHolders(mint)
 
 	return (
 		<div className="relative w-full justify-self-start">

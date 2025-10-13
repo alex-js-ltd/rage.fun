@@ -131,7 +131,7 @@ export function useLightweightChart(data: CandlestickData[], mint: string, inter
 
 		const newSeries = seriesRef.current
 
-		const currentData = seriesRef.current?.data().filter(isOhlcData)
+		const currentData = seriesRef.current?.data() as CandlestickData[]
 
 		console.log('currentData', currentData)
 
@@ -142,6 +142,13 @@ export function useLightweightChart(data: CandlestickData[], mint: string, inter
 		const roundedTime = formattedEvent.time - (formattedEvent.time % interval)
 
 		if (lastCandle && lastCandle.time === roundedTime) {
+			const open = lastCandle.open
+			const close = formattedEvent.value
+
+			const color = close === open ? lastCandle.color : close > open ? green : red
+			const wickColor = color
+			const borderColor = color
+
 			const newData = [
 				...(currentData?.slice(0, -1) || []),
 				{
@@ -149,6 +156,9 @@ export function useLightweightChart(data: CandlestickData[], mint: string, inter
 					close: formattedEvent.value,
 					high: Math.max(lastCandle.high, formattedEvent.value),
 					low: Math.min(lastCandle.low, formattedEvent.value),
+					color,
+					wickColor,
+					borderColor,
 				},
 			]
 
@@ -156,12 +166,15 @@ export function useLightweightChart(data: CandlestickData[], mint: string, inter
 		} else {
 			const prevClose = lastCandle?.close
 
-			const newCandle: OhlcData = {
+			const newCandle: CandlestickData = {
 				time: roundedTime as UTCTimestamp,
 				open: prevClose ? prevClose : formattedEvent.value,
 				high: formattedEvent.value,
 				low: formattedEvent.value,
 				close: formattedEvent.value,
+				color: lastCandle?.color,
+				wickColor: lastCandle?.color,
+				borderColor: lastCandle?.borderColor,
 			}
 
 			newSeries?.setData(currentData ? [...currentData, newCandle] : [newCandle])
@@ -174,3 +187,6 @@ export function useLightweightChart(data: CandlestickData[], mint: string, inter
 function formatEvent(e: { time: string; price: number }) {
 	return { time: new Decimal(e.time.toString()).mul(1000).toNumber(), value: e.price }
 }
+
+const green = '#8DF0CC' // lime green (buy candle fill)
+const red = '#E5989B'
