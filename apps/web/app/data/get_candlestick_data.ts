@@ -1,6 +1,6 @@
 import { prisma } from '@/app/utils/db'
 import { Prisma } from '@prisma/client'
-import { UTCTimestamp, OhlcData } from 'lightweight-charts'
+import { UTCTimestamp, OhlcData, CandlestickData } from 'lightweight-charts'
 import { SwapEvent } from '@prisma/client'
 import { isOhlcData } from '@/app/utils/schemas'
 import { Decimal } from '@prisma/client/runtime/library'
@@ -69,24 +69,35 @@ export async function getCandlstickData(mint: string, interval: number) {
 	return data
 }
 
+const green = '#8DF0CC' // lime green (buy candle fill)
+const red = '#E5989B'
+
 /** Visual-only post-processing: force open[i] = close[i-1] */
-export function stitchCandles(candles: OhlcData[]): OhlcData[] {
+export function stitchCandles(candles: OhlcData[]) {
 	if (!candles.length) return candles
 
-	let prevClose = candles[0].close
-	const out: OhlcData[] = [{ ...candles[0], open: candles[0].open }] // keep first as-is
+	let prev = candles[0]
+
+	const out: Array<CandlestickData> = [
+		{ ...candles[0], open: candles[0].open, color: green, wickColor: green, borderColor: green },
+	] // keep first as-is
 
 	for (let i = 1; i < candles.length; i++) {
 		const c = candles[i]
-		const open = prevClose
+		const open = prev.close
 		const close = c.close
 
 		// keep the real range but include the new open
 		const high = Math.max(c.high, open, close)
 		const low = Math.min(c.low, open, close)
 
-		out.push({ time: c.time as UTCTimestamp, open, high, low, close })
-		prevClose = close
+		const color = close === open ? out[out.length - 1].color : open > close ? red : green
+		const wickColor = color
+		const borderColor = color
+
+		const newCandle = { time: c.time as UTCTimestamp, open, high, low, close, color, wickColor, borderColor }
+		out.push(newCandle)
+		prev = newCandle
 	}
 
 	return out

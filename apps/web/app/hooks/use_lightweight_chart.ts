@@ -10,6 +10,7 @@ import {
 	DeepPartial,
 	ChartOptions,
 	UTCTimestamp,
+	CandlestickData,
 } from 'lightweight-charts'
 import { useEffect, useRef } from 'react'
 import dayjs from 'dayjs'
@@ -26,7 +27,7 @@ import Decimal from 'decimal.js'
 
 dayjs.extend(utc)
 
-export function useLightweightChart(data: OhlcData[], mint: string, interval: number) {
+export function useLightweightChart(data: CandlestickData[], mint: string, interval: number) {
 	const chartContainerRef = useRef<HTMLDivElement | null>(null)
 	const chartRef = useRef<IChartApi | null>(null)
 	const seriesRef = useRef<ISeriesApi<'Candlestick'> | null>(null)
@@ -98,22 +99,8 @@ export function useLightweightChart(data: OhlcData[], mint: string, interval: nu
 
 		chart.timeScale().fitContent()
 
-		const green = '#34d399'
-		const red = '#f87171'
-
-		// Candle bodies
-		const upColor = '#8DF0CC' // lime green (buy candle fill)
-		const downColor = '#E5989B'
-
 		const newSeries = chart.addCandlestickSeries({
 			borderVisible: true,
-			upColor,
-			downColor,
-			wickUpColor: upColor,
-			wickDownColor: downColor,
-
-			borderUpColor: upColor,
-			borderDownColor: downColor,
 
 			priceLineVisible: true,
 			wickVisible: true,

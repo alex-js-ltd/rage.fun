@@ -4,12 +4,12 @@ import { use } from 'react'
 import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
 import { useLightweightChart } from '@/app/hooks/use_lightweight_chart'
-import { OhlcData } from 'lightweight-charts'
+import { OhlcData, CandlestickData } from 'lightweight-charts'
 
 dayjs.extend(utc)
 
 type CandlestickChartProps = {
-	ohlcPromise: Promise<OhlcData[]>
+	ohlcPromise: Promise<CandlestickData[]>
 	mint: string
 	interval: number
 }
