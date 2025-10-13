@@ -279,40 +279,26 @@ export function TokenGrid({
 
 	return (
 		<div className="grid">
-			<motion.ul initial={false} layout="position" className="mx-auto grid w-full grid-cols-1 gap-0">
-				<AnimatePresence initial={false}>
-					{tokens.map((token, i) => {
-						const isPenultimate = i === tokens.length - 2
+			<ul className="mx-auto grid w-full grid-cols-1 gap-0">
+				{tokens.map((token, i) => {
+					const isPenultimate = i === tokens.length - 2
 
-						return (
-							<motion.li
-								key={token.id}
-								ref={isPenultimate && !isLastPage && !isLoading ? ref : undefined}
-								className="space-y-4 w-full"
-								layout="position"
-								initial={false}
-								exit={{ opacity: 0, y: 8 }}
-								transition={{
-									delay: i * 0.025,
-									layout: {
-										type: 'spring',
-										stiffness: 420,
-										damping: 32,
-										mass: 0.6,
-									},
-								}}
-							>
-								<TokenCard token={token} pathname={pathname}>
-									{isEarnPage ? <HarvestYieldForm token={token} /> : null}
-								</TokenCard>
-							</motion.li>
-						)
-					})}
+					return (
+						<li
+							key={token.id}
+							ref={isPenultimate && !isLastPage && !isLoading ? ref : undefined}
+							className="space-y-4 w-full"
+						>
+							<TokenCard token={token} pathname={pathname}>
+								{isEarnPage ? <HarvestYieldForm token={token} /> : null}
+							</TokenCard>
+						</li>
+					)
+				})}
 
-					{/* Show loader card while fetching */}
-					{isLoading ? <TokenGridFallback isEarnPage={isEarnPage} /> : null}
-				</AnimatePresence>
-			</motion.ul>
+				{/* Show loader card while fetching */}
+				{isLoading ? <TokenGridFallback isEarnPage={isEarnPage} /> : null}
+			</ul>
 
 			<form
 				ref={formRef}
