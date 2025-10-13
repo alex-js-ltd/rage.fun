@@ -2,7 +2,6 @@ import { prisma } from '@/app/utils/db'
 import { Prisma } from '@prisma/client'
 import { UTCTimestamp, OhlcData, CandlestickData } from 'lightweight-charts'
 import { SwapEvent } from '@prisma/client'
-import { isOhlcData } from '@/app/utils/schemas'
 import { Decimal } from '@prisma/client/runtime/library'
 import 'server-only'
 
@@ -24,29 +23,36 @@ function generateCandlestickData(events: SwapEvent[], interval: number) {
 
 	const allTimes = [...new Set(groupedEvents.map(e => e.time))]
 
-	const start: OhlcData[] = []
+	const start: CandlestickData[] = []
 
-	const output = allTimes.reduce((acc, curr) => {
-		let tempObj: Partial<OhlcData> = {}
+	const output = allTimes.reduce((acc, curr, index, arr) => {
+		const prev = acc[acc.length - 1]
+
+		let tempObj: Partial<CandlestickData> = {}
 
 		const filteredData = groupedEvents.filter(e => e.time === curr)
 		const prices = filteredData.map(el => el.value)
-		tempObj.time = curr
-		tempObj.open = filteredData[0].value
-		tempObj.close = filteredData[filteredData.length - 1].value
-		tempObj.high = Math.max(...prices)
-		tempObj.low = Math.min(...prices)
+		const time = curr
+		const open = index === 0 ? filteredData[0].value : prev.close
+		const close = filteredData[filteredData.length - 1].value
+		const color = index === 0 ? green : close > open ? green : red
 
-		if (isOhlcData(tempObj)) {
-			acc.push(tempObj)
-		} else {
-			console.log(`is not ohlc Data ${tempObj}`)
-		}
+		tempObj.time = time
+		tempObj.open = open
+		tempObj.close = close
+		tempObj.high = Math.max(...prices, open, close)
+		tempObj.low = Math.min(...prices, open, close)
+
+		tempObj.color = color
+		tempObj.wickColor = color
+		tempObj.borderColor = color
+
+		acc.push(tempObj as CandlestickData)
 
 		return acc
 	}, start)
 
-	return stitchCandles(output)
+	return output
 }
 
 export async function getCandlstickData(mint: string, interval: number) {
@@ -70,34 +76,4 @@ export async function getCandlstickData(mint: string, interval: number) {
 	const data = generateCandlestickData(swapEvents, interval)
 
 	return data
-}
-
-/** Visual-only post-processing: force open[i] = close[i-1] */
-export function stitchCandles(candles: OhlcData[]) {
-	if (!candles.length) return candles
-
-	let prev = { ...candles[0], color: green, wickColor: green, borderColor: green }
-
-	const out: Array<CandlestickData> = [prev] // keep first as-is
-
-	for (let i = 1; i < candles.length; i++) {
-		const c = candles[i]
-		const open = prev.close
-		const close = c.close
-
-		// keep the real range but include the new open
-		const high = Math.max(c.high, open, close)
-		const low = Math.min(c.low, open, close)
-
-		const color = close > open ? green : close < open ? red : prev.color
-
-		const wickColor = color
-		const borderColor = color
-
-		const newCandle = { time: c.time as UTCTimestamp, open, high, low, close, color, wickColor, borderColor }
-		out.push(newCandle)
-		prev = newCandle
-	}
-
-	return out
 }
