@@ -17,7 +17,7 @@ import { program, connection } from '@/app/utils/setup'
 import { buildTransaction, getSellTokenIx } from '@repo/rage'
 import { parseWithZod } from '@conform-to/zod'
 import { DialectMetadataSchema, DialectSwapSchema } from '@/app/utils/schemas'
-import { getCachedTokenMetadata } from '@/app/data/get_token_metadata'
+import { getTokenMetadata } from '@/app/data/get_token_metadata'
 import { getDecimals } from '@/app/data/get_decimals'
 import { BN } from '@coral-xyz/anchor'
 import { isInstructionError, getErrorMessage } from '@/app/utils/setup'
@@ -48,7 +48,7 @@ export async function GET(req: NextRequest) {
 
 	const baseHref = new URL(`/api/dialect/sell?mint=${mint}`, requestUrl.origin).toString()
 
-	const token = await getCachedTokenMetadata(mint)
+	const token = await getTokenMetadata(mint)
 
 	if (!token) {
 		const message = 'Failed to retrieve token metadata'
