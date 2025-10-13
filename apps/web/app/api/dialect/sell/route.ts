@@ -149,6 +149,19 @@ export async function POST(req: NextRequest) {
 			})
 		}
 
+		if (sim.value.err !== null && !isInstructionError(sim.value.err)) {
+			const message = 'Failed to simulate transaction'
+			// Wrap message in an ActionError object so it can be shown in the Blink UI
+			const errorResponse: ActionError = {
+				message,
+			}
+
+			return new Response(JSON.stringify(errorResponse), {
+				status: 500,
+				headers,
+			})
+		}
+
 		const payload: ActionPostResponse = await createPostResponse({
 			fields: {
 				transaction,
