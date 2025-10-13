@@ -165,7 +165,9 @@ export function useLightweightChart(data: CandlestickData[], mint: string, inter
 
 			newSeries?.setData(newData)
 		} else if (lastCandle) {
-			const prevClose = lastCandle?.close
+			const open = lastCandle?.close ? lastCandle.close : formattedEvent.value
+
+			const close = formattedEvent.value
 
 			const color = close > open ? green : close < open ? red : lastCandle.color
 
@@ -174,10 +176,10 @@ export function useLightweightChart(data: CandlestickData[], mint: string, inter
 
 			const newCandle: CandlestickData = {
 				time: roundedTime as UTCTimestamp,
-				open: prevClose ? prevClose : formattedEvent.value,
-				high: formattedEvent.value,
-				low: formattedEvent.value,
-				close: formattedEvent.value,
+				open,
+				high: open,
+				low: open,
+				close: open,
 				color,
 				wickColor,
 				borderColor,

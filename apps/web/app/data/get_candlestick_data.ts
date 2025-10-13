@@ -6,6 +6,9 @@ import { isOhlcData } from '@/app/utils/schemas'
 import { Decimal } from '@prisma/client/runtime/library'
 import 'server-only'
 
+const green = '#8DF0CC' // lime green (buy candle fill)
+const red = '#E5989B'
+
 function generateCandlestickData(events: SwapEvent[], interval: number) {
 	const formattedEvents = events.map(e => ({
 		time: new Decimal(e.time.toString()).mul(1000).toNumber(),
@@ -69,9 +72,6 @@ export async function getCandlstickData(mint: string, interval: number) {
 	return data
 }
 
-const green = '#8DF0CC' // lime green (buy candle fill)
-const red = '#E5989B'
-
 /** Visual-only post-processing: force open[i] = close[i-1] */
 export function stitchCandles(candles: OhlcData[]) {
 	if (!candles.length) return candles
@@ -89,7 +89,8 @@ export function stitchCandles(candles: OhlcData[]) {
 		const high = Math.max(c.high, open, close)
 		const low = Math.min(c.low, open, close)
 
-		const color = close === open ? prev.color : close > open ? green : red
+		const color = close > open ? green : close < open ? red : prev.color
+
 		const wickColor = color
 		const borderColor = color
 
