@@ -45,9 +45,14 @@ export function Nav() {
 		return (
 			<nav className="hidden sm:block sticky top-0 ">
 				<div className="h-[52px] flex items-center w-full ">
-					<div className="xl:ml-0 ml-auto w-[70px] h-[52px] flex items-center justify-center">
+					<Link
+						href={{
+							pathname: '/home',
+						}}
+						className="xl:ml-0 ml-auto w-[70px] h-[52px] flex items-center justify-center cursor-pointer"
+					>
 						<Image className="" src="/rage.png" alt="logo" width={56} height={56} />
-					</div>
+					</Link>
 				</div>
 
 				<div className="ml-auto xl:ml-0 w-[70px] xl:w-full items-center xl:items-start flex flex-col gap-1  h-[calc(100vh-52px)] pb-3">
