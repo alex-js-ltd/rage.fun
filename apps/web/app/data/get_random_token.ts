@@ -4,19 +4,15 @@ import { Prisma } from '@prisma/client'
 export async function getRandomToken() {
 	const fiveMinutesAgo = new Date(Date.now() - 5 * 60 * 1000)
 
-	const total = await prisma.token.count({
+	// Get the 5 latest coins
+	const latest = await prisma.token.findMany({
 		where: { createdAt: { lt: fiveMinutesAgo } },
+		orderBy: { createdAt: 'desc' },
+		take: 5,
+		select: { id: true, createdAt: true }, // add other fields if needed
 	})
 
-	if (total === 0) throw new Error('No eligible tokens')
+	const randomIndex = Math.floor(Math.random() * latest.length)
 
-	const randomIndex = Math.floor(Math.random() * total)
-
-	const token = await prisma.token.findFirstOrThrow({
-		where: { createdAt: { lt: fiveMinutesAgo } },
-		skip: randomIndex,
-		select: { id: true, createdAt: true }, // add fields as needed
-	})
-
-	return token
+	return latest[randomIndex]
 }
