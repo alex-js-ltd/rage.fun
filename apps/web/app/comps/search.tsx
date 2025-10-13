@@ -53,9 +53,9 @@ export function SearchResults({ searchPromise }: { searchPromise: Promise<TokenM
 										className="flex items-center gap-2"
 										href={{
 											pathname: `/token/${token.tokenId}`,
-											query: { interval: '5m' },
+											query: { interval: '1m' },
 										}}
-										as={`/token/${token.tokenId}?interval=5m`}
+										as={`/token/${token.tokenId}?interval=1m`}
 									>
 										<TokenLogo {...getTokenLogoProps(token)} className="w-[40px] h-[40px] rounded-full" />
 										<span className="text-text-200 uppercase  text-xs text-nowrap">{token.symbol}</span>
