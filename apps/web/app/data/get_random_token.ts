@@ -9,7 +9,7 @@ export async function getRandomToken() {
 	const latest = await prisma.token.findMany({
 		where: { createdAt: { lt: since } },
 		orderBy: { createdAt: 'desc' },
-		take: 5,
+		take: 10,
 		select: { id: true, createdAt: true }, // add other fields if needed
 	})
 
