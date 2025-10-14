@@ -7,6 +7,7 @@ import { BN } from '@coral-xyz/anchor'
 import { getRandomToken } from '@/app/data/get_random_token'
 import { getServerEnv } from '@/app/utils/env'
 import { Program } from '@coral-xyz/anchor'
+
 import 'server-only'
 
 export async function GET(req: NextRequest) {
@@ -36,6 +37,17 @@ export async function GET(req: NextRequest) {
 		}
 
 		await buy({ program, mint: new PublicKey(token.id), signer: b.keypair })
+	}
+
+	for (const b of bots) {
+		for (const t of b.wallet) {
+			const mint = new PublicKey(t.mint)
+			const signer = b.keypair
+			const decimals = t.tokenAmount.decimals
+			const uiAmount = t.tokenAmount.uiAmountString
+
+			await sell({ program, mint, signer, uiAmount, decimals })
+		}
 	}
 
 	// Return a success response
