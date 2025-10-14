@@ -47,7 +47,7 @@ export async function GET(req: NextRequest) {
 	)
 }
 
-export async function sell({
+async function sell({
 	program,
 	mint,
 	signer,
@@ -84,7 +84,7 @@ export async function sell({
 	console.log(`🔗 Transaction sig: ${sig} for sell`)
 }
 
-export async function buy({ program, mint, signer }: { program: Program<Rage>; signer: Keypair; mint: PublicKey }) {
+async function buy({ program, mint, signer }: { program: Program<Rage>; signer: Keypair; mint: PublicKey }) {
 	const payer = signer.publicKey
 	const decimals = 9
 
