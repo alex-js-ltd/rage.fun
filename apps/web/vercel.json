@@ -18,6 +18,11 @@
     {
       "path": "/api/cron/trending",
       "schedule": "*/10 * * * *"
+    },
+
+    {
+      "path": "/api/cron/pump",
+      "schedule": "*/10 * * * *"
     }
   ]
 }
