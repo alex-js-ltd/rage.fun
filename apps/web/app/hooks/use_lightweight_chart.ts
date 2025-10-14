@@ -103,7 +103,7 @@ export function useLightweightChart(
 			autoScale: true,
 		})
 
-		// chart.timeScale().fitContent()
+		chart.timeScale().fitContent()
 
 		const newSeries = chart.addCandlestickSeries({
 			borderVisible: true,
