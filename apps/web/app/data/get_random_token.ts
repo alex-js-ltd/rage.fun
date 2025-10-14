@@ -1,14 +1,15 @@
 import { prisma } from '@/app/utils/db'
 import { Prisma } from '@prisma/client'
+import dayjs from 'dayjs'
+import 'server-only'
 
 export async function getRandomToken() {
-	const fiveMinutesAgo = new Date(Date.now() - 5 * 60 * 1000)
+	const since = dayjs().subtract(5, 'minute').toDate()
 
-	// Get the 5 latest coins
 	const latest = await prisma.token.findMany({
-		where: { createdAt: { lt: fiveMinutesAgo } },
+		where: { createdAt: { lt: since } },
 		orderBy: { createdAt: 'desc' },
-		take: 5,
+
 		select: { id: true, createdAt: true }, // add other fields if needed
 	})
 
