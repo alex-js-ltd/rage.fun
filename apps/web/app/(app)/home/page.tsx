@@ -5,6 +5,8 @@ import { TokenGrid, TokenGridFallback } from '@/app/comps/token_grid'
 import { ExploreNav } from '@/app/comps/explore_nav'
 import { Events } from '@/app/comps/events'
 
+export const dynamic = 'force-dynamic'
+
 type Props = {
 	searchParams: Promise<SearchParams>
 }
@@ -41,5 +43,3 @@ export default async function Page(props: Props) {
 		</div>
 	)
 }
-
-function generateStaticParams() {}
