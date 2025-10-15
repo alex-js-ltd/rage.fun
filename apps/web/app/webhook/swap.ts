@@ -191,16 +191,17 @@ export async function processSwapEvents(swapEvents: EventData<'swapEvent'>[]) {
 
 	for await (const event of swapEvents) {
 		try {
-			const swapEvent = await upsertSwapEvent(event)
-
 			const mint = event.data.mint
-			const state = await fetchBondingCurveState({
-				program,
-				mint,
-			})
-			const curve = await updateBondingCurveState(state)
-			await updateMarketData(state)
 
+			const [swapEvent, state] = await Promise.all([
+				upsertSwapEvent(event),
+				fetchBondingCurveState({
+					program,
+					mint,
+				}),
+			])
+
+			const [curve] = await Promise.all([updateBondingCurveState(state), updateMarketData(state)])
 			const parsed = SwapEventSchema.safeParse(swapEvent)
 
 			if (!parsed.success) {
@@ -214,12 +215,11 @@ export async function processSwapEvents(swapEvents: EventData<'swapEvent'>[]) {
 			revalidatePath(`@token/(.)token/${tokenId}`)
 			revalidatePath(`/token/${tokenId}`)
 
-			const transaction = await getTransaction(swapEvent)
-			const token = await getTokenFeed(tokenId)
+			const [transaction, token] = await Promise.all([getTransaction(swapEvent), getTokenFeed(tokenId)])
 
-			await AblyEvents.publishUpdateEvent(updateChannel, token, parsed.data.swapType)
 			await AblyEvents.publishSwapEvent(swapChannel, parsed.data)
 			await AblyEvents.publishTransactionEvent(transactionChannel, transaction)
+			await AblyEvents.publishUpdateEvent(updateChannel, token, parsed.data.swapType)
 
 			const topHolders = await getTopHolders(tokenId)
 
