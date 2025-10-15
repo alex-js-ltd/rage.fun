@@ -63,6 +63,8 @@ export function useLightweightChart(
 				timeVisible: true, // ✅ Show timestamps
 				secondsVisible: true,
 				borderColor: '#FFFFFF20',
+
+				rightOffset: 20,
 			},
 
 			localization: {
@@ -157,8 +159,6 @@ export function useLightweightChart(
 				wickColor,
 				borderColor,
 			})
-
-			chart?.timeScale().scrollToRealTime()
 		} else {
 			const open = lastCandle?.close ? lastCandle.close : formattedEvent.value
 
@@ -181,8 +181,6 @@ export function useLightweightChart(
 			}
 
 			series?.update(newCandle)
-
-			chart?.timeScale().scrollToRealTime()
 		}
 	})
 
