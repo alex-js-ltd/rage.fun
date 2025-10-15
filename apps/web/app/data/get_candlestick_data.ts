@@ -68,7 +68,7 @@ export function generateMarkers(events: SwapEvent[], creatorId: string) {
 		// timestamp → ms → UTCTimestamp
 		const timestamp = new Decimal(curr.time.toString()).mul(1000).toNumber() as UTCTimestamp
 
-		const text = '@ Dev'
+		const text = 'Dev'
 
 		// check if there's already a marker for this exact candle
 		const existing = acc.find(m => m.time === timestamp)
