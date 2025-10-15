@@ -107,6 +107,8 @@ export async function updateMarketData(state: BondingCurveState) {
 		data,
 	})
 
+	console.log('🔁 Synced market data:', update)
+
 	return update
 }
 
@@ -193,17 +195,17 @@ export async function processSwapEvents(swapEvents: EventData<'swapEvent'>[]) {
 		try {
 			const mint = event.data.mint
 
-			const state = await fetchBondingCurveState({
-				program,
-				mint,
-			})
+			const [swapEvent, state] = await Promise.all([
+				upsertSwapEvent(event),
+				fetchBondingCurveState({
+					program,
+					mint,
+				}),
+			])
 
 			// update db
-			const [swapEvent, curve] = await Promise.all([
-				upsertSwapEvent(event),
-				updateBondingCurveState(state),
-				updateMarketData(state),
-			])
+			const [curve, market] = await Promise.all([updateBondingCurveState(state), updateMarketData(state)])
+
 			const parsed = SwapEventSchema.safeParse(swapEvent)
 
 			if (!parsed.success) {
