@@ -193,15 +193,17 @@ export async function processSwapEvents(swapEvents: EventData<'swapEvent'>[]) {
 		try {
 			const mint = event.data.mint
 
-			const [swapEvent, state] = await Promise.all([
-				upsertSwapEvent(event),
-				fetchBondingCurveState({
-					program,
-					mint,
-				}),
-			])
+			const state = await fetchBondingCurveState({
+				program,
+				mint,
+			})
 
-			const [curve] = await Promise.all([updateBondingCurveState(state), updateMarketData(state)])
+			// update db
+			const [swapEvent, curve] = await Promise.all([
+				upsertSwapEvent(event),
+				updateBondingCurveState(state),
+				updateMarketData(state),
+			])
 			const parsed = SwapEventSchema.safeParse(swapEvent)
 
 			if (!parsed.success) {
