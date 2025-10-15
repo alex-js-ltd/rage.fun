@@ -159,12 +159,12 @@ export function useLightweightChart(
 			})
 
 			chart?.timeScale().scrollToRealTime()
-		} else if (lastCandle) {
+		} else {
 			const open = lastCandle?.close ? lastCandle.close : formattedEvent.value
 
 			const close = formattedEvent.value
 
-			const color = close > open ? green : close < open ? red : lastCandle.color
+			const color = close > open ? green : close < open ? red : lastCandle?.color
 
 			const wickColor = color
 			const borderColor = color
