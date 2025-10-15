@@ -124,26 +124,22 @@ export function useLightweightChart(
 	const { channel } = useChannel('swapEvent', (message: Ably.Message) => {
 		const swapEvent: SwapEventType = message.data
 
-		const { tokenId, price, time } = swapEvent
-
-		if (tokenId !== mint) return
+		if (swapEvent.tokenId !== mint) return
 
 		const series = seriesRef.current
 		const chart = chartRef.current
 
 		const currentData = seriesRef.current?.data() as CandlestickData[]
 
-		console.log('currentData', currentData)
-
 		const lastCandle = currentData ? currentData[currentData?.length - 1] : undefined
 
-		const formattedEvent = formatEvent({ price, time })
+		const { time, value } = formatEvent(swapEvent)
 
-		const roundedTime = formattedEvent.time - (formattedEvent.time % interval)
+		const roundedTime = time - (time % interval)
 
 		if (lastCandle && lastCandle.time === roundedTime) {
 			const open = lastCandle.open
-			const close = formattedEvent.value
+			const close = value
 
 			const color = close > open ? green : close < open ? red : lastCandle.color
 
@@ -152,17 +148,17 @@ export function useLightweightChart(
 
 			series?.update({
 				...lastCandle,
-				close: formattedEvent.value,
-				high: Math.max(lastCandle.high, formattedEvent.value),
-				low: Math.min(lastCandle.low, formattedEvent.value),
+				close: value,
+				high: Math.max(lastCandle.high, value),
+				low: Math.min(lastCandle.low, value),
 				color,
 				wickColor,
 				borderColor,
 			})
 		} else {
-			const open = lastCandle?.close ? lastCandle.close : formattedEvent.value
+			const open = lastCandle?.close ? lastCandle.close : value
 
-			const close = formattedEvent.value
+			const close = value
 
 			const color = close > open ? green : close < open ? red : lastCandle?.color
 
@@ -172,9 +168,9 @@ export function useLightweightChart(
 			const newCandle: CandlestickData = {
 				time: roundedTime as UTCTimestamp,
 				open,
-				high: formattedEvent.value,
-				low: formattedEvent.value,
-				close: formattedEvent.value,
+				high: value,
+				low: value,
+				close: value,
 				color,
 				wickColor,
 				borderColor,
