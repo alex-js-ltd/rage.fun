@@ -80,9 +80,6 @@ export function useLightweightChart(
 
 		const chart = createChart(chartContainerRef.current, chartOptions)
 
-		// Setting the border color for the horizontal axis
-		// chart.timeScale().applyOptions({ barSpacing: 0, minBarSpacing: 0 })
-
 		chartRef.current = chart
 
 		chart.priceScale('right').applyOptions({
@@ -95,7 +92,7 @@ export function useLightweightChart(
 			autoScale: true,
 		})
 
-		const newSeries = chart.addCandlestickSeries({
+		const series = chart.addCandlestickSeries({
 			borderVisible: true,
 
 			priceLineVisible: true,
@@ -108,10 +105,10 @@ export function useLightweightChart(
 			},
 		})
 
-		seriesRef.current = newSeries
-		newSeries.setData(data)
+		seriesRef.current = series
+		series.setData(data)
 
-		newSeries.setMarkers(markers)
+		series.setMarkers(markers)
 
 		chart.timeScale().scrollToRealTime()
 
@@ -129,7 +126,8 @@ export function useLightweightChart(
 
 		if (tokenId !== mint) return
 
-		const newSeries = seriesRef.current
+		const series = seriesRef.current
+		const chart = chartRef.current
 
 		const currentData = seriesRef.current?.data() as CandlestickData[]
 
@@ -150,20 +148,17 @@ export function useLightweightChart(
 			const wickColor = color
 			const borderColor = color
 
-			const newData = [
-				...(currentData?.slice(0, -1) || []),
-				{
-					...lastCandle,
-					close: formattedEvent.value,
-					high: Math.max(lastCandle.high, formattedEvent.value),
-					low: Math.min(lastCandle.low, formattedEvent.value),
-					color,
-					wickColor,
-					borderColor,
-				},
-			]
+			series?.update({
+				...lastCandle,
+				close: formattedEvent.value,
+				high: Math.max(lastCandle.high, formattedEvent.value),
+				low: Math.min(lastCandle.low, formattedEvent.value),
+				color,
+				wickColor,
+				borderColor,
+			})
 
-			newSeries?.setData(newData)
+			chart?.timeScale().scrollToRealTime()
 		} else if (lastCandle) {
 			const open = lastCandle?.close ? lastCandle.close : formattedEvent.value
 
@@ -185,7 +180,9 @@ export function useLightweightChart(
 				borderColor,
 			}
 
-			newSeries?.setData(currentData ? [...currentData, newCandle] : [newCandle])
+			series?.update(newCandle)
+
+			chart?.timeScale().scrollToRealTime()
 		}
 	})
 
