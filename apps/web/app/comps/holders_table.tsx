@@ -36,7 +36,7 @@ export function HoldersTable({ holdersPromise }: HoldersTableProps) {
 					<thead className="sticky top-0 z-10 whitespace-nowrap  after:absolute after:inset-x-0 after:-bottom-px after:h-px after:bg-white/10 bg-background-100">
 						<tr className="h-10 shadow-[0_1px_0_0_theme(colors.neutral.900)] transition-colors">
 							<th className="px-3 text-left text-text-100 font-medium" style={{ width: 150 }}>
-								Account
+								Address
 							</th>
 							<th className="px-3 text-right text-text-200 font-medium" style={{ width: 50 }}>
 								% Owned
@@ -66,7 +66,7 @@ export function HoldersTable({ holdersPromise }: HoldersTableProps) {
 									</div>
 								</td>
 
-								<td className="px-3 text-right font-medium">{row.percentageOwned}</td>
+								<td className="px-3 text-right font-medium">{`${row.percentageOwned} %`}</td>
 								<td className="px-3 text-right font-medium">{row.uiAmount}</td>
 							</tr>
 						))}
