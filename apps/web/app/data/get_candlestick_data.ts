@@ -63,7 +63,7 @@ export function generateMarkers(events: SwapEvent[], creatorId: string) {
 		const isBuy = curr.swapType === 'Buy'
 		const color = isBuy ? green : red
 		const position = 'aboveBar'
-		const shape = isBuy ? 'arrowUp' : 'arrowDown'
+		const shape = 'circle'
 
 		// timestamp → ms → UTCTimestamp
 		const timestamp = new Decimal(curr.time.toString()).mul(1000).toNumber() as UTCTimestamp
