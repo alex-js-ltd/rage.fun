@@ -83,14 +83,6 @@ export function useLightweightChart(
 		// Setting the border color for the horizontal axis
 		// chart.timeScale().applyOptions({ barSpacing: 0, minBarSpacing: 0 })
 
-		chart.timeScale().applyOptions({
-			barSpacing: 0, // smaller number = candles closer together
-			rightOffset: 0, // keep some breathing room on the right
-			fixLeftEdge: false, // allow chart to pan
-			lockVisibleTimeRangeOnResize: false,
-			minBarSpacing: 0,
-		})
-
 		chartRef.current = chart
 
 		chart.priceScale('right').applyOptions({
@@ -102,8 +94,6 @@ export function useLightweightChart(
 			mode: 0,
 			autoScale: true,
 		})
-
-		chart.timeScale().fitContent()
 
 		const newSeries = chart.addCandlestickSeries({
 			borderVisible: true,
@@ -122,6 +112,8 @@ export function useLightweightChart(
 		newSeries.setData(data)
 
 		newSeries.setMarkers(markers)
+
+		chart.timeScale().scrollToRealTime()
 
 		return () => {
 			if (chartRef.current) {
