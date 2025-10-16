@@ -29,6 +29,8 @@ export default function Layout(props: {
 
 	const isOnTokenSegment = segment === 'token'
 
+	const isOnCreateSegment = segment === 'create'
+
 	return (
 		<>
 			<div className="flex justify-center w-full">
@@ -69,7 +71,7 @@ export default function Layout(props: {
 					</aside>
 				</div>
 			</div>
-			{props.modal}
+			{isOnCreateSegment ? null : props.modal}
 		</>
 	)
 }
