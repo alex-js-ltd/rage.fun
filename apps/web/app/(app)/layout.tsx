@@ -71,7 +71,7 @@ export default function Layout(props: {
 					</aside>
 				</div>
 			</div>
-			{isOnCreateSegment ? null : props.modal}
+			{props.modal}
 		</>
 	)
 }
