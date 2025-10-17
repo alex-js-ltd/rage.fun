@@ -34,7 +34,7 @@ export async function publishSwapEvent(event: SwapEventType, token: TokenFeedTyp
 
 	const solScanUrl = `https://solscan.io/tx/${event.id}`
 	const rageUrl = `https://www.letsrage.fun/token/${token.id}?interval=5m`
-	// const dialectUrl = generateSolanaBlink(token.id)
+	const dialectUrl = generateSolanaBlink(token.id)
 
 	const topHolderLines = topHolders
 		.reduce<string[]>((acc, curr) => {
