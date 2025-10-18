@@ -1,9 +1,8 @@
-import { prisma } from '@/app/utils/db'
-import { Prisma } from '@prisma/client'
 import { UTCTimestamp, OhlcData, CandlestickData, SeriesMarker } from 'lightweight-charts'
 import { SwapEvent } from '@prisma/client'
 import { Decimal } from '@prisma/client/runtime/library'
 import { getCreatorId } from '@/app/data/get_creator_id'
+import { getSwapEvents } from '@/app/data/get_swap_events'
 import 'server-only'
 
 const green = '#8DF0CC' // lime green (buy candle fill)
@@ -90,21 +89,7 @@ export function generateMarkers(events: SwapEvent[], creatorId: string) {
 }
 
 export async function getCandlstickData(mint: string, interval: number) {
-	const query = Prisma.validator<Prisma.SwapEventFindManyArgs>()({
-		where: {
-			tokenId: mint,
-
-			lamports: {
-				not: BigInt(0),
-			},
-		},
-
-		orderBy: {
-			time: 'asc',
-		},
-	})
-
-	const [swapEvents, creatorId] = await Promise.all([prisma.swapEvent.findMany(query), getCreatorId(mint)])
+	const [swapEvents, creatorId] = await Promise.all([getSwapEvents(mint), getCreatorId(mint)])
 
 	const data = generateCandlestickData(swapEvents, interval)
 	const markers = generateMarkers(swapEvents, creatorId)
