@@ -2,12 +2,12 @@
   "crons": [
     {
       "path": "/api/cron/buy",
-      "schedule": "* * * * *"
+      "schedule": "*/1 * * * *"
     },
 
     {
       "path": "/api/cron/sell",
-      "schedule": "* * * * *"
+      "schedule": "1-59/1 * * * *"
     },
 
     {
@@ -18,11 +18,6 @@
     {
       "path": "/api/cron/trending",
       "schedule": "*/10 * * * *"
-    },
-
-    {
-      "path": "/api/cron/pump",
-      "schedule": "0 */4 * * *"
     }
   ]
 }
