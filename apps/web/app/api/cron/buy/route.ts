@@ -28,7 +28,7 @@ export async function GET(req: NextRequest) {
 	const signer = chosen.keypair
 	const payer = chosen.keypair.publicKey
 
-	const token = await getRandomToken()
+	const token = await getRandomToken(true)
 	const mint = new PublicKey(token.id)
 
 	const uiAmount = await getUiAmountForBuy(payer)

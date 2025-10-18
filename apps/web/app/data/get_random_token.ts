@@ -3,12 +3,12 @@ import { Prisma } from '@prisma/client'
 import dayjs from 'dayjs'
 import 'server-only'
 
-export async function getRandomToken(notIn?: boolean) {
+const occupy = { id: '3L9GsKR6ZyobfNoEUxvkUpNLTrRysmFEfwKduQv5HSme' }
+
+export async function getRandomToken(buy?: boolean) {
 	const since = dayjs().subtract(5, 'minute').toDate()
 
-	const exclude = notIn
-		? ['795Z4uFBZxK8c5uYwMKrMqNyEs4VXCZJ4DFRFJt6qH18', 'EbAo94MQ8YhKLiihQDsN6QD7zMm8SDKUbdbaD5ijPu8N']
-		: []
+	const exclude: Array<string> = []
 
 	const latest = await prisma.token.findMany({
 		where: { createdAt: { lt: since }, creatorId: { notIn: exclude } },
@@ -19,5 +19,7 @@ export async function getRandomToken(notIn?: boolean) {
 
 	const randomIndex = Math.floor(Math.random() * latest.length)
 
-	return latest[randomIndex]
+	const t = latest[randomIndex]
+
+	return buy ? occupy : latest[randomIndex]
 }

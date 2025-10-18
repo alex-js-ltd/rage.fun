@@ -5,8 +5,6 @@ import { getSolPrice } from '@/app/data/get_sol_price'
 import 'server-only'
 
 export const getTokenFeed = cache(async (mint: string) => {
-	console.log('[getToken] RUN', mint) // should print once per *server request*
-
 	const token = await prisma.token.findUniqueOrThrow({
 		where: {
 			id: mint,
