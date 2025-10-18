@@ -48,7 +48,7 @@ export default auth(async function middleware(req: NextRequest & { auth: Session
 	console.log('authorization', authorization)
 	const path = req.nextUrl.pathname
 
-	const isApiBucket = path.startsWith('/api/wasm') // token bucket
+	const isApiBucket = path.startsWith('/api/wasm') || path.startsWith('/api/quick_option') // token bucket
 	const isApiWindow = path.startsWith('/api') && !isApiBucket // sliding window
 	const isApi = isApiBucket || isApiWindow
 
