@@ -124,6 +124,8 @@ export async function initializeAction(_prevState: State, formData: FormData) {
 	const sim = await connection.simulateTransaction(tx)
 
 	if (sim.value.err !== null) {
+		await deleteToken(mint, session.user.id)
+
 		return {
 			...submission.reply(),
 			serializedTx: undefined,
@@ -195,4 +197,17 @@ export async function fetchImage(url: string): Promise<Buffer> {
 	const response = await fetch(url)
 
 	return Buffer.from(await response.arrayBuffer())
+}
+
+async function deleteToken(mint: PublicKey, creatorId: string) {
+	const tokenId = mint.toBase58()
+	const token = await prisma.token.findUniqueOrThrow({ where: { id: tokenId } })
+
+	if (token.creatorId !== creatorId) {
+		console.warn(`Unauthorized delete attempt for ${tokenId}`)
+		return
+	}
+	// if you add a status field, also guard: if (token.status !== 'Draft') return
+	await prisma.metadata.deleteMany({ where: { tokenId } })
+	await prisma.token.delete({ where: { id: tokenId } })
 }
