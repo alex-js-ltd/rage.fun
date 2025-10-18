@@ -13,7 +13,11 @@ export function Modal(props: { children: React.ReactNode }) {
 	function onOpenChange(open: boolean) {
 		if (open) return
 
-		router.back()
+		if (window.history.length > 1) {
+			router.back()
+		} else {
+			router.push('/home') // fallback page
+		}
 	}
 
 	return (
