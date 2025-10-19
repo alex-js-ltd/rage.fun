@@ -23,14 +23,16 @@ export const getTopHolders = cache(async (address: string): Promise<TopHolderTyp
 
 	const TopHolderSchema = createTopHolderSchema(decimals, currentSupply)
 
-	const accountData = await Promise.all(
+	const results = await Promise.allSettled(
 		tokenAccounts.map(curr => getAccount(connection, curr.address, 'confirmed', TOKEN_2022_PROGRAM_ID)),
 	)
 
-	const result = accountData.reduce<TopHolderType[]>((acc, curr) => {
-		const isCreator = curr.address.toBase58() === token0CreatorAta.toBase58()
+	const result = results.reduce<TopHolderType[]>((acc, curr) => {
+		if (curr.status === 'rejected') return acc
 
-		const parsed = TopHolderSchema.safeParse({ ...curr, isCreator })
+		const isCreator = curr.value.address.toBase58() === token0CreatorAta.toBase58()
+
+		const parsed = TopHolderSchema.safeParse({ ...curr.value, isCreator })
 
 		if (parsed.success) {
 			acc.push(parsed.data)
