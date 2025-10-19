@@ -88,7 +88,7 @@ export async function Token(props: Props) {
 					<Content
 						value="tab1"
 						forceMount
-						className="data-[state=inactive]:hidden data-[state=inactive]:absolute data-[state=inactive]:pointer-events-none max-h-[172px]"
+						className="data-[state=inactive]:absolute data-[state=inactive]:opacity-0 data-[state=inactive]:pointer-events-none max-h-[172px]"
 					>
 						<Suspense fallback={<Loading i={1} className="w-full h-[172px] " />}>
 							<TransactionTable transactionPromise={transactionPromise} tokenPromise={tokenPromise} />
@@ -98,7 +98,7 @@ export async function Token(props: Props) {
 					<Content
 						value="tab2"
 						forceMount
-						className="data-[state=inactive]:hidden data-[state=inactive]:absolute data-[state=inactive]:pointer-events-none max-h-[172px]"
+						className="data-[state=inactive]:absolute data-[state=inactive]:opacity-0 data-[state=inactive]:pointer-events-none max-h-[172px]"
 					>
 						<Suspense fallback={<Loading i={2} className="w-full h-[172px] overflow-hidden " />}>
 							<HoldersTable holdersPromise={holdersPromise} />
