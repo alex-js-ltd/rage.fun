@@ -21,7 +21,7 @@ export function HoldersTable({ holdersPromise }: HoldersTableProps) {
 
 	const { channel } = useChannel('holdersEvent', (message: Ably.Message) => {
 		const holdersEvent: { holders: TopHolderType[]; id: string } = message.data
-
+		console.log('top holders', holdersEvent)
 		if (holdersEvent.id !== id) return
 
 		setHoldersData(holdersEvent.holders)
