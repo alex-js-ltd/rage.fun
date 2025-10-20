@@ -23,6 +23,8 @@ export function HoldersTable({ holdersPromise }: HoldersTableProps) {
 		const holdersEvent: { holders: TopHolderType[]; id: string } = message.data
 
 		console.log('💥 Received holdersEvent update:', holdersEvent)
+
+		console.log('mint', mint)
 		if (holdersEvent.id !== mint) return
 
 		setHoldersData(holdersEvent.holders)
