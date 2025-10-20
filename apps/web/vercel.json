@@ -17,17 +17,17 @@
 
     {
       "path": "/api/cron/trending",
-      "schedule": "*/10 * * * *"
+      "schedule": "*/5 * * * *"
     },
 
     {
       "path": "/api/cron/random",
-      "schedule": "*/10 * * * *"
+      "schedule": "*/5 * * * *"
     },
 
     {
       "path": "/api/cron/reset",
-      "schedule": "*/30 * * * *"
+      "schedule": "*/5 * * * *"
     }
   ]
 }
