@@ -24,29 +24,23 @@ export async function GET(req: NextRequest) {
 
 	const bots = await getBotWallets()
 
-	const token = await getRandomToken()
-
 	for (const b of bots) {
-		for (const t of b.wallet) {
-			const mint = new PublicKey(t.mint)
-			const signer = b.keypair
-			const decimals = t.tokenAmount.decimals
-			const uiAmount = t.tokenAmount.uiAmountString
+		try {
+			for (const t of b.wallet) {
+				try {
+					const mint = new PublicKey(t.mint)
+					const signer = b.keypair
+					const decimals = t.tokenAmount.decimals
+					const uiAmount = t.tokenAmount.uiAmountString
 
-			await sell({ program, mint, signer, uiAmount, decimals })
-		}
-
-		await buy({ program, mint: new PublicKey(token.id), signer: b.keypair })
-	}
-
-	for (const b of bots) {
-		for (const t of b.wallet) {
-			const mint = new PublicKey(t.mint)
-			const signer = b.keypair
-			const decimals = t.tokenAmount.decimals
-			const uiAmount = t.tokenAmount.uiAmountString
-
-			await sell({ program, mint, signer, uiAmount, decimals })
+					await sell({ program, mint, signer, uiAmount, decimals })
+				} catch (err) {
+					console.error(`❌ Sell failed for ${t.mint} (bot ${b.keypair.publicKey ?? 'unknown'})`, err)
+					continue // move to next token
+				}
+			}
+		} catch (outerErr) {
+			console.error(`🔥 Unexpected error in bot ${b.keypair.publicKey ?? 'unknown'}`, outerErr)
 		}
 	}
 
