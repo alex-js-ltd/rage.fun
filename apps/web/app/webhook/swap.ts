@@ -2,7 +2,7 @@ import { prisma } from '@/app/utils/db'
 import { Prisma, SwapType, SwapEvent, $Enums, BondingCurve } from '@prisma/client'
 
 import { program } from '@/app/utils/setup'
-import { Keypair, PublicKey } from '@solana/web3.js'
+import { Connection, Keypair, PublicKey } from '@solana/web3.js'
 import { getEnv } from '@/app/utils/env'
 import {
 	type Rage,

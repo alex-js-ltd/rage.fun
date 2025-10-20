@@ -1,14 +1,19 @@
 import { cache } from 'react'
 import { type TopHolderType, createTopHolderSchema } from '@/app/utils/schemas'
 import { connection } from '@/app/utils/setup'
-import { PublicKey } from '@solana/web3.js'
+import { PublicKey, Connection } from '@solana/web3.js'
 import { program } from '@/app/utils/setup'
 import { TOKEN_2022_PROGRAM_ID, getAccount, getAssociatedTokenAddress } from '@solana/spl-token'
 import { fetchBondingCurveState } from '@repo/rage'
 import { getCreatorId } from '@/app/data/get_creator_id'
+import { getServerEnv } from '@/app/utils/env'
 import 'server-only'
 
+const { RPC_URL } = getServerEnv()
+
 export const getTopHolders = cache(async (address: string): Promise<TopHolderType[]> => {
+	const connection = new Connection(RPC_URL, 'confirmed')
+
 	const creatorId = await getCreatorId(address)
 
 	const mint = new PublicKey(address)
