@@ -17,13 +17,13 @@ export function HoldersTable({ holdersPromise }: HoldersTableProps) {
 
 	const [holdersData, setHoldersData] = useState<TopHolderType[]>(initial)
 
-	const { id } = useParams()
+	const { mint } = useParams()
 
 	const { channel } = useChannel('holdersEvent', (message: Ably.Message) => {
 		const holdersEvent: { holders: TopHolderType[]; id: string } = message.data
 
 		console.log('💥 Received holdersEvent update:', holdersEvent)
-		if (holdersEvent.id !== id) return
+		if (holdersEvent.id !== mint) return
 
 		setHoldersData(holdersEvent.holders)
 	})
