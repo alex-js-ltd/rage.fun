@@ -21,7 +21,8 @@ export function HoldersTable({ holdersPromise }: HoldersTableProps) {
 
 	const { channel } = useChannel('holdersEvent', (message: Ably.Message) => {
 		const holdersEvent: { holders: TopHolderType[]; id: string } = message.data
-		console.log('top holders', holdersEvent)
+
+		console.log('💥 Received holdersEvent update:', holdersEvent)
 		if (holdersEvent.id !== id) return
 
 		setHoldersData(holdersEvent.holders)
@@ -48,7 +49,7 @@ export function HoldersTable({ holdersPromise }: HoldersTableProps) {
 					</thead>
 					<tbody>
 						{holdersData.map((row, i) => (
-							<tr key={row.owner} className="h-10 text-text-100">
+							<tr key={`${row.owner}-${row.uiAmount}`} className="h-10 text-text-100">
 								<td className="px-3 text-left font-medium">
 									<div className="flex items-center gap-x-1 truncate">
 										<a href={`https://solscan.io/account/${row.address}`}>
