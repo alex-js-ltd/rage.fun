@@ -37,7 +37,7 @@ export function Nav() {
 			label: 'Earn',
 			icon: 'dollar',
 			as: '/earn',
-			prefetch: true,
+			prefetch: false,
 		},
 	] as const satisfies readonly NavItem[]
 
