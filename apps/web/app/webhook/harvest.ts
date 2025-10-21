@@ -55,7 +55,17 @@ export async function processHarvestEvents(harvestEvents: EventData<'harvestEven
 
 	for await (const event of harvestEvents) {
 		try {
-			const harvest = await upsertHarvestEvent(event)
+			const mint = event.data.mint
+
+			const [harvest, state] = await Promise.all([
+				upsertHarvestEvent(event),
+				fetchBondingCurveState({
+					program,
+					mint,
+				}),
+			])
+
+			await updateBondingCurveState(state)
 
 			const token = await getTokenFeed(harvest.tokenId)
 

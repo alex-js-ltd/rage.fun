@@ -41,17 +41,22 @@ export function HarvestYieldForm({ token }: HarvestYieldProps) {
 		lastResult,
 	})
 
-	const { serializedTx } = lastResult || {}
+	const { serializedTx, errMessage } = lastResult || {}
 
 	const harvest = useSignAndSendTx(serializedTx)
+	const { isSuccess, setError } = harvest
+
+	useEffect(() => {
+		if (errMessage) {
+			setError(errMessage)
+		}
+	}, [errMessage, setError])
 
 	const { getToastProps } = useToast(harvest)
 
 	const payer = usePayer()
 
-	const config = { loading: `Harvesting ${token.metadata.symbol} 🌾`, success: `Harvest confirmed ✅` }
-
-	const { isSuccess } = harvest
+	const config = { loading: `Harvesting ${token.metadata.symbol}`, success: `Harvest confirmed` }
 
 	const disabled = isPending || harvest.isLoading || token.bondingCurve.tradingFees === 0
 

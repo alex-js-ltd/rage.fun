@@ -9,10 +9,12 @@ import { getHarvestYieldIx, buildTransaction } from '@repo/rage'
 import { auth } from '@/app/auth'
 
 import { PublicKey } from '@solana/web3.js'
+import { isInstructionError, getErrorMessage } from '@/app/utils/setup'
 
 export type State =
 	| (SubmissionResult<string[]> & {
 			serializedTx?: Uint8Array
+			errMessage?: string
 	  })
 	| undefined
 
@@ -27,6 +29,7 @@ export async function harvestYieldAction(_prevState: State, formData: FormData) 
 		return {
 			...submission.reply(),
 			serializedTx: undefined,
+			errMessage: undefined,
 		}
 	}
 
@@ -47,8 +50,22 @@ export async function harvestYieldAction(_prevState: State, formData: FormData) 
 		signers: [],
 	})
 
+	const sim = await connection.simulateTransaction(transaction)
+
+	if (sim.value.err !== null && isInstructionError(sim.value.err)) {
+		const code = sim.value.err.InstructionError[1].Custom
+		const errMessage = getErrorMessage(code)
+
+		return {
+			...submission.reply(),
+			serializedTx: undefined,
+			errMessage,
+		}
+	}
+
 	return {
 		...submission.reply(),
 		serializedTx: transaction.serialize(),
+		errMessage: undefined,
 	}
 }
