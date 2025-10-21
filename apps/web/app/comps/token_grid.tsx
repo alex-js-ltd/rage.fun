@@ -212,15 +212,18 @@ export function TokenGrid({
 
 						return { ...prev, tokens: next, nextCursorId }
 					}
-					const idx = prev.tokens.findIndex(t => t.id === e.id)
-					if (idx === -1) return prev
 
-					const next = prev.tokens.slice()
-					next[idx] = { ...e }
+					if (e.updateType === 'Buy' || e.updateType === 'Sell') {
+						const idx = prev.tokens.findIndex(t => t.id === e.id)
+						if (idx === -1) return prev
 
-					const nextCursorId = next?.length ? next[next.length - 1]?.id : undefined
+						const next = prev.tokens.slice()
+						next[idx] = { ...e }
 
-					return { ...prev, tokens: next, nextCursorId }
+						const nextCursorId = next?.length ? next[next.length - 1]?.id : undefined
+
+						return { ...prev, tokens: next, nextCursorId }
+					}
 				}
 				case 'lastTrade': {
 					if (e.updateType !== 'Buy' && e.updateType !== 'Sell') return prev
