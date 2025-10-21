@@ -168,7 +168,7 @@ export async function publishHarvestAlert(event: HarvestEvent, token: TokenFeedT
 
 	const { symbol } = token.metadata
 
-	const alertMessage = '🛸 **NEW HARVEST** 🛸'
+	const alertMessage = '✨ **NEW HARVEST** ✨'
 
 	const amount = fromLamports(new BN(event.lamports.toString()), 9)
 
