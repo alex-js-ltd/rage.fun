@@ -196,8 +196,6 @@ export function TokenGrid({
 
 		if (!state || !e.updateType) return
 
-		if (e.updateType === 'Create' && pathname !== '/create') return
-
 		setState(prev => {
 			if (!prev) return prev
 			const sortType = prev.searchParams?.sortType ?? 'createdAt'
