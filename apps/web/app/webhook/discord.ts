@@ -160,3 +160,52 @@ export async function publishCreateAlert(event: EventData<'createEvent'>, token:
 		console.error('Error sending message to Discord:', error)
 	}
 }
+
+export async function publishHarvestAlert(event: HarvestEvent, token: TokenFeedType) {
+	const signature = event.id
+	const mint = event.tokenId
+	const creator = event.signer
+
+	const { symbol } = token.metadata
+
+	const alertMessage = '🛸 **NEW HARVEST** 🛸'
+
+	const amount = fromLamports(new BN(event.lamports.toString()), 9)
+
+	const solScanUrl = `https://solscan.io/tx/${signature}`
+	const rageUrl = `https://www.letsrage.fun/token/${mint}?interval=1m`
+	const dialectUrl = generateSolanaBlink(mint)
+
+	const caption = [
+		`${alertMessage}`,
+		'',
+
+		`**🪙 ${symbol}**`,
+		`** ├Creator: \`${creator}\`**`,
+		`** ├Yield: \`${amount} SOL\`**`,
+		'',
+
+		// LINKS SECTION
+		`**🔗 LINKS**`,
+		`** ├**[**solscan.io**](<${solScanUrl}>)`,
+		`** ├**[**magicmint.fun**](<${rageUrl}>)`,
+		`** ├**[**Buy on Dialect**](${dialectUrl})`,
+	].join('\n')
+
+	// Then in your Discord webhook payload:
+	const payload = {
+		content: caption,
+	}
+
+	try {
+		const res = await client(DISCORD_WEBHOOK_CHAT_URL, {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify(payload),
+		})
+
+		console.log('✅ Webhook sent:', res)
+	} catch (error) {
+		console.error('Error sending message to Discord:', error)
+	}
+}

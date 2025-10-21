@@ -215,7 +215,6 @@ export async function processSwapEvents(swapEvents: EventData<'swapEvent'>[]) {
 
 			const tokenId = parsed.data.tokenId
 
-			revalidateTag(`feed-${tokenId}`)
 			revalidatePath(`@token/(.)token/${tokenId}`)
 			revalidatePath(`/token/${tokenId}`)
 
