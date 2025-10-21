@@ -13,7 +13,7 @@ import { getSolPrice } from '@/app/data/get_sol_price'
 import { client } from '@/app/utils/client'
 import { HarvestEvent } from '@prisma/client'
 
-const { DISCORD_WEBHOOK_ALERT_URL, DISCORD_WEBHOOK_CHAT_URL } = getServerEnv()
+const { DISCORD_WEBHOOK_ALERT_URL, DISCORD_WEBHOOK_CHAT_URL, DISCORD_WEBHOOK_HARVEST_URL } = getServerEnv()
 
 export async function publishSwapEvent(event: SwapEventType, token: TokenFeedType, topHolders: TopHolderType[]) {
 	const { symbol } = token.metadata
@@ -197,15 +197,19 @@ export async function publishHarvestAlert(event: HarvestEvent, token: TokenFeedT
 		content: caption,
 	}
 
-	try {
-		const res = await client(DISCORD_WEBHOOK_CHAT_URL, {
+	const [chat, harvest] = await Promise.allSettled([
+		client(DISCORD_WEBHOOK_CHAT_URL, {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify(payload),
-		})
+		}),
+		client(DISCORD_WEBHOOK_HARVEST_URL, {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify(payload),
+		}),
+	])
 
-		console.log('✅ Webhook sent:', res)
-	} catch (error) {
-		console.error('Error sending message to Discord:', error)
-	}
+	console.log('chat result:', chat)
+	console.log('harvest result:', harvest)
 }
