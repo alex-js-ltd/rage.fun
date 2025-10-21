@@ -22,7 +22,7 @@
 
     {
       "path": "/api/cron/random",
-      "schedule": "*/5 * * * *"
+      "schedule": "*/30 * * * *"
     },
 
     {
