@@ -10,6 +10,7 @@ import * as Ably from 'ably'
 import { getTokenFeed } from '@/app/data/get_token_feed'
 import { program } from '@/app/utils/setup'
 import { fetchBondingCurveState } from '@repo/rage'
+import { revalidatePath } from 'next/cache'
 
 import * as AblyEvents from '@/app/webhook/ably'
 import * as DiscordAlerts from '@/app/webhook/discord'
@@ -66,6 +67,8 @@ export async function processHarvestEvents(harvestEvents: EventData<'harvestEven
 			])
 
 			await updateBondingCurveState(state)
+
+			revalidatePath(`/earn`)
 
 			const token = await getTokenFeed(harvest.tokenId)
 
