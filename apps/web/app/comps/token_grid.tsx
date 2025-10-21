@@ -189,6 +189,8 @@ export function TokenGrid({
 
 	const [state, setState] = useState<InitialState>(initialState)
 
+	console.log(state)
+
 	const { tokens, isLastPage, nextCursorId, searchParams } = state || {}
 
 	const { channel } = useChannel('updateEvent', (message: Ably.Message) => {
@@ -211,7 +213,7 @@ export function TokenGrid({
 						return { ...prev, tokens: next, nextCursorId }
 					}
 
-					if (e.updateType === 'Buy' || e.updateType === 'Sell') {
+					if (e.updateType === 'Buy' || e.updateType === 'Sell' || e.updateType === 'Harvest') {
 						const idx = prev.tokens.findIndex(t => t.id === e.id)
 						if (idx === -1) return prev
 
