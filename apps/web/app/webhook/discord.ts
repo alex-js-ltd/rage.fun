@@ -188,8 +188,8 @@ export async function publishHarvestAlert(event: HarvestEvent, token: TokenFeedT
 		// LINKS SECTION
 		`**🔗 LINKS**`,
 		`** ├**[**solscan.io**](<${solScanUrl}>)`,
-		`** ├**[**magicmint.fun**](<${rageUrl}>)`,
-		`** ├**[**Buy on Dialect**](${dialectUrl})`,
+		`** ├**[**letsrage.fun**](<${rageUrl}>)`,
+		`** ├**[**Buy on Dialect**](<${dialectUrl}>)`,
 	].join('\n')
 
 	// Then in your Discord webhook payload:
@@ -197,19 +197,11 @@ export async function publishHarvestAlert(event: HarvestEvent, token: TokenFeedT
 		content: caption,
 	}
 
-	const [chat, harvest] = await Promise.allSettled([
-		client(DISCORD_WEBHOOK_CHAT_URL, {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify(payload),
-		}),
-		client(DISCORD_WEBHOOK_HARVEST_URL, {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify(payload),
-		}),
-	])
+	const res = await client(DISCORD_WEBHOOK_HARVEST_URL, {
+		method: 'POST',
+		headers: { 'Content-Type': 'application/json' },
+		body: JSON.stringify(payload),
+	})
 
-	console.log('chat result:', chat)
-	console.log('harvest result:', harvest)
+	console.log('harvest result:', res)
 }
