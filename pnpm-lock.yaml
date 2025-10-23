@@ -236,6 +236,9 @@ importers:
       tiny-invariant:
         specifier: ^1.3.3
         version: 1.3.3
+      tweetnacl:
+        specifier: ^1.0.3
+        version: 1.0.3
       twitter-api-v2:
         specifier: ^1.22.0
         version: 1.27.0
