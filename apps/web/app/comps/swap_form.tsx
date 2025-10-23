@@ -185,7 +185,7 @@ function Buy({ token }: { token: TokenFeedType }) {
 				decimals,
 			}
 
-			if (uiAmount === '') {
+			if (uiAmount === '' || uiAmount === '0') {
 				return ''
 			}
 			const quote = await calculateBuyAmount(params)
@@ -252,7 +252,7 @@ function Sell({ token }: { token: TokenFeedType }) {
 				decimals,
 			}
 
-			if (uiAmount === '') {
+			if (uiAmount === '' || uiAmount === '0') {
 				return ''
 			}
 			const quote = await calculateSellPrice(params)
