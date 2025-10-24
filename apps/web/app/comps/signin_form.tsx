@@ -47,12 +47,11 @@ export function SignInForm({ nonce }: { nonce: string }) {
 	}, [data, isPending])
 
 	return (
-		<form ref={formRef} action={formAction}>
+		<form className="sr-only" ref={formRef} action={formAction}>
 			<input type="hidden" name="domain" value={messageRef.current.domain} />
 			<input type="hidden" name="publicKey" value={messageRef.current.publicKey} />
 			<input type="hidden" name="statement" value={messageRef.current.statement} />
 			<input type="hidden" name="nonce" value={messageRef.current.nonce} />
-
 			<input type="hidden" name="signature" value={data ?? ''} />
 		</form>
 	)
