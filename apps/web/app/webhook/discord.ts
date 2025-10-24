@@ -170,7 +170,7 @@ export async function publishHarvestAlert(event: HarvestEvent, token: TokenFeedT
 
 	const { symbol } = token.metadata
 
-	const alertMessage = '✨ **NEW HARVEST** ✨'
+	const alertMessage = '💰 **NEW HARVEST** 💰'
 
 	const solPrice = await getSolPrice()
 
@@ -186,7 +186,7 @@ export async function publishHarvestAlert(event: HarvestEvent, token: TokenFeedT
 		`${alertMessage}`,
 
 		'',
-		`**👤 Creator** \`${shortAddress(creator)}\` ** earned $${formatNumberSmart(amountDollars)} **`,
+		`**👤** \`${shortAddress(creator)}\` ** just earned $${formatNumberSmart(amountDollars)} **`,
 		'',
 
 		// LINKS SECTION
