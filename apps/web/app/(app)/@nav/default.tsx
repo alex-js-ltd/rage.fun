@@ -13,14 +13,21 @@ export default async function Default() {
 }
 
 async function getNonceFromCookie() {
-	// cookies() is now async, so we await it
 	const cookieStore = await cookies()
 
-	// try both modern and legacy cookie names
-	const raw = cookieStore.get('authjs.csrf-token')?.value ?? cookieStore.get('next-auth.csrf-token')?.value ?? ''
+	// Handle all modern + legacy cookie names
+	const raw =
+		cookieStore.get('__Host-authjs.csrf-token')?.value ??
+		cookieStore.get('authjs.csrf-token')?.value ??
+		cookieStore.get('next-auth.csrf-token')?.value ??
+		''
 
-	// sometimes the value looks like "nonce|hash"
+	if (!raw) {
+		console.warn('[auth] No CSRF token cookie found')
+		return ''
+	}
+
+	// Sometimes cookie is "nonce|hash"
 	const nonce = raw.split('|')[0] ?? ''
-
 	return nonce
 }
