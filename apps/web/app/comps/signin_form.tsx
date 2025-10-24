@@ -3,8 +3,6 @@ import { useAsync } from '@/app/hooks/use_async'
 import { useUnifiedWallet } from '@jup-ag/wallet-adapter'
 import { SigninMessage } from '@/app/utils/sign_in'
 import bs58 from 'bs58'
-
-import { getCsrfToken, useSession } from 'next-auth/react'
 import { authenticate } from '@/app/actions/authenticate'
 import { useLatestRef } from '@/app/hooks/use_latest_ref'
 

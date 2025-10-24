@@ -5,6 +5,7 @@ import { auth } from '@/app/auth'
 export default async function Default() {
 	const nonce = await getNonceFromCookie()
 	const session = await auth()
+	console.log('nonce', nonce)
 
 	return <Nav nonce={nonce} session={session} />
 }

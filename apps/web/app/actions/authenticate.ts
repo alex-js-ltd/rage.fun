@@ -11,7 +11,7 @@ export async function authenticate(_prevState: any, formData: FormData) {
 	const submission = parseWithZod(formData, {
 		schema: AuthSchema,
 	})
-	console.log(submission)
+
 	if (submission.status !== 'success') {
 		return {
 			...submission.reply(),

@@ -7,6 +7,8 @@ import { SigninMessage } from '@/app/utils/sign_in'
 
 export const { auth, signIn, signOut } = NextAuth({
 	...authConfig,
+
+	trustHost: true,
 	providers: [
 		Credentials({
 			async authorize(credentials) {
