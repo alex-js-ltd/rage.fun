@@ -2,8 +2,6 @@
 
 import { signIn, signOut, auth } from '@/app/auth'
 import { AuthError } from 'next-auth'
-import { redirect } from 'next/navigation'
-import { revalidatePath } from 'next/cache'
 import { parseWithZod } from '@conform-to/zod'
 import { AuthSchema } from '@/app/utils/schemas'
 
