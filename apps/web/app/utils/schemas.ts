@@ -9,6 +9,7 @@ import { fromLamports } from '@repo/rage'
 import { formatCompactNumber } from '@/app/utils/misc'
 import { calculatePercentage } from './misc'
 import { OhlcData } from 'lightweight-charts'
+import { publicKey } from '@coral-xyz/anchor/dist/cjs/utils'
 
 const MAX_UPLOAD_SIZE = 1024 * 1024 * 1 // 1MB
 
@@ -145,7 +146,11 @@ export const HeliusSchema = z.array(
 )
 
 export const AuthSchema = z.object({
-	publicKey: Wallet,
+	domain: z.string(),
+	publicKey: z.string(),
+	statement: z.string(),
+	nonce: z.string(),
+	signature: z.string(),
 })
 
 export const ReplySchema = z.object({

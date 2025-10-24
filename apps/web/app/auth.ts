@@ -3,27 +3,34 @@ import Credentials from 'next-auth/providers/credentials'
 import { authConfig } from './auth.config'
 import { AuthSchema } from './utils/schemas'
 import { getUser } from './data/get_user'
+import { SigninMessage } from '@/app/utils/sign_in'
 
 export const { auth, signIn, signOut } = NextAuth({
 	...authConfig,
 	providers: [
 		Credentials({
 			async authorize(credentials) {
-				const parsedCredentials = AuthSchema.safeParse(credentials)
+				const parse = AuthSchema.safeParse(credentials)
+				console.log(parse)
+				if (parse.error) return null
 
-				if (parsedCredentials.success) {
-					const { publicKey } = parsedCredentials.data
+				const { domain, publicKey, nonce, statement, signature } = parse.data
 
-					const user = await getUser(publicKey.toBase58())
+				const signinMessage = new SigninMessage({ domain, publicKey, nonce, statement })
 
-					if (!user) return null
+				const validationResult = await signinMessage.validate(signature)
 
-					console.log(user)
-					return user
-				}
+				console.log('validation result', validationResult)
 
-				console.log('Invalid credentials')
-				return null
+				console.log('sign in message', signinMessage)
+
+				if (!validationResult) throw new Error('Could not validate the signed message')
+				console.log(signinMessage)
+				const id = signinMessage.publicKey
+
+				const user = await getUser(id)
+
+				return user
 			},
 		}),
 	],

@@ -48,7 +48,7 @@ export function WalletProvider({ children }: { children: ReactNode }) {
 					iconUrls: metadata.iconUrls,
 				},
 				notificationCallback: {
-					onConnect: onConnect,
+					onConnect: noop,
 					onConnecting: noop,
 					onDisconnect: onDisconnect,
 					onNotInstalled: noop,
@@ -69,12 +69,6 @@ export function WalletProvider({ children }: { children: ReactNode }) {
 		const url = `${pathname}?${p.toString()}`
 		return url
 	})
-
-	async function onConnect({ publicKey }: { publicKey: string }) {
-		if (!refUrl.current) return
-		const url = refUrl.current()
-		await authenticate(publicKey, url)
-	}
 
 	async function onDisconnect() {
 		if (!refUrl.current) return

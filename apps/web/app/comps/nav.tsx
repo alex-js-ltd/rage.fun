@@ -8,11 +8,14 @@ import Image from 'next/image'
 import { NavLink, type NavLinkProps } from './nav_link'
 import { cn } from '@/app/utils/misc'
 import { usePathname } from 'next/navigation'
+import { useUnifiedWallet } from '@jup-ag/wallet-adapter'
+import { SignInForm } from './signin_form'
+import { Session } from 'next-auth'
 
 // Only the fields you put in NAV_ITEMS, plus label/icon
 type NavItem = NavLinkProps & { label: string; icon: string }
 
-export function Nav() {
+export function Nav({ nonce, session }: { nonce: string; session: Session | null }) {
 	const pathname = usePathname()
 	const NAV_ITEMS = [
 		{
@@ -121,6 +124,7 @@ export function Nav() {
 		<>
 			<Desktop />
 			<Mobile />
+			{session ? null : <SignInForm nonce={nonce} />}
 		</>
 	)
 }

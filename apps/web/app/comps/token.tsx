@@ -25,7 +25,7 @@ import { TokenSearchParamsSchema } from '@/app/utils/schemas'
 import { MobileDrawer } from '@/app/comps/mobile_drawer'
 import { SwapForm, SwapFormFallback } from '@/app/comps/swap_form'
 import { Header } from '@/app/comps/header'
-import { Events } from './events'
+import { generateSolanaBlink } from '@/app/utils/dialect'
 
 type Props = {
 	params: Promise<{ mint: string }>
@@ -48,6 +48,10 @@ export async function Token(props: Props) {
 	const holdersPromise = getTopHolders(mint)
 
 	const commentsPromise = getComments(mint)
+
+	const blink = generateSolanaBlink(mint)
+
+	console.log(blink)
 
 	return (
 		<div className="flex flex-col w-full min-h-[100vh] border-x border-white border-opacity-[0.125] bg-background-100 relative max-w-[600px]">

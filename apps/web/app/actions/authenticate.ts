@@ -4,10 +4,22 @@ import { signIn, signOut, auth } from '@/app/auth'
 import { AuthError } from 'next-auth'
 import { redirect } from 'next/navigation'
 import { revalidatePath } from 'next/cache'
+import { parseWithZod } from '@conform-to/zod'
+import { AuthSchema } from '@/app/utils/schemas'
 
-export async function authenticate(publicKey: string, url: string) {
+export async function authenticate(_prevState: any, formData: FormData) {
+	const submission = parseWithZod(formData, {
+		schema: AuthSchema,
+	})
+	console.log(submission)
+	if (submission.status !== 'success') {
+		return {
+			...submission.reply(),
+		}
+	}
+
 	try {
-		await signIn('credentials', { publicKey, redirect: false })
+		await signIn('credentials', { ...submission.value, redirect: true })
 	} catch (error) {
 		if (error instanceof AuthError) {
 			switch (error.type) {
@@ -19,9 +31,6 @@ export async function authenticate(publicKey: string, url: string) {
 		}
 		throw error
 	}
-	console.log(url)
-	revalidatePath(url, 'layout')
-	redirect(url) // forces a rebuild with new cookies
 }
 
 export async function disconnect(url: string) {

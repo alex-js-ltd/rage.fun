@@ -18,6 +18,8 @@ export const authConfig = {
 
 		// ✅ Expose public key in session.user.id
 		async session({ session, token }) {
+			console.log('session', session)
+			console.log('token', token)
 			if (token?.sub) {
 				session.user.id = token.sub
 			}
