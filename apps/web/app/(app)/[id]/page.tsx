@@ -6,7 +6,6 @@ import { getTokens } from '@/app/data/get_tokens'
 import { TokenGrid, TokenGridFallback } from '@/app/comps/token_grid'
 
 import { Header } from '@/app/comps/header'
-import { shortenWallet } from '@/app/utils/misc'
 
 export const dynamic = 'force-dynamic'
 

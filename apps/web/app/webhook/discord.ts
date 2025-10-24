@@ -6,12 +6,14 @@ import { generateSolanaBlink } from '@/app/utils/dialect'
 import { type TokenFeedType, SwapEventType } from '@/app/utils/schemas'
 
 import { BN } from '@coral-xyz/anchor'
-import { formatTokenAmount } from '@/app/utils/misc'
+import { formatNumberSmart, formatTokenAmount, shortAddress } from '@/app/utils/misc'
 import { type TopHolderType } from '@/app/utils/schemas'
 import { getSolPrice } from '@/app/data/get_sol_price'
 
 import { client } from '@/app/utils/client'
 import { HarvestEvent } from '@prisma/client'
+import { solToUsd } from '@/app/utils/misc'
+import { Decimal } from '@prisma/client/runtime/library'
 
 const { DISCORD_WEBHOOK_ALERT_URL, DISCORD_WEBHOOK_CHAT_URL, DISCORD_WEBHOOK_HARVEST_URL } = getServerEnv()
 
@@ -39,7 +41,7 @@ export async function publishSwapEvent(event: SwapEventType, token: TokenFeedTyp
 	const topHolderLines = topHolders
 		.reduce<string[]>((acc, curr) => {
 			if (curr.percentageOwned !== '0.00') {
-				acc.push(`├ ${curr.owner}: ${curr.percentageOwned}%`)
+				acc.push(`├ ${shortAddress(curr.owner)}: ${curr.percentageOwned}%`)
 			}
 
 			return acc // No bold
@@ -170,7 +172,11 @@ export async function publishHarvestAlert(event: HarvestEvent, token: TokenFeedT
 
 	const alertMessage = '✨ **NEW HARVEST** ✨'
 
-	const amount = fromLamports(new BN(event.lamports.toString()), 9)
+	const solPrice = await getSolPrice()
+
+	const amountSol = new Decimal(event.lamports.toString()).div(1e9)
+
+	const amountDollars = solToUsd(amountSol, solPrice).toNumber()
 
 	const solScanUrl = `https://solscan.io/tx/${signature}`
 	const rageUrl = `https://www.letsrage.fun/token/${mint}?interval=1m`
@@ -178,11 +184,9 @@ export async function publishHarvestAlert(event: HarvestEvent, token: TokenFeedT
 
 	const caption = [
 		`${alertMessage}`,
-		'',
 
-		`**🪙 ${symbol}**`,
-		`** ├Creator: \`${creator}\`**`,
-		`** ├Yield: \`${amount} SOL\`**`,
+		'',
+		`**👤 Creator** \`${shortAddress(creator)}\` ** earned $${formatNumberSmart(amountDollars)} **`,
 		'',
 
 		// LINKS SECTION

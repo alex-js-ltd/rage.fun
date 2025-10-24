@@ -22,7 +22,7 @@ import { SearchSchema } from '@/app/utils/schemas'
 import { client } from '@/app/utils/client'
 
 import { SquareProgress } from './square_progress'
-import { shortenWallet } from '@/app/utils/misc'
+import { shortAddress } from '@/app/utils/misc'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/app/comps/tooltip'
 
 import { useInView } from 'react-intersection-observer'
@@ -116,7 +116,7 @@ function TokenCard({
 							}}
 							className="text-xs text-text-200 w-fit font-mono"
 						>
-							{shortenWallet(creatorId)}
+							{shortAddress(creatorId)}
 						</Link>
 					</div>
 				</div>

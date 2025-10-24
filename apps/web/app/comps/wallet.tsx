@@ -1,7 +1,7 @@
 'use client'
 
 import { UnifiedWalletButton, useUnifiedWallet } from '@jup-ag/wallet-adapter'
-import { shortenWallet } from '@/app/utils/misc'
+import { shortAddress } from '@/app/utils/misc'
 import { Icon } from './_icon'
 
 import { PopoverRoot, PopoverTrigger, PopoverPortal, PopoverContent, PopoverAnchor, PopoverArrow } from './popover'
@@ -35,7 +35,7 @@ export function Wallet() {
 			<PopoverTrigger className="sm:w-fit w-full">
 				<div className="relative h-auto  xl:h-[65.55px] sm:rounded-full hover:bg-white/10 sm:w-fit flex items-center p-3 gap-3 justify-center">
 					<img src={walletIcon} alt={walletName} className=" size-6 sm:size-10 rounded-full" />
-					<span className="hidden xl:block text-sm text-text-200">{shortenWallet(publicKey?.toBase58())}</span>
+					<span className="hidden xl:block text-sm text-text-200">{shortAddress(publicKey?.toBase58())}</span>
 					<Icon name="more-horizontal" className="hidden xl:block size-6 text-text-200 " />
 				</div>
 			</PopoverTrigger>

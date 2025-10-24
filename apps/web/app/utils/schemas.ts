@@ -10,6 +10,7 @@ import { formatCompactNumber } from '@/app/utils/misc'
 import { calculatePercentage } from './misc'
 import { OhlcData } from 'lightweight-charts'
 import { publicKey } from '@coral-xyz/anchor/dist/cjs/utils'
+import { solToUsd } from '@/app/utils/misc'
 
 const MAX_UPLOAD_SIZE = 1024 * 1024 * 1 // 1MB
 
@@ -308,10 +309,6 @@ export function calculateProgress(state: BondingCurveType) {
 	const progress = curr.div(target).mul(100)
 
 	return progress.toNumber()
-}
-
-export function solToUsd(amountInSol: Decimal, solPrice: number): Decimal {
-	return amountInSol.mul(new Decimal(solPrice))
 }
 
 export function createTransactionTableSchema(options: { decimals: number; solPrice: number }) {

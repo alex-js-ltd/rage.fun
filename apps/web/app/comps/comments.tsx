@@ -4,7 +4,7 @@ import { use, useMemo, useState } from 'react'
 import * as Ably from 'ably'
 import { useChannel } from 'ably/react'
 import { CommentType } from '@/app/utils/schemas'
-import { shortenWallet, timeAgo } from '@/app/utils/misc'
+import { shortAddress, timeAgo } from '@/app/utils/misc'
 
 export function Comments({ mint, commentsPromise }: { mint: string; commentsPromise: Promise<CommentType[]> }) {
 	const comments = use(commentsPromise)
@@ -32,7 +32,7 @@ export function Comments({ mint, commentsPromise }: { mint: string; commentsProm
 						<div className="flex gap-2">
 							<div className="flex flex-col gap-2">
 								<div className="flex gap-2 items-center">
-									<span className="text-text-200 text-sm">{shortenWallet(c.ownerId)}</span>
+									<span className="text-text-200 text-sm">{shortAddress(c.ownerId)}</span>
 
 									<span className="text-text-200 text-sm">{' • '}</span>
 									<span className="text-text-500 text-xs">{timeAgo(new Date(c.createdAt))}</span>

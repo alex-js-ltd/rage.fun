@@ -128,10 +128,6 @@ export function calculatePercentageDifference(
 	return parseFloat(percentage.toDecimalPlaces(decimalPlaces).toString())
 }
 
-export function shortenWallet(address: string): string {
-	return `${address.slice(0, 3)}…${address.slice(-3)}`
-}
-
 export function formatCompactNumber(
 	value: number,
 	options?: {
@@ -191,4 +187,8 @@ export function takePercentage(balance: BN, percent: number): BN {
 	// Convert the percent (which can be a float) to a scaled integer
 	const scaledPercent = new BN(Math.round(percent * 1_000_000_000)) // keep 9 decimals
 	return balance.mul(scaledPercent).div(PERCENTAGE_SCALE.mul(new BN(100)))
+}
+
+export function solToUsd(amountInSol: Decimal, solPrice: number): Decimal {
+	return amountInSol.mul(new Decimal(solPrice))
 }
