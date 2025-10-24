@@ -41,10 +41,10 @@ export function SignInForm({ nonce }: { nonce: string }) {
 	const [lastResult, formAction, isPending] = useActionState(authenticate, undefined)
 
 	useEffect(() => {
-		if (data) {
+		if (data && !isPending) {
 			formRef.current?.requestSubmit()
 		}
-	}, [data])
+	}, [data, isPending])
 
 	return (
 		<form ref={formRef} action={formAction}>
