@@ -68,16 +68,9 @@ export async function GET(req: NextRequest) {
 async function getUiAmountForBuy(wallet: PublicKey) {
 	const lamports = await connection.getBalance(wallet)
 
-	// fractions we allow
-	const fractions = [0.1, 0.25, 0.5, 0.125] // 10%, 25%, 50%, 12.5%
+	const randomFraction = 0.01 + Math.random() * 0.6 // 1%–60%
 
-	// pick one at random
-	const randomFraction = fractions[Math.floor(Math.random() * fractions.length)]
-
-	// apply it
 	const portion = Math.floor(lamports * randomFraction)
-
-	// convert to SOL (UI amount)
 	const uiAmount = portion / LAMPORTS_PER_SOL
 
 	return uiAmount.toFixed(9)
