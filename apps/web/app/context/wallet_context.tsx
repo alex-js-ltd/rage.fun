@@ -4,11 +4,9 @@ import { type ReactNode, useMemo } from 'react'
 import { UnifiedWalletProvider } from '@jup-ag/wallet-adapter'
 import { PhantomWalletAdapter, CoinbaseWalletAdapter, TrustWalletAdapter } from '@solana/wallet-adapter-wallets'
 import { getEnv } from '@/app/utils/env'
-import { authenticate, disconnect } from '@/app/actions/authenticate'
+import { disconnect } from '@/app/actions/authenticate'
 import { Adapter } from '@solana/wallet-adapter-base'
 import { useIsMobile } from '@/app/hooks/use_is_mobile'
-import { usePathname, useSearchParams } from 'next/navigation'
-import { useLatestRef } from '@/app/hooks/use_latest_ref'
 
 const { CLUSTER } = getEnv()
 
@@ -61,19 +59,8 @@ export function WalletProvider({ children }: { children: ReactNode }) {
 		[wallets, isMobile],
 	)
 
-	const pathname = usePathname()
-	const searchParams = useSearchParams()
-
-	const refUrl = useLatestRef(() => {
-		const p = new URLSearchParams(searchParams)
-		const url = `${pathname}?${p.toString()}`
-		return url
-	})
-
 	async function onDisconnect() {
-		if (!refUrl.current) return
-		const url = refUrl.current()
-		await disconnect(url)
+		await disconnect()
 	}
 
 	return <UnifiedWalletProvider {...params}>{children}</UnifiedWalletProvider>
