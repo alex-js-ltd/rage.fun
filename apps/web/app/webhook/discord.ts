@@ -213,11 +213,7 @@ export async function publishHarvestAlert(event: HarvestEvent, token: TokenFeedT
 	console.log('harvest result:', res)
 }
 
-export async function linkDiscordAccount(discordId: string, userId?: string) {
-	if (!userId) {
-		throw new Error('user is not authenticated')
-	}
-
+export async function linkDiscordAccount(discordId: string, userId: string) {
 	const account = await prisma.account.upsert({
 		where: {
 			// composite unique identifier from @@id([provider, providerAccountId])

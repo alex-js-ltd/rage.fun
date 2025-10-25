@@ -58,6 +58,8 @@ export const { auth, signIn, signOut, handlers } = NextAuth({
 				try {
 					const session = await auth()
 
+					if (!session?.user?.id) return
+
 					await linkDiscordAccount(profile.id, session?.user?.id)
 
 					const isCreator = await getIsCreator(session?.user?.id)

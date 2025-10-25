@@ -1,6 +1,6 @@
 'use client'
 
-import { useActionState } from 'react'
+import { useActionState, useEffect } from 'react'
 
 import { useForm, getFormProps, getInputProps, FormProvider } from '@conform-to/react'
 import { parseWithZod } from '@conform-to/zod'
@@ -45,9 +45,17 @@ export function Form() {
 		lastResult,
 	})
 
-	const { serializedTx } = lastResult || {}
+	const { serializedTx, errMessage, requestId } = lastResult || {}
 
 	const create = useSignAndSendTx(serializedTx)
+
+	const { isLoading, setError } = create
+
+	useEffect(() => {
+		if (errMessage) {
+			setError(errMessage)
+		}
+	}, [errMessage, setError, requestId])
 
 	const { getToastProps } = useToast(create)
 
@@ -55,7 +63,7 @@ export function Form() {
 
 	const { clearImage } = useImage()
 
-	const config: ToastDescription = { loading: `Generating token 🧙‍♂️`, success: `Token ready 🚀` }
+	const config: ToastDescription = { loading: `Generating token`, success: `Token ready` }
 
 	return (
 		<FormProvider context={form.context}>
@@ -111,7 +119,7 @@ export function Form() {
 								<ImageChooser />
 							</div>
 
-							<SubmitButton variant={'submit_1'} content="Submit" isPending={isPending} isLoading={create.isLoading} />
+							<SubmitButton variant={'submit_1'} content="Submit" isPending={isPending} isLoading={isLoading} />
 						</div>
 					</fieldset>
 				</form>

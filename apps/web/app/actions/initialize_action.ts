@@ -14,7 +14,7 @@ import { auth } from '@/app/auth'
 import { getServerEnv } from '@/app/utils/env'
 import { getUser } from '@/app/data/get_user'
 import { PinataSDK } from 'pinata'
-
+import { isInstructionError, getErrorMessage } from '@/app/utils/setup'
 import sharp from 'sharp'
 import * as ThumbHash from 'thumbhash'
 
@@ -28,10 +28,13 @@ const pinata = new PinataSDK({
 export type State =
 	| (SubmissionResult<string[]> & {
 			serializedTx?: Uint8Array
+			errMessage?: string
+			requestId?: string
 	  })
 	| undefined
 
 export async function initializeAction(_prevState: State, formData: FormData) {
+	const requestId = crypto.randomUUID()
 	const session = await auth()
 
 	if (!session) {
@@ -56,6 +59,8 @@ export async function initializeAction(_prevState: State, formData: FormData) {
 		return {
 			...submission.reply(),
 			serializedTx: undefined,
+			errMessage: undefined,
+			requestId,
 		}
 	}
 
@@ -123,18 +128,30 @@ export async function initializeAction(_prevState: State, formData: FormData) {
 
 	const sim = await connection.simulateTransaction(tx)
 
-	if (sim.value.err !== null) {
-		await deleteToken(mint, session.user.id)
+	if (sim.value.err !== null && !isInstructionError(sim.value.err)) {
+		return {
+			...submission.reply(),
+			serializedTx: undefined,
+			errMessage: 'unknown error',
+			requestId,
+		}
+	} else if (sim.value.err !== null && isInstructionError(sim.value.err)) {
+		const code = sim.value.err.InstructionError[1].Custom
+		const errMessage = getErrorMessage(code)
 
 		return {
 			...submission.reply(),
 			serializedTx: undefined,
+			errMessage,
+			requestId,
 		}
 	}
 
 	return {
 		...submission.reply(),
 		serializedTx: tx.serialize(),
+		errMessage: undefined,
+		requestId,
 	}
 }
 
