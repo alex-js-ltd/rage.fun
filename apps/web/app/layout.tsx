@@ -15,6 +15,8 @@ export const metadata: Metadata = {
 	},
 	description: 'Launch a token and trade with zero extraction.',
 	metadataBase: new URL('https://www.letsrage.fun'),
+
+	icons: [{ url: '/favicon.ico' }],
 }
 
 export default async function RootLayout(props: { children: ReactNode }) {
