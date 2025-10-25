@@ -243,12 +243,6 @@ export async function linkDiscordAccount(discordId: string) {
 		},
 	})
 
-	const isCreator = await getIsCreator(userId)
-
-	if (isCreator) {
-		await assignCreatorRole(discordId)
-	}
-
 	return account
 }
 

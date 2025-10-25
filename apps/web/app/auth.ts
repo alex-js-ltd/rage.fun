@@ -4,6 +4,7 @@ import Discord from 'next-auth/providers/discord'
 import { authConfig } from '@/app/auth.config'
 import { AuthSchema } from '@/app/utils/schemas'
 import { getUser } from '@/app/data/get_user'
+import { getIsCreator } from '@/app/data/get_is_creator'
 import { SigninMessage } from '@/app/utils/sign_in'
 import { getServerEnv } from '@/app/utils/env'
 import { linkDiscordAccount, assignCreatorRole } from '@/app/webhook/discord'
@@ -43,14 +44,26 @@ export const { auth, signIn, signOut, handlers } = NextAuth({
 		Discord({
 			clientId: AUTH_DISCORD_ID,
 			clientSecret: AUTH_DISCORD_SECRET,
-
-			async profile(discordProfile) {
-				if (!discordProfile?.id) return null
-
-				const account = await linkDiscordAccount(discordProfile?.id)
-
-				return discordProfile
-			},
 		}),
 	],
+
+	events: {
+		async signIn({ user, account, profile }) {
+			// Only run this logic for Discord logins
+			if (account?.provider === 'discord' && profile?.id) {
+				try {
+					await linkDiscordAccount(profile.id)
+
+					const isCreator = await getIsCreator(user.id)
+					if (isCreator) {
+						await assignCreatorRole(profile.id)
+					}
+
+					console.log(`✅ Linked and updated Discord user ${profile.id}`)
+				} catch (error) {
+					console.error('❌ Discord link/update failed', error)
+				}
+			}
+		},
+	},
 })

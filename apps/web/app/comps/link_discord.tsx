@@ -1,6 +1,7 @@
 'use client'
 
 import { signIn } from 'next-auth/react'
+import { Icon } from './_icon'
 
 export function LinkDiscord() {
 	async function handleClick() {
@@ -10,14 +11,10 @@ export function LinkDiscord() {
 	}
 
 	return (
-		<>
-			<button
-				onClick={handleClick}
-				type="submit"
-				className="rounded-md bg-[#5865F2] px-3 py-2 text-sm font-medium text-white hover:brightness-110 active:scale-95"
-			>
-				Link Discord
+		<div className="pt-4 w-full  flex justify-end ">
+			<button onClick={handleClick} type="submit" className="w-[55px] h-[55px] rounded-md">
+				<Icon name="Discord-Logo" className="w-[55px] h-[55px] " />
 			</button>
-		</>
+		</div>
 	)
 }
