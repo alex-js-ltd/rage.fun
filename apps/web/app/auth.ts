@@ -50,11 +50,17 @@ export const { auth, signIn, signOut, handlers } = NextAuth({
 	events: {
 		async signIn({ user, account, profile }) {
 			// Only run this logic for Discord logins
+
+			console.log('user', user)
+
+			console.log('account', account)
 			if (account?.provider === 'discord' && profile?.id) {
 				try {
-					await linkDiscordAccount(profile.id)
+					const session = await auth()
 
-					const isCreator = await getIsCreator(user.id)
+					await linkDiscordAccount(profile.id, session?.user?.id)
+
+					const isCreator = await getIsCreator(session?.user?.id)
 					if (isCreator) {
 						await assignCreatorRole(profile.id)
 					}

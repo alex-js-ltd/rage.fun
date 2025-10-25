@@ -213,11 +213,7 @@ export async function publishHarvestAlert(event: HarvestEvent, token: TokenFeedT
 	console.log('harvest result:', res)
 }
 
-export async function linkDiscordAccount(discordId: string) {
-	const session = await auth()
-
-	const userId = session?.user?.id
-
+export async function linkDiscordAccount(discordId: string, userId?: string) {
 	if (!userId) {
 		throw new Error('user is not authenticated')
 	}
