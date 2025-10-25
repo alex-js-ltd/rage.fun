@@ -37,12 +37,6 @@ export async function initializeAction(_prevState: State, formData: FormData) {
 	const requestId = crypto.randomUUID()
 	const session = await auth()
 
-	if (!session) {
-		console.error('no user session')
-
-		return
-	}
-
 	const submission = await parseWithZod(formData, {
 		schema: control =>
 			// create a zod schema base on the control
@@ -67,10 +61,6 @@ export async function initializeAction(_prevState: State, formData: FormData) {
 	const { file, name, symbol, description, creator } = submission.value
 
 	const decimals = 6
-
-	if (creator.toBase58() !== session.user?.id) {
-		return
-	}
 
 	const upload = await pinata.upload.public.file(file)
 
