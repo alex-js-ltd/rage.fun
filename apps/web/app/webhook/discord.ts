@@ -14,6 +14,9 @@ import { client } from '@/app/utils/client'
 import { HarvestEvent } from '@prisma/client'
 import { solToUsd } from '@/app/utils/misc'
 import { Decimal } from '@prisma/client/runtime/library'
+import { auth } from '@/app/auth'
+import { prisma } from '@/app/utils/db'
+import { Prisma, SwapType, SwapEvent, $Enums, BondingCurve } from '@prisma/client'
 
 const { DISCORD_WEBHOOK_ALERT_URL, DISCORD_WEBHOOK_CHAT_URL, DISCORD_WEBHOOK_HARVEST_URL } = getServerEnv()
 
@@ -88,17 +91,13 @@ export async function publishSwapEvent(event: SwapEventType, token: TokenFeedTyp
 		content: caption,
 	}
 
-	try {
-		const res = await client(DISCORD_WEBHOOK_ALERT_URL, {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify(payload),
-		})
+	const res = await client(DISCORD_WEBHOOK_ALERT_URL, {
+		method: 'POST',
+		headers: { 'Content-Type': 'application/json' },
+		body: JSON.stringify(payload),
+	})
 
-		console.log('✅ Webhook sent:', res)
-	} catch (error) {
-		console.error('❌ Failed to send Discord alert:', error)
-	}
+	console.log('✅ Webhook sent:', res)
 }
 
 async function getRefund(event: SwapEventType) {
@@ -150,17 +149,13 @@ export async function publishCreateAlert(event: EventData<'createEvent'>, token:
 		content: caption,
 	}
 
-	try {
-		const res = await client(DISCORD_WEBHOOK_CHAT_URL, {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify(payload),
-		})
+	const res = await client(DISCORD_WEBHOOK_CHAT_URL, {
+		method: 'POST',
+		headers: { 'Content-Type': 'application/json' },
+		body: JSON.stringify(payload),
+	})
 
-		console.log('✅ Webhook sent:', res)
-	} catch (error) {
-		console.error('Error sending message to Discord:', error)
-	}
+	console.log('✅ Webhook sent:', res)
 }
 
 export async function publishHarvestAlert(event: HarvestEvent, token: TokenFeedType) {
@@ -208,4 +203,37 @@ export async function publishHarvestAlert(event: HarvestEvent, token: TokenFeedT
 	})
 
 	console.log('harvest result:', res)
+}
+
+export async function linkDiscordAccount(discordId: string) {
+	const session = await auth()
+
+	const userId = session?.user?.id
+
+	if (!userId) {
+		throw new Error('user is not authenticated')
+	}
+
+	const account = await prisma.account.upsert({
+		where: {
+			// composite unique identifier from @@id([provider, providerAccountId])
+			provider_providerAccountId: {
+				provider: 'discord',
+				providerAccountId: discordId,
+			},
+		},
+		update: {
+			// if this Discord is already known, make sure it's linked to THIS wallet
+			userId,
+			type: 'oauth',
+		},
+		create: {
+			userId,
+			type: 'oauth',
+			provider: 'discord',
+			providerAccountId: discordId,
+		},
+	})
+
+	return account
 }
