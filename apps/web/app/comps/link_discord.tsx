@@ -11,7 +11,7 @@ export function LinkDiscord() {
 	}
 
 	return (
-		<div className="pt-4 w-full  flex justify-end ">
+		<div className="fixed bottom-16 sm:bottom-8 right-8">
 			<button onClick={handleClick} type="submit" className="w-[55px] h-[55px] rounded-md">
 				<Icon name="Discord-Logo" className="w-[55px] h-[55px] " />
 			</button>
