@@ -135,6 +135,12 @@ export async function processCreateEvents(createEvents: EventData<'createEvent'>
 	for await (const alert of socialAlerts) {
 		try {
 			await DiscordAlerts.publishCreateAlert(alert.event, alert.token)
+
+			const discordId = await getDiscordId(alert.event.data.creator.toBase58())
+
+			if (discordId) {
+				await DiscordAlerts.assignCreatorRole(discordId)
+			}
 		} catch (err) {
 			console.error(`🔥 Error processing create alert for ${alert.event.signature}:`, err)
 		}
@@ -171,4 +177,17 @@ export function calculateMarketCap(price: Decimal, state: BondingCurveState) {
 	const supply = new Decimal(state.currentSupply.toString()).div(new Decimal(10).pow(state.decimals))
 
 	return price.mul(supply)
+}
+
+export async function getDiscordId(userId: string) {
+	// userId here is the wallet address (since User.id is the wallet)
+	const account = await prisma.account.findFirst({
+		where: {
+			userId,
+			provider: 'discord',
+		},
+		select: { providerAccountId: true },
+	})
+
+	return account?.providerAccountId
 }
