@@ -11,7 +11,7 @@ import { getServerEnv } from '@/app/utils/env'
 const { HELIUS_SECRET, CRON_SECRET } = getServerEnv()
 
 export const config = {
-	matcher: ['/((?!_next/static|_next/image|.*\\.webp$).*)'], // Allow middleware to run on API routes
+	matcher: ['/((?!api/auth|_next/static|_next/image|.*\\.webp$).*)'],
 }
 
 // Rate limiter for APIs (tighter)

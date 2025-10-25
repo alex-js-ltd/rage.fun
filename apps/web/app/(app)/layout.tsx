@@ -3,6 +3,7 @@
 import { usePathname, useSelectedLayoutSegment } from 'next/navigation'
 import { cn } from '@/app/utils/misc'
 import { Footer } from '@/app/comps/footer'
+import { LinkDiscord } from '../comps/link_discord'
 
 export default function Layout(props: {
 	children: React.ReactNode
@@ -62,7 +63,7 @@ export default function Layout(props: {
 						<div className="sticky top-0 px-4">
 							<div className="relative h-[100vh] overflow-hidden">
 								{props.right}
-
+								{/* <LinkDiscord /> */}
 								<div className="absolute bottom-2 left-0 right-0">
 									<Footer />
 								</div>
