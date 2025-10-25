@@ -118,22 +118,27 @@ export async function initializeAction(_prevState: State, formData: FormData) {
 
 	const sim = await connection.simulateTransaction(tx)
 
-	if (sim.value.err !== null && !isInstructionError(sim.value.err)) {
-		return {
-			...submission.reply(),
-			serializedTx: undefined,
-			errMessage: 'unknown error',
-			requestId,
-		}
-	} else if (sim.value.err !== null && isInstructionError(sim.value.err)) {
-		const code = sim.value.err.InstructionError[1].Custom
-		const errMessage = getErrorMessage(code)
+	if (sim.value.err !== null) {
+		await deleteToken(mint, session?.user?.id)
 
-		return {
-			...submission.reply(),
-			serializedTx: undefined,
-			errMessage,
-			requestId,
+		if (!isInstructionError(sim.value.err)) {
+			return {
+				...submission.reply(),
+				serializedTx: undefined,
+				errMessage: 'unknown error',
+				requestId,
+			}
+		}
+
+		if (isInstructionError(sim.value.err)) {
+			const code = sim.value.err.InstructionError[1].Custom
+			const errMessage = getErrorMessage(code)
+			return {
+				...submission.reply(),
+				serializedTx: undefined,
+				errMessage,
+				requestId,
+			}
 		}
 	}
 
@@ -206,11 +211,11 @@ export async function fetchImage(url: string): Promise<Buffer> {
 	return Buffer.from(await response.arrayBuffer())
 }
 
-async function deleteToken(mint: PublicKey, creatorId: string) {
+async function deleteToken(mint: PublicKey, creatorId?: string) {
 	const tokenId = mint.toBase58()
 	const token = await prisma.token.findUniqueOrThrow({ where: { id: tokenId } })
 
-	if (token.creatorId !== creatorId) {
+	if (token.creatorId !== creatorId || !creatorId) {
 		console.warn(`Unauthorized delete attempt for ${tokenId}`)
 		return
 	}
