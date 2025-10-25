@@ -6,7 +6,7 @@ import { AuthSchema } from '@/app/utils/schemas'
 import { getUser } from '@/app/data/get_user'
 import { SigninMessage } from '@/app/utils/sign_in'
 import { getServerEnv } from '@/app/utils/env'
-import { linkDiscordAccount } from '@/app/webhook/discord'
+import { linkDiscordAccount, assignCreatorRole } from '@/app/webhook/discord'
 
 const { AUTH_DISCORD_ID, AUTH_DISCORD_SECRET } = getServerEnv()
 
@@ -49,7 +49,6 @@ export const { auth, signIn, signOut, handlers } = NextAuth({
 
 				const account = await linkDiscordAccount(discordProfile?.id)
 
-				console.log('discord account linked')
 				return discordProfile
 			},
 		}),

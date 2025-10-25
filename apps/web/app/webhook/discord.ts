@@ -17,8 +17,16 @@ import { Decimal } from '@prisma/client/runtime/library'
 import { auth } from '@/app/auth'
 import { prisma } from '@/app/utils/db'
 import { Prisma, SwapType, SwapEvent, $Enums, BondingCurve } from '@prisma/client'
+import { getIsCreator } from '@/app/data/get_is_creator'
 
-const { DISCORD_WEBHOOK_ALERT_URL, DISCORD_WEBHOOK_CHAT_URL, DISCORD_WEBHOOK_HARVEST_URL } = getServerEnv()
+const {
+	DISCORD_WEBHOOK_ALERT_URL,
+	DISCORD_WEBHOOK_CHAT_URL,
+	DISCORD_WEBHOOK_HARVEST_URL,
+	DISCORD_BOT_TOKEN,
+	DISCORD_GUILD_ID,
+	DISCORD_CREATOR_ROLE_ID,
+} = getServerEnv()
 
 export async function publishSwapEvent(event: SwapEventType, token: TokenFeedType, topHolders: TopHolderType[]) {
 	const { symbol } = token.metadata
@@ -235,5 +243,25 @@ export async function linkDiscordAccount(discordId: string) {
 		},
 	})
 
+	const isCreator = await getIsCreator(userId)
+
+	if (isCreator) {
+		await assignCreatorRole(discordId)
+	}
+
 	return account
+}
+
+export async function assignCreatorRole(discordUserId: string) {
+	const res = await client(
+		`https://discord.com/api/guilds/${DISCORD_GUILD_ID}/members/${discordUserId}/roles/${DISCORD_CREATOR_ROLE_ID}`,
+		{
+			method: 'PUT',
+			headers: {
+				Authorization: `Bot ${DISCORD_BOT_TOKEN}`,
+			},
+		},
+	)
+	console.log(res)
+	console.log(`✅ Assigned Creator role to Discord user ${discordUserId}`)
 }

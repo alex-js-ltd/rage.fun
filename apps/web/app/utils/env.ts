@@ -23,6 +23,11 @@ const schema = z.object({
 
 	AUTH_DISCORD_ID: z.string(),
 	AUTH_DISCORD_SECRET: z.string(),
+
+	DISCORD_BOT_TOKEN: z.string(),
+	DISCORD_GUILD_ID: z.string(),
+	DISCORD_CREATOR_ROLE_ID: z.string(),
+
 	DISCORD_WEBHOOK_ALERT_URL: z.string(),
 	DISCORD_WEBHOOK_CHAT_URL: z.string(),
 	DISCORD_WEBHOOK_HARVEST_URL: z.string(),
@@ -81,6 +86,10 @@ export function getServerEnv() {
 
 		AUTH_DISCORD_ID: process.env.AUTH_DISCORD_ID,
 		AUTH_DISCORD_SECRET: process.env.AUTH_DISCORD_SECRET,
+
+		DISCORD_BOT_TOKEN: process.env.DISCORD_BOT_TOKEN,
+		DISCORD_GUILD_ID: process.env.DISCORD_GUILD_ID,
+		DISCORD_CREATOR_ROLE_ID: process.env.DISCORD_CREATOR_ROLE_ID,
 
 		DISCORD_WEBHOOK_ALERT_URL: process.env.DISCORD_WEBHOOK_ALERT_URL,
 		DISCORD_WEBHOOK_CHAT_URL: process.env.DISCORD_WEBHOOK_CHAT_URL,
