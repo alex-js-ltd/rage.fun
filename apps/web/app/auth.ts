@@ -16,7 +16,6 @@ export const { auth, signIn, signOut, handlers } = NextAuth({
 
 	trustHost: true,
 
-	session: { strategy: 'jwt' },
 	providers: [
 		Credentials({
 			async authorize(credentials) {
