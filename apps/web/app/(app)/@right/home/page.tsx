@@ -4,6 +4,9 @@ import { searchTokens } from '@/app/data/search_tokens'
 import { type SearchParams } from '@/app/utils/schemas'
 import { getTrendingTokens } from '@/app/data/get_trending_tokens'
 import { Trending, TrendingFallBack } from '@/app/comps/trending'
+import { Welcome } from '@/app/comps/welcome'
+import { auth } from '@/app/auth'
+import { getDiscordId } from '@/app/data/get_discord_id'
 
 export const dynamic = 'force-dynamic'
 
@@ -14,28 +17,42 @@ type Props = {
 export default async function Page(props: Props) {
 	const searchParams = await props.searchParams
 
+	const session = await auth()
+
+	console.log(session)
+
 	const { sortType = 'createdAt', sortOrder = 'desc', cursorId = '', search = '' } = searchParams
 
 	const searchPromise = searchTokens(search)
 
 	const trendingPromise = getTrendingTokens()
 
+	const id = session?.user?.id
+
+	const discordIdPromise = getDiscordId(id)
+
 	return (
 		<div className="relative w-full">
-			<div className="sticky top-0 z-40 flex flex-col">
+			<div className="sticky top-0 z-40">
 				<div className="mt-[6px]">
 					<SearchField />
 				</div>
 
-				<Suspense>
-					<SearchResults searchPromise={searchPromise} />
-				</Suspense>
+				<div className="flex flex-col gap-4">
+					<Suspense>
+						<SearchResults searchPromise={searchPromise} />
+					</Suspense>
 
-				<div className="h-[2px] bg-white/[0.125] my-4" />
+					<div className="h-[2px] bg-white/[0.125] py-0" />
 
-				<Suspense fallback={<TrendingFallBack />}>
-					<Trending trendingPromise={trendingPromise} />
-				</Suspense>
+					<Suspense fallback={<TrendingFallBack />}>
+						<Trending trendingPromise={trendingPromise} />
+					</Suspense>
+
+					<Suspense fallback={null}>
+						<Welcome discordIdPromise={discordIdPromise} />
+					</Suspense>
+				</div>
 			</div>
 		</div>
 	)

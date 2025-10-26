@@ -104,7 +104,6 @@ export async function initializeAction(_prevState: State, formData: FormData) {
 	const ix = await getInitializeIx({
 		program,
 		payer,
-
 		decimals,
 		args,
 	})

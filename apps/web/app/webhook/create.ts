@@ -9,6 +9,7 @@ import * as AblyEvents from '@/app/webhook/ably'
 import { type SwapEventType, type TokenFeedType, type TopHolderType } from '@/app/utils/schemas'
 import { revalidateTag } from 'next/cache'
 import { Decimal } from '@prisma/client/runtime/library'
+import { getDiscordId } from '@/app/data/get_discord_id'
 import * as Ably from 'ably'
 import * as DiscordAlerts from '@/app/webhook/discord'
 import 'server-only'
@@ -177,17 +178,4 @@ export function calculateMarketCap(price: Decimal, state: BondingCurveState) {
 	const supply = new Decimal(state.currentSupply.toString()).div(new Decimal(10).pow(state.decimals))
 
 	return price.mul(supply)
-}
-
-export async function getDiscordId(userId: string) {
-	// userId here is the wallet address (since User.id is the wallet)
-	const account = await prisma.account.findFirst({
-		where: {
-			userId,
-			provider: 'discord',
-		},
-		select: { providerAccountId: true },
-	})
-
-	return account?.providerAccountId
 }

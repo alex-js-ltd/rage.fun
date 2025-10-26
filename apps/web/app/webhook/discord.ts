@@ -14,10 +14,7 @@ import { client } from '@/app/utils/client'
 import { HarvestEvent } from '@prisma/client'
 import { solToUsd } from '@/app/utils/misc'
 import { Decimal } from '@prisma/client/runtime/library'
-import { auth } from '@/app/auth'
 import { prisma } from '@/app/utils/db'
-import { Prisma, SwapType, SwapEvent, $Enums, BondingCurve } from '@prisma/client'
-import { getIsCreator } from '@/app/data/get_is_creator'
 
 const {
 	DISCORD_WEBHOOK_ALERT_URL,

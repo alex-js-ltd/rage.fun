@@ -1,20 +1,24 @@
 'use client'
 
-import { signIn } from 'next-auth/react'
-import { Icon } from './_icon'
+import { signIn, useSession } from 'next-auth/react'
+import { useAsync } from '@/app/hooks/use_async'
+import { type ButtonProps, Button } from './button'
 
-export function LinkDiscord() {
-	async function handleClick() {
-		await signIn('discord', {
-			callbackUrl: '/home',
-		})
-	}
+export function LinkDiscord({ onClick, children, ...rest }: ButtonProps) {
+	const { run } = useAsync()
 
 	return (
-		<div className="fixed bottom-16 sm:bottom-8 right-8">
-			<button onClick={handleClick} type="submit" className="w-[55px] h-[55px] rounded-md">
-				<Icon name="Discord-Logo" className="w-[55px] h-[55px] " />
-			</button>
-		</div>
+		<Button
+			onClick={() => {
+				const promise = signIn('discord', {
+					callbackUrl: '/home',
+				})
+
+				run(promise)
+			}}
+			{...rest}
+		>
+			{children}
+		</Button>
 	)
 }
