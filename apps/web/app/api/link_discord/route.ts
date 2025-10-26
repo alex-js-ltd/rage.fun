@@ -10,6 +10,10 @@ export async function GET(req: NextRequest) {
 	const userId = searchParams.get('userId')
 
 	console.log('userId to restore session', userId)
+
+	if (!userId) {
+		return NextResponse.json({ success: false }, { status: 404 })
+	}
 	// 1. Load the saved wallet session token
 	const savedToken = await kv.get<string>(`session:${userId}`)
 
