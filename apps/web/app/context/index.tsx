@@ -19,7 +19,7 @@ const WalletProvider = dynamic(() => import('@/app/context/wallet_context.tsx').
 
 export function AppProviders({ session, children }: { session: Session | null; children: ReactNode }) {
 	return (
-		<AuthProvider session={session}>
+		<AuthProvider session={session} baseUrl="/api/auth">
 			<WalletProvider>
 				<AblyProvider>
 					<ToastProvider>{children}</ToastProvider>

@@ -5,6 +5,9 @@ import { useAsync } from '@/app/hooks/use_async'
 import { type ButtonProps, Button } from './button'
 
 export function LinkDiscord({ onClick, children, ...rest }: ButtonProps) {
+	const session = useSession()
+
+	console.log('session', session)
 	const { run } = useAsync()
 
 	return (
