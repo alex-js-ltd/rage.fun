@@ -2,7 +2,7 @@
 
 import type { ReactNode } from 'react'
 import { ToastProvider } from './toast_context'
-
+import { type Session } from 'next-auth'
 import dynamic from 'next/dynamic'
 
 const AuthProvider = dynamic(() => import('@/app/context/auth_context.tsx').then(mod => mod.AuthProvider), {
@@ -17,9 +17,9 @@ const WalletProvider = dynamic(() => import('@/app/context/wallet_context.tsx').
 	ssr: false,
 })
 
-export function AppProviders({ children }: { children: ReactNode }) {
+export function AppProviders({ session, children }: { session: Session | null; children: ReactNode }) {
 	return (
-		<AuthProvider>
+		<AuthProvider session={session}>
 			<WalletProvider>
 				<AblyProvider>
 					<ToastProvider>{children}</ToastProvider>
