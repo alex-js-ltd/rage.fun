@@ -48,10 +48,11 @@ export default async function Page(props: Props) {
 					<Suspense fallback={<TrendingFallBack />}>
 						<Trending trendingPromise={trendingPromise} />
 					</Suspense>
-
-					<Suspense fallback={null}>
-						<Welcome discordIdPromise={discordIdPromise} />
-					</Suspense>
+					{!session ? null : (
+						<Suspense fallback={null}>
+							<Welcome discordIdPromise={discordIdPromise} />
+						</Suspense>
+					)}
 				</div>
 			</div>
 		</div>
