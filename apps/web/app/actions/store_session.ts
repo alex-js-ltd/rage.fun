@@ -12,6 +12,8 @@ export async function storeSession() {
 
 	const userId = session?.user?.id
 
+	console.log('userId to store session', userId)
+
 	const cookieStore = await cookies()
 	const currentSession = cookieStore.get(cookieName)?.value
 
@@ -21,14 +23,9 @@ export async function storeSession() {
 	}
 
 	// store just the raw token string
-	await kv.set(
-		`session:${userId}`,
-		currentSession,
-		{ ex: 300 }, // expire in 5 min so it’s not reusable forever
-	)
+	await kv.set(`session:${userId}`, currentSession)
+
 	if (!currentSession) throw new Error('no session cookie')
 
-	await kv.set(`session:${userId}`, currentSession, { ex: 300 })
-
-	console.log('session stored')
+	return userId
 }

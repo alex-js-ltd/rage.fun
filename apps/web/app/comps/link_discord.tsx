@@ -12,10 +12,9 @@ export function LinkDiscord({ onClick, children, ...rest }: ButtonProps) {
 	const { run } = useAsync()
 
 	async function handleLink() {
-		await storeSession()
-
+		const userId = await storeSession()
 		await signIn('discord', {
-			callbackUrl: '/home',
+			callbackUrl: `/api/link_discord?userId=${userId}`,
 		})
 	}
 

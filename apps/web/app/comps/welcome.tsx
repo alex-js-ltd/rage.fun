@@ -16,7 +16,7 @@ export function Welcome({ discordIdPromise }: { discordIdPromise: Promise<string
 				<h2 className="text-white font-semibold text-[15px]">Welcome to letsrage.fun</h2>
 			</div>
 			<div className="grid">
-				<LinkDiscord asChild className={discordId ? 'pointer-events-none' : ''}>
+				<LinkDiscord asChild className={discordId ? 'pointer-events' : ''}>
 					<div className="w-full hover:bg-white/10 h-[65.55px] px-3 cursor-pointer">
 						<div className="flex items-center justify-between h-full">
 							<div className="relative size-[40px] rounded-full overflow-hidden">
