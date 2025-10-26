@@ -19,10 +19,12 @@ const WalletProvider = dynamic(() => import('@/app/context/wallet_context.tsx').
 
 export function AppProviders({ children }: { children: ReactNode }) {
 	return (
-		<WalletProvider>
-			<AblyProvider>
-				<ToastProvider>{children}</ToastProvider>
-			</AblyProvider>
-		</WalletProvider>
+		<AuthProvider>
+			<WalletProvider>
+				<AblyProvider>
+					<ToastProvider>{children}</ToastProvider>
+				</AblyProvider>
+			</WalletProvider>
+		</AuthProvider>
 	)
 }
