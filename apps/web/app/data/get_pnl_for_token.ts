@@ -8,6 +8,10 @@ export async function getPnLForToken(mint: string) {
 	const pnl = await prisma.pnl.findMany({
 		where: {
 			tokenId: mint,
+
+			sold: {
+				gt: 0, // only include wallets that sold something
+			},
 		},
 
 		orderBy: {
