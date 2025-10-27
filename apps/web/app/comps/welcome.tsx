@@ -19,7 +19,7 @@ export function Welcome({ discordIdPromise }: { discordIdPromise: Promise<string
 				<LinkDiscord asChild discordId={discordId}>
 					<div className="w-full hover:bg-white/10 h-[65.55px] px-3 cursor-pointer">
 						<div className="flex items-center justify-between h-full">
-							<div className="relative size-[40px] rounded-full overflow-hidden">
+							<div className="relative size-[40px]">
 								<Icon name="Discord-Logo" className="w-full h-full object-cover object-center" />
 							</div>
 
