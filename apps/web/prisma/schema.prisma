@@ -52,6 +52,8 @@ model Token {
   comments      Comment[]
   harvestEvents HarvestEvent[]
 
+  pnl Pnl[]
+
   creator   User   @relation(fields: [creatorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   creatorId String
 
@@ -192,4 +194,22 @@ model MarketData {
   tokenId String @unique
 
   @@index([tokenId])
+}
+
+model Pnl {
+  signer  String
+  tokenId String
+
+  bought      BigInt
+  sold        BigInt
+  realizedPnl BigInt
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  token Token @relation(fields: [tokenId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@id([signer, tokenId])
+  @@index([tokenId])
+  @@index([signer])
 }
