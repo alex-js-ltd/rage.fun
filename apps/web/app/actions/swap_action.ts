@@ -11,8 +11,6 @@ import { PublicKey } from '@solana/web3.js'
 import { BN } from '@coral-xyz/anchor'
 import { isInstructionError, getErrorMessage } from '@/app/utils/setup'
 
-import { getAssociatedTokenAddress, getAccount, TOKEN_2022_PROGRAM_ID } from '@solana/spl-token'
-
 export type State =
 	| (SubmissionResult<string[]> & {
 			serializedTx?: Uint8Array
@@ -38,9 +36,7 @@ export async function buyAction(_prevState: State, formData: FormData) {
 		}
 	}
 
-	const { mint, amount, decimals } = submission.value
-
-	const payer = new PublicKey(session?.user?.id)
+	const { mint, amount, decimals, payer } = submission.value
 
 	const buy = await getBuyTokenIx({
 		program,
@@ -104,9 +100,7 @@ export async function sellAction(_prevState: State, formData: FormData) {
 		}
 	}
 
-	const { mint, amount, decimals } = submission.value
-
-	const payer = new PublicKey(session?.user?.id)
+	const { mint, amount, decimals, payer } = submission.value
 
 	const ix = await getSellTokenIx({
 		program,
