@@ -56,17 +56,17 @@ export function PnLTable({ pnlPromise }: PnLTableProps) {
 									</div>
 								</td>
 
-								<td className="px-3 text-right font-medium text-buy-100">{`$${formatNumberSmart(row.bought)}`}</td>
+								<td className="px-3 text-right font-medium text-buy-100">{`$${row.bought.toFixed(4)}`}</td>
 								<td
 									className={cn('px-3 text-right font-mediumm ', row.sold === 0 ? 'text-text-100' : 'text-sell-100')}
-								>{`$${formatNumberSmart(row.sold)}`}</td>
+								>{`$${row.sold.toFixed(4)}`}</td>
 
 								<td
 									className={cn(
 										'px-3 text-right font-mediumm ',
 										row.bought > row.sold ? 'text-sell-100' : 'text-buy-100',
 									)}
-								>{`$${formatNumberSmart(row.realizedPnl)}`}</td>
+								>{`$${row.realizedPnl.toFixed(4)}`}</td>
 							</tr>
 						))}
 					</tbody>
