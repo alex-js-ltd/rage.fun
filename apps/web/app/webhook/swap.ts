@@ -294,11 +294,13 @@ export async function upsertPnL({
 				bought,
 				sold,
 				realizedPnl,
+				unrealizedPnl,
 			},
 			update: {
 				bought,
 				sold,
 				realizedPnl,
+				unrealizedPnl,
 			},
 		})
 
