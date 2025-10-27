@@ -26,6 +26,7 @@ import { MobileDrawer } from '@/app/comps/mobile_drawer'
 import { SwapForm, SwapFormFallback } from '@/app/comps/swap_form'
 import { Header } from '@/app/comps/header'
 import { generateSolanaBlink } from '@/app/utils/dialect'
+import { getPnLForToken } from '@/app/data/get_pnl_for_token'
 
 type Props = {
 	params: Promise<{ mint: string }>
@@ -52,6 +53,8 @@ export async function Token(props: Props) {
 	const blink = generateSolanaBlink(mint)
 
 	console.log(blink)
+
+	const pnlPromise = getPnLForToken(mint)
 
 	return (
 		<div className="flex flex-col w-full min-h-[100vh] border-x border-white border-opacity-[0.125] bg-background-100 relative max-w-[600px]">
