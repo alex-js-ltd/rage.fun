@@ -33,6 +33,7 @@ import { calculatePrice, calculateMarketCap } from './create'
 import { getTransactionCount } from '@/app/data/get_transaction_count'
 
 import { getTokenBalance } from '@/app/data/get_token_balance'
+import { calculateSellPrice } from '@/app/utils/wasm'
 
 import * as Ably from 'ably'
 import * as AblyEvents from '@/app/webhook/ably'
@@ -233,7 +234,7 @@ export async function processSwapEvents(swapEvents: EventData<'swapEvent'>[]) {
 
 			await AblyEvents.publishTopHoldersEvent(holdersChannel, topHolders, token)
 
-			const pnl = await computePnlForSigner(tokenId, signer)
+			const pnl = await computePnl(tokenId, signer, curve)
 
 			await upsertPnL(pnl)
 
@@ -263,63 +264,22 @@ export async function processSwapEvents(swapEvents: EventData<'swapEvent'>[]) {
 	}
 }
 
-export async function computePnlForSigner(tokenId: string, signer: string) {
-	// 1. Sum total lamports the signer spent on buys
-	const buy = await prisma.swapEvent.aggregate({
-		where: {
-			tokenId,
-			signer,
-			swapType: 'Buy',
-		},
-		_sum: {
-			lamports: true,
-		},
-	})
-
-	// 2. Sum total lamports they received from sells
-	const sell = await prisma.swapEvent.aggregate({
-		where: {
-			tokenId,
-			signer,
-			swapType: 'Sell',
-		},
-		_sum: {
-			lamports: true,
-		},
-	})
-
-	// 3. Compute realized profit/loss
-	const bought = buy._sum.lamports ?? BigInt('0')
-	const sold = sell._sum.lamports ?? BigInt('0')
-	const realizedPnl = sold - bought
-
-	// 4, Get unrealized PnL
-	const tokenBalance = await getTokenBalance(new PublicKey(tokenId), new PublicKey(signer))
-
-	console.log('token balance', tokenBalance)
-
-	return {
-		signer,
-		tokenId,
-		bought,
-		sold,
-		realizedPnl,
-	}
-}
-
 export async function upsertPnL({
 	signer,
 	tokenId,
 	bought,
 	sold,
 	realizedPnl,
+	unrealizedPnl,
 }: {
 	signer: string
 	tokenId: string
 	bought: bigint
 	sold: bigint
 	realizedPnl: bigint
+	unrealizedPnl: bigint
 }) {
+	console.log('un realized pnl', unrealizedPnl?.toString())
 	try {
 		const row = await prisma.pnl.upsert({
 			where: {
@@ -358,5 +318,122 @@ export async function upsertPnL({
 	} catch (err) {
 		console.error(`🔥 [PnL Upsert Error] tokenId=${tokenId}, signer=${signer}`, err)
 		throw err
+	}
+}
+
+export async function computePnl(tokenId: string, signer: string, curve: BondingCurve) {
+	//
+	// 1. Aggregate SOL in/out
+	//
+	const buyAgg = await prisma.swapEvent.aggregate({
+		where: {
+			tokenId,
+			signer,
+			swapType: 'Buy',
+		},
+		_sum: {
+			lamports: true,
+		},
+	})
+
+	const sellAgg = await prisma.swapEvent.aggregate({
+		where: {
+			tokenId,
+			signer,
+			swapType: 'Sell',
+		},
+		_sum: {
+			lamports: true,
+		},
+	})
+
+	const bought = buyAgg._sum.lamports ?? BigInt(0) // SOL spent
+	const sold = sellAgg._sum.lamports ?? BigInt(0) // SOL received
+
+	//
+	// 2. Realized PnL = what they've already locked in
+	//
+	const realizedPnl = sold - bought // can be neg
+
+	//
+	// 3. Unrealized PnL
+	//
+
+	// 3a. validate curve params for quote
+	const parsed = BondingcurveSchema.safeParse(curve)
+
+	if (parsed.error) {
+		return {
+			signer,
+			tokenId,
+			bought,
+			sold,
+			realizedPnl,
+			unrealizedPnl: BigInt('0'),
+		}
+	}
+
+	const {
+		connectorWeight,
+		decimals,
+		virtualSupply,
+		currentSupply,
+		targetSupply,
+		virtualReserve,
+		currentReserve,
+		targetReserve,
+	} = parsed.data
+
+	// 3b. how many tokens the signer currently still holds
+	const tokenBalance = await getTokenBalance(new PublicKey(tokenId), new PublicKey(signer))
+
+	// turn token balance into the "uiAmount" string your quote fn expects
+	const uiAmount = tokenBalance?.toString() ?? '0'
+
+	// if they hold nothing, unrealized is trivially 0
+	if (uiAmount === '0') {
+		return {
+			signer,
+			tokenId,
+			bought,
+			sold,
+			realizedPnl,
+			unrealizedPnl: BigInt('0'),
+		}
+	}
+
+	// 3c. ask: if they dumped ALL of that balance right now,
+	// how many lamports would they receive?
+	const sellQuote = await calculateSellPrice({
+		connectorWeight,
+		decimals,
+		virtualSupply,
+		currentSupply,
+		targetSupply,
+		virtualReserve,
+		currentReserve,
+		targetReserve,
+		uiAmount,
+	})
+
+	// normalize to BigInt
+	const markToMarketLamports = BigInt(sellQuote ?? '0')
+
+	// 3d. how much SOL is still "in play" (their active cost basis)
+	let remainingCostBasisLamports = bought - sold
+	if (remainingCostBasisLamports < BigInt('0')) {
+		remainingCostBasisLamports = BigInt('0')
+	}
+
+	// 3e. unrealized PnL = (what they'd get if they sold now) - (what they still have at risk)
+	const unrealizedPnl = markToMarketLamports - remainingCostBasisLamports
+
+	return {
+		signer,
+		tokenId,
+		bought,
+		sold,
+		realizedPnl,
+		unrealizedPnl,
 	}
 }
