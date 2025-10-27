@@ -450,3 +450,27 @@ export const TokenSearchParamsSchema = z
 				return { interval: 300000 } // fallback to 5m
 		}
 	})
+
+export function createPnLSchema(options: { solPrice: number }) {
+	const { solPrice } = options
+	return z
+		.object({
+			tokenId: z.string(),
+			signer: z.string(),
+
+			bought: z.bigint().transform(v => v.toString()),
+			sold: z.bigint().transform(v => v.toString()),
+			realizedPnl: z.bigint().transform(v => v.toString()),
+
+			createdAt: z.date().transform(d => d.toISOString()),
+			updatedAt: z.date().transform(d => d.toISOString()),
+		})
+		.transform(data => {
+			const bought = solToUsd(new Decimal(data.bought).div(1e9), solPrice).toNumber()
+			const sold = solToUsd(new Decimal(data.sold).div(1e9), solPrice).toNumber()
+
+			const realizedPnl = solToUsd(new Decimal(data.realizedPnl).div(1e9), solPrice).toNumber()
+
+			return { ...data, bought, sold, realizedPnl }
+		})
+}

@@ -25,12 +25,11 @@ export async function getTokens(searchParams: SearchParams) {
 	})
 
 	const solPrice = await getSolPrice()
+	const TokenFeedSchema = createTokenFeedSchema({
+		solPrice,
+	})
 
 	const data = tokens.map(token => {
-		const TokenFeedSchema = createTokenFeedSchema({
-			solPrice,
-		})
-
 		const parsed = TokenFeedSchema.safeParse(token)
 
 		if (!parsed.success) {
