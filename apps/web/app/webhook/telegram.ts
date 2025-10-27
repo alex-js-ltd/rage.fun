@@ -81,11 +81,12 @@ export async function publishSwapEvent(event: SwapEventType, token: TokenFeedTyp
 		photo: image, // Ensure this is a valid, direct image URL
 		caption: caption,
 		parse_mode: 'MarkdownV2',
+
+		reply_markup: {
+			inline_keyboard: [[{ text: 'Buy on Dialect', url: `${dialectUrl}` }]],
+		},
 	}
 
-	// reply_markup: {
-	// 	inline_keyboard: [[{ text: 'Buy on Dialect', url: `${dialectUrl}` }]],
-	// },
 	try {
 		const res = await client(url, {
 			method: 'POST',
