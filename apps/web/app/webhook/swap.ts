@@ -256,7 +256,7 @@ export async function processSwapEvents(swapEvents: EventData<'swapEvent'>[]) {
 			await DiscordAlerts.publishSwapEvent(alert.swapEvent, alert.token, alert.topHolders)
 			await TelegramAlerts.publishSwapEvent(alert.swapEvent, alert.token, alert.topHolders)
 		} catch (err) {
-			console.error(`🔥 Error processing swap alert for ${alert.swapEvent.id}:`, err)
+			console.error(`🔥 Error processing social alert for ${alert.swapEvent.tokenId}:`, err)
 		}
 	}
 }

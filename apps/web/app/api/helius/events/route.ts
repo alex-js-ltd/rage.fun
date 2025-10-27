@@ -11,7 +11,6 @@ import { processHarvestEvents } from '@/app/webhook/harvest'
 import { processRaydiumEvents } from '@/app/webhook/raydium'
 
 const { HELIUS_SECRET, RPC_URL } = getServerEnv()
-console.log(RPC_URL)
 
 export async function POST(request: NextRequest) {
 	const requestHeaders = new Headers(request.headers)
@@ -51,8 +50,7 @@ export async function POST(request: NextRequest) {
 	// Return a success response
 	return NextResponse.json(
 		{
-			message: 'Submission successful',
-			data: events,
+			sucess: true,
 		},
 		{ status: 201 },
 	)
