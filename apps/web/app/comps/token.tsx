@@ -27,6 +27,7 @@ import { SwapForm, SwapFormFallback } from '@/app/comps/swap_form'
 import { Header } from '@/app/comps/header'
 import { generateSolanaBlink } from '@/app/utils/dialect'
 import { getPnLForToken } from '@/app/data/get_pnl_for_token'
+import { PnLTable } from '@/app/comps/pnl_table'
 
 type Props = {
 	params: Promise<{ mint: string }>
@@ -90,6 +91,12 @@ export async function Token(props: Props) {
 								Holders
 							</Button>
 						</Trigger>
+
+						{/* <Trigger value="tab3" asChild>
+							<Button className="data-[state=active]:border-white border-b border-transparent" variant="chart">
+								PnL
+							</Button>
+						</Trigger> */}
 					</List>
 
 					<Content
@@ -111,6 +118,16 @@ export async function Token(props: Props) {
 							<HoldersTable holdersPromise={holdersPromise} />
 						</Suspense>
 					</Content>
+
+					{/* <Content
+						value="tab3"
+						forceMount
+						className="data-[state=inactive]:absolute data-[state=inactive]:opacity-0 data-[state=inactive]:pointer-events-none max-h-[172px]"
+					>
+						<Suspense fallback={<Loading i={2} className="w-full h-[172px] overflow-hidden " />}>
+							<PnLTable pnlPromise={pnlPromise} />
+						</Suspense>
+					</Content> */}
 				</Tabs>
 
 				<ReplyForm mint={mint} />

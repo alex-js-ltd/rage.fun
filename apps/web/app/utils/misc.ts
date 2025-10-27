@@ -174,7 +174,7 @@ export function formatNumberSmart(num: number): string {
 	if (num === 0) return '0'
 
 	if (num >= 0.01) {
-		return num.toFixed(2) // two decimals for "normal" numbers
+		return num.toFixed(4) // two decimals for "normal" numbers
 	}
 
 	// fallback for ultra tiny numbers

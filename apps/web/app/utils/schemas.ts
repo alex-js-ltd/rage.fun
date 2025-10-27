@@ -474,3 +474,5 @@ export function createPnLSchema(options: { solPrice: number }) {
 			return { ...data, bought, sold, realizedPnl }
 		})
 }
+
+export type PnlType = z.infer<ReturnType<typeof createPnLSchema>>

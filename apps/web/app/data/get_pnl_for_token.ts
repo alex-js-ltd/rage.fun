@@ -9,7 +9,13 @@ export async function getPnLForToken(mint: string) {
 		where: {
 			tokenId: mint,
 		},
+
+		orderBy: {
+			realizedPnl: 'desc', // 👈 biggest profit first
+		},
 	})
+
+	console.log(pnl)
 
 	const solPrice = await getSolPrice()
 
