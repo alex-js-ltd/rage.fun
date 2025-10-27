@@ -23,7 +23,7 @@ import { revalidateTag, revalidatePath } from 'next/cache'
 
 import { getServerEnv } from '@/app/utils/env'
 
-import { SwapEventSchema, SwapEventType, TokenFeedType, TopHolderType } from '@/app/utils/schemas'
+import { SwapEventSchema, SwapEventType, TokenFeedType, TopHolderType, BondingcurveSchema } from '@/app/utils/schemas'
 import { getTokenFeed } from '@/app/data/get_token_feed'
 import { getSigner } from '@/app/utils/misc'
 import { getTransaction } from '@/app/data/get_single_transaction'
@@ -31,6 +31,8 @@ import { getTopHolders } from '@/app/data/get_top_holders'
 import { getVolume } from '@/app/data/get_volume'
 import { calculatePrice, calculateMarketCap } from './create'
 import { getTransactionCount } from '@/app/data/get_transaction_count'
+
+import { getTokenBalance } from '@/app/data/get_token_balance'
 
 import * as Ably from 'ably'
 import * as AblyEvents from '@/app/webhook/ably'
@@ -290,6 +292,11 @@ export async function computePnlForSigner(tokenId: string, signer: string) {
 	const bought = buy._sum.lamports ?? BigInt('0')
 	const sold = sell._sum.lamports ?? BigInt('0')
 	const realizedPnl = sold - bought
+
+	// 4, Get unrealized PnL
+	const tokenBalance = await getTokenBalance(new PublicKey(tokenId), new PublicKey(signer))
+
+	console.log('token balance', tokenBalance)
 
 	return {
 		signer,

@@ -1,14 +1,13 @@
 'use client'
 
-import { type ReactNode, useActionState, use, useEffect, useState, useCallback, Suspense } from 'react'
+import { type ReactNode, useActionState, use, useEffect, useState, useCallback } from 'react'
 
 import { Tabs, List, Trigger, Content } from '@/app/comps/tabs'
 import { Button } from '@/app/comps/button'
 
 import { usePayer } from '@/app/hooks/use_payer'
-import { useForm, FormProvider, getFormProps, useInputControl } from '@conform-to/react'
-import { parseWithZod } from '@conform-to/zod'
-import { SwapSchema, WasmType } from '@/app/utils/schemas'
+
+import { type TokenFeedType } from '@/app/utils/schemas'
 import { buyAction, sellAction } from '@/app/actions/swap_action'
 import { Input } from '@/app/comps/input'
 
@@ -19,8 +18,6 @@ import { Toast } from '@/app/comps/toast'
 import { type ToastDescription as ToastConfig, useToast } from '@/app/hooks/use_toast'
 import { useSignAndSendTx } from '@/app/hooks/use_sign_and_send_tx'
 
-import { type TokenFeedType } from '@/app/utils/schemas'
-
 import { useDebounceValue } from 'usehooks-ts'
 import { useAsync } from '@/app/hooks/use_async'
 import { client } from '@/app/utils/client'
@@ -30,10 +27,11 @@ import { useChannel } from 'ably/react'
 import { ConnectWallet } from '@/app/comps/connect_wallet'
 
 import { Progress } from '@/app/comps/progress'
-import { formatCompactNumber } from '../utils/misc'
+import { formatCompactNumber } from '@/app/utils/misc'
 import { fromLamports } from '@repo/rage'
 import { BN } from '@coral-xyz/anchor'
 import { amountToUiAmount } from '@repo/rage'
+import { calculateBuyAmount, calculateSellPrice } from '@/app/utils/wasm'
 
 export interface SwapFormProps {
 	tokenPromise: Promise<TokenFeedType>
@@ -52,28 +50,6 @@ interface FormProps {
 	displayQuote: (amount: string) => string
 
 	getQuickOption: (params: URLSearchParams) => Promise<string>
-}
-
-async function calculateBuyAmount(params: WasmType): Promise<string> {
-	return client<string>(`/api/wasm/calculate_buy_amount`, {
-		method: 'POST',
-		body: JSON.stringify(params),
-		headers: {
-			'Content-Type': 'application/json',
-		},
-		cache: 'no-store',
-	})
-}
-
-async function calculateSellPrice(params: WasmType): Promise<string> {
-	return client<string>(`/api/wasm/calculate_sell_price`, {
-		method: 'POST',
-		body: JSON.stringify(params),
-		headers: {
-			'Content-Type': 'application/json',
-		},
-		cache: 'no-store',
-	})
 }
 
 async function getQuickOptionForBuy(params: URLSearchParams): Promise<string> {
