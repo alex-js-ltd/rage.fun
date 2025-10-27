@@ -200,9 +200,11 @@ model Pnl {
   signer  String
   tokenId String
 
-  bought      BigInt
-  sold        BigInt
-  realizedPnl BigInt
+  bought BigInt
+  sold   BigInt
+
+  realizedPnl   BigInt
+  unrealizedPnl BigInt?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
