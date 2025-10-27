@@ -214,6 +214,7 @@ export async function processSwapEvents(swapEvents: EventData<'swapEvent'>[]) {
 			}
 
 			const tokenId = parsed.data.tokenId
+			const signer = parsed.data.signer
 
 			revalidatePath(`@token/(.)token/${tokenId}`)
 			revalidatePath(`/token/${tokenId}`)
@@ -229,6 +230,10 @@ export async function processSwapEvents(swapEvents: EventData<'swapEvent'>[]) {
 			console.log('top holders', topHolders)
 
 			await AblyEvents.publishTopHoldersEvent(holdersChannel, topHolders, token)
+
+			const pnl = await computePnlForSigner(tokenId, signer)
+
+			await upsertPnL(pnl)
 
 			if (curve.status === 'Complete') {
 				await deployToRaydium({ program, mint: event.data.mint, payer })
@@ -253,5 +258,98 @@ export async function processSwapEvents(swapEvents: EventData<'swapEvent'>[]) {
 		} catch (err) {
 			console.error(`🔥 Error processing swap alert for ${alert.swapEvent.id}:`, err)
 		}
+	}
+}
+
+export async function computePnlForSigner(tokenId: string, signer: string) {
+	// 1. Sum total lamports the signer spent on buys
+	const buy = await prisma.swapEvent.aggregate({
+		where: {
+			tokenId,
+			signer,
+			swapType: 'Buy',
+		},
+		_sum: {
+			lamports: true,
+		},
+	})
+
+	// 2. Sum total lamports they received from sells
+	const sell = await prisma.swapEvent.aggregate({
+		where: {
+			tokenId,
+			signer,
+			swapType: 'Sell',
+		},
+		_sum: {
+			lamports: true,
+		},
+	})
+
+	// 3. Compute realized profit/loss
+	const bought = buy._sum.lamports ?? BigInt('0')
+	const sold = sell._sum.lamports ?? BigInt('0')
+	const realizedPnl = sold - bought
+
+	return {
+		signer,
+		tokenId,
+		bought,
+		sold,
+		realizedPnl,
+	}
+}
+
+export async function upsertPnL({
+	signer,
+	tokenId,
+	bought,
+	sold,
+	realizedPnl,
+}: {
+	signer: string
+	tokenId: string
+	bought: bigint
+	sold: bigint
+	realizedPnl: bigint
+}) {
+	try {
+		const row = await prisma.pnl.upsert({
+			where: {
+				signer_tokenId: {
+					signer,
+					tokenId,
+				},
+			},
+			create: {
+				signer,
+				tokenId,
+				bought,
+				sold,
+				realizedPnl,
+			},
+			update: {
+				bought,
+				sold,
+				realizedPnl,
+			},
+		})
+
+		// 🧠 Format profit visually (add + sign if positive)
+		const pnl = realizedPnl > BigInt('0') ? `+${realizedPnl}` : `${realizedPnl}`
+
+		console.log(
+			`💹 [PnL Updated] Token: ${tokenId}\n` +
+				`👤 Signer: ${signer}\n` +
+				`🟢 Bought: ${bought} lamports\n` +
+				`🔴 Sold: ${sold} lamports\n` +
+				`💰 Realized PnL: ${pnl} lamports\n` +
+				`✅ Upsert successful\n`,
+		)
+
+		return row
+	} catch (err) {
+		console.error(`🔥 [PnL Upsert Error] tokenId=${tokenId}, signer=${signer}`, err)
+		throw err
 	}
 }
