@@ -90,7 +90,7 @@ export function useLightweightChart(
 				bottom: 0.0,
 			},
 
-			mode: 0,
+			mode: 1,
 			autoScale: true,
 		})
 
