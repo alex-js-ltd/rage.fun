@@ -55,7 +55,9 @@ export function useLightweightChart(
 			rightPriceScale: { borderColor: '#FFFFFF20', mode: 1, visible: true, borderVisible: true },
 			timeScale: {
 				tickMarkFormatter: (time: number, _tickMarkType: TickMarkType) => {
-					return dayjs(time).utc().format('H:mm')
+					return dayjs(time * 1000)
+						.utc()
+						.format('H:mm')
 				},
 
 				visible: true, // ✅ Must be true
@@ -69,7 +71,9 @@ export function useLightweightChart(
 
 			localization: {
 				timeFormatter: (time: number) => {
-					return dayjs(time).utc().format('H:mm')
+					return dayjs(time * 1000)
+						.utc()
+						.format('H:mm')
 				},
 			},
 
@@ -184,7 +188,7 @@ export function useLightweightChart(
 }
 
 function formatEvent(e: { time: string; price: number }) {
-	return { time: new Decimal(e.time.toString()).mul(1000).toNumber(), value: e.price }
+	return { time: new Decimal(e.time.toString()).toNumber(), value: e.price }
 }
 
 const green = '#8DF0CC' // lime green (buy candle fill)

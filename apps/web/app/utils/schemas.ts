@@ -420,34 +420,34 @@ export const TokenSearchParamsSchema = z
 	.transform(data => {
 		switch (data.interval) {
 			case '1s':
-				return { interval: 1000 }
+				return { interval: 1 }
 			case '15s':
-				return { interval: 15000 }
+				return { interval: 15 }
 			case '30s':
-				return { interval: 30000 }
+				return { interval: 30 }
 
 			case '1m':
-				return { interval: 60000 }
+				return { interval: 60 }
 			case '5m':
-				return { interval: 300000 }
+				return { interval: 300 }
 			case '15m':
-				return { interval: 900000 }
+				return { interval: 900 }
 			case '30m':
-				return { interval: 1800000 }
+				return { interval: 1800 }
 
 			case '1h':
-				return { interval: 3600000 }
+				return { interval: 3600 }
 			case '4h':
-				return { interval: 14400000 }
+				return { interval: 14400 }
 			case '6h':
-				return { interval: 21600000 }
+				return { interval: 21600 }
 			case '12h':
-				return { interval: 43200000 }
+				return { interval: 43200 }
 			case '24h':
-				return { interval: 86400000 }
+				return { interval: 86400 }
 
 			default:
-				return { interval: 300000 } // fallback to 5m
+				return { interval: 300 } // fallback to 5m
 		}
 	})
 

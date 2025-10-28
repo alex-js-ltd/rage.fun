@@ -9,8 +9,9 @@ const green = '#8DF0CC' // lime green (buy candle fill)
 const red = '#E5989B'
 
 function generateCandlestickData(events: SwapEvent[], interval: number) {
+	console.log(events)
 	const formattedEvents = events.map(e => ({
-		time: new Decimal(e.time.toString()).mul(1000).toNumber(),
+		time: new Decimal(e.time.toString()).toNumber(),
 		value: e.price.toNumber(),
 	}))
 
@@ -65,7 +66,7 @@ export function generateMarkers(events: SwapEvent[], creatorId: string) {
 		const shape = 'circle'
 
 		// timestamp → ms → UTCTimestamp
-		const timestamp = new Decimal(curr.time.toString()).mul(1000).toNumber() as UTCTimestamp
+		const timestamp = new Decimal(curr.time.toString()).toNumber() as UTCTimestamp
 
 		const text = '🧑‍🎨'
 
