@@ -117,27 +117,23 @@ export async function initializeAction(_prevState: State, formData: FormData) {
 
 	const sim = await connection.simulateTransaction(tx)
 
-	if (sim.value.err !== null) {
+	if (sim.value.err !== null && !isInstructionError(sim.value.err)) {
 		await deleteToken(mint, session?.user?.id)
-
-		if (!isInstructionError(sim.value.err)) {
-			return {
-				...submission.reply(),
-				serializedTx: undefined,
-				errMessage: 'unknown error',
-				requestId,
-			}
+		return {
+			...submission.reply(),
+			serializedTx: undefined,
+			errMessage: 'Insufficient balance',
+			requestId,
 		}
-
-		if (isInstructionError(sim.value.err)) {
-			const code = sim.value.err.InstructionError[1].Custom
-			const errMessage = getErrorMessage(code)
-			return {
-				...submission.reply(),
-				serializedTx: undefined,
-				errMessage,
-				requestId,
-			}
+	} else if (sim.value.err !== null && isInstructionError(sim.value.err)) {
+		const code = sim.value.err.InstructionError[1].Custom
+		const errMessage = getErrorMessage(code)
+		await deleteToken(mint, session?.user?.id)
+		return {
+			...submission.reply(),
+			serializedTx: undefined,
+			errMessage,
+			requestId,
 		}
 	}
 
