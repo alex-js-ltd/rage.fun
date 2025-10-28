@@ -188,7 +188,7 @@ export function useLightweightChart(
 }
 
 function formatEvent(e: { time: string; price: number }) {
-	return { time: new Decimal(e.time.toString()).toNumber(), value: e.price }
+	return { time: new Decimal(e.time).toNumber(), value: e.price }
 }
 
 const green = '#8DF0CC' // lime green (buy candle fill)
