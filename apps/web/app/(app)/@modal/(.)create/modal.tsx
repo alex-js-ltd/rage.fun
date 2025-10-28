@@ -3,9 +3,6 @@
 import React, { type ReactNode, useRef, useEffect } from 'react'
 import * as DialogPrimitive from '@radix-ui/react-dialog'
 import { useRouter } from 'next/navigation'
-import { useSwipeable } from 'react-swipeable'
-import { cn } from '@/app/utils/misc'
-import { useParams } from 'next/navigation'
 
 export function Modal(props: { children: React.ReactNode }) {
 	const router = useRouter()
