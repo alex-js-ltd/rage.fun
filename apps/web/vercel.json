@@ -1,6 +1,14 @@
 {
   "crons": [
     {
+      "path": "/api/cron/buy",
+      "schedule": "* * * * *"
+    },
+    {
+      "path": "/api/cron/sell",
+      "schedule": "* * * * *"
+    },
+    {
       "path": "/api/cron/sol_price",
       "schedule": "0 0 * * *"
     },
