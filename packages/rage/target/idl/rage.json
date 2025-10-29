@@ -1238,6 +1238,11 @@
       "code": 6015,
       "name": "SlippageExceeded",
       "msg": "Slippage exceeded."
+    },
+    {
+      "code": 6016,
+      "name": "InvalidAta",
+      "msg": "Missing token account"
     }
   ],
   "types": [

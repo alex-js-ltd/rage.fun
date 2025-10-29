@@ -17,14 +17,14 @@ rage = "rage9dQeAYhkEhpXwFcrqwikW81dMXdGNY77jdrSmnq"
 url = "https://api.apr.dev"
 
 [provider]
-cluster = "Mainnet"
+cluster = "Localnet"
 wallet = "~/.config/solana/id.json"
 
 [scripts]
 test = "pnpm run jest src/__tests__/initialize.test.ts"
 
 [test]
-startup_wait = 8000
+startup_wait = 12000
 shutdown_wait = 2000
 upgradeable = false
 

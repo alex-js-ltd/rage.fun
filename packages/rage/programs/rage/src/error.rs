@@ -59,4 +59,7 @@ pub enum ErrorCode {
 
     #[msg("Slippage exceeded.")]
     SlippageExceeded,
+
+    #[msg("Missing token account")]
+    InvalidAta,
 }

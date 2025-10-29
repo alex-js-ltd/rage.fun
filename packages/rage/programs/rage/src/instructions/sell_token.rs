@@ -71,6 +71,14 @@ pub fn sell_token(ctx: Context<SellToken>, token_amount: u64, min_output: u64) -
     require_eq!(ctx.accounts.bonding_curve_auth.owner, &crate::id());
     require_eq!(ctx.accounts.trading_fee_auth.owner, &crate::id());
 
+    if ctx.accounts.token_0_seller_ata.data_is_empty() {
+        return Err(ErrorCode::InvalidAta.into());
+    }
+
+    if ctx.accounts.bonding_curve_state.status != Status::Funding {
+        return Err(ErrorCode::BondingCurveComplete.into());
+    }
+
     let token_0_seller_ata = spl_token_2022::extension::StateWithExtensions::<
         spl_token_2022::state::Account,
     >::unpack(&ctx.accounts.token_0_seller_ata.data.borrow())?

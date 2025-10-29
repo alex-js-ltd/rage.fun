@@ -1244,6 +1244,11 @@ export type Rage = {
       "code": 6015,
       "name": "slippageExceeded",
       "msg": "Slippage exceeded."
+    },
+    {
+      "code": 6016,
+      "name": "invalidAta",
+      "msg": "Missing token account"
     }
   ],
   "types": [
