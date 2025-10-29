@@ -48,9 +48,9 @@ export default async function Page(props: Props) {
 						<Trending trendingPromise={trendingPromise} />
 					</Suspense>
 
-					{/* <Suspense fallback={<TrendingFallBack />}>
+					<Suspense fallback={<TrendingFallBack />}>
 						<TopCreators topCreatorsPromise={topCreatorsPromise} />
-					</Suspense> */}
+					</Suspense>
 
 					{!session ? null : (
 						<Suspense fallback={null}>
