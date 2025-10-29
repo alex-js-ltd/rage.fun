@@ -4,8 +4,9 @@ import {
 	type SwapEventType,
 	type UpdateEnumType,
 	type TopHolderType,
-	CommentType,
-	TransactionTableType,
+	type CommentType,
+	type TransactionTableType,
+	type PnlType,
 } from '@/app/utils/schemas'
 import { type SignatureStatus } from '@solana/web3.js'
 import 'server-only'
@@ -64,6 +65,14 @@ export async function publishCommentEvent(channel: Ably.Channel, comment: Commen
 export async function publishTrendingEvent(channel: Ably.Channel, tokens: TokenFeedType[]) {
 	try {
 		await channel.publish('trendingEvent', { tokens })
+	} catch (error) {
+		console.error(error)
+	}
+}
+
+export async function publishPnLEvent(channel: Ably.Channel, pnl: PnlType) {
+	try {
+		await channel.publish('pnlEvent', { ...pnl })
 	} catch (error) {
 		console.error(error)
 	}

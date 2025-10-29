@@ -19,11 +19,11 @@ import {
 import { connection } from '@/app/utils/setup'
 
 import { Program } from '@coral-xyz/anchor'
-import { revalidateTag, revalidatePath } from 'next/cache'
+import { revalidatePath } from 'next/cache'
 
 import { getServerEnv } from '@/app/utils/env'
 
-import { SwapEventSchema, SwapEventType, TokenFeedType, TopHolderType, BondingcurveSchema } from '@/app/utils/schemas'
+import { SwapEventSchema, SwapEventType, TokenFeedType, TopHolderType, createPnLSchema } from '@/app/utils/schemas'
 import { getTokenFeed } from '@/app/data/get_token_feed'
 import { getSigner } from '@/app/utils/misc'
 import { getTransaction } from '@/app/data/get_single_transaction'
@@ -31,9 +31,7 @@ import { getTopHolders } from '@/app/data/get_top_holders'
 import { getVolume } from '@/app/data/get_volume'
 import { calculatePrice, calculateMarketCap } from './create'
 import { getTransactionCount } from '@/app/data/get_transaction_count'
-
-import { getTokenBalance } from '@/app/data/get_token_balance'
-import { calculateSellPrice } from '@/app/utils/wasm'
+import { getSolPrice } from '@/app/data/get_sol_price'
 
 import * as Ably from 'ably'
 import * as AblyEvents from '@/app/webhook/ably'
@@ -190,6 +188,7 @@ export async function processSwapEvents(swapEvents: EventData<'swapEvent'>[]) {
 	const updateChannel = client.channels.get('updateEvent')
 	const transactionChannel = client.channels.get('transactionEvent')
 	const holdersChannel = client.channels.get('holdersEvent')
+	const pnlChannel = client.channels.get('pnlEvent')
 	const payer = getSigner(PROXY_PRIVATE_KEY)
 
 	const socialAlerts: Array<{ swapEvent: SwapEventType; token: TokenFeedType; topHolders: TopHolderType[] }> = []
@@ -234,9 +233,17 @@ export async function processSwapEvents(swapEvents: EventData<'swapEvent'>[]) {
 
 			await AblyEvents.publishTopHoldersEvent(holdersChannel, topHolders, token)
 
-			const pnl = await computePnl(tokenId, signer, curve)
+			const pnl = await upsertPnL(tokenId, signer)
 
-			await upsertPnL(pnl)
+			const solPrice = await getSolPrice()
+
+			const PnlSchema = createPnLSchema({ solPrice })
+
+			const parse = PnlSchema.safeParse(pnl)
+
+			if (parse.success) {
+				await AblyEvents.publishPnLEvent(pnlChannel, parse.data)
+			}
 
 			if (curve.status === 'Complete') {
 				await deployToRaydium({ program, mint: event.data.mint, payer })
@@ -264,19 +271,9 @@ export async function processSwapEvents(swapEvents: EventData<'swapEvent'>[]) {
 	}
 }
 
-export async function upsertPnL({
-	signer,
-	tokenId,
-	bought,
-	sold,
-	realizedPnl,
-}: {
-	signer: string
-	tokenId: string
-	bought: bigint
-	sold: bigint
-	realizedPnl: bigint
-}) {
+export async function upsertPnL(tokenId: string, signer: string) {
+	const { bought, sold, realizedPnl } = await computePnl(tokenId, signer)
+
 	try {
 		const row = await prisma.pnl.upsert({
 			where: {
@@ -318,7 +315,7 @@ export async function upsertPnL({
 	}
 }
 
-export async function computePnl(tokenId: string, signer: string, curve: BondingCurve) {
+export async function computePnl(tokenId: string, signer: string) {
 	//
 	// 1. Aggregate SOL in/out
 	//
