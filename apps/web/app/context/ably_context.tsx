@@ -42,6 +42,10 @@ export function TrendingProvider({ children }: { children: ReactNode }) {
 	return <ChannelProvider channelName="trendingEvent">{children}</ChannelProvider>
 }
 
+export function PnLProvider({ children }: { children: ReactNode }) {
+	return <ChannelProvider channelName="pnlEvent">{children}</ChannelProvider>
+}
+
 export function RealTime({ children }: { children: ReactNode }) {
 	return (
 		<AblyProvider>
@@ -52,7 +56,9 @@ export function RealTime({ children }: { children: ReactNode }) {
 							<HoldersProvider>
 								<CommentProvider>
 									<TransactionProvider>
-										<TrendingProvider>{children}</TrendingProvider>
+										<TrendingProvider>
+											<PnLProvider>{children}</PnLProvider>
+										</TrendingProvider>
 									</TransactionProvider>
 								</CommentProvider>
 							</HoldersProvider>
