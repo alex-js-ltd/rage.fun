@@ -9,7 +9,6 @@ const green = '#8DF0CC' // lime green (buy candle fill)
 const red = '#E5989B'
 
 function generateCandlestickData(events: SwapEvent[], interval: number) {
-	console.log(events)
 	const formattedEvents = events.map(e => ({
 		time: new Decimal(e.time.toString()).toNumber(),
 		value: e.price.toNumber(),

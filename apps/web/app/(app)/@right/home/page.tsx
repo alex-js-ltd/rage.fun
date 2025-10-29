@@ -30,8 +30,6 @@ export default async function Page(props: Props) {
 
 	const topCreatorsPromise = getTopCreators()
 
-	console.log(await topCreatorsPromise)
-
 	return (
 		<div className="relative w-full">
 			<div className="sticky top-0 z-40">

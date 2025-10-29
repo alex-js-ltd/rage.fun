@@ -31,7 +31,6 @@ export async function getTopCreators(limit = 3) {
 			const totalYieldSol = new Decimal(row._sum.lamports?.toString() ?? 0).div(LAMPORTS_PER_SOL)
 
 			const discord = user?.accounts.filter(({ provider }) => provider === 'discord')[0]
-			console.log(discord)
 
 			const uiAmount = solToUsd(totalYieldSol, solPrice).toNumber().toFixed(2)
 			return {
