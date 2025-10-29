@@ -135,16 +135,15 @@ export async function publishCreateAlert(event: EventData<'createEvent'>, token:
 		'',
 		// TOKEN INFO SECTION
 		`**🪙 ${token.metadata.symbol}**`,
-		`** ├Creator: \`${event.data.creator.toBase58()}\`**`,
+		`** ├Creator: \`${shortAddress(event.data.creator.toBase58())}\`**`,
 		'',
-		// BONDING CURVE SECTION
-		`**🌀 BONDING CURVE**`,
-		`** ├Progress: 0%**`,
+
 		'',
 		// LINKS SECTION
 		`**🔗 LINKS**`,
 		`** ├**[**solscan.io**](<${solScanUrl}>)`,
 		`** ├**[**letrage.fun**](${letsRageUrl})`,
+		`** ├**[**Buy on Dialect**](<${dialectUrl}>)`,
 
 		'',
 	].join('\n')
