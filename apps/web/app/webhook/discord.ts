@@ -181,7 +181,8 @@ export async function publishHarvestAlert(event: HarvestEvent, token: TokenFeedT
 
 	const solScanUrl = `https://solscan.io/tx/${signature}`
 	const rageUrl = `https://www.letsrage.fun/token/${mint}?interval=1m`
-	const dialectUrl = generateSolanaBlink(mint)
+	const dialectBuy = buyBlink(token.id)
+	const dialectSell = sellBlink(token.id)
 
 	const caption = [
 		`${alertMessage}`,
@@ -194,7 +195,9 @@ export async function publishHarvestAlert(event: HarvestEvent, token: TokenFeedT
 		`**🔗 LINKS**`,
 		`** ├**[**solscan.io**](<${solScanUrl}>)`,
 		`** ├**[**letsrage.fun**](<${rageUrl}>)`,
-		`** ├**[**Buy on Dialect**](<${dialectUrl}>)`,
+
+		`** ├**[**Buy on Dialect**](<${dialectBuy}>)`,
+		`** ├**[**Sell on Dialect**](${dialectSell})`,
 	].join('\n')
 
 	// Then in your Discord webhook payload:
