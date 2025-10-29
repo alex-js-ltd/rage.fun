@@ -7,7 +7,6 @@ import { shortAddress } from '@/app/utils/misc'
 import * as Ably from 'ably'
 import { useChannel } from 'ably/react'
 import { useParams } from 'next/navigation'
-import { formatNumberSmart } from '@/app/utils/misc'
 import { cn } from '@/app/utils/misc'
 
 export type PnLTableProps = {
@@ -20,6 +19,22 @@ export function PnLTable({ pnlPromise }: PnLTableProps) {
 	const [state, setState] = useState<PnlType[]>(initial)
 
 	const { mint } = useParams()
+
+	const { channel } = useChannel('pnlEvent', (message: Ably.Message) => {
+		const e: PnlType = message.data
+		console.log('pnl event', e)
+		if (e.tokenId !== mint) return
+
+		setState(prev => {
+			const idx = prev.findIndex(t => t.signer === e.signer)
+			if (idx === -1) return prev
+
+			const next = prev.slice()
+			next[idx] = { ...e }
+
+			return next
+		})
+	})
 
 	if (state.length === 0) return null
 
