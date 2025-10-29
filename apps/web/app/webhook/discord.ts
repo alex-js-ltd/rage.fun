@@ -197,7 +197,7 @@ export async function publishHarvestAlert(event: HarvestEvent, token: TokenFeedT
 		`** ├**[**letsrage.fun**](<${rageUrl}>)`,
 
 		`** ├**[**Buy on Dialect**](<${dialectBuy}>)`,
-		`** ├**[**Sell on Dialect**](${dialectSell})`,
+		`** ├**[**Sell on Dialect**](<${dialectSell}>)`,
 	].join('\n')
 
 	// Then in your Discord webhook payload:
