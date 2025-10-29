@@ -5,6 +5,7 @@ import { GeistSans } from 'geist/font/sans'
 import { GeistMono } from 'geist/font/mono'
 import { Analytics } from '@vercel/analytics/next'
 import { auth } from '@/app/auth'
+import { getTopCreators } from './data/get_top_creators'
 import './globals.css'
 
 export const metadata: Metadata = {

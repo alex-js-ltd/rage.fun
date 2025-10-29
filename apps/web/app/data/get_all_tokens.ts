@@ -8,22 +8,7 @@ export async function getAllTokens() {
 			bondingCurve: { isNot: null },
 		},
 
-		select: {
-			id: true,
-			creatorId: true,
-
-			metadata: {
-				select: {
-					name: true,
-					symbol: true,
-					description: true,
-					image: true,
-					thumbhash: true,
-					createdAt: true,
-					updatedAt: true,
-				},
-			},
-		},
+		include: { metadata: true },
 	})
 
 	const data = tokens.reduce<TokenMetadataType[]>((acc, curr) => {

@@ -476,3 +476,10 @@ export function createPnLSchema(options: { solPrice: number }) {
 }
 
 export type PnlType = z.infer<ReturnType<typeof createPnLSchema>>
+
+export const WalletSchema = z.object({
+	metadata: MetadataSchema,
+	tokenAmount: TokenAmountSchema,
+})
+
+export type WalletType = z.infer<typeof WalletSchema>
