@@ -8,6 +8,8 @@ import { getIsCreator } from '@/app/data/get_is_creator'
 import { SigninMessage } from '@/app/utils/sign_in'
 import { getServerEnv } from '@/app/utils/env'
 import { linkDiscordAccount, assignCreatorRole } from '@/app/webhook/discord'
+import { PrismaAdapter } from '@auth/prisma-adapter'
+import { prisma } from '@/app/utils/db'
 
 const { AUTH_DISCORD_ID, AUTH_DISCORD_SECRET } = getServerEnv()
 
@@ -15,6 +17,8 @@ export const { auth, signIn, signOut, handlers } = NextAuth({
 	...authConfig,
 
 	trustHost: true,
+	adapter: PrismaAdapter(prisma),
+	session: { strategy: 'jwt' },
 
 	providers: [
 		Credentials({
@@ -71,6 +75,22 @@ export const { auth, signIn, signOut, handlers } = NextAuth({
 					console.error('❌ Discord link/update failed', error)
 				}
 			}
+		},
+	},
+
+	callbacks: {
+		authorized({ auth, request: { nextUrl } }) {
+			const isLoggedIn = !!auth?.user
+
+			return isLoggedIn
+		},
+
+		// ✅ Expose public key in session.user.id
+		async session({ session, token }) {
+			if (token?.sub) {
+				session.user.id = token.sub
+			}
+			return session
 		},
 	},
 })
