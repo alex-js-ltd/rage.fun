@@ -28,7 +28,7 @@ export async function GET(req: NextRequest) {
 
 	const previous = await getTrendingTokens()
 
-	const since = dayjs().subtract(30, 'minute').toDate()
+	const since = dayjs().subtract(5, 'minute').toDate()
 
 	const rows = await prisma.token.findMany({
 		where: {
