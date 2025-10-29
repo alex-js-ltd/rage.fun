@@ -1,5 +1,9 @@
+import { getEnv } from '@/app/utils/env'
+
+const { BASE_URL } = getEnv()
+
 async function client<DataType>(endpoint: string, config: RequestInit): Promise<DataType> {
-	return fetch(`${endpoint}`, config).then(async response => {
+	return fetch(`${BASE_URL}${endpoint}`, config).then(async response => {
 		const contentType = response.headers.get('content-type')
 
 		let data = null
