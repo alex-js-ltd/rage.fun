@@ -10,49 +10,38 @@ import * as Ably from 'ably'
 import { useChannel } from 'ably/react'
 
 import { Loading } from './loading'
+import { shortAddress } from '../utils/misc'
 
-export function Trending({ trendingPromise }: { trendingPromise: Promise<TokenFeedType[]> }) {
-	const data = use(trendingPromise)
+export function TopCreators({
+	topCreatorsPromise,
+}: {
+	topCreatorsPromise: Promise<{ user: { id: string }; yield: { uiAmount: string } }[]>
+}) {
+	const data = use(topCreatorsPromise)
 
 	const [state, setState] = useState(data)
-
-	const { channel } = useChannel('trendingEvent', (message: Ably.Message) => {
-		const e: { tokens: TokenFeedType[] } = message.data
-
-		setState(e.tokens)
-	})
 
 	return (
 		<div className="border border-white border-opacity-[0.125] rounded-2xl w-full overflow-hidden">
 			<div className="h-[48px] flex items-center px-3">
-				<h2 className="text-white font-semibold text-[15px]">Trending</h2>
+				<h2 className="text-white font-semibold text-[15px]">Top Creators</h2>
 			</div>
 			<ul className="grid">
-				{state.map(t => (
-					<li key={t.id} className="w-full hover:bg-white/10 h-[65.55px] px-3">
+				{state?.map(c => (
+					<li key={c.user.id} className="w-full hover:bg-white/10 h-[65.55px] px-3">
 						<Link
-							aria-label={`View ${t.metadata.name}`}
-							href={{
-								pathname: `/token/${t.id}`,
-								query: { interval: '5m' },
-							}}
-							as={`/token/${t.id}?interval=5m`}
-							scroll={true}
 							className="flex items-center justify-between h-full"
+							href={{
+								pathname: `/${c.user.id}`,
+							}}
+							as={`/${c.user.id}`}
+							scroll={true}
 						>
-							<div className="relative size-[40px] rounded-full overflow-hidden">
-								<Image
-									src={t.metadata.image}
-									alt={t.metadata.name}
-									width={40}
-									height={40}
-									blurDataURL={createPngDataUri(t.metadata.thumbhash)}
-									placeholder="blur"
-									className="w-full h-full object-cover object-center"
-								/>
+							<div className="relative h-[40px] flex items-center ">
+								<span className="font-medium text-text-200 text-sm">{shortAddress(c.user.id)}</span>
 							</div>
 
-							<span className="text-text-100 text-sm">{t.metadata.symbol}</span>
+							<span className="font-medium text-buy-100 text-sm">{`+$${c.yield.uiAmount}`}</span>
 						</Link>
 					</li>
 				))}

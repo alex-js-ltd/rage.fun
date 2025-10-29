@@ -7,7 +7,8 @@ import { Trending, TrendingFallBack } from '@/app/comps/trending'
 import { Welcome } from '@/app/comps/welcome'
 import { auth } from '@/app/auth'
 import { getDiscordId } from '@/app/data/get_discord_id'
-
+import { TopCreators } from '@/app/comps/top_creators'
+import { getTopCreators } from '@/app/data/get_top_creators'
 export const dynamic = 'force-dynamic'
 
 type Props = {
@@ -27,6 +28,10 @@ export default async function Page(props: Props) {
 
 	const discordIdPromise = getDiscordId(session?.user?.id)
 
+	const topCreatorsPromise = getTopCreators()
+
+	console.log(await topCreatorsPromise)
+
 	return (
 		<div className="relative w-full">
 			<div className="sticky top-0 z-40">
@@ -44,6 +49,11 @@ export default async function Page(props: Props) {
 					<Suspense fallback={<TrendingFallBack />}>
 						<Trending trendingPromise={trendingPromise} />
 					</Suspense>
+
+					{/* <Suspense fallback={<TrendingFallBack />}>
+						<TopCreators topCreatorsPromise={topCreatorsPromise} />
+					</Suspense> */}
+
 					{!session ? null : (
 						<Suspense fallback={null}>
 							<Welcome discordIdPromise={discordIdPromise} />
