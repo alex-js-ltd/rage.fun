@@ -15,6 +15,7 @@ import { HarvestEvent } from '@prisma/client'
 import { solToUsd } from '@/app/utils/misc'
 import { Decimal } from '@prisma/client/runtime/library'
 import { prisma } from '@/app/utils/db'
+import { Account } from 'next-auth'
 
 const {
 	DISCORD_WEBHOOK_ALERT_URL,
@@ -214,29 +215,58 @@ export async function publishHarvestAlert(event: HarvestEvent, token: TokenFeedT
 	console.log('harvest result:', res)
 }
 
-export async function linkDiscordAccount(discordId: string, userId: string) {
-	const account = await prisma.account.upsert({
+export async function linkDiscordAccount(account: Account, userId: string) {
+	const {
+		type,
+		provider,
+		providerAccountId,
+		refresh_token,
+		access_token,
+		expires_at,
+		token_type,
+		scope,
+		id_token,
+		session_state,
+	} = account
+
+	console.log('account', account)
+	const data = await prisma.account.upsert({
 		where: {
 			// composite unique identifier from @@id([provider, providerAccountId])
 			provider_providerAccountId: {
-				provider: 'discord',
-				providerAccountId: discordId,
+				provider,
+				providerAccountId,
 			},
 		},
 		update: {
 			// if this Discord is already known, make sure it's linked to THIS wallet
 			userId,
-			type: 'oauth',
+			type,
+			provider,
+			providerAccountId,
+			refresh_token,
+			access_token,
+			expires_at,
+			token_type,
+			scope,
+			id_token,
 		},
 		create: {
 			userId,
-			type: 'oauth',
-			provider: 'discord',
-			providerAccountId: discordId,
+
+			type,
+			provider,
+			providerAccountId,
+			refresh_token,
+			access_token,
+			expires_at,
+			token_type,
+			scope,
+			id_token,
 		},
 	})
 
-	return account
+	return data
 }
 
 export async function assignCreatorRole(discordUserId: string) {
