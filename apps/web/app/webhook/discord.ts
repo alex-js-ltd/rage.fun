@@ -1,7 +1,7 @@
 import { getServerEnv } from '@/app/utils/env'
 
 import { type EventData, fromLamports, amountToUiAmount } from '@repo/rage'
-import { generateSolanaBlink } from '@/app/utils/dialect'
+import { buyBlink, generateSolanaBlink, sellBlink } from '@/app/utils/dialect'
 
 import { type TokenFeedType, SwapEventType } from '@/app/utils/schemas'
 
@@ -44,7 +44,8 @@ export async function publishSwapEvent(event: SwapEventType, token: TokenFeedTyp
 
 	const solScanUrl = `https://solscan.io/tx/${event.id}`
 	const rageUrl = `https://www.letsrage.fun/token/${token.id}?interval=5m`
-	const dialectUrl = generateSolanaBlink(token.id)
+	const dialectBuy = buyBlink(token.id)
+	const dialectSell = sellBlink(token.id)
 
 	const topHolderLines = topHolders
 		.reduce<string[]>((acc, curr) => {
@@ -86,7 +87,8 @@ export async function publishSwapEvent(event: SwapEventType, token: TokenFeedTyp
 		`**🔗 LINKS**`,
 		`** ├**[**solscan.io**](<${solScanUrl}>)`,
 		`** ├**[**letsrage.fun**](<${rageUrl}>)`,
-		`** ├**[**Buy on Dialect**](${dialectUrl})`,
+		`** ├**[**Buy on Dialect**](<${dialectBuy}>)`,
+		`** ├**[**Sell on Dialect**](${dialectSell})`,
 
 		'',
 	].join('\n')
