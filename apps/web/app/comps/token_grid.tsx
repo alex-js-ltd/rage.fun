@@ -360,32 +360,65 @@ async function loadMore(params: URLSearchParams): Promise<InitialState> {
 
 export function TokenCardFallback({ i, children }: { i: number; children?: React.ReactNode }) {
 	return (
-		<article className="group relative flex flex-col w-full h-[178px] overflow-hidden border-b border-white border-opacity-[0.125]">
-			<div className="relative cursor-pointer p-4 grid grid-cols-1 gap-4">
+		<article className="group relative flex flex-col w-full h-full min-h-[178px] border-b border-white border-opacity-[0.125] hover:bg-white/10 bg-background-100">
+			<div className="relative p-4 flex flex-col gap-4 ">
 				<div className="flex gap-4">
-					<SquareProgress progress={0} size={74}>
-						<div className="w-[72px] h-[72px] relative rounded-md overflow-hidden flex-shrink-0">
-							<Loading i={i} />
-						</div>
-					</SquareProgress>
+					<div className="flex flex-col items-center gap-[4px]">
+						<SquareProgress progress={0} size={74}>
+							<Loading
+								className="w-[72px] h-[72px] cursor-pointer relative rounded-md overflow-hidden flex-shrink-0"
+								i={0}
+							></Loading>
+						</SquareProgress>
 
-					<div className="grid grid-cols-1 gap-1 w-full">
-						<div className="text text-text-200 w-fit">
-							<Loading className="text-sm w-[62px] h-[12px] rounded-full" i={i + 1} />
+						<span className="text-xs text-text-200 font-medium">
+							<Loading
+								className="w-[72px] h-[10px] cursor-pointer relative rounded-full overflow-hidden flex-shrink-0"
+								i={1}
+							></Loading>
+						</span>
+					</div>
+
+					<div className="flex flex-col gap-2 w-full">
+						<div className="text-[16px] font-medium text-text-100 w-full">
+							<Loading
+								className="w-[72px] h-[24px] cursor-pointer relative rounded-full overflow-hidden flex-shrink-0"
+								i={2}
+							></Loading>
 						</div>
-						<div className="text-xs text-text-200 w-fit">
-							<Loading className="text-xs w-[62px] h-[10px] rounded-full" i={i + 2} />
+
+						<div className="flex items-center gap-1">
+							<span className="text-rage-100 font-medium font-mono text-[15px]">
+								<Loading
+									className="w-[72px] h-[22px] cursor-pointer relative rounded-full overflow-hidden flex-shrink-0"
+									i={3}
+								></Loading>
+							</span>
 						</div>
 					</div>
 				</div>
 
-				<div className="flex gap-2 items-center flex-wrap">
-					<div className="flex gap-2 items-center flex-wrap">
-						<Loading className="w-[62px] h-[20px] rounded-full" i={i + 3} />
-						<Loading className="w-[62px] h-[20px] rounded-full" i={i + 4} />
-						<Loading className="w-[62px] h-[20px] rounded-full" i={i + 5} />
-						<Loading className="w-[62px] h-[20px] rounded-full" i={i + 6} />
-						<Loading className="w-[62px] h-[20px] rounded-full" i={i + 7} />
+				<div className="flex gap-2 items-center flex-wrap h-[32px]">
+					<div className="flex gap-1 items-center flex-wrap border border-white border-opacity-[0.05] rounded-full px-1 py-1">
+						<Loading
+							className="w-[60px] h-[16px] cursor-pointer relative rounded-md overflow-hidden flex-shrink-0"
+							i={4}
+						></Loading>
+
+						<Loading
+							className="w-[60px] h-[16px] cursor-pointer relative rounded-md overflow-hidden flex-shrink-0"
+							i={5}
+						></Loading>
+
+						<Loading
+							className="w-[60px] h-[16px] cursor-pointer relative rounded-md overflow-hidden flex-shrink-0"
+							i={6}
+						></Loading>
+
+						<Loading
+							className="w-[60px] h-[16px] cursor-pointer relative rounded-md overflow-hidden flex-shrink-0"
+							i={7}
+						></Loading>
 					</div>
 
 					<div className="xs:ml-auto">{children ? children : null}</div>
@@ -401,7 +434,11 @@ export function TokenGridFallback({ count = 12, isEarnPage }: { count?: number; 
 			{Array.from({ length: count }, (_, i) => (
 				<li key={`loading-card-${i}`} className="space-y-4 w-full">
 					<TokenCardFallback i={i}>
-						{isEarnPage && <Loading className="w-[74px] h-[34px] rounded-full" i={i} />}
+						{isEarnPage ? (
+							<Loading className="w-[74px] h-[34px] rounded-full" i={i} />
+						) : (
+							<Loading className="w-[120px] h-6 rounded-full" i={i} />
+						)}
 					</TokenCardFallback>
 				</li>
 			))}
