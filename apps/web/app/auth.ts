@@ -1,4 +1,4 @@
-import NextAuth from 'next-auth'
+import NextAuth, { User } from 'next-auth'
 import Credentials from 'next-auth/providers/credentials'
 import Discord from 'next-auth/providers/discord'
 import { authConfig } from '@/app/auth.config'
@@ -54,16 +54,21 @@ export const { auth, signIn, signOut, handlers } = NextAuth({
 		async linkAccount({ user, account, profile }) {
 			if (account?.provider === 'discord' && account && user.id) {
 				try {
-					console.log('user', user)
-
-					console.log('account', account)
-
 					await linkDiscordAccount(account, user?.id)
 
 					const isCreator = await getIsCreator(user?.id)
+
 					if (isCreator) {
 						await assignCreatorRole(account.providerAccountId)
 					}
+
+					await prisma.user.update({
+						where: { id: user.id },
+						data: {
+							image: profile.image ?? undefined,
+							name: profile.name ?? undefined,
+						},
+					})
 
 					console.log(`✅ Linked and updated Discord user ${profile.id}`)
 				} catch (error) {
