@@ -56,6 +56,13 @@ const nextConfig = {
 				port: '',
 				pathname: '/**', // Allow all paths under this domain
 			},
+
+			{
+				protocol: 'https',
+				hostname: 'cdn.discordapp.com', // Add picsum.photos
+				port: '',
+				pathname: '/**', // Allow all paths under this domain
+			},
 		],
 	},
 	transpilePackages: ['geist'],

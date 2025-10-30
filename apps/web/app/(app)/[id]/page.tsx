@@ -6,6 +6,8 @@ import { getTokens } from '@/app/data/get_tokens'
 import { TokenGrid, TokenGridFallback } from '@/app/comps/token_grid'
 
 import { Header } from '@/app/comps/header'
+import { getUser } from '@/app/data/get_user'
+import Image from 'next/image'
 
 export const dynamic = 'force-dynamic'
 
@@ -23,13 +25,19 @@ export default async function Page(props: Props) {
 
 	const tokenPromise = getTokens({ sortType, sortOrder, cursorId, creatorId })
 
+	const user = await getUser(creatorId)
+
 	return (
 		<div className="flex-1 border-x border-white border-opacity-[0.125]">
 			<Header>
-				<div className="ml-4 flex flex-col ">
-					<h2 className="font-medium text-text-200 text-[15px]">Creator</h2>
+				<div className="ml-2 flex items-center gap-2">
+					{user?.image && (
+						<div className="size-[20px] rounded-full overflow-hidden">
+							<Image src={user?.image} alt={user?.id} width={20} height={20} />
+						</div>
+					)}
 
-					{/* <span className="text-text-200 font-mono">{shortenWallet(creatorId)}</span> */}
+					{user?.name && <span className="text-text-200 font-mono text-[15px]">{user?.name}</span>}
 				</div>
 			</Header>
 
