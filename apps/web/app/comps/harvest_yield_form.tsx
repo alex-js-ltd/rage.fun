@@ -74,7 +74,7 @@ export function HarvestYieldForm({ token }: HarvestYieldProps) {
 				<Tooltip>
 					<TooltipTrigger asChild>
 						<button
-							className="bg-background-500 hover:bg-background-600 rounded-full p-4 h-[34px] flex items-center font-semibold"
+							className="bg-background-500 hover:bg-background-600 rounded-full p-4 h-7 flex items-center font-semibold"
 							aria-label="Harvest Yield"
 							disabled={disabled}
 							type="submit"
@@ -83,7 +83,7 @@ export function HarvestYieldForm({ token }: HarvestYieldProps) {
 						</button>
 					</TooltipTrigger>
 
-					<TooltipContent variant={'submit_3'} side="bottom" sideOffset={6}>
+					<TooltipContent variant={'submit_3'} side="bottom" sideOffset={6} className="bg-background-100">
 						Harvest Yield
 					</TooltipContent>
 				</Tooltip>
