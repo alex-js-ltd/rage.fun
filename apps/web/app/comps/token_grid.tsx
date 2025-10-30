@@ -112,7 +112,11 @@ function TokenCard({
 					</div>
 
 					<div className="flex flex-col gap-2 w-full">
-						<div className="text-[16px] font-medium text-text-100 w-full">{symbol}</div>
+						<div className="flex items-center gap-2">
+							<span className="text-[16px] font-medium text-text-100 w-fit">{symbol}</span>
+							<span className="text-white">|</span>
+							<span className="text-[14px] font-medium text-text-200 w-fit">{name}</span>
+						</div>
 
 						<div className="flex items-center gap-1">
 							<span className="text-xs text-text-200 font-medium">MC</span>
