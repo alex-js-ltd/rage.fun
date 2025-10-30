@@ -116,9 +116,20 @@ function TokenCard({
 
 						<div className="flex items-center gap-1">
 							<span className="text-xs text-text-200 font-medium">MC</span>
-
 							<span className="text-rage-100 font-medium font-mono text-[15px]">{`$${formatNumberSmart(marketCap)}`}</span>
 						</div>
+
+						{disableCreatorLink ? null : (
+							<Link
+								href={{
+									pathname: `/${creatorId}`,
+								}}
+								as={`/${creatorId}`}
+								className="size-4"
+							>
+								<Icon className="size-4 text-cyan-400" name="creator" />
+							</Link>
+						)}
 					</div>
 				</div>
 

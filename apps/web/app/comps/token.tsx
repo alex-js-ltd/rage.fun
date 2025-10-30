@@ -53,8 +53,6 @@ export async function Token(props: Props) {
 
 	const blink = generateSolanaBlink(mint)
 
-	console.log(blink)
-
 	const pnlPromise = getPnLForToken(mint)
 
 	return (
@@ -139,11 +137,7 @@ export async function Token(props: Props) {
 
 			<MobileDrawer
 				trigger={
-					<div
-						className="z-40 sticky bottom-[calc(52px+16px)] sm:bottom-4 w-full lg:hidden
-
-  "
-					>
+					<div className="z-50 sticky bottom-[calc(52px+16px)] sm:bottom-4 w-full lg:hidden">
 						<div className="flex justify-end pr-4">
 							<Button className="ml-auto pointer-events-auto rounded-full border border-white border-opacity-[0.125] bg-rage-100">
 								<Image src="/rage.png" alt="logo" width={56} height={56} />
