@@ -112,7 +112,7 @@ export function calculatePercentage(numerator: BN, denominator: BN, decimals: nu
 }
 
 export function shortAddress(addr: string) {
-	return `${addr.slice(0, 3)}...${addr.slice(-3)}`
+	return `${addr.slice(0, 4)}...${addr.slice(-4)}`
 }
 
 export function calculatePercentageDifference(

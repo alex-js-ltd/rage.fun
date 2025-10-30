@@ -28,7 +28,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '@/app/comps/tooltip'
 import { useInView } from 'react-intersection-observer'
 import { HarvestYieldForm } from '@/app/comps/harvest_yield_form'
 import { usePathname } from 'next/navigation'
-import { motion, AnimatePresence } from 'framer-motion'
+import { Blink } from './blink'
 
 export type InitialState = {
 	tokens: TokenFeedType[]
@@ -71,7 +71,7 @@ function TokenCard({
 	}, [updatedAt])
 
 	return (
-		<article className="group relative flex flex-col w-full min-h-[178px] border-b border-white border-opacity-[0.125] hover:bg-white/10 bg-background-100">
+		<article className="group relative flex flex-col w-full h-full min-h-[178px] border-b border-white border-opacity-[0.125] hover:bg-white/10 bg-background-100">
 			<div
 				onAnimationEnd={() => setAnimate(false)}
 				className={cn(
@@ -80,51 +80,51 @@ function TokenCard({
 					updateType === 'Sell' && animate && 'animate-sell',
 				)}
 			/>
-			<div className="relative p-4 grid grid-cols-1 gap-4">
+
+			<div className="relative p-4 flex flex-col gap-4 ">
 				<div className="flex gap-4">
-					<SquareProgress progress={progress} size={74}>
-						<Link
-							className="w-[72px] h-[72px] cursor-pointer relative rounded-md overflow-hidden flex-shrink-0"
-							aria-label={`View ${name}`}
-							href={{
-								pathname: `/token/${mint}`,
-								query: { interval: '1m' },
-							}}
-							as={`/token/${mint}?interval=1m`}
-							scroll={true}
-							prefetch={false}
-						>
-							<Image
-								src={`${image}`}
-								alt={`${name}`}
-								className="object-cover object-center w-full h-full z-0"
-								fill={true}
-								blurDataURL={createPngDataUri(thumbhash)}
-								placeholder="blur"
-								sizes="(min-width: 1280px) 14vw, (min-width: 1024px) 16vw, (min-width: 768px) 20vw, (min-width: 640px) 25vw, 33vw"
-							/>
-						</Link>
-					</SquareProgress>
+					<div className="flex flex-col items-center gap-[4px]">
+						<SquareProgress progress={progress} size={74}>
+							<Link
+								className="w-[72px] h-[72px] cursor-pointer relative rounded-md overflow-hidden flex-shrink-0"
+								aria-label={`View ${name}`}
+								href={{
+									pathname: `/token/${mint}`,
+									query: { interval: '1m' },
+								}}
+								as={`/token/${mint}?interval=1m`}
+								scroll={true}
+								prefetch={false}
+							>
+								<Image
+									src={`${image}`}
+									alt={`${name}`}
+									className="object-cover object-center w-full h-full z-0"
+									fill={true}
+									blurDataURL={createPngDataUri(thumbhash)}
+									placeholder="blur"
+									sizes="(min-width: 1280px) 14vw, (min-width: 1024px) 16vw, (min-width: 768px) 20vw, (min-width: 640px) 25vw, 33vw"
+								/>
+							</Link>
+						</SquareProgress>
 
-					<div className="grid grid-cols-1 gap-1 w-full">
-						<div className="text text-text-100 w-full">{symbol}</div>
+						<span className="text-xs text-text-200 font-medium">{shortAddress(mint)}</span>
+					</div>
 
-						<Link
-							style={{ pointerEvents: disableCreatorLink ? 'none' : undefined }}
-							href={{
-								pathname: `/${creatorId}`,
-							}}
-							className="text-xs text-text-200 w-fit font-mono"
-						>
-							{shortAddress(creatorId)}
-						</Link>
+					<div className="flex flex-col gap-2 w-full">
+						<div className="text-[16px] font-medium text-text-100 w-full">{symbol}</div>
+
+						<div className="flex items-center gap-1">
+							<span className="text-xs text-text-200 font-medium">MC</span>
+
+							<span className="text-rage-100 font-medium font-mono text-[15px]">{`$${formatNumberSmart(marketCap)}`}</span>
+						</div>
 					</div>
 				</div>
 
-				<div className="flex gap-2 items-center flex-wrap">
-					<div className="flex gap-2 items-center flex-wrap">
+				<div className="flex gap-2 items-center flex-wrap h-[32px]">
+					<div className="flex gap-0 items-center flex-wrap border border-white border-opacity-[0.05] rounded-full px-1 py-1">
 						<Pill label="P" value={`$${formatNumberSmart(price)}`} tooltip="Price" />
-						<Pill label="M" value={`$${formatNumberSmart(marketCap)}`} tooltip="Market Cap" />
 
 						<Pill label="L" value={`$${formatNumberSmart(liquidity)}`} tooltip="Liquidity" />
 
@@ -134,7 +134,8 @@ function TokenCard({
 							label={''}
 							value={
 								<div className="flex gap-2">
-									<div className="text-buy-100">{buyCount}</div> / <div className="text-sell-100">{sellCount}</div>
+									<div className="text-buy-100 text-xs">{buyCount}</div> /{' '}
+									<div className="text-sell-100 text-xs">{sellCount}</div>
 								</div>
 							}
 							tooltip="TXNS"
@@ -156,10 +157,10 @@ type PillProps = {
 }
 export function Pill({ label, value, tooltip, className }: PillProps) {
 	const body = (
-		<div className={`flex border border-white border-opacity-[0.125] py-1 px-2 rounded-full w-fit ${className ?? ''}`}>
+		<div className={`flex py-1 px-[8px] rounded-full w-fit hover:bg-background-100 ${className ?? ''}`}>
 			<div className="flex gap-1">
-				<span className="text-sm text-text-200">{label}</span>
-				<span className="text-sm text-text-200">{value}</span>
+				<span className="text-xs text-text-200">{label}</span>
+				<span className="text-xs text-text-200">{value}</span>
 			</div>
 		</div>
 	)
@@ -169,7 +170,7 @@ export function Pill({ label, value, tooltip, className }: PillProps) {
 	return (
 		<Tooltip>
 			<TooltipTrigger asChild>{body}</TooltipTrigger>
-			<TooltipContent variant={'submit_3'} side="bottom" sideOffset={6}>
+			<TooltipContent side="bottom" sideOffset={4} className="bg-background-100 rounded-sm p-1 text-text-200 text-xs">
 				{tooltip}
 			</TooltipContent>
 		</Tooltip>
@@ -303,7 +304,7 @@ export function TokenGrid({
 							className="space-y-4 w-full"
 						>
 							<TokenCard token={token} pathname={pathname}>
-								{isEarnPage ? <HarvestYieldForm token={token} /> : null}
+								{isEarnPage ? <HarvestYieldForm token={token} /> : <Blink />}
 							</TokenCard>
 						</li>
 					)
