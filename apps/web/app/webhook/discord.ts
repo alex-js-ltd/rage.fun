@@ -1,7 +1,7 @@
 import { getServerEnv } from '@/app/utils/env'
 
 import { type EventData, fromLamports, amountToUiAmount } from '@repo/rage'
-import { buyBlink, generateSolanaBlink, sellBlink } from '@/app/utils/dialect'
+import { buyBlink, sellBlink } from '@/app/utils/dialect'
 
 import { type TokenFeedType, SwapEventType } from '@/app/utils/schemas'
 
@@ -130,7 +130,7 @@ export async function publishCreateAlert(event: EventData<'createEvent'>, token:
 	const mint = event.data.mint.toBase58()
 	const solScanUrl = `https://solscan.io/tx/${event.signature}`
 	const letsRageUrl = `https://www.letsrage.fun/token/${mint}?interval=5m`
-	const dialectUrl = generateSolanaBlink(mint)
+	const dialectUrl = buyBlink(mint)
 
 	const caption = [
 		``,
@@ -141,12 +141,11 @@ export async function publishCreateAlert(event: EventData<'createEvent'>, token:
 		`** ├Creator: \`${shortAddress(event.data.creator.toBase58())}\`**`,
 		'',
 
-		'',
 		// LINKS SECTION
 		`**🔗 LINKS**`,
 		`** ├**[**solscan.io**](<${solScanUrl}>)`,
-		`** ├**[**letrage.fun**](${letsRageUrl})`,
-		`** ├**[**Buy on Dialect**](<${dialectUrl}>)`,
+		`** ├**[**letrage.fun**](<${letsRageUrl}>)`,
+		`** ├**[**Buy on Dialect**](${dialectUrl})`,
 
 		'',
 	].join('\n')
@@ -229,7 +228,6 @@ export async function linkDiscordAccount(account: Account, userId: string) {
 		session_state,
 	} = account
 
-	console.log('account', account)
 	const data = await prisma.account.upsert({
 		where: {
 			// composite unique identifier from @@id([provider, providerAccountId])
