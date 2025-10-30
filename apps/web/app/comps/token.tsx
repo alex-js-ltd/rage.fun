@@ -79,7 +79,7 @@ export async function Token(props: Props) {
 				</div>
 
 				<Tabs className="relative z-0 flex flex-col">
-					<List className="flex items-center px-2 h-[40px]">
+					<List className="flex items-center px-2 h-[40px] border-white border-b border-opacity-[0.125]">
 						<Trigger value="tab1" asChild>
 							<Button className="data-[state=active]:border-white border-b border-transparent" variant="chart">
 								Transactions
