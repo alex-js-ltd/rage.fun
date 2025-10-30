@@ -304,7 +304,7 @@ export function TokenGrid({
 							className="space-y-4 w-full"
 						>
 							<TokenCard token={token} pathname={pathname}>
-								{isEarnPage ? <HarvestYieldForm token={token} /> : <Blink />}
+								{isEarnPage ? <HarvestYieldForm token={token} /> : <Blink mint={token.id} />}
 							</TokenCard>
 						</li>
 					)
