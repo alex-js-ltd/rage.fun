@@ -67,6 +67,7 @@ export const { auth, signIn, signOut, handlers } = NextAuth({
 						data: {
 							image: profile.image ?? undefined,
 							name: profile.name ?? undefined,
+							email: profile.email ?? undefined,
 						},
 					})
 
