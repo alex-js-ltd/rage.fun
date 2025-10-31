@@ -283,3 +283,25 @@ export async function assignCreatorRole(discordUserId: string) {
 		console.log(error)
 	}
 }
+
+export async function addUserToGuild(discordUserId: string, userAccessToken: string) {
+	try {
+		const res = await client(`https://discord.com/api/v10/guilds/${DISCORD_GUILD_ID}/members/${discordUserId}`, {
+			method: 'PUT',
+			headers: {
+				Authorization: `Bot ${DISCORD_BOT_TOKEN}`,
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({
+				access_token: userAccessToken, // required
+				// Optional extras if your bot has perms:
+				// nick: 'letsrage user',
+				// roles: ['<roleId>'],
+			}),
+		})
+
+		console.log(`✅ Added Discord user ${discordUserId} to the guild`)
+	} catch (error) {
+		console.log(error)
+	}
+}

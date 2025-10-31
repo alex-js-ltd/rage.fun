@@ -7,7 +7,7 @@ import { getUser } from '@/app/data/get_user'
 import { getIsCreator } from '@/app/data/get_is_creator'
 import { SigninMessage } from '@/app/utils/sign_in'
 import { getServerEnv } from '@/app/utils/env'
-import { linkDiscordAccount, assignCreatorRole } from '@/app/webhook/discord'
+import { linkDiscordAccount, assignCreatorRole, addUserToGuild } from '@/app/webhook/discord'
 import { PrismaAdapter } from '@auth/prisma-adapter'
 import { prisma } from '@/app/utils/db'
 
@@ -66,6 +66,10 @@ export const { auth, signIn, signOut, handlers } = NextAuth({
 			if (account?.provider === 'discord' && account && user.id) {
 				try {
 					await linkDiscordAccount(account, user?.id)
+
+					if (account.access_token) {
+						await addUserToGuild(account.providerAccountId, account?.access_token)
+					}
 
 					const isCreator = await getIsCreator(user?.id)
 
