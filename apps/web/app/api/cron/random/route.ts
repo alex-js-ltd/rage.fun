@@ -37,7 +37,7 @@ export async function GET(req: NextRequest) {
 
 	const randomIndex = Math.floor(Math.random() * latest.length)
 
-	const token = { id: 'qbiDqX2LNKx7waRR4umXMwfXkEZbgt8WupxkqtSjdmG' }
+	const token = { id: '8u2V59Gajjqtig5Beok5z7Us4FTMpex62YrwizrBWymr' }
 
 	await kv.set('random_token', token)
 
