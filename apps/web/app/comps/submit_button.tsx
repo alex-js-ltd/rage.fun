@@ -44,10 +44,9 @@ export function SubmitButton({ content, variant, isPending, isLoading, onClick }
 					aria-label={`Submit ${content}`}
 					onClick={onClick}
 					onPointerDown={e => {
-						// Prevent tooltip from hijacking the first tap
+						e.stopPropagation()
 						e.preventDefault()
-						const form = (e.currentTarget as HTMLButtonElement).form
-						form?.requestSubmit() // native submit
+						e.currentTarget.form?.requestSubmit()
 					}}
 				>
 					{isPending ? <Spinner /> : <Icon name="submit" className="size-4" />}

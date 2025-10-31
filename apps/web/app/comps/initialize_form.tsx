@@ -63,6 +63,14 @@ export function Form() {
 
 	const { clearImage, cid } = useImage()
 
+	useEffect(() => {
+		if (isLoading) {
+			clearImage()
+		}
+
+		return () => clearImage()
+	}, [clearImage, isLoading])
+
 	const config: ToastDescription = { loading: `Generating token`, success: `Token ready` }
 
 	return (
@@ -74,10 +82,7 @@ export function Form() {
 					key={form.key}
 					className="z-10 h-full w-full min-w-0 bg-secondary-background"
 					{...getFormProps(form)}
-					action={(formData: FormData) => {
-						formAction(formData)
-						clearImage()
-					}}
+					action={formAction}
 				>
 					<fieldset className="relative flex w-full flex-1 items-center transition-all duration-300 flex-col gap-6">
 						<div className="relative grid grid-cols-1 w-full">
