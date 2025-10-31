@@ -12,7 +12,7 @@ import { OhlcData } from 'lightweight-charts'
 import { publicKey } from '@coral-xyz/anchor/dist/cjs/utils'
 import { solToUsd } from '@/app/utils/misc'
 
-const MAX_UPLOAD_SIZE = 1024 * 1024 * 1 // 1MB
+const MAX_UPLOAD_SIZE = 1024 * 1024 * 4
 
 const Wallet = z.preprocess(
 	value => {
@@ -44,7 +44,7 @@ export const InitializeSchema = z.object({
 
 	file: z.instanceof(File).refine(file => {
 		return !file || file.size <= MAX_UPLOAD_SIZE
-	}, 'File size must be less than 1MB'),
+	}, 'File size must be less than 4MB'),
 })
 
 // validate bonding curve schema on the server
@@ -100,9 +100,8 @@ export function initializeBondingCurveSchema(
 				name: z.string(),
 
 				description: z.string(),
-				file: z.instanceof(File).refine(file => {
-					return !file || file.size <= MAX_UPLOAD_SIZE
-				}, 'File size must be less than 1MB'),
+
+				cid: z.string(),
 			}),
 		)
 }

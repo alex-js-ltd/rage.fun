@@ -61,7 +61,7 @@ export function Form() {
 
 	const payer = usePayer()
 
-	const { clearImage } = useImage()
+	const { clearImage, cid } = useImage()
 
 	const config: ToastDescription = { loading: `Generating token`, success: `Token ready` }
 
@@ -112,6 +112,8 @@ export function Form() {
 							/>
 							{/* hidden inputs */}
 							<input name="creator" type="hidden" defaultValue={payer} />
+
+							<input name="cid" type="hidden" defaultValue={cid ?? ''} />
 						</div>
 
 						<div className="flex items-end w-full gap-2 p-3 h-[69px]">

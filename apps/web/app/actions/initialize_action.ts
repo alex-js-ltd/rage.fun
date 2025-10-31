@@ -58,13 +58,11 @@ export async function initializeAction(_prevState: State, formData: FormData) {
 		}
 	}
 
-	const { file, name, symbol, description, creator } = submission.value
+	const { cid, name, symbol, description, creator } = submission.value
 
 	const decimals = 6
 
-	const upload = await pinata.upload.public.file(file)
-
-	const image = `https://indigo-adverse-vicuna-777.mypinata.cloud/ipfs/${upload.cid}`
+	const image = `https://indigo-adverse-vicuna-777.mypinata.cloud/ipfs/${cid}`
 
 	const imageBuffer = await fetchImage(image)
 
