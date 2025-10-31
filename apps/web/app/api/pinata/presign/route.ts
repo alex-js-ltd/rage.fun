@@ -18,7 +18,7 @@ export async function GET() {
 	try {
 		const url = await pinata.upload.public.createSignedURL({
 			expires: 30, // The only required param
-			mimeTypes: ['text/*'], // Optional restriction for certain file types
+			mimeTypes: ['image/*'],
 			maxFileSize: 5000000, // Optional file size limit
 		})
 		return NextResponse.json({ url: url }, { status: 200 }) // Returns the signed upload URL
