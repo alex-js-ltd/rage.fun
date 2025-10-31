@@ -17,6 +17,7 @@ import invariant from 'tiny-invariant'
 import { useAsync } from '@/app/hooks/use_async'
 import { client } from '@/app/utils/client'
 import { PinataSDK } from 'pinata'
+import { useSession } from 'next-auth/react'
 
 const pinata = new PinataSDK({
 	pinataGateway: 'indigo-adverse-vicuna-777.mypinata.cloud',
@@ -55,37 +56,47 @@ function ImageProvider({ children }: { children: ReactNode }) {
 		return upload.cid
 	}
 
-	const getInputProps = useCallback<(name: string) => InputProps>(name => {
-		return {
-			className: 'sr-only pointer-events-none',
-			type: 'file',
-			accept: 'image/*',
-			name,
-			ref: fileRef,
-			async onChange(e) {
-				fileRef?.current?.focus()
-				const file = e.target.files?.[0]
+	const session = useSession()
 
-				if (file) {
-					const reader = new FileReader()
+	const isAuthenticated = session.status === 'authenticated'
 
-					reader.onloadend = async () => {
-						const image = { src: reader.result, alt: 'your uploaded image' }
+	const getInputProps = useCallback<(name: string) => InputProps>(
+		name => {
+			return {
+				className: 'sr-only pointer-events-none',
+				type: 'file',
+				accept: 'image/*',
+				name,
+				ref: fileRef,
+				async onChange(e) {
+					fileRef?.current?.focus()
+					const file = e.target.files?.[0]
 
-						if (isImage(image)) {
-							setImage(image)
-							const promise = uploadImage(file)
-							run(promise)
+					if (file) {
+						const reader = new FileReader()
+
+						reader.onloadend = async () => {
+							const image = { src: reader.result, alt: 'your uploaded image' }
+
+							if (isImage(image)) {
+								setImage(image)
+
+								if (!isAuthenticated) return
+
+								const promise = uploadImage(file)
+								run(promise)
+							}
 						}
-					}
 
-					reader.readAsDataURL(file)
-				} else {
-					setImage(undefined)
-				}
-			},
-		}
-	}, [])
+						reader.readAsDataURL(file)
+					} else {
+						setImage(undefined)
+					}
+				},
+			}
+		},
+		[isAuthenticated],
+	)
 
 	const value = useMemo(
 		() => ({ fileRef, image, cid, clearImage, getInputProps }),
