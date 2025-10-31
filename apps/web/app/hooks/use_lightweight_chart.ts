@@ -103,6 +103,14 @@ export function useLightweightChart(
 
 			priceLineVisible: true,
 			wickVisible: true,
+
+			upColor: green,
+			downColor: red,
+			wickUpColor: green,
+			wickDownColor: red,
+			borderUpColor: green,
+			borderDownColor: red,
+
 			priceFormat: {
 				type: 'custom',
 				formatter: (val: number) => {

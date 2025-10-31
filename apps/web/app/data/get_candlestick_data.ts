@@ -16,43 +16,47 @@ function generateCandlestickData(events: SwapEvent[], interval: number) {
 		}))
 		.sort((a, b) => a.time - b.time)
 
-	const groupedEvents = ticks.map(e => ({
-		...e,
-		time: (Math.floor(e.time / interval) * interval) as UTCTimestamp,
-	}))
+	const bucketStart = (time: number) => (Math.floor(time / interval) * interval) as UTCTimestamp
 
-	const allTimes = [...new Set(groupedEvents.map(e => e.time))]
+	const candles: CandlestickData[] = []
 
-	const start: CandlestickData[] = []
+	// 2) seed first candle
+	let curBucket = bucketStart(ticks[0].time)
 
-	const output = allTimes.reduce((acc, curr, index, arr) => {
-		const prev = acc[acc.length - 1]
+	let cur: CandlestickData = {
+		time: curBucket,
+		open: ticks[0].value,
+		high: ticks[0].value,
+		low: ticks[0].value,
+		close: ticks[0].value,
+	}
 
-		let tempObj: Partial<CandlestickData> = {}
+	// 3) single pass over ticks
+	for (let i = 1; i < ticks.length; i++) {
+		const { time, value } = ticks[i]
+		const b = bucketStart(time)
 
-		const filteredData = groupedEvents.filter(e => e.time === curr)
-		const prices = filteredData.map(el => el.value)
-		const time = curr
-		const open = index === 0 ? filteredData[0].value : prev.close
-		const close = filteredData[filteredData.length - 1].value
-		const color = index === 0 ? green : close > open ? green : red
+		if (b === curBucket) {
+			// update current candle
+			cur.high = Math.max(cur.high, value)
+			cur.low = Math.min(cur.low, value)
+			cur.close = value
+		} else {
+			candles.push(cur)
 
-		tempObj.time = time
-		tempObj.open = open
-		tempObj.close = close
-		tempObj.high = Math.max(...prices, open, close)
-		tempObj.low = Math.min(...prices, open, close)
+			// 3c) start a new candle using previous close as open
+			curBucket = b
+			cur = {
+				time: curBucket,
+				open: candles[candles.length - 1].close,
+				high: value,
+				low: value,
+				close: value,
+			}
+		}
+	}
 
-		tempObj.color = color
-		tempObj.wickColor = color
-		tempObj.borderColor = color
-
-		acc.push(tempObj as CandlestickData)
-
-		return acc
-	}, start)
-
-	return output
+	return candles
 }
 
 export function generateMarkers(events: SwapEvent[], creatorId: string) {
