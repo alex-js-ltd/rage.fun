@@ -10,6 +10,7 @@ import * as Ably from 'ably'
 import { useChannel } from 'ably/react'
 
 import { Loading } from './loading'
+import { Icon } from './_icon'
 
 export function Trending({ trendingPromise }: { trendingPromise: Promise<TokenFeedType[]> }) {
 	const data = use(trendingPromise)
@@ -24,7 +25,8 @@ export function Trending({ trendingPromise }: { trendingPromise: Promise<TokenFe
 
 	return (
 		<div className="border border-white border-opacity-[0.125] rounded-2xl w-full overflow-hidden">
-			<div className="h-[48px] flex items-center px-3">
+			<div className="h-[48px] flex items-center gap-1 px-3">
+				<Icon name="cooking" className="size-4 text-text-100" />
 				<h2 className="text-white font-semibold text-[15px]">Trending</h2>
 			</div>
 			<ul className="grid">

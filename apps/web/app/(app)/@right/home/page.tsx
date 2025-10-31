@@ -50,7 +50,7 @@ export default async function Page(props: Props) {
 						<Trending trendingPromise={trendingPromise} />
 					</Suspense>
 
-					{isConnected ? null : (
+					{discordId || !session ? null : (
 						<Suspense fallback={null}>
 							<Welcome discordId={discordId} />
 						</Suspense>
