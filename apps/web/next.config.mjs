@@ -9,6 +9,7 @@ const nextConfig = {
 		instrumentationHook: true,
 		mdxRs: true,
 		serverComponentsExternalPackages: ['ably', 'twitter-api-v2'],
+		bodySizeLimit: '1mb',
 	},
 
 	images: {
