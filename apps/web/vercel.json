@@ -16,7 +16,7 @@
 
     {
       "path": "/api/cron/reset",
-      "schedule": "*/5 * * * *"
+      "schedule": "*/20 * * * *"
     },
 
     {
