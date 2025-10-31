@@ -37,7 +37,19 @@ export function SubmitButton({ content, variant, isPending, isLoading, onClick }
 			</TooltipContent>
 
 			<TooltipTrigger asChild>
-				<Button type="submit" disabled={disabled} variant={variant} aria-label={`Submit ${content}`} onClick={onClick}>
+				<Button
+					type="submit"
+					disabled={disabled}
+					variant={variant}
+					aria-label={`Submit ${content}`}
+					onClick={onClick}
+					onPointerDown={e => {
+						// Prevent tooltip from hijacking the first tap
+						e.preventDefault()
+						const form = (e.currentTarget as HTMLButtonElement).form
+						form?.requestSubmit() // native submit
+					}}
+				>
 					{isPending ? <Spinner /> : <Icon name="submit" className="size-4" />}
 				</Button>
 			</TooltipTrigger>
