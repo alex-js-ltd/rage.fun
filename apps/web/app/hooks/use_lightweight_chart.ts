@@ -150,32 +150,14 @@ export function useLightweightChart(
 		const roundedTime = time - (time % interval)
 
 		if (lastCandle && lastCandle.time === roundedTime) {
-			const open = lastCandle.open
-			const close = value
-
-			const color = close > open ? green : close < open ? red : lastCandle.color
-
-			const wickColor = color
-			const borderColor = color
-
 			series?.update({
 				...lastCandle,
 				close: value,
 				high: Math.max(lastCandle.high, value),
 				low: Math.min(lastCandle.low, value),
-				color,
-				wickColor,
-				borderColor,
 			})
 		} else {
 			const open = lastCandle?.close ? lastCandle.close : value
-
-			const close = value
-
-			const color = close > open ? green : close < open ? red : lastCandle?.color
-
-			const wickColor = color
-			const borderColor = color
 
 			const newCandle: CandlestickData = {
 				time: roundedTime as UTCTimestamp,
@@ -183,9 +165,6 @@ export function useLightweightChart(
 				high: value,
 				low: value,
 				close: value,
-				color,
-				wickColor,
-				borderColor,
 			}
 
 			series?.update(newCandle)

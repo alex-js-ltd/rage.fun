@@ -8,21 +8,18 @@ import 'server-only'
 const green = '#8DF0CC' // lime green (buy candle fill)
 const red = '#E5989B'
 
-function generateCandlestickData(events: SwapEvent[], interval: number) {
+function generateCandlestickData(events: SwapEvent[], interval: number): CandlestickData[] {
+	if (!events.length) return []
+
 	const ticks = events
-		.map(e => ({
-			time: new Decimal(e.time.toString()).toNumber(),
-			value: e.price.toNumber(),
-		}))
+		.map(e => ({ time: Number(e.time), value: e.price.toNumber() })) // seconds
 		.sort((a, b) => a.time - b.time)
 
-	const bucketStart = (time: number) => (Math.floor(time / interval) * interval) as UTCTimestamp
+	const bucketStart = (t: number) => (Math.floor(t / interval) * interval) as UTCTimestamp
 
 	const candles: CandlestickData[] = []
 
-	// 2) seed first candle
 	let curBucket = bucketStart(ticks[0].time)
-
 	let cur: CandlestickData = {
 		time: curBucket,
 		open: ticks[0].value,
@@ -31,31 +28,33 @@ function generateCandlestickData(events: SwapEvent[], interval: number) {
 		close: ticks[0].value,
 	}
 
-	// 3) single pass over ticks
 	for (let i = 1; i < ticks.length; i++) {
 		const { time, value } = ticks[i]
 		const b = bucketStart(time)
 
 		if (b === curBucket) {
-			// update current candle
-			cur.high = Math.max(cur.high, value)
-			cur.low = Math.min(cur.low, value)
+			if (value > cur.high) cur.high = value
+			if (value < cur.low) cur.low = value
 			cur.close = value
-		} else {
-			candles.push(cur)
+			continue
+		}
 
-			// 3c) start a new candle using previous close as open
-			curBucket = b
-			cur = {
-				time: curBucket,
-				open: candles[candles.length - 1].close,
-				high: value,
-				low: value,
-				close: value,
-			}
+		// bucket advanced → finalize previous candle
+		candles.push(cur)
+
+		// continuity only: new.open = previous.close
+		curBucket = b
+		cur = {
+			time: curBucket,
+			open: candles[candles.length - 1].close,
+			high: value,
+			low: value,
+			close: value,
 		}
 	}
 
+	// push the last (in-progress) candle
+	candles.push(cur)
 	return candles
 }
 
