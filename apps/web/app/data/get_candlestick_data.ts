@@ -9,14 +9,14 @@ const green = '#8DF0CC' // lime green (buy candle fill)
 const red = '#E5989B'
 
 function generateCandlestickData(events: SwapEvent[], interval: number) {
-	const formattedEvents = events.map(e => ({
-		time: new Decimal(e.time.toString()).toNumber(),
-		value: e.price.toNumber(),
-	}))
+	const ticks = events
+		.map(e => ({
+			time: new Decimal(e.time.toString()).toNumber(),
+			value: e.price.toNumber(),
+		}))
+		.sort((a, b) => a.time - b.time)
 
-	const sortedEvents = formattedEvents.sort((a, b) => a.time - b.time)
-
-	const groupedEvents = sortedEvents.map(e => ({
+	const groupedEvents = ticks.map(e => ({
 		...e,
 		time: (Math.floor(e.time / interval) * interval) as UTCTimestamp,
 	}))
