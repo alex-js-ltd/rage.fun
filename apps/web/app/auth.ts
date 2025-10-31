@@ -58,11 +58,21 @@ export const { auth, signIn, signOut, handlers } = NextAuth({
 
 	events: {
 		async linkAccount({ user, account, profile }) {
-			console.log(user)
+			console.log('----------------------------------------')
+			console.log('🧩  DISCORD LINK EVENT')
+			console.log('----------------------------------------')
 
-			console.log(account)
+			console.log('👤  User:')
+			console.dir(user, { depth: null, colors: true })
 
-			console.log(profile)
+			console.log('💠  Account:')
+			console.dir(account, { depth: null, colors: true })
+
+			console.log('🪪  Profile:')
+			console.dir(profile, { depth: null, colors: true })
+
+			console.log('----------------------------------------\n')
+
 			if (account?.provider === 'discord' && account && user.id) {
 				try {
 					await linkDiscordAccount(account, user?.id)
