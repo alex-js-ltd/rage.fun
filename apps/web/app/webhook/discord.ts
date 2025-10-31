@@ -3,7 +3,7 @@ import { getServerEnv } from '@/app/utils/env'
 import { type EventData, fromLamports, amountToUiAmount } from '@repo/rage'
 import { buyBlink, sellBlink } from '@/app/utils/dialect'
 
-import { type TokenFeedType, SwapEventType } from '@/app/utils/schemas'
+import { type TokenFeedType, SwapEventType, PnlType } from '@/app/utils/schemas'
 
 import { BN } from '@coral-xyz/anchor'
 import { formatNumberSmart, formatTokenAmount, shortAddress } from '@/app/utils/misc'
@@ -11,7 +11,7 @@ import { type TopHolderType } from '@/app/utils/schemas'
 import { getSolPrice } from '@/app/data/get_sol_price'
 
 import { client } from '@/app/utils/client'
-import { HarvestEvent } from '@prisma/client'
+import { HarvestEvent, SwapType } from '@prisma/client'
 import { solToUsd } from '@/app/utils/misc'
 import { Decimal } from '@prisma/client/runtime/library'
 import { prisma } from '@/app/utils/db'
@@ -162,6 +162,43 @@ export async function publishCreateAlert(event: EventData<'createEvent'>, token:
 	})
 
 	console.log('✅ Webhook sent:', res)
+}
+
+export async function publishProfitAlert(pnlEvent: PnlType, swapEvent: SwapEventType) {
+	const alertMessage = '🎯 **NEW PROFIT** 🎯'
+
+	const { bought, sold, realizedPnl } = pnlEvent
+	// assume realizedPnl is profit in SOL (positive for gain, negative for loss)
+	const profitPct = bought > 0 ? (realizedPnl / bought) * 100 : 0
+
+	const solPrice = await getSolPrice()
+
+	const boughtInDollars = solToUsd(new Decimal(bought).div(1e9), solPrice).toNumber()
+	const positionInDollars = solToUsd(new Decimal(sold).div(1e9), solPrice).toNumber()
+
+	const caption = [
+		`${alertMessage}`,
+
+		'',
+		`** ├ PnL: +${profitPct}% **`,
+		`** ├ Bought: $${boughtInDollars}**`,
+		`** ├ Position: $${positionInDollars}**`,
+		'',
+		'',
+	].join('\n')
+
+	// Then in your Discord webhook payload:
+	const payload = {
+		content: caption,
+	}
+
+	const res = await client(DISCORD_WEBHOOK_CHAT_URL, {
+		method: 'POST',
+		headers: { 'Content-Type': 'application/json' },
+		body: JSON.stringify(payload),
+	})
+
+	console.log('harvest result:', res)
 }
 
 export async function publishHarvestAlert(event: HarvestEvent, token: TokenFeedType) {
