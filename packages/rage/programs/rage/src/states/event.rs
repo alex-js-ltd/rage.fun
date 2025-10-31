@@ -29,11 +29,10 @@ pub fn get_swap_event<'a>(
     token_amount: u64,
     lamports: u64,
     rent_amount: u64,
+    price: f64,
     swap_type: SwapType,
 ) -> Result<SwapEvent> {
     let block_timestamp = Clock::get()?.unix_timestamp as u64;
-
-    let price = calculate_price(token_amount, lamports, decimals)?;
 
     msg!("Price per token: {} SOL", price);
 
@@ -52,14 +51,6 @@ pub fn get_swap_event<'a>(
         rent_amount,
         swap_type,
     })
-}
-
-pub fn calculate_price(token_amount: u64, lamports: u64, decimals: u8) -> Result<f64> {
-    let token_amount = spl_token_2022::amount_to_ui_amount(token_amount, decimals);
-    let sol = spl_token_2022::amount_to_ui_amount(lamports, 9);
-    let price = sol / token_amount;
-
-    Ok(price)
 }
 
 /// Emitted when new bonding curve is created

@@ -1,6 +1,6 @@
 use crate::error::ErrorCode;
 use crate::states::{
-    calculate_sell_price, get_status, get_swap_event, update_bonding_curve_state,
+    calculate_price, calculate_sell_price, get_status, get_swap_event, update_bonding_curve_state,
     BondingCurveState, Status, SwapType,
 };
 use crate::utils::fees::trading_fee;
@@ -194,6 +194,13 @@ pub fn sell_token(ctx: Context<SellToken>, token_amount: u64, min_output: u64) -
         status,
     )?;
 
+    let price = calculate_price(
+        current_supply + ctx.accounts.bonding_curve_state.virtual_supply,
+        current_reserve + ctx.accounts.bonding_curve_state.virtual_reserve,
+        ctx.accounts.bonding_curve_state.connector_weight,
+        ctx.accounts.bonding_curve_state.decimals,
+    )?;
+
     let event = get_swap_event(
         ctx.accounts.token_0_mint.to_account_info(),
         ctx.accounts.signer.to_account_info(),
@@ -201,6 +208,7 @@ pub fn sell_token(ctx: Context<SellToken>, token_amount: u64, min_output: u64) -
         token_amount,
         seller_amount,
         rent_amount,
+        price,
         SwapType::Sell,
     )?;
 

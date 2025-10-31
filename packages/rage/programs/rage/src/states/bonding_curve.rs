@@ -190,3 +190,18 @@ pub fn calculate_virtual_supply(
 
     Ok(output)
 }
+
+pub fn calculate_price(
+    supply: u64,
+    reserve: u64,
+    connector_weight: f64,
+    decimals: u8,
+) -> Result<f64> {
+    // use Decimal for precision
+    let supply = amount_to_ui_amount(supply, decimals);
+    let reserve = amount_to_ui_amount(reserve, 9);
+
+    let price = reserve / (supply * connector_weight);
+
+    Ok(price)
+}

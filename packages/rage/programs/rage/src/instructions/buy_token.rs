@@ -1,7 +1,7 @@
 use anchor_lang::prelude::*;
 
 use crate::states::{
-    calculate_buy_amount, get_status, get_swap_event, update_bonding_curve_state,
+    calculate_buy_amount, calculate_price, get_status, get_swap_event, update_bonding_curve_state,
     BondingCurveState, Status, SwapType,
 };
 use crate::utils::seed::{
@@ -219,6 +219,13 @@ pub fn buy_token(ctx: Context<BuyToken>, lamports: u64, min_output: u64) -> Resu
         status,
     )?;
 
+    let price = calculate_price(
+        current_supply + ctx.accounts.bonding_curve_state.virtual_supply,
+        current_reserve + ctx.accounts.bonding_curve_state.virtual_reserve,
+        ctx.accounts.bonding_curve_state.connector_weight,
+        ctx.accounts.bonding_curve_state.decimals,
+    )?;
+
     let event = get_swap_event(
         ctx.accounts.token_0_mint.to_account_info(),
         ctx.accounts.payer.to_account_info(),
@@ -226,6 +233,7 @@ pub fn buy_token(ctx: Context<BuyToken>, lamports: u64, min_output: u64) -> Resu
         payer_amount,
         safe_deposit,
         rent_amount,
+        price,
         SwapType::Buy,
     )?;
 
