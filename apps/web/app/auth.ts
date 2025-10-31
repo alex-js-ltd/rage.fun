@@ -47,11 +47,22 @@ export const { auth, signIn, signOut, handlers } = NextAuth({
 		Discord({
 			clientId: AUTH_DISCORD_ID,
 			clientSecret: AUTH_DISCORD_SECRET,
+
+			authorization: {
+				params: {
+					scope: 'identify email guilds.join', // 👈 add guilds.join here
+				},
+			},
 		}),
 	],
 
 	events: {
 		async linkAccount({ user, account, profile }) {
+			console.log(user)
+
+			console.log(account)
+
+			console.log(profile)
 			if (account?.provider === 'discord' && account && user.id) {
 				try {
 					await linkDiscordAccount(account, user?.id)

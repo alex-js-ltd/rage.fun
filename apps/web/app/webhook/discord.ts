@@ -268,15 +268,18 @@ export async function linkDiscordAccount(account: Account, userId: string) {
 }
 
 export async function assignCreatorRole(discordUserId: string) {
-	const res = await client(
-		`https://discord.com/api/guilds/${DISCORD_GUILD_ID}/members/${discordUserId}/roles/${DISCORD_CREATOR_ROLE_ID}`,
-		{
-			method: 'PUT',
-			headers: {
-				Authorization: `Bot ${DISCORD_BOT_TOKEN}`,
+	try {
+		const res = await client(
+			`https://discord.com/api/guilds/${DISCORD_GUILD_ID}/members/${discordUserId}/roles/${DISCORD_CREATOR_ROLE_ID}`,
+			{
+				method: 'PUT',
+				headers: {
+					Authorization: `Bot ${DISCORD_BOT_TOKEN}`,
+				},
 			},
-		},
-	)
-	console.log(res)
-	console.log(`✅ Assigned Creator role to Discord user ${discordUserId}`)
+		)
+		console.log(`✅ Assigned Creator role to Discord user ${discordUserId}`)
+	} catch (error) {
+		console.log(error)
+	}
 }
