@@ -26,7 +26,7 @@ export default async function Page(props: Props) {
 
 	const trendingPromise = getTrendingTokens()
 
-	const discordIdPromise = getDiscordId(session?.user?.id)
+	const discordId = await getDiscordId(session?.user?.id)
 
 	const topCreatorsPromise = getTopCreators()
 
@@ -48,9 +48,9 @@ export default async function Page(props: Props) {
 						<Trending trendingPromise={trendingPromise} />
 					</Suspense>
 
-					{!session ? null : (
+					{!discordId ? null : (
 						<Suspense fallback={null}>
-							<Welcome discordIdPromise={discordIdPromise} />
+							<Welcome discordId={discordId} />
 						</Suspense>
 					)}
 				</div>

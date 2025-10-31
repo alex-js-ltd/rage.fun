@@ -6,10 +6,7 @@ import Image from 'next/image'
 import { Icon } from './_icon'
 import { LinkDiscord } from './link_discord'
 
-export function Welcome({ discordIdPromise }: { discordIdPromise: Promise<string | null> }) {
-	const discordId = use(discordIdPromise)
-
-	console.log('discordId', discordId)
+export function Welcome({ discordId }: { discordId: string | null }) {
 	return (
 		<div className="border border-white border-opacity-[0.125] rounded-2xl w-full overflow-hidden">
 			<div className="h-[48px] flex items-center px-3">
