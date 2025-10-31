@@ -8,6 +8,7 @@ import { TokenGrid, TokenGridFallback } from '@/app/comps/token_grid'
 import { Header } from '@/app/comps/header'
 import { getUser } from '@/app/data/get_user'
 import Image from 'next/image'
+import { shortAddress } from '@/app/utils/misc'
 
 export const dynamic = 'force-dynamic'
 
@@ -38,6 +39,10 @@ export default async function Page(props: Props) {
 					)}
 
 					{user?.name && <span className="text-text-200 font-mono text-[15px]">{user?.name}</span>}
+
+					{user?.image && user?.name && <span className="text-text-200 font-mono text-[15px]">•</span>}
+
+					<span className="text-text-200 font-mono text-xs">{shortAddress(creatorId)}</span>
 				</div>
 			</Header>
 
