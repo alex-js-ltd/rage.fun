@@ -50,9 +50,9 @@ function ImageProvider({ children }: { children: ReactNode }) {
 
 	async function uploadImage(file: File) {
 		const res = await client<{ url: string }>(`/api/pinata/presign`, {})
-		console.log(res)
+
 		const upload = await pinata.upload.public.file(file).url(res.url) // Upload the file with the signed URL
-		console.log(upload)
+
 		return upload.cid
 	}
 
