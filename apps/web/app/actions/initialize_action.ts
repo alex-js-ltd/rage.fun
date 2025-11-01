@@ -49,6 +49,8 @@ export async function initializeAction(_prevState: State, formData: FormData) {
 		async: true,
 	})
 
+	console.log('submission', submission)
+
 	if (submission.status !== 'success') {
 		return {
 			...submission.reply(),
