@@ -5,8 +5,8 @@ import { Icon } from '@/app/comps/_icon'
 import { Spinner } from '@/app/comps/spinner'
 import { useAnchorWallet } from '@jup-ag/wallet-adapter'
 import { type TooltipContentProps, Tooltip, TooltipContent, TooltipTrigger } from '@/app/comps/tooltip'
-
 import { cn } from '@/app/utils/misc'
+import { useIsMobile } from '@/app/hooks/use_is_mobile'
 
 export type SubmitButtonProps = {
 	variant: Extract<ButtonProps['variant'], 'submit_1' | 'submit_2' | 'submit_3'>
@@ -22,6 +22,27 @@ export function SubmitButton({ content, variant, isPending, isLoading, onClick }
 	const { publicKey } = wallet || {}
 
 	const disabled = !publicKey || isPending || isLoading ? true : false
+
+	const isMobile = useIsMobile()
+
+	if (isMobile) {
+		return (
+			<Button
+				type="submit"
+				disabled={disabled}
+				variant={variant}
+				aria-label={`Submit ${content}`}
+				onClick={onClick}
+				onPointerDown={e => {
+					e.stopPropagation()
+					e.preventDefault()
+					e.currentTarget.form?.requestSubmit()
+				}}
+			>
+				{isPending ? <Spinner /> : <Icon name="submit" className="size-4" />}
+			</Button>
+		)
+	}
 
 	return (
 		<Tooltip open={publicKey ? undefined : false}>
