@@ -79,6 +79,7 @@ export function Form() {
 					action={formData => {
 						formData.delete('file')
 						formAction(formData)
+						clearImage()
 					}}
 				>
 					<fieldset className="relative flex w-full flex-1 items-center transition-all duration-300 flex-col gap-6">
