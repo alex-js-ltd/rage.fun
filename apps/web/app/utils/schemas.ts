@@ -498,3 +498,18 @@ export const UserSchema = z.object({
 	createdAt: z.date().transform(d => d.toISOString()),
 	updatedAt: z.date().transform(d => d.toISOString()),
 })
+
+export const UserPnlSchema = z.object({
+	userId: z.string(),
+
+	bought: z.bigint().transform(v => v.toString()),
+	sold: z.bigint().transform(v => v.toString()),
+	realizedPnl: z.bigint().transform(v => v.toString()),
+
+	createdAt: z.date().transform(d => d.toISOString()),
+	updatedAt: z.date().transform(d => d.toISOString()),
+})
+
+export const LeaderBoardSchema = UserSchema.extend({
+	pnl: UserPnlSchema,
+})
