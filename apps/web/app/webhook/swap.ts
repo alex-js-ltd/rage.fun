@@ -233,7 +233,7 @@ export async function processSwapEvents(swapEvents: EventData<'swapEvent'>[]) {
 
 			await AblyEvents.publishTopHoldersEvent(holdersChannel, topHolders, token)
 
-			const pnl = await upsertPnL(tokenId, signer)
+			const pnl = await upsertTokenPnL(tokenId, signer)
 
 			const solPrice = await getSolPrice()
 
@@ -271,8 +271,8 @@ export async function processSwapEvents(swapEvents: EventData<'swapEvent'>[]) {
 	}
 }
 
-export async function upsertPnL(tokenId: string, signer: string) {
-	const { bought, sold, realizedPnl } = await computePnl(tokenId, signer)
+export async function upsertTokenPnL(tokenId: string, signer: string) {
+	const { bought, sold, realizedPnl } = await computeTokenPnl(tokenId, signer)
 
 	try {
 		const row = await prisma.tokenPnl.upsert({
@@ -315,7 +315,7 @@ export async function upsertPnL(tokenId: string, signer: string) {
 	}
 }
 
-export async function computePnl(tokenId: string, signer: string) {
+export async function computeTokenPnl(tokenId: string, signer: string) {
 	//
 	// 1. Aggregate SOL in/out
 	//
