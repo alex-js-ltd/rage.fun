@@ -22,7 +22,7 @@ function generateCandlestickData(events: SwapEvent[], interval: number): Candles
 	let curBucket = bucketStart(ticks[0].time)
 	let cur: CandlestickData = {
 		time: curBucket,
-		open: ticks[0].value,
+		open: 0,
 		high: ticks[0].value,
 		low: ticks[0].value,
 		close: ticks[0].value,
