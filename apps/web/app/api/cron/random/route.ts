@@ -33,12 +33,12 @@ export async function GET(req: NextRequest) {
 		orderBy: { createdAt: 'desc' },
 
 		select: { id: true, createdAt: true },
-		take: 5,
+		take: 2,
 	})
 
 	const randomIndex = Math.floor(Math.random() * latest.length)
 
-	const token = { id: 'HL21zqrfpNxto3ypfu2EbBSwqFRQCRrDaTXCgb25FEBF' }
+	const token = latest[randomIndex]
 
 	await kv.set('random_token', token)
 
