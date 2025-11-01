@@ -22,6 +22,11 @@
     {
       "path": "/api/cron/random",
       "schedule": "*/5 * * * *"
+    },
+
+    {
+      "path": "/api/cron/pnl",
+      "schedule": "0 0 * * *"
     }
   ]
 }
