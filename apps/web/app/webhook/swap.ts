@@ -275,7 +275,7 @@ export async function upsertPnL(tokenId: string, signer: string) {
 	const { bought, sold, realizedPnl } = await computePnl(tokenId, signer)
 
 	try {
-		const row = await prisma.pnl.upsert({
+		const row = await prisma.tokenPnl.upsert({
 			where: {
 				signer_tokenId: {
 					signer,

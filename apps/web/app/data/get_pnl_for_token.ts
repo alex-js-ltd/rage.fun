@@ -5,7 +5,7 @@ import { createPnLSchema } from '@/app/utils/schemas'
 import 'server-only'
 
 export async function getPnLForToken(mint: string) {
-	const pnl = await prisma.pnl.findMany({
+	const pnl = await prisma.tokenPnl.findMany({
 		where: {
 			tokenId: mint,
 
