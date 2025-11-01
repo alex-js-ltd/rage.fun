@@ -45,6 +45,8 @@ export const InitializeSchema = z.object({
 	file: z.instanceof(File).refine(file => {
 		return !file || file.size <= MAX_UPLOAD_SIZE
 	}, 'File size must be less than 4MB'),
+
+	cid: z.string(),
 })
 
 // validate bonding curve schema on the server
