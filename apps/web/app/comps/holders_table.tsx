@@ -24,7 +24,6 @@ export function HoldersTable({ holdersPromise }: HoldersTableProps) {
 
 		console.log('💥 Received holdersEvent update:', holdersEvent)
 
-		console.log('mint', mint)
 		if (holdersEvent.id !== mint) return
 
 		setHoldersData(holdersEvent.holders)

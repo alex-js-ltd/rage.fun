@@ -1,16 +1,6 @@
 'use client'
 
-import React, {
-	type RefObject,
-	type ReactNode,
-	createContext,
-	useMemo,
-	use,
-	useCallback,
-	useState,
-	useRef,
-	useEffect,
-} from 'react'
+import React, { type RefObject, type ReactNode, createContext, useMemo, use, useCallback, useRef } from 'react'
 import { type InputProps } from '@/app/comps/input'
 import { type ImageProps } from 'next/image'
 import invariant from 'tiny-invariant'
@@ -25,8 +15,8 @@ const pinata = new PinataSDK({
 
 type Context = {
 	fileRef: RefObject<HTMLInputElement | null>
-	image?: ImageProps
-	cid?: string | null
+	data?: string | null
+	isLoading: boolean
 	clearImage: () => void
 	getInputProps: (name: string) => InputProps
 }
@@ -35,25 +25,22 @@ const ImageContext = createContext<Context | undefined>(undefined)
 ImageContext.displayName = 'ImageContext'
 
 function ImageProvider({ children }: { children: ReactNode }) {
-	const [image, setImage] = useState<ImageProps | undefined>(undefined)
+	const { run, data, isLoading, reset } = useAsync<string>()
 
 	const fileRef = useRef<HTMLInputElement>(null)
 
 	const clearImage = useCallback(() => {
 		if (fileRef.current) {
 			fileRef.current.value = ''
-			setImage(undefined)
+			reset()
 		}
 	}, [])
 
-	const { run, data: cid } = useAsync<string>()
-
 	async function uploadImage(file: File) {
 		const res = await client<{ url: string }>(`/api/pinata/presign`, {})
-
 		const upload = await pinata.upload.public.file(file).url(res.url) // Upload the file with the signed URL
-
-		return upload.cid
+		const image = `https://indigo-adverse-vicuna-777.mypinata.cloud/ipfs/${upload.cid}`
+		return image
 	}
 
 	const session = useSession()
@@ -76,31 +63,25 @@ function ImageProvider({ children }: { children: ReactNode }) {
 						const reader = new FileReader()
 
 						reader.onloadend = async () => {
-							const image = { src: reader.result, alt: 'your uploaded image' }
+							if (!isAuthenticated) return
 
-							if (isImage(image)) {
-								setImage(image)
-
-								if (!isAuthenticated) return
-
-								const promise = uploadImage(file)
-								run(promise)
-							}
+							const promise = uploadImage(file)
+							run(promise)
 						}
 
 						reader.readAsDataURL(file)
 					} else {
-						setImage(undefined)
+						reset()
 					}
 				},
 			}
 		},
-		[isAuthenticated],
+		[isAuthenticated, reset],
 	)
 
 	const value = useMemo(
-		() => ({ fileRef, image, cid, clearImage, getInputProps }),
-		[cid, image, clearImage, getInputProps],
+		() => ({ fileRef, data, isLoading, clearImage, getInputProps }),
+		[data, isLoading, clearImage, getInputProps],
 	)
 
 	return <ImageContext.Provider value={value}>{children}</ImageContext.Provider>
@@ -113,12 +94,3 @@ function useImage() {
 }
 
 export { ImageProvider, useImage }
-
-function isImage(image: unknown): image is ImageProps {
-	return (
-		Boolean(image) &&
-		typeof image === 'object' &&
-		typeof (image as ImageProps).src === 'string' &&
-		typeof (image as ImageProps).alt === 'string'
-	)
-}
