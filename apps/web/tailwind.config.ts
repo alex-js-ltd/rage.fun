@@ -150,6 +150,18 @@ const config: Config = {
 					'50%': { backgroundColor: 'rgb(229 152 155 / 0.1)' }, // #E5989B with 10% opacity
 					'100%': { backgroundColor: 'transparent' },
 				},
+
+				// add this
+				wave: {
+					'0%': { transform: 'translateX(-100%)' },
+					'100%': { transform: 'translateX(100%)' },
+				},
+				// optional: a radial pulse ring
+				'pulse-ring': {
+					'0%': { transform: 'scale(0.6)', opacity: '0.35' },
+					'70%': { transform: 'scale(1.3)', opacity: '0' },
+					'100%': { transform: 'scale(1.3)', opacity: '0' },
+				},
 			},
 			animation: {
 				'slide-up-and-fade': 'slide-up-and-fade 400ms cubic-bezier(0.16, 1, 0.3, 1)',
@@ -181,6 +193,10 @@ const config: Config = {
 				buy: 'buy 2000ms linear',
 
 				sell: 'sell 2000ms linear',
+
+				wave: 'wave 2s linear infinite',
+				'wave-once': 'wave 2s linear forwards',
+				'pulse-ring': 'pulse-ring 1.8s ease-out infinite',
 			},
 
 			backgroundSize: {
