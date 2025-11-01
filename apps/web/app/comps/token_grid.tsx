@@ -70,48 +70,28 @@ function TokenCard({
 		}
 	}, [updatedAt])
 
+	const buyWave = cn(
+		'absolute inset-0 z-20 pointer-events-none overflow-hidden bg-transparent',
+		'before:pointer-events-none before:absolute before:inset-0',
+		'before:bg-gradient-to-r before:from-transparent before:via-teal-300/10 before:to-transparent',
+		'before:animate-wave-once',
+	)
+
+	const sellWave = cn(
+		'absolute inset-0 z-20 pointer-events-none overflow-hidden bg-transparent',
+		'before:pointer-events-none before:absolute before:inset-0',
+		'before:bg-gradient-to-r before:from-transparent before:via-red-300/10 before:to-transparent',
+		'before:animate-wave-once',
+	)
+
 	return (
 		<article className="group relative flex flex-col w-full h-full min-h-[178px] border-b border-white border-opacity-[0.125] hover:bg-white/10 bg-background-100">
 			<div
 				onAnimationEnd={() => setAnimate(false)}
 				className={cn(
 					'absolute inset-0',
-					updateType === 'Buy' &&
-						animate &&
-						[
-							'absolute',
-							'inset-0',
-							'z-20',
-							'pointer-events-none',
-							'overflow-hidden',
-							'bg-transparent',
-							'before:pointer-events-none',
-							'before:absolute',
-							'before:inset-0',
-							'before:bg-gradient-to-r',
-							'before:from-transparent',
-							'before:via-teal-300/10',
-							'before:to-transparent',
-							'before:animate-wave-once',
-						].join(' '),
-					updateType === 'Sell' &&
-						animate &&
-						[
-							'absolute',
-							'inset-0',
-							'z-20',
-							'pointer-events-none',
-							'overflow-hidden',
-							'bg-transparent',
-							'before:pointer-events-none',
-							'before:absolute',
-							'before:inset-0',
-							'before:bg-gradient-to-r',
-							'before:from-transparent',
-							'before:via-red-300/10',
-							'before:to-transparent',
-							'before:animate-wave-once',
-						].join(' '),
+					updateType === 'Buy' && animate && buyWave,
+					updateType === 'Sell' && animate && sellWave,
 				)}
 			/>
 
