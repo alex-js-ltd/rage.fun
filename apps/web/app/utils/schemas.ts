@@ -46,7 +46,7 @@ export const InitializeSchema = z.object({
 		return !file || file.size <= MAX_UPLOAD_SIZE
 	}, 'File size must be less than 4MB'),
 
-	cid: z.string(),
+	image: z.string(),
 })
 
 // validate bonding curve schema on the server
@@ -103,7 +103,7 @@ export function initializeBondingCurveSchema(
 
 				description: z.string(),
 
-				cid: z.string(),
+				image: z.string(),
 			}),
 		)
 }

@@ -30,7 +30,7 @@ const initialState: State = {
 export function Form() {
 	const [lastResult, formAction, isPending] = useActionState(initializeAction, initialState)
 
-	const { clearImage, cid } = useImage()
+	const { clearImage, data: image } = useImage()
 
 	const [form, fields] = useForm({
 		// Reuse the validation logic on the client
@@ -116,7 +116,7 @@ export function Form() {
 							{/* hidden inputs */}
 							<input name="creator" type="hidden" defaultValue={payer} />
 
-							<input name="cid" type="hidden" defaultValue={cid ?? ''} />
+							<input name="image" type="hidden" defaultValue={image ?? ''} />
 						</div>
 
 						<div className="flex items-end w-full gap-2 p-3 h-[69px]">
