@@ -30,6 +30,8 @@ const initialState: State = {
 export function Form() {
 	const [lastResult, formAction, isPending] = useActionState(initializeAction, initialState)
 
+	const { clearImage, cid } = useImage()
+
 	const [form, fields] = useForm({
 		// Reuse the validation logic on the client
 		onValidate({ formData }) {
@@ -38,6 +40,8 @@ export function Form() {
 				schema: InitializeSchema,
 			})
 		},
+
+		async onSubmit(e) {},
 
 		// Validate the form on blur event triggered
 		shouldValidate: 'onBlur',
@@ -61,16 +65,6 @@ export function Form() {
 
 	const payer = usePayer()
 
-	const { clearImage, cid } = useImage()
-
-	useEffect(() => {
-		if (isLoading) {
-			clearImage()
-		}
-
-		return () => clearImage()
-	}, [clearImage, isLoading])
-
 	const config: ToastDescription = { loading: `Generating token`, success: `Token ready` }
 
 	return (
@@ -82,7 +76,10 @@ export function Form() {
 					key={form.key}
 					className="z-10 h-full w-full min-w-0 bg-secondary-background"
 					{...getFormProps(form)}
-					action={formAction}
+					action={formData => {
+						formData.delete('file')
+						formAction(formData)
+					}}
 				>
 					<fieldset className="relative flex w-full flex-1 items-center transition-all duration-300 flex-col gap-6">
 						<div className="relative grid grid-cols-1 w-full">
