@@ -94,7 +94,24 @@ function TokenCard({
 							'before:to-transparent',
 							'before:animate-wave-once',
 						].join(' '),
-					updateType === 'Sell' && animate && 'animate-sell',
+					updateType === 'Sell' &&
+						animate &&
+						[
+							'absolute',
+							'inset-0',
+							'z-20',
+							'pointer-events-none',
+							'overflow-hidden',
+							'bg-transparent',
+							'before:pointer-events-none',
+							'before:absolute',
+							'before:inset-0',
+							'before:bg-gradient-to-r',
+							'before:from-transparent',
+							'before:via-red-300/10',
+							'before:to-transparent',
+							'before:animate-wave-once',
+						].join(' '),
 				)}
 			/>
 
