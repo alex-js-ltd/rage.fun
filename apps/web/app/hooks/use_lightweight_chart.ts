@@ -114,7 +114,10 @@ export function useLightweightChart(
 			priceFormat: {
 				type: 'custom',
 				formatter: (val: number) => {
-					return val.toFixed(10)
+					if (val < 0.000000001) {
+						return val.toExponential(2)
+					}
+					return val.toFixed(9)
 				},
 			},
 		})
