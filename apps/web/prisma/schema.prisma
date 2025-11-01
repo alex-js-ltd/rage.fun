@@ -30,6 +30,8 @@ model User {
   tokens   Token[]
   comments Comment[]
 
+  pnl UserPnl?
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -103,7 +105,7 @@ model Token {
   comments      Comment[]
   harvestEvents HarvestEvent[]
 
-  pnl Pnl[]
+  pnl TokenPnl[]
 
   creator   User   @relation(fields: [creatorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   creatorId String
@@ -247,15 +249,14 @@ model MarketData {
   @@index([tokenId])
 }
 
-model Pnl {
+model TokenPnl {
   signer  String
   tokenId String
 
   bought BigInt
   sold   BigInt
 
-  realizedPnl   BigInt
-
+  realizedPnl BigInt
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -265,4 +266,18 @@ model Pnl {
   @@id([signer, tokenId])
   @@index([tokenId])
   @@index([signer])
+}
+
+model UserPnl {
+  userId String @id // use bonding curve pda address as id
+
+  bought BigInt
+  sold   BigInt
+
+  realizedPnl BigInt
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }
