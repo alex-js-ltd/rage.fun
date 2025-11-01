@@ -482,3 +482,19 @@ export const WalletSchema = z.object({
 })
 
 export type WalletType = z.infer<typeof WalletSchema>
+
+export const UserSchema = z.object({
+	id: z.string(),
+
+	name: z.string().nullable(),
+	email: z.string().email().nullable(),
+	image: z.string().url().nullable(),
+
+	emailVerified: z
+		.date()
+		.nullable()
+		.transform(d => d?.toISOString()),
+
+	createdAt: z.date().transform(d => d.toISOString()),
+	updatedAt: z.date().transform(d => d.toISOString()),
+})
