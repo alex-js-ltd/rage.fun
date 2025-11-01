@@ -114,7 +114,7 @@ export function useLightweightChart(
 			priceFormat: {
 				type: 'custom',
 				formatter: (val: number) => {
-					return val.toFixed(9)
+					return val.toFixed(10)
 				},
 			},
 		})
