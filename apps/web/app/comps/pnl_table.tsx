@@ -77,11 +77,10 @@ export function PnLTable({ pnlPromise }: PnLTableProps) {
 								>{`$${row.sold.toFixed(4)}`}</td>
 
 								<td
-									className={cn(
-										'px-3 text-right font-mediumm ',
-										row.bought > row.sold ? 'text-sell-100' : 'text-buy-100',
-									)}
-								>{`$${row.realizedPnl.toFixed(4)}`}</td>
+									className={cn('px-3 text-right font-medium', row.realizedPnl < 0 ? 'text-sell-100' : 'text-buy-100')}
+								>
+									{`${row.realizedPnl > 0 ? '+' : row.realizedPnl < 0 ? '-' : ''}$${Math.abs(row.realizedPnl).toFixed(4)}`}
+								</td>
 							</tr>
 						))}
 					</tbody>
