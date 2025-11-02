@@ -94,17 +94,22 @@ function TableRow({ row, animate }: { row: TransactionTableType; animate: boolea
 					<div>{timeFromNow(row.time)}</div>
 				</div>
 			</td>
+
 			<td className="px-3 text-center capitalize max-lg:hidden">
 				<SwapType swapType={row.swapType} />
 			</td>
+
 			<td
 				className={cn(
 					'px-3 text-right font-medium md:text-text-100',
 					row.swapType === 'Buy' ? 'text-buy-100' : 'text-sell-100',
 				)}
 			>{`$${formatTinyNumber(row.price)}`}</td>
-			<td className="px-3 text-right font-medium">{`$${formatNumberSmart(row.volume)}`}</td>
+
+			<td className="px-3 text-right font-medium">{`$${row.volume.toFixed(2)}`}</td>
+
 			<td className="px-3 text-right font-medium">{row.uiAmount}</td>
+
 			<td className="px-3 max-sm:hidden">
 				<div className="flex justify-end items-center gap-x-1.5 text-neutral-400 cursor-pointer">
 					<a
