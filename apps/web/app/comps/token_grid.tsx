@@ -151,7 +151,7 @@ function TokenCard({
 					</div>
 				</div>
 
-				<div className="flex gap-2 items-center flex-wrap min-h-[32px]">
+				<div className="flex gap-2 items-center flex-wrap sm:h-[32px]">
 					<div className="flex gap-0 items-center flex-wrap border border-white border-opacity-[0.05] rounded-full px-1 py-1">
 						<Pill label="P" value={`$${formatNumberSmart(price)}`} tooltip="Price" />
 						<Pill label="L" value={`$${formatNumberSmart(liquidity)}`} tooltip="Liquidity" />
@@ -425,7 +425,7 @@ export function TokenCardFallback({ i, children }: { i: number; children?: React
 					</div>
 				</div>
 
-				<div className="flex gap-2 items-center flex-wrap h-[32px]">
+				<div className="flex gap-2 items-center flex-wrap sm:h-[32px]">
 					<div className="flex gap-1 items-center flex-wrap border border-white border-opacity-[0.05] rounded-full px-1 py-1">
 						<Loading
 							className="w-[60px] h-[16px] cursor-pointer relative rounded-md overflow-hidden flex-shrink-0"
