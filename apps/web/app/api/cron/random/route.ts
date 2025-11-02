@@ -33,7 +33,7 @@ export async function GET(req: NextRequest) {
 		orderBy: { createdAt: 'desc' },
 
 		select: { id: true, createdAt: true },
-		take: 2,
+		take: 6,
 	})
 
 	const randomIndex = Math.floor(Math.random() * latest.length)
