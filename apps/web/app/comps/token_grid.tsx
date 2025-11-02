@@ -151,12 +151,10 @@ function TokenCard({
 					</div>
 				</div>
 
-				<div className="flex gap-2 items-center flex-wrap h-[32px]">
+				<div className="flex gap-2 items-center flex-wrap min-h-[32px]">
 					<div className="flex gap-0 items-center flex-wrap border border-white border-opacity-[0.05] rounded-full px-1 py-1">
 						<Pill label="P" value={`$${formatNumberSmart(price)}`} tooltip="Price" />
-
 						<Pill label="L" value={`$${formatNumberSmart(liquidity)}`} tooltip="Liquidity" />
-
 						<Pill label="V" value={`$${formatNumberSmart(volume)}`} tooltip="Volume" />
 
 						<Pill
