@@ -11,6 +11,7 @@ import { Icon } from './_icon'
 import * as Ably from 'ably'
 import { useChannel } from 'ably/react'
 import { timeFromNow } from '@/app/utils/misc'
+import { formatTinyNumber } from '@/app/utils/misc'
 
 export type TransactionTableProps = {
 	transactionPromise: Promise<TransactionTableType[]>
@@ -101,7 +102,7 @@ function TableRow({ row, animate }: { row: TransactionTableType; animate: boolea
 					'px-3 text-right font-medium md:text-text-100',
 					row.swapType === 'Buy' ? 'text-buy-100' : 'text-sell-100',
 				)}
-			>{`$${formatNumberSmart(row.price)}`}</td>
+			>{`$${formatTinyNumber(row.price)}`}</td>
 			<td className="px-3 text-right font-medium">{`$${formatNumberSmart(row.volume)}`}</td>
 			<td className="px-3 text-right font-medium">{row.uiAmount}</td>
 			<td className="px-3 max-sm:hidden">

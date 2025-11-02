@@ -25,6 +25,7 @@ import { BN } from '@coral-xyz/anchor'
 
 import { SwapEventType } from '@/app/utils/schemas'
 import Decimal from 'decimal.js'
+import { formatTinyNumber } from '@/app/utils/misc'
 
 dayjs.extend(utc)
 
@@ -114,10 +115,7 @@ export function useLightweightChart(
 			priceFormat: {
 				type: 'custom',
 				formatter: (val: number) => {
-					if (val < 0.000000001) {
-						return val.toExponential(2)
-					}
-					return val.toFixed(9)
+					return formatTinyNumber(val)
 				},
 			},
 		})
