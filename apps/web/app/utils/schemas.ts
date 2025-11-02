@@ -322,7 +322,9 @@ export function createTransactionTableSchema(options: { decimals: number; solPri
 
 		const volume = solToUsd(volumeSol, options.solPrice).toNumber()
 
-		const price = solToUsd(new Decimal(data.price), options.solPrice).toNumber()
+		const avg = volumeSol.div(new Decimal(uiResult))
+
+		const price = solToUsd(avg, options.solPrice).toNumber()
 
 		const { id, time, swapType, signer, tokenId } = data
 
