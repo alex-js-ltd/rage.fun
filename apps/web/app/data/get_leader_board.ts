@@ -1,6 +1,10 @@
 import { prisma } from '@/app/utils/db'
 import { fromLamports } from '@repo/rage'
 import { BN } from '@coral-xyz/anchor'
+import { getRageWallet } from '@/app/data/get_rage_wallet'
+
+import { getTokenFeed } from '@/app/data/get_token_feed'
+import { calculateSellPrice } from '@/app/utils/wasm'
 
 export async function getLeaderBoard(limit = 100) {
 	const rows = await prisma.user.findMany({
@@ -42,4 +46,8 @@ export async function getLeaderBoard(limit = 100) {
 			netFlow,
 		}
 	})
+}
+
+async function getUserPosition(userId: string) {
+	const wallet = await getRageWallet(userId)
 }
