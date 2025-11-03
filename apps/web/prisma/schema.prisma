@@ -275,6 +275,7 @@ model UserPnl {
   sold   BigInt
 
   realizedPnl BigInt
+  position    BigInt?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
