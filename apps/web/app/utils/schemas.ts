@@ -509,6 +509,7 @@ export const UserPnlSchema = z.object({
 	bought: z.bigint().transform(v => v.toString()),
 	sold: z.bigint().transform(v => v.toString()),
 	realizedPnl: z.bigint().transform(v => v.toString()),
+	position: z.bigint().transform(v => v.toString()),
 
 	createdAt: z.date().transform(d => d.toISOString()),
 	updatedAt: z.date().transform(d => d.toISOString()),
@@ -516,4 +517,15 @@ export const UserPnlSchema = z.object({
 
 export const LeaderBoardSchema = UserSchema.extend({
 	pnl: UserPnlSchema,
+}).transform(data => {
+	const { userId } = data.pnl
+	// ROI% on realized PnL only. Guard against divide-by-zero.
+	const roiPct = Number(data.pnl.bought) > 0 ? (Number(data.pnl.realizedPnl) / Number(data.pnl.bought)) * 100 : 0
+
+	const bought = fromLamports(new BN(data.pnl.bought), 9)
+	const position = fromLamports(new BN(data.pnl.position), 9)
+
+	return { userId, roiPct, bought, position }
 })
+
+export type LeaderBoardType = z.infer<typeof LeaderBoardSchema>

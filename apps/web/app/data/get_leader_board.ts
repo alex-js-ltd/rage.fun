@@ -1,16 +1,14 @@
 import { prisma } from '@/app/utils/db'
-import { fromLamports } from '@repo/rage'
-import { BN } from '@coral-xyz/anchor'
-import { getRageWallet } from '@/app/data/get_rage_wallet'
-
-import { getTokenFeed } from '@/app/data/get_token_feed'
-import { calculateSellPrice } from '@/app/utils/wasm'
+import { LeaderBoardSchema } from '@/app/utils/schemas'
+import { ZodError } from 'zod'
 
 export async function getLeaderBoard(limit = 100) {
 	const rows = await prisma.user.findMany({
 		include: {
 			pnl: true, // include their PnL record
 		},
+
+		where: { pnl: { isNot: null } },
 		orderBy: {
 			pnl: {
 				realizedPnl: 'desc', // sort by highest realized profit
@@ -24,30 +22,22 @@ export async function getLeaderBoard(limit = 100) {
 	}
 
 	return rows.map(u => {
-		const bought = u.pnl?.bought ?? BigInt('0')
-		const sold = u.pnl?.sold ?? BigInt('0')
-		const realized = u.pnl?.realizedPnl ?? BigInt('0')
+		const parsed = LeaderBoardSchema.safeParse(u)
 
-		// ROI% on realized PnL only. Guard against divide-by-zero.
-		const roiPct = bought > BigInt('0') ? (Number(realized) / Number(bought)) * 100 : 0
+		if (!parsed.success) {
+			// Optional: prefix the path so it’s obvious the object that failed
+			const issues = parsed.error.issues.map(issue => ({
+				...issue,
+				path: [...issue.path],
+			}))
 
-		const netFlow = sold - bought
+			// Log nicely for server debugging
+			console.error('❌ Invalid token with relations:', parsed.error.format())
 
-		const pnl = { roi: roiPct, bought: fromLamports(new BN(bought.toString()), 9) }
-
-		return {
-			userId: u.id,
-			name: u.name,
-			image: u.image,
-			bought,
-			sold,
-			realizedPnl: realized,
-			roiPct,
-			netFlow,
+			// Throw a real ZodError so upstream can `catch (e instanceof ZodError)`
+			throw new ZodError(issues)
 		}
-	})
-}
 
-async function getUserPosition(userId: string) {
-	const wallet = await getRageWallet(userId)
+		return parsed.data
+	})
 }
