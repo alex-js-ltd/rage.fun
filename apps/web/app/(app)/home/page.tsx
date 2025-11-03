@@ -4,6 +4,7 @@ import { getTokens } from '@/app/data/get_tokens'
 import { TokenGrid, TokenGridFallback } from '@/app/comps/token_grid'
 import { ExploreNav } from '@/app/comps/explore_nav'
 import { Events } from '@/app/comps/events'
+import { getLeaderBoard } from '@/app/data/get_leader_board'
 
 export const dynamic = 'force-dynamic'
 
