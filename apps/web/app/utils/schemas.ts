@@ -519,13 +519,15 @@ export const LeaderBoardSchema = UserSchema.extend({
 	pnl: UserPnlSchema,
 }).transform(data => {
 	const { userId } = data.pnl
+
+	const realizedPnl = fromLamports(new BN(data.pnl.realizedPnl), 9)
 	// ROI% on realized PnL only. Guard against divide-by-zero.
 	const roiPct = Number(data.pnl.bought) > 0 ? (Number(data.pnl.realizedPnl) / Number(data.pnl.bought)) * 100 : 0
 
 	const bought = fromLamports(new BN(data.pnl.bought), 9)
 	const position = fromLamports(new BN(data.pnl.position), 9)
 
-	return { userId, roiPct, bought, position }
+	return { userId, realizedPnl, roiPct, bought, position }
 })
 
 export type LeaderBoardType = z.infer<typeof LeaderBoardSchema>
