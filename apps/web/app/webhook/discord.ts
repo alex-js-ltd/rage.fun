@@ -7,7 +7,7 @@ import { type TokenFeedType, SwapEventType, PnlType } from '@/app/utils/schemas'
 
 import { BN } from '@coral-xyz/anchor'
 import { formatNumberSmart, formatTokenAmount, shortAddress } from '@/app/utils/misc'
-import { type TopHolderType } from '@/app/utils/schemas'
+import { type TopHolderType, type LeaderBoardType } from '@/app/utils/schemas'
 import { getSolPrice } from '@/app/data/get_sol_price'
 
 import { client } from '@/app/utils/client'
@@ -164,28 +164,23 @@ export async function publishCreateAlert(event: EventData<'createEvent'>, token:
 	console.log('✅ Webhook sent:', res)
 }
 
-export async function publishProfitAlert(pnlEvent: PnlType, swapEvent: SwapEventType) {
-	const alertMessage = '🎯 **NEW PROFIT** 🎯'
+export async function publishLeaderBoardAlert(leaderBoard: LeaderBoardType[]) {
+	function formatTraderCard(user: LeaderBoardType) {
+		const emoji = user.realizedPnl >= 0 ? '🟩' : '🟥'
 
-	const { bought, sold, realizedPnl } = pnlEvent
-	// assume realizedPnl is profit in SOL (positive for gain, negative for loss)
-	const profitPct = bought > 0 ? (realizedPnl / bought) * 100 : 0
+		return [
+			`**${emoji} ${shortAddress(user.userId)}**`,
+			`**+${user.realizedPnl.toFixed(4)}◎`,
+			`PNL: +${user.roiPct.toFixed(4)}%`,
+			`Bought: ${user.bought.toFixed(4)}◎`,
+			`Position: ${user.position.toFixed(4)}◎`,
+		].join('\n')
+	}
 
-	const solPrice = await getSolPrice()
+	// Example usage:
+	const cards = leaderBoard.slice(0, 5).map(formatTraderCard).join('\n\n')
 
-	const boughtInDollars = solToUsd(new Decimal(bought).div(1e9), solPrice).toNumber()
-	const positionInDollars = solToUsd(new Decimal(sold).div(1e9), solPrice).toNumber()
-
-	const caption = [
-		`${alertMessage}`,
-
-		'',
-		`** ├ PnL: +${profitPct}% **`,
-		`** ├ Bought: $${boughtInDollars}**`,
-		`** ├ Position: $${positionInDollars}**`,
-		'',
-		'',
-	].join('\n')
+	const caption = ['🏆 **RAGE LEADERBOARD** 🏆', '', cards].join('\n')
 
 	// Then in your Discord webhook payload:
 	const payload = {
