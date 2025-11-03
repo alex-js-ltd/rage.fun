@@ -165,22 +165,25 @@ export async function publishCreateAlert(event: EventData<'createEvent'>, token:
 }
 
 export async function publishLeaderBoardAlert(leaderBoard: LeaderBoardType[]) {
-	function formatTraderCard(user: LeaderBoardType) {
-		const emoji = user.realizedPnl >= 0 ? '🟩' : '🟥'
+	function formatTraderCard(user: LeaderBoardType, index: number, isLast: boolean) {
+		const medals = ['🥇', '🥈', '🥉', '🏅', '🎖️']
+		const medal = medals[index] ?? '🏵️'
 
 		return [
-			`**${emoji} ${shortAddress(user.userId)}**`,
-			`**+${user.realizedPnl.toFixed(4)}◎`,
-			`PNL: +${user.roiPct.toFixed(4)}%`,
-			`Bought: ${user.bought.toFixed(4)}◎`,
-			`Position: ${user.position.toFixed(4)}◎`,
+			`**${medal} ${shortAddress(user.userId)}**`,
+			`**├R. PNL:** +${user.realizedPnl.toFixed(4)}◎`,
+			`**├ROI:** +${user.roiPct.toFixed(4)}%`,
+			`**├Bought:** ${user.bought.toFixed(4)}◎`,
+			`**├Position:** ${user.position.toFixed(4)}◎`,
 		].join('\n')
 	}
 
-	// Example usage:
-	const cards = leaderBoard.slice(0, 5).map(formatTraderCard).join('\n\n')
+	const cards = leaderBoard
+		.slice(0, 5)
+		.map((user, i, arr) => formatTraderCard(user, i, i === arr.length - 1))
+		.join('\n\n') // 👈 adds a blank line between each user
 
-	const caption = ['🏆 **RAGE LEADERBOARD** 🏆', '', cards].join('\n')
+	const caption = ['⚡ **RAGE LEADERBOARD** ⚡', '', cards].join('\n')
 
 	// Then in your Discord webhook payload:
 	const payload = {
