@@ -169,7 +169,7 @@ function TokenCard({
 						/>
 					</div>
 
-					<div className="xs:ml-auto">{children ? children : null}</div>
+					<div className="flex-1 xxs:justify-end items-center flex">{children ? children : null}</div>
 				</div>
 			</div>
 		</article>
@@ -448,7 +448,7 @@ export function TokenCardFallback({ i, children }: { i: number; children?: React
 						></Loading>
 					</div>
 
-					<div className="xs:ml-auto">{children ? children : null}</div>
+					<div className="flex-1 xxs:justify-end items-center flex">{children ? children : null}</div>
 				</div>
 			</div>
 		</article>
