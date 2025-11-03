@@ -1,4 +1,7 @@
 import { prisma } from '@/app/utils/db'
+import { getRageWallet } from '@/app/data/get_rage_wallet'
+import { calculateSellPrice } from '@/app/utils/wasm'
+import { getTokenFeed } from '@/app/data/get_token_feed'
 
 export async function upsertUserPnL(userId: string) {
 	try {
@@ -48,4 +51,46 @@ export async function upsertUserPnL(userId: string) {
 		console.error(`🔥 [User PnL Upsert Error] signer=${userId}`, err)
 		throw err
 	}
+}
+
+export async function getUserPosition(userId: string) {
+	const wallet = await getRageWallet(userId)
+
+	const results = await Promise.all(
+		wallet.map(async item => {
+			const { bondingCurve } = await getTokenFeed(item.metadata.tokenId)
+
+			const {
+				virtualReserve,
+				currentReserve,
+				targetReserve,
+				virtualSupply,
+				currentSupply,
+				targetSupply,
+				connectorWeight,
+				decimals,
+			} = bondingCurve
+
+			const uiAmount = item.tokenAmount.uiAmountString
+
+			const position = await calculateSellPrice({
+				uiAmount,
+				virtualReserve,
+				currentReserve,
+				targetReserve,
+				virtualSupply,
+				currentSupply,
+				targetSupply,
+				connectorWeight,
+				decimals,
+			})
+
+			return position
+		}),
+	)
+
+	// aggregate positions (example: sum them)
+	const total = results.reduce((acc, pos) => acc + Number(pos), 0)
+
+	return total
 }
