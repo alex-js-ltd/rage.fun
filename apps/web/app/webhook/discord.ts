@@ -67,7 +67,7 @@ export async function publishSwapEvent(event: SwapEventType, token: TokenFeedTyp
 		// TOKEN INFO SECTION
 		`**🪙 ${symbol}**`,
 		`** ├Amount: \`${formattedAmount}\`**`,
-		`** ├Price per Token: \`${event.price.toFixed(9)} SOL\`**`,
+		`** ├Price per Token: \`${event.price.toFixed(12)}\`** <:sol:1370492439873323028>`,
 
 		...refund,
 
