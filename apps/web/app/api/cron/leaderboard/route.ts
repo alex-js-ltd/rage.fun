@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { kv } from '@vercel/kv'
 import { getServerEnv } from '@/app/utils/env'
 import { getLeaderBoard } from '@/app/data/get_leader_board'
+import * as DiscordAlerts from '@/app/webhook/discord'
 import 'server-only'
 
 const { ABLY_API_KEY } = getServerEnv()
@@ -19,6 +20,8 @@ export async function GET(req: NextRequest) {
 	const leaderBoard = await getLeaderBoard(5)
 
 	await kv.set('leader_board', leaderBoard)
+
+	await DiscordAlerts.publishLeaderBoardAlert(leaderBoard)
 
 	// Return a success response
 	return NextResponse.json(
