@@ -1,5 +1,6 @@
 import { prisma } from '@/app/utils/db'
-import { RowsIcon } from '@radix-ui/react-icons'
+import { fromLamports } from '@repo/rage'
+import { BN } from '@coral-xyz/anchor'
 
 export async function getLeaderBoard(limit = 100) {
 	const rows = await prisma.user.findMany({
@@ -19,14 +20,16 @@ export async function getLeaderBoard(limit = 100) {
 	}
 
 	return rows.map(u => {
-		const bought = u.pnl?.bought ?? 0n
-		const sold = u.pnl?.sold ?? 0n
-		const realized = u.pnl?.realizedPnl ?? 0n
+		const bought = u.pnl?.bought ?? BigInt('0')
+		const sold = u.pnl?.sold ?? BigInt('0')
+		const realized = u.pnl?.realizedPnl ?? BigInt('0')
 
 		// ROI% on realized PnL only. Guard against divide-by-zero.
-		const roiPct = bought > 0n ? (Number(realized) / Number(bought)) * 100 : null
+		const roiPct = bought > BigInt('0') ? (Number(realized) / Number(bought)) * 100 : 0
 
 		const netFlow = sold - bought
+
+		const pnl = { roi: roiPct, bought: fromLamports(new BN(bought.toString()), 9) }
 
 		return {
 			userId: u.id,
