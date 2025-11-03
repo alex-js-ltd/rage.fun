@@ -3,6 +3,7 @@ import { prisma } from '@/app/utils/db'
 import { Prisma } from '@prisma/client'
 import { getSolPrice } from '@/app/data/get_sol_price'
 import { createTokenFeedSchema } from '@/app/utils/schemas'
+import { ZodError } from 'zod'
 import 'server-only'
 
 export async function getTokens(searchParams: SearchParams) {
@@ -33,8 +34,17 @@ export async function getTokens(searchParams: SearchParams) {
 		const parsed = TokenFeedSchema.safeParse(token)
 
 		if (!parsed.success) {
-			console.error(parsed.error.format())
-			throw new Error('Invalid token with relations')
+			// Optional: prefix the path so it’s obvious the object that failed
+			const issues = parsed.error.issues.map(issue => ({
+				...issue,
+				path: ['token', ...issue.path],
+			}))
+
+			// Log nicely for server debugging
+			console.error('❌ Invalid token with relations:', parsed.error.format())
+
+			// Throw a real ZodError so upstream can `catch (e instanceof ZodError)`
+			throw new ZodError(issues)
 		}
 
 		return parsed.data

@@ -1,7 +1,7 @@
 import { prisma } from '@/app/utils/db'
 import { getSolPrice } from '@/app/data/get_sol_price'
 import { createPnLSchema } from '@/app/utils/schemas'
-
+import { ZodError } from 'zod'
 import 'server-only'
 
 export async function getPnLForToken(mint: string) {
@@ -19,18 +19,20 @@ export async function getPnLForToken(mint: string) {
 		},
 	})
 
-	console.log(pnl)
-
 	const solPrice = await getSolPrice()
 
 	const PnlSchema = createPnLSchema({ solPrice })
 
 	const data = pnl.map(p => {
 		const parsed = PnlSchema.safeParse(p)
-
 		if (!parsed.success) {
-			console.error(parsed.error.format())
-			throw new Error('Invalid pnl schema')
+			// 🧨 Wrap the Zod issues into a thrown ZodError
+			throw new ZodError(
+				parsed.error.issues.map(issue => ({
+					...issue,
+					path: ['pnl', ...issue.path], // optional: prefix path with index
+				})),
+			)
 		}
 
 		return parsed.data
