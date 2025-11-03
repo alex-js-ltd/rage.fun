@@ -173,11 +173,11 @@ export async function publishLeaderBoardAlert(leaderBoard: LeaderBoardType[]) {
 		const name = user?.name ? `${user.name} • ${shortAddress(user.userId)}` : `${shortAddress(user.userId)}`
 
 		return [
-			`**${medal} ${name}**`,
-			`**├R. PNL:** +${user.realizedPnl.toFixed(4)}◎`,
-			`**├ROI:** +${user.roiPct.toFixed(4)}%`,
-			`**├Bought:** ${user.bought.toFixed(4)}◎`,
-			`**├Position:** ${user.position.toFixed(4)}◎`,
+			`**\`${medal} ${name}\`**`,
+			`**\`├ R. PNL: +${user.realizedPnl.toFixed(4)}◎\`**`,
+			`**\`├ ROI: +${user.roiPct.toFixed(4)}%\`**`,
+			`**\`├ Bought: ${user.bought.toFixed(4)}◎\`**`,
+			`**\`├ Position: ${user.position.toFixed(4)}◎\`**`,
 		].join('\n')
 	}
 
