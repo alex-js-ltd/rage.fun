@@ -19,6 +19,8 @@ export async function upsertUserPnL(userId: string) {
 		const sold = result._sum.sold ?? BigInt(0)
 		const realizedPnl = result._sum.realizedPnl ?? BigInt(0)
 
+		const position = await getUserPosition(userId)
+
 		const row = await prisma.userPnl.upsert({
 			where: { userId },
 			create: {
@@ -26,23 +28,23 @@ export async function upsertUserPnL(userId: string) {
 				bought,
 				sold,
 				realizedPnl,
+				position,
 			},
 			update: {
 				bought,
 				sold,
 				realizedPnl,
+				position,
 			},
 		})
-
-		// 🧠 Format profit visually
-		const pnl = realizedPnl > BigInt(0) ? `+${realizedPnl}` : `${realizedPnl}`
 
 		console.log(
 			`📈 [User PnL Updated]\n` +
 				`👤 Signer: ${userId}\n` +
-				`🟢 Total Bought: ${bought} lamports\n` +
-				`🔴 Total Sold: ${sold} lamports\n` +
-				`💰 Realized PnL: ${pnl} lamports\n` +
+				`🟢 Total Bought: ${row.bought} lamports\n` +
+				`🔴 Total Sold: ${row.sold} lamports\n` +
+				`💰 Realized PnL: ${row.realizedPnl} lamports\n` +
+				`📊 Position: ${row?.position} lamports\n` +
 				`✅ Upsert successful\n`,
 		)
 
