@@ -1,7 +1,8 @@
 import { prisma } from '@/app/utils/db'
+import { RowsIcon } from '@radix-ui/react-icons'
 
 export async function getLeaderBoard(limit = 100) {
-	const users = await prisma.user.findMany({
+	const rows = await prisma.user.findMany({
 		include: {
 			pnl: true, // include their PnL record
 		},
@@ -13,7 +14,29 @@ export async function getLeaderBoard(limit = 100) {
 		take: 5,
 	})
 
-	console.log(users)
+	if (rows.length === 0) {
+		throw new Error('No users found')
+	}
 
-	return users
+	return rows.map(u => {
+		const bought = u.pnl?.bought ?? 0n
+		const sold = u.pnl?.sold ?? 0n
+		const realized = u.pnl?.realizedPnl ?? 0n
+
+		// ROI% on realized PnL only. Guard against divide-by-zero.
+		const roiPct = bought > 0n ? (Number(realized) / Number(bought)) * 100 : null
+
+		const netFlow = sold - bought
+
+		return {
+			userId: u.id,
+			name: u.name,
+			image: u.image,
+			bought,
+			sold,
+			realizedPnl: realized,
+			roiPct,
+			netFlow,
+		}
+	})
 }
