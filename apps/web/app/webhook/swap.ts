@@ -262,6 +262,16 @@ export async function processSwapEvents(swapEvents: EventData<'swapEvent'>[]) {
 		}
 	}
 
+	const userIds = [...new Set(swapEvents.map(e => e.data.signer.toBase58()))]
+
+	for (const userId of userIds) {
+		try {
+			await upsertUserPnL(userId)
+		} catch (err) {
+			console.error(`🔥 Failed to upsert PnL for user ${userId}:`, err instanceof Error ? err.message : err)
+		}
+	}
+
 	for await (const alert of socialAlerts) {
 		try {
 			await DiscordAlerts.publishSwapEvent(alert.swapEvent, alert.token, alert.topHolders)

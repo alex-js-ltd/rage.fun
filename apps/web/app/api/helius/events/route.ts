@@ -49,12 +49,6 @@ export async function POST(request: NextRequest) {
 
 	await processRaydiumEvents(raydiumEvent)
 
-	const userIds = [...new Set(swapEvent.map(e => e.data.signer.toBase58()))]
-
-	for (const user of userIds) {
-		await upsertUserPnL(user)
-	}
-
 	// Return a success response
 	return NextResponse.json(
 		{
