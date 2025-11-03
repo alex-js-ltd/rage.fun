@@ -74,7 +74,7 @@ export async function publishSwapEvent(event: SwapEventType, token: TokenFeedTyp
 		// BONDING CURVE SECTION
 		`**🌀 BONDING CURVE**`,
 		`** ├Ciculating Supply: ${formattedcirculatingSupply}**`,
-		`** ├Liquidity: ${liquidity.toFixed(9)} / 80 SOL**`,
+		`** ├Liquidity: ${liquidity.toFixed(12)} / 80 SOL**`,
 		'',
 
 		// TOP HOLDERS
@@ -174,10 +174,10 @@ export async function publishLeaderBoardAlert(leaderBoard: LeaderBoardType[]) {
 
 		return [
 			`**\`${medal} ${name}\`**`,
-			`**\`├ R. PNL: +${user.realizedPnl.toFixed(4)}◎\`**`,
+			`**\`├ R. PNL: +${user.realizedPnl.toFixed(4)}\`** <:sol:1370492439873323028>`,
 			`**\`├ ROI: +${user.roiPct.toFixed(4)}%\`**`,
-			`**\`├ Bought: ${user.bought.toFixed(4)}◎\`**`,
-			`**\`├ Position: ${user.position.toFixed(4)}◎\`**`,
+			`**\`├ Bought: ${user.bought.toFixed(4)}\`** <:sol:1370492439873323028>`,
+			`**\`├ Position: ${user.position.toFixed(4)}\`** <:sol:1370492439873323028>`,
 		].join('\n')
 	}
 
