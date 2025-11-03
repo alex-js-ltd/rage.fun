@@ -2,7 +2,7 @@ import { prisma } from '@/app/utils/db'
 import { LeaderBoardSchema } from '@/app/utils/schemas'
 import { ZodError } from 'zod'
 
-export async function getLeaderBoard(limit = 100) {
+export async function getLeaderBoard(limit = 5) {
 	const rows = await prisma.user.findMany({
 		include: {
 			pnl: true, // include their PnL record
@@ -14,7 +14,7 @@ export async function getLeaderBoard(limit = 100) {
 				realizedPnl: 'desc', // sort by highest realized profit
 			},
 		},
-		take: 5,
+		take: limit,
 	})
 
 	if (rows.length === 0) {
