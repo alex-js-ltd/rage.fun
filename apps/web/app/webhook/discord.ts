@@ -74,7 +74,7 @@ export async function publishSwapEvent(event: SwapEventType, token: TokenFeedTyp
 		// BONDING CURVE SECTION
 		`**🌀 BONDING CURVE**`,
 		`** ├Ciculating Supply: ${formattedcirculatingSupply}**`,
-		`** ├Liquidity: ${liquidity.toFixed(12)} / 80 SOL**`,
+		`** ├Liquidity: ${liquidity.toFixed(12)} / 80 ** <:sol:1370492439873323028>`,
 		'',
 
 		// TOP HOLDERS
