@@ -167,10 +167,13 @@ export async function publishCreateAlert(event: EventData<'createEvent'>, token:
 export async function publishLeaderBoardAlert(leaderBoard: LeaderBoardType[]) {
 	function formatTraderCard(user: LeaderBoardType, index: number, isLast: boolean) {
 		const medals = ['🥇', '🥈', '🥉', '🏅', '🎖️']
+
 		const medal = medals[index] ?? '🏵️'
 
+		const name = user?.name ? `${user.name} • ${shortAddress(user.userId)}` : `${shortAddress(user.userId)}`
+
 		return [
-			`**${medal} ${shortAddress(user.userId)}**`,
+			`**${medal} ${name}**`,
 			`**├R. PNL:** +${user.realizedPnl.toFixed(4)}◎`,
 			`**├ROI:** +${user.roiPct.toFixed(4)}%`,
 			`**├Bought:** ${user.bought.toFixed(4)}◎`,

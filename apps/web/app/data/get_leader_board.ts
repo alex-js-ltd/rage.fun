@@ -6,6 +6,7 @@ export async function getLeaderBoard(limit = 5) {
 	const rows = await prisma.user.findMany({
 		include: {
 			pnl: true, // include their PnL record
+			accounts: true,
 		},
 
 		where: { pnl: { isNot: null } },

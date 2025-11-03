@@ -518,6 +518,7 @@ export const UserPnlSchema = z.object({
 export const LeaderBoardSchema = UserSchema.extend({
 	pnl: UserPnlSchema,
 }).transform(data => {
+	const { name } = data
 	const { userId } = data.pnl
 
 	const realizedPnl = fromLamports(new BN(data.pnl.realizedPnl), 9)
@@ -527,7 +528,7 @@ export const LeaderBoardSchema = UserSchema.extend({
 	const bought = fromLamports(new BN(data.pnl.bought), 9)
 	const position = fromLamports(new BN(data.pnl.position), 9)
 
-	return { userId, realizedPnl, roiPct, bought, position }
+	return { userId, name, realizedPnl, roiPct, bought, position }
 })
 
 export type LeaderBoardType = z.infer<typeof LeaderBoardSchema>
