@@ -31,7 +31,7 @@ importers:
         version: 0.30.1(typescript@5.5.2)
       '@jup-ag/jup-mobile-adapter':
         specifier: ^0.0.1
-        version: 0.0.1(@reown/appkit-adapter-solana@1.8.3)(@reown/appkit-wallet-button@1.8.3)(@reown/appkit@1.8.3)(@solana/wallet-adapter-base@0.9.27)(@solana/web3.js@1.98.4)(next@15.1.0)(react@19.0.0)
+        version: 0.0.1(@reown/appkit-adapter-solana@1.8.3)(@reown/appkit-wallet-button@1.8.3)(@reown/appkit@1.8.3)(@solana/wallet-adapter-base@0.9.27)(@solana/web3.js@1.98.4)(next@15.1.11)(react@19.0.0)
       '@jup-ag/wallet-adapter':
         specifier: ^0.2.2
         version: 0.2.3(@emotion/react@11.14.0)(@emotion/styled@11.14.1)(@jup-ag/jup-mobile-adapter@0.0.1)(@reown/appkit-adapter-solana@1.8.3)(@reown/appkit-wallet-button@1.8.3)(@reown/appkit@1.8.3)(@solana/spl-token@0.4.14)(@solana/web3.js@1.98.4)(bs58@6.0.0)(decimal.js@10.6.0)(react-dom@19.0.0)(react-native@0.81.1)(react@19.0.0)(styled-components@6.1.19)
@@ -142,7 +142,7 @@ importers:
         version: 1.35.3
       '@vercel/analytics':
         specifier: ^1.4.1
-        version: 1.5.0(next@15.1.0)(react@19.0.0)
+        version: 1.5.0(next@15.1.11)(react@19.0.0)
       '@vercel/blob':
         specifier: ^0.23.2
         version: 0.23.4
@@ -181,7 +181,7 @@ importers:
         version: 12.23.22(react-dom@19.0.0)(react@19.0.0)
       geist:
         specifier: ^1.3.1
-        version: 1.5.1(next@15.1.0)
+        version: 1.5.1(next@15.1.11)
       i:
         specifier: ^0.3.7
         version: 0.3.7
@@ -201,11 +201,11 @@ importers:
         specifier: ^12.23.22
         version: 12.23.22(react-dom@19.0.0)(react@19.0.0)
       next:
-        specifier: 15.1.0
-        version: 15.1.0(@babel/core@7.28.4)(react-dom@19.0.0)(react@19.0.0)
+        specifier: 15.1.11
+        version: 15.1.11(@babel/core@7.28.4)(react-dom@19.0.0)(react@19.0.0)
       next-auth:
         specifier: 5.0.0-beta.29
-        version: 5.0.0-beta.29(next@15.1.0)(react@19.0.0)
+        version: 5.0.0-beta.29(next@15.1.11)(react@19.0.0)
       pinata:
         specifier: ^2.1.3
         version: 2.5.0(react-dom@19.0.0)(react@19.0.0)
@@ -2019,7 +2019,7 @@ packages:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.5
 
-  /@jup-ag/jup-mobile-adapter@0.0.1(@reown/appkit-adapter-solana@1.8.3)(@reown/appkit-wallet-button@1.8.3)(@reown/appkit@1.8.3)(@solana/wallet-adapter-base@0.9.27)(@solana/web3.js@1.98.4)(next@15.1.0)(react@19.0.0):
+  /@jup-ag/jup-mobile-adapter@0.0.1(@reown/appkit-adapter-solana@1.8.3)(@reown/appkit-wallet-button@1.8.3)(@reown/appkit@1.8.3)(@solana/wallet-adapter-base@0.9.27)(@solana/web3.js@1.98.4)(next@15.1.11)(react@19.0.0):
     resolution: {integrity: sha512-RdUREyLzwEVry+RQjctxItyqQkRccgJR3d8A+FacEKP8dg6dKOhQzbC6pVXO43uACACTu6GIIIIhZBY1ouT7PQ==}
     peerDependencies:
       '@reown/appkit': '>=1.6.0'
@@ -2035,7 +2035,7 @@ packages:
       '@reown/appkit-wallet-button': 1.8.3(@types/react@19.0.0)(@upstash/redis@1.35.3)(@vercel/blob@0.23.4)(@vercel/kv@3.0.0)(react@19.0.0)(typescript@5.5.2)(zod@3.25.76)
       '@solana/wallet-adapter-base': 0.9.27(@solana/web3.js@1.98.4)
       '@solana/web3.js': 1.98.4(typescript@5.5.2)
-      next: 15.1.0(@babel/core@7.28.4)(react-dom@19.0.0)(react@19.0.0)
+      next: 15.1.11(@babel/core@7.28.4)(react-dom@19.0.0)(react@19.0.0)
       react: 19.0.0
     dev: false
 
@@ -2056,7 +2056,7 @@ packages:
     dependencies:
       '@emotion/react': 11.14.0(@types/react@19.0.0)(react@19.0.0)
       '@emotion/styled': 11.14.1(@emotion/react@11.14.0)(@types/react@19.0.0)(react@19.0.0)
-      '@jup-ag/jup-mobile-adapter': 0.0.1(@reown/appkit-adapter-solana@1.8.3)(@reown/appkit-wallet-button@1.8.3)(@reown/appkit@1.8.3)(@solana/wallet-adapter-base@0.9.27)(@solana/web3.js@1.98.4)(next@15.1.0)(react@19.0.0)
+      '@jup-ag/jup-mobile-adapter': 0.0.1(@reown/appkit-adapter-solana@1.8.3)(@reown/appkit-wallet-button@1.8.3)(@reown/appkit@1.8.3)(@solana/wallet-adapter-base@0.9.27)(@solana/web3.js@1.98.4)(next@15.1.11)(react@19.0.0)
       '@reown/appkit': 1.8.3(@types/react@19.0.0)(@upstash/redis@1.35.3)(@vercel/blob@0.23.4)(@vercel/kv@3.0.0)(react@19.0.0)(typescript@5.5.2)(zod@3.25.76)
       '@reown/appkit-adapter-solana': 1.8.3(@types/react@19.0.0)(@upstash/redis@1.35.3)(@vercel/blob@0.23.4)(@vercel/kv@3.0.0)(fastestsmallesttextencoderdecoder@1.0.22)(react@19.0.0)(typescript@5.5.2)(zod@3.25.76)
       '@reown/appkit-wallet-button': 1.8.3(@types/react@19.0.0)(@upstash/redis@1.35.3)(@vercel/blob@0.23.4)(@vercel/kv@3.0.0)(react@19.0.0)(typescript@5.5.2)(zod@3.25.76)
@@ -2289,8 +2289,8 @@ packages:
       '@types/pg': 8.15.5
     dev: false
 
-  /@next/env@15.1.0:
-    resolution: {integrity: sha512-UcCO481cROsqJuszPPXJnb7GGuLq617ve4xuAyyNG4VSSocJNtMU5Fsx+Lp6mlN8c7W58aZLc5y6D/2xNmaK+w==}
+  /@next/env@15.1.11:
+    resolution: {integrity: sha512-yp++FVldfLglEG5LoS2rXhGypPyoSOyY0kxZQJ2vnlYJeP8o318t5DrDu5Tqzr03qAhDWllAID/kOCsXNLcwKw==}
     dev: false
 
   /@next/mdx@15.0.3(@mdx-js/loader@3.1.1)(@mdx-js/react@3.1.1):
@@ -2309,8 +2309,8 @@ packages:
       source-map: 0.7.6
     dev: false
 
-  /@next/swc-darwin-arm64@15.1.0:
-    resolution: {integrity: sha512-ZU8d7xxpX14uIaFC3nsr4L++5ZS/AkWDm1PzPO6gD9xWhFkOj2hzSbSIxoncsnlJXB1CbLOfGVN4Zk9tg83PUw==}
+  /@next/swc-darwin-arm64@15.1.9:
+    resolution: {integrity: sha512-sQF6MfW4nk0PwMYYq8xNgqyxZJGIJV16QqNDgaZ5ze9YoVzm4/YNx17X0exZudayjL9PF0/5RGffDtzXapch0Q==}
     engines: {node: '>= 10'}
     cpu: [arm64]
     os: [darwin]
@@ -2318,8 +2318,8 @@ packages:
     dev: false
     optional: true
 
-  /@next/swc-darwin-x64@15.1.0:
-    resolution: {integrity: sha512-DQ3RiUoW2XC9FcSM4ffpfndq1EsLV0fj0/UY33i7eklW5akPUCo6OX2qkcLXZ3jyPdo4sf2flwAED3AAq3Om2Q==}
+  /@next/swc-darwin-x64@15.1.9:
+    resolution: {integrity: sha512-fp0c1rB6jZvdSDhprOur36xzQvqelAkNRXM/An92sKjjtaJxjlqJR8jiQLQImPsClIu8amQn+ZzFwl1lsEf62w==}
     engines: {node: '>= 10'}
     cpu: [x64]
     os: [darwin]
@@ -2327,8 +2327,8 @@ packages:
     dev: false
     optional: true
 
-  /@next/swc-linux-arm64-gnu@15.1.0:
-    resolution: {integrity: sha512-M+vhTovRS2F//LMx9KtxbkWk627l5Q7AqXWWWrfIzNIaUFiz2/NkOFkxCFyNyGACi5YbA8aekzCLtbDyfF/v5Q==}
+  /@next/swc-linux-arm64-gnu@15.1.9:
+    resolution: {integrity: sha512-77rYykF6UtaXvxh9YyRIKoaYPI6/YX6cy8j1DL5/1XkjbfOwFDfTEhH7YGPqG/ePl+emBcbDYC2elgEqY2e+ag==}
     engines: {node: '>= 10'}
     cpu: [arm64]
     os: [linux]
@@ -2336,8 +2336,8 @@ packages:
     dev: false
     optional: true
 
-  /@next/swc-linux-arm64-musl@15.1.0:
-    resolution: {integrity: sha512-Qn6vOuwaTCx3pNwygpSGtdIu0TfS1KiaYLYXLH5zq1scoTXdwYfdZtwvJTpB1WrLgiQE2Ne2kt8MZok3HlFqmg==}
+  /@next/swc-linux-arm64-musl@15.1.9:
+    resolution: {integrity: sha512-uZ1HazKcyWC7RA6j+S/8aYgvxmDqwnG+gE5S9MhY7BTMj7ahXKunpKuX8/BA2M7OvINLv7LTzoobQbw928p3WA==}
     engines: {node: '>= 10'}
     cpu: [arm64]
     os: [linux]
@@ -2345,8 +2345,8 @@ packages:
     dev: false
     optional: true
 
-  /@next/swc-linux-x64-gnu@15.1.0:
-    resolution: {integrity: sha512-yeNh9ofMqzOZ5yTOk+2rwncBzucc6a1lyqtg8xZv0rH5znyjxHOWsoUtSq4cUTeeBIiXXX51QOOe+VoCjdXJRw==}
+  /@next/swc-linux-x64-gnu@15.1.9:
+    resolution: {integrity: sha512-gQIX1d3ct2RBlgbbWOrp+SHExmtmFm/HSW1Do5sSGMDyzbkYhS2sdq5LRDJWWsQu+/MqpgJHqJT6ORolKp/U1g==}
     engines: {node: '>= 10'}
     cpu: [x64]
     os: [linux]
@@ -2354,8 +2354,8 @@ packages:
     dev: false
     optional: true
 
-  /@next/swc-linux-x64-musl@15.1.0:
-    resolution: {integrity: sha512-t9IfNkHQs/uKgPoyEtU912MG6a1j7Had37cSUyLTKx9MnUpjj+ZDKw9OyqTI9OwIIv0wmkr1pkZy+3T5pxhJPg==}
+  /@next/swc-linux-x64-musl@15.1.9:
+    resolution: {integrity: sha512-fJOwxAbCeq6Vo7pXZGDP6iA4+yIBGshp7ie2Evvge7S7lywyg7b/SGqcvWq/jYcmd0EbXdb7hBfdqSQwTtGTPg==}
     engines: {node: '>= 10'}
     cpu: [x64]
     os: [linux]
@@ -2363,8 +2363,8 @@ packages:
     dev: false
     optional: true
 
-  /@next/swc-win32-arm64-msvc@15.1.0:
-    resolution: {integrity: sha512-WEAoHyG14t5sTavZa1c6BnOIEukll9iqFRTavqRVPfYmfegOAd5MaZfXgOGG6kGo1RduyGdTHD4+YZQSdsNZXg==}
+  /@next/swc-win32-arm64-msvc@15.1.9:
+    resolution: {integrity: sha512-crfbUkAd9PVg9nGfyjSzQbz82dPvc4pb1TeP0ZaAdGzTH6OfTU9kxidpFIogw0DYIEadI7hRSvuihy2NezkaNQ==}
     engines: {node: '>= 10'}
     cpu: [arm64]
     os: [win32]
@@ -2372,8 +2372,8 @@ packages:
     dev: false
     optional: true
 
-  /@next/swc-win32-x64-msvc@15.1.0:
-    resolution: {integrity: sha512-J1YdKuJv9xcixzXR24Dv+4SaDKc2jj31IVUEMdO5xJivMTXuE6MAdIi4qPjSymHuFG8O5wbfWKnhJUcHHpj5CA==}
+  /@next/swc-win32-x64-msvc@15.1.9:
+    resolution: {integrity: sha512-SBB0oA4E2a0axUrUwLqXlLkSn+bRx9OWU6LheqmRrO53QEAJP7JquKh3kF0jRzmlYOWFZtQwyIWJMEJMtvvDcQ==}
     engines: {node: '>= 10'}
     cpu: [x64]
     os: [win32]
@@ -7475,7 +7475,7 @@ packages:
       uncrypto: 0.1.3
     dev: false
 
-  /@vercel/analytics@1.5.0(next@15.1.0)(react@19.0.0):
+  /@vercel/analytics@1.5.0(next@15.1.11)(react@19.0.0):
     resolution: {integrity: sha512-MYsBzfPki4gthY5HnYN7jgInhAZ7Ac1cYDoRWFomwGHWEX7odTEzbtg9kf/QSo7XEsEAqlQugA6gJ2WS2DEa3g==}
     peerDependencies:
       '@remix-run/react': ^2
@@ -7501,7 +7501,7 @@ packages:
       vue-router:
         optional: true
     dependencies:
-      next: 15.1.0(@babel/core@7.28.4)(react-dom@19.0.0)(react@19.0.0)
+      next: 15.1.11(@babel/core@7.28.4)(react-dom@19.0.0)(react@19.0.0)
       react: 19.0.0
     dev: false
 
@@ -11491,12 +11491,12 @@ packages:
     resolution: {integrity: sha512-xckBUXyTIqT97tq2x2AMb+g163b5JFysYk0x4qxNFwbfQkmNZoiRHb6sPzI9/QV33WeuvVYBUIiD4NzNIyqaRQ==}
     dev: true
 
-  /geist@1.5.1(next@15.1.0):
+  /geist@1.5.1(next@15.1.11):
     resolution: {integrity: sha512-mAHZxIsL2o3ZITFaBVFBnwyDOw+zNLYum6A6nIjpzCGIO8QtC3V76XF2RnZTyLx1wlDTmMDy8jg3Ib52MIjGvQ==}
     peerDependencies:
       next: '>=13.2.0'
     dependencies:
-      next: 15.1.0(@babel/core@7.28.4)(react-dom@19.0.0)(react@19.0.0)
+      next: 15.1.11(@babel/core@7.28.4)(react-dom@19.0.0)(react@19.0.0)
     dev: false
 
   /gensync@1.0.0-beta.2:
@@ -14146,7 +14146,7 @@ packages:
     resolution: {integrity: sha512-Yd3UES5mWCSqR+qNT93S3UoYUkqAZ9lLg8a7g9rimsWmYGK8cVToA4/sF3RrshdyV3sAGMXVUmpMYOw+dLpOuw==}
     dev: false
 
-  /next-auth@5.0.0-beta.29(next@15.1.0)(react@19.0.0):
+  /next-auth@5.0.0-beta.29(next@15.1.11)(react@19.0.0):
     resolution: {integrity: sha512-Ukpnuk3NMc/LiOl32njZPySk7pABEzbjhMUFd5/n10I0ZNC7NCuVv8IY2JgbDek2t/PUOifQEoUiOOTLy4os5A==}
     peerDependencies:
       '@simplewebauthn/browser': ^9.0.1
@@ -14163,12 +14163,12 @@ packages:
         optional: true
     dependencies:
       '@auth/core': 0.40.0
-      next: 15.1.0(@babel/core@7.28.4)(react-dom@19.0.0)(react@19.0.0)
+      next: 15.1.11(@babel/core@7.28.4)(react-dom@19.0.0)(react@19.0.0)
       react: 19.0.0
     dev: false
 
-  /next@15.1.0(@babel/core@7.28.4)(react-dom@19.0.0)(react@19.0.0):
-    resolution: {integrity: sha512-QKhzt6Y8rgLNlj30izdMbxAwjHMFANnLwDwZ+WQh5sMhyt4lEBqDK9QpvWHtIM4rINKPoJ8aiRZKg5ULSybVHw==}
+  /next@15.1.11(@babel/core@7.28.4)(react-dom@19.0.0)(react@19.0.0):
+    resolution: {integrity: sha512-UiVJaOGhKST58AadwbFUZThlNBmYhKqaCs8bVtm4plTxsgKq0mJ0zTsp7t7j/rzsbAEj9WcAMdZCztjByi4EoQ==}
     engines: {node: ^18.18.0 || ^19.8.0 || >= 20.0.0}
     hasBin: true
     peerDependencies:
@@ -14188,7 +14188,7 @@ packages:
       sass:
         optional: true
     dependencies:
-      '@next/env': 15.1.0
+      '@next/env': 15.1.11
       '@swc/counter': 0.1.3
       '@swc/helpers': 0.5.15
       busboy: 1.6.0
@@ -14198,14 +14198,14 @@ packages:
       react-dom: 19.0.0(react@19.0.0)
       styled-jsx: 5.1.6(@babel/core@7.28.4)(react@19.0.0)
     optionalDependencies:
-      '@next/swc-darwin-arm64': 15.1.0
-      '@next/swc-darwin-x64': 15.1.0
-      '@next/swc-linux-arm64-gnu': 15.1.0
-      '@next/swc-linux-arm64-musl': 15.1.0
-      '@next/swc-linux-x64-gnu': 15.1.0
-      '@next/swc-linux-x64-musl': 15.1.0
-      '@next/swc-win32-arm64-msvc': 15.1.0
-      '@next/swc-win32-x64-msvc': 15.1.0
+      '@next/swc-darwin-arm64': 15.1.9
+      '@next/swc-darwin-x64': 15.1.9
+      '@next/swc-linux-arm64-gnu': 15.1.9
+      '@next/swc-linux-arm64-musl': 15.1.9
+      '@next/swc-linux-x64-gnu': 15.1.9
+      '@next/swc-linux-x64-musl': 15.1.9
+      '@next/swc-win32-arm64-msvc': 15.1.9
+      '@next/swc-win32-x64-msvc': 15.1.9
       sharp: 0.33.5
     transitivePeerDependencies:
       - '@babel/core'
