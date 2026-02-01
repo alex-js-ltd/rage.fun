@@ -60,6 +60,13 @@ const nextConfig = {
 
 			{
 				protocol: 'https',
+				hostname: 'violet-giant-deer-1.mypinata.cloud', // Add picsum.photos
+				port: '',
+				pathname: '/**', // Allow all paths under this domain
+			},
+
+			{
+				protocol: 'https',
 				hostname: 'cdn.discordapp.com', // Add picsum.photos
 				port: '',
 				pathname: '/**', // Allow all paths under this domain
