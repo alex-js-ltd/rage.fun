@@ -14,7 +14,7 @@ const nextConfig = {
 
 	images: {
 		formats: ['image/webp'],
-		dangerouslyAllowSVG: true,
+
 		remotePatterns: [
 			{
 				protocol: 'https',
