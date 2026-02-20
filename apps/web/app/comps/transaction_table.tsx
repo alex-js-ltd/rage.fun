@@ -32,6 +32,10 @@ export function TransactionTable({ transactionPromise, tokenPromise }: Transacti
 		if (transactionEvent.tokenId !== token.id) return
 
 		setRows(prev => {
+			// If already exists, ignore
+			if (prev.some(r => r.id === transactionEvent.id)) {
+				return prev
+			}
 			const newRow = { ...transactionEvent, animate: true }
 
 			return [newRow, ...prev.map(r => ({ ...r, animate: false }))]
