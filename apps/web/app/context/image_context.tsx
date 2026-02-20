@@ -36,47 +36,44 @@ function ImageProvider({ children }: { children: ReactNode }) {
 		}
 	}, [])
 
-	async function uploadImage(file: File) {
-		const res = await client<{ url: string }>(`/api/pinata/presign`, {})
-		const upload = await pinata.upload.public.file(file).url(res.url) // Upload the file with the signed URL
-		const image = `https://indigo-adverse-vicuna-777.mypinata.cloud/ipfs/${upload.cid}`
-		return image
-	}
-
 	const session = useSession()
 
 	const isAuthenticated = session.status === 'authenticated'
 
+	const uploadImage = useCallback(async (file: File) => {
+		// Optional: validate type/size here to fail fast
+		const res = await client<{ url: string }>(`/api/pinata/presign`, {})
+		const upload = await pinata.upload.public.file(file).url(res.url)
+		return `https://indigo-adverse-vicuna-777.mypinata.cloud/ipfs/${upload.cid}`
+	}, [])
+
 	const getInputProps = useCallback<(name: string) => InputProps>(
-		name => {
-			return {
-				className: 'sr-only pointer-events-none',
-				type: 'file',
-				accept: 'image/*',
-				name,
-				ref: fileRef,
-				async onChange(e) {
-					fileRef?.current?.focus()
-					const file = e.target.files?.[0]
+		name => ({
+			className: 'sr-only', // drop pointer-events-none unless you really need it
+			type: 'file',
+			accept: 'image/*',
+			name,
+			ref: fileRef,
+			onChange: async e => {
+				const file = e.target.files?.[0]
+				if (!file) {
+					reset()
+					return
+				}
 
-					if (file) {
-						const reader = new FileReader()
+				// clear immediately so re-selecting same file triggers onChange next time
+				if (fileRef.current) fileRef.current.value = ''
 
-						reader.onloadend = async () => {
-							if (!isAuthenticated) return
+				if (!isAuthenticated) {
+					// ideally set an error state so it’s not “silent”
+					reset()
+					return
+				}
 
-							const promise = uploadImage(file)
-							run(promise)
-						}
-
-						reader.readAsDataURL(file)
-					} else {
-						reset()
-					}
-				},
-			}
-		},
-		[isAuthenticated, reset],
+				run(uploadImage(file))
+			},
+		}),
+		[isAuthenticated, reset, run, uploadImage],
 	)
 
 	const value = useMemo(
