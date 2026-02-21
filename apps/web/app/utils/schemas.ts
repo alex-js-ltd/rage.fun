@@ -42,10 +42,6 @@ export const InitializeSchema = z.object({
 
 	description: z.string(),
 
-	file: z.instanceof(File).refine(file => {
-		return !file || file.size <= MAX_UPLOAD_SIZE
-	}, 'File size must be less than 5MB'),
-
 	image: z.string(),
 })
 
