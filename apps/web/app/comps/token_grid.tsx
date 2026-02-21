@@ -77,6 +77,8 @@ function TokenCard({ token, pathname, children }: { token: TokenCard; pathname: 
 		'before:animate-wave-once',
 	)
 
+	const [src, setImgSrc] = useState(image)
+
 	return (
 		<article className="group relative flex flex-col w-full h-full min-h-[178px] border-b border-white border-opacity-[0.125] hover:bg-white/10 bg-background-100">
 			<div
@@ -104,13 +106,16 @@ function TokenCard({ token, pathname, children }: { token: TokenCard; pathname: 
 								prefetch={false}
 							>
 								<Image
-									src={`${image}`}
+									src={`${src}`}
 									alt={`${name}`}
 									className="object-cover object-center w-full h-full z-0"
 									fill={true}
 									blurDataURL={createPngDataUri(thumbhash)}
 									placeholder="blur"
 									sizes="(min-width: 1280px) 14vw, (min-width: 1024px) 16vw, (min-width: 768px) 20vw, (min-width: 640px) 25vw, 33vw"
+									onError={() => {
+										setImgSrc(createPngDataUri(thumbhash))
+									}}
 								/>
 							</Link>
 						</SquareProgress>
@@ -209,8 +214,6 @@ export function TokenGrid({
 	const initialState = use(tokenPromise)
 
 	const [state, setState] = useState<InitialState>(initialState)
-
-	console.log(state)
 
 	const { tokens, isLastPage, nextCursorId, searchParams } = state || {}
 
@@ -370,10 +373,7 @@ export function TokenGrid({
 }
 
 async function loadMore(params: URLSearchParams): Promise<InitialState> {
-	const { data } = await client<{ data: InitialState }>(`/api/load_more?${params.toString()}`, {
-		method: 'GET',
-		redirect: 'manual', // optional
-	})
+	const { data } = await client<{ data: InitialState }>(`/api/load_more?${params.toString()}`, {})
 
 	return data
 }

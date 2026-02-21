@@ -30,36 +30,46 @@ export function Trending({ trendingPromise }: { trendingPromise: Promise<TokenFe
 				<h2 className="text-white font-semibold text-[15px]">Trending</h2>
 			</div>
 			<ul className="grid">
-				{state.map(t => (
-					<li key={t.id} className="w-full hover:bg-white/10 h-[65.55px] px-3">
-						<Link
-							aria-label={`View ${t.metadata.name}`}
-							href={{
-								pathname: `/token/${t.id}`,
-								query: { interval: '5m' },
-							}}
-							as={`/token/${t.id}?interval=5m`}
-							scroll={true}
-							className="flex items-center justify-between h-full"
-						>
-							<div className="relative size-[40px] rounded-full overflow-hidden">
-								<Image
-									src={t.metadata.image}
-									alt={t.metadata.name}
-									width={40}
-									height={40}
-									blurDataURL={createPngDataUri(t.metadata.thumbhash)}
-									placeholder="blur"
-									className="w-full h-full object-cover object-center"
-								/>
-							</div>
-
-							<span className="text-text-100 text-sm">{t.metadata.symbol}</span>
-						</Link>
-					</li>
-				))}
+				{state.map(t => {
+					return <ListItem key={t.id} token={t} />
+				})}
 			</ul>
 		</div>
+	)
+}
+
+function ListItem({ token }: { token: TokenFeedType }) {
+	const [src, setImgSrc] = useState(token.metadata.image)
+	return (
+		<li key={token.id} className="w-full hover:bg-white/10 h-[65.55px] px-3">
+			<Link
+				aria-label={`View ${token.metadata.name}`}
+				href={{
+					pathname: `/token/${token.id}`,
+					query: { interval: '5m' },
+				}}
+				as={`/token/${token.id}?interval=5m`}
+				scroll={true}
+				className="flex items-center justify-between h-full"
+			>
+				<div className="relative size-[40px] rounded-full overflow-hidden">
+					<Image
+						src={src}
+						alt={token.metadata.name}
+						width={40}
+						height={40}
+						blurDataURL={createPngDataUri(token.metadata.thumbhash)}
+						placeholder="blur"
+						className="w-full h-full object-cover object-center"
+						onError={() => {
+							setImgSrc(createPngDataUri(token.metadata.thumbhash))
+						}}
+					/>
+				</div>
+
+				<span className="text-text-100 text-sm">{token.metadata.symbol}</span>
+			</Link>
+		</li>
 	)
 }
 export function TrendingFallBack() {
