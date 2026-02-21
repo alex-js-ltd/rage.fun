@@ -1,5 +1,5 @@
 import { prisma } from '@/app/utils/db'
-import { Prisma, SwapType, SwapEvent, HarvestEvent } from '@prisma/client'
+import { Prisma, HarvestEvent } from '@prisma/client'
 
 import { type EventData } from '@repo/rage'
 
@@ -7,14 +7,16 @@ import { updateBondingCurveState, updateMarketData } from '@/app/webhook/swap'
 
 import { getServerEnv } from '@/app/utils/env'
 import * as Ably from 'ably'
-import { getTokenFeed } from '@/app/data/get_token_feed'
+
 import { program } from '@/app/utils/setup'
 import { fetchBondingCurveState } from '@repo/rage'
 import { revalidatePath } from 'next/cache'
 
 import * as AblyEvents from '@/app/webhook/ably'
 import * as DiscordAlerts from '@/app/webhook/discord'
-import { TokenFeedType } from '@/app/utils/schemas'
+
+import { getTokenCard, type TokenCard } from '@/app/data/get_tokens'
+
 import 'server-only'
 
 const { ABLY_API_KEY, PROXY_PRIVATE_KEY } = getServerEnv()
@@ -52,7 +54,7 @@ export async function upsertHarvestEvent(eventData: EventData<'harvestEvent'>): 
 export async function processHarvestEvents(harvestEvents: EventData<'harvestEvent'>[]) {
 	const client = new Ably.Rest(ABLY_API_KEY)
 	const updateChannel = client.channels.get('updateEvent')
-	const socialAlerts: Array<{ harvest: HarvestEvent; token: TokenFeedType }> = []
+	const socialAlerts: Array<{ harvest: HarvestEvent; token: TokenCard }> = []
 
 	for await (const event of harvestEvents) {
 		try {
@@ -70,11 +72,11 @@ export async function processHarvestEvents(harvestEvents: EventData<'harvestEven
 
 			revalidatePath(`/earn`)
 
-			const token = await getTokenFeed(harvest.tokenId)
+			const token = await getTokenCard(harvest.tokenId)
 
 			await AblyEvents.publishUpdateEvent(updateChannel, token, 'Harvest')
 
-			const alert: { harvest: HarvestEvent; token: TokenFeedType } = { harvest, token }
+			const alert: { harvest: HarvestEvent; token: TokenCard } = { harvest, token }
 			socialAlerts.push(alert)
 		} catch (err) {
 			console.error('processHarvestEvents error', {

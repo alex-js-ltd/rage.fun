@@ -27,10 +27,9 @@ const {
 	DISCORD_CREATOR_ROLE_ID,
 } = getServerEnv()
 
-export async function publishSwapEvent(event: SwapEventType, token: TokenFeedType, topHolders: TopHolderType[]) {
+export async function publishSwapEvent(event: SwapEventType, token: TokenCard, topHolders: TopHolderType[]) {
 	const { symbol } = token.metadata
-	const { currentReserve, currentSupply, decimals } = token.bondingCurve
-	const { progress } = token.marketData
+	const { currentReserve, currentSupply, decimals, progress } = token.bondingCurve
 
 	const circulatingSupply = amountToUiAmount(new BN(currentSupply), decimals)
 	const formattedcirculatingSupply = formatTokenAmount(circulatingSupply)
@@ -203,7 +202,7 @@ export async function publishLeaderBoardAlert(leaderBoard: LeaderBoardType[]) {
 	console.log('harvest result:', res)
 }
 
-export async function publishHarvestAlert(event: HarvestEvent, token: TokenFeedType) {
+export async function publishHarvestAlert(event: HarvestEvent, token: TokenCard) {
 	const signature = event.id
 	const mint = event.tokenId
 	const creator = event.signer
