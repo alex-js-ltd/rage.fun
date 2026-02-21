@@ -17,6 +17,7 @@ import { Decimal } from '@prisma/client/runtime/library'
 import { prisma } from '@/app/utils/db'
 import { Account } from 'next-auth'
 import { type TokenCard } from '@/app/data/get_tokens'
+import { TokenAlert } from '../data/get_token_alert'
 
 const {
 	DISCORD_WEBHOOK_ALERT_URL,
@@ -27,7 +28,7 @@ const {
 	DISCORD_CREATOR_ROLE_ID,
 } = getServerEnv()
 
-export async function publishSwapEvent(event: SwapEventType, token: TokenCard, topHolders: TopHolderType[]) {
+export async function publishSwapEvent(event: SwapEventType, token: TokenAlert, topHolders: TopHolderType[]) {
 	const { symbol } = token.metadata
 	const { currentReserve, currentSupply, decimals, progress } = token.bondingCurve
 

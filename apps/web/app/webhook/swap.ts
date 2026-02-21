@@ -41,6 +41,8 @@ import * as TelegramAlerts from '@/app/webhook/telegram'
 
 import { type TokenCard, getTokenCard } from '@/app/data/get_tokens'
 
+import { type TokenAlert, getTokenAlert } from '@/app/data/get_token_alert'
+
 import 'server-only'
 const { ABLY_API_KEY, PROXY_PRIVATE_KEY } = getServerEnv()
 
@@ -193,7 +195,7 @@ export async function processSwapEvents(swapEvents: EventData<'swapEvent'>[]) {
 	const pnlChannel = client.channels.get('pnlEvent')
 	const payer = getSigner(PROXY_PRIVATE_KEY)
 
-	const socialAlerts: Array<{ swapEvent: SwapEventType; token: TokenCard; topHolders: TopHolderType[] }> = []
+	const socialAlerts: Array<{ swapEvent: SwapEventType; token: TokenAlert; topHolders: TopHolderType[] }> = []
 
 	for await (const event of swapEvents) {
 		try {
@@ -251,9 +253,9 @@ export async function processSwapEvents(swapEvents: EventData<'swapEvent'>[]) {
 				await deployToRaydium({ program, mint: event.data.mint, payer })
 			}
 
-			const socialAlert: { swapEvent: SwapEventType; token: TokenCard; topHolders: TopHolderType[] } = {
+			const socialAlert: { swapEvent: SwapEventType; token: TokenAlert; topHolders: TopHolderType[] } = {
 				swapEvent: parsed.data,
-				token,
+				token: await getTokenAlert(parsed.data.tokenId),
 				topHolders,
 			}
 

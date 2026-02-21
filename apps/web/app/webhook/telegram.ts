@@ -10,14 +10,13 @@ import { formatTokenAmount } from '@/app/utils/misc'
 import { type TopHolderType } from '@/app/utils/schemas'
 import { shortAddress } from '@/app/utils/misc'
 import { client } from '@/app/utils/client'
+import { type TokenAlert } from '@/app/data/get_token_alert'
 
 const { TELEGRAM_CHAT_ID, TELEGRAM_BOT_TOKEN } = getServerEnv()
 
-export async function publishSwapEvent(event: SwapEventType, token: TokenFeedType, topHolders: TopHolderType[]) {
+export async function publishSwapEvent(event: SwapEventType, token: TokenAlert, topHolders: TopHolderType[]) {
 	const { symbol, image } = token.metadata
-	const { currentSupply, decimals } = token.bondingCurve
-
-	const { progress } = token.marketData
+	const { currentSupply, decimals, progress } = token.bondingCurve
 
 	// Calculate and format values
 	const circulatingSupply = amountToUiAmount(new BN(currentSupply), decimals)
