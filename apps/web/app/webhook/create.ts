@@ -2,17 +2,18 @@ import { PublicKey } from '@solana/web3.js'
 import { type EventData, getBondingCurveState, fetchBondingCurveState, BondingCurveState } from '@repo/rage'
 import { program } from '@/app/utils/setup'
 import { prisma } from '@/app/utils/db'
-import { Prisma, $Enums, BondingCurve } from '@prisma/client'
+import { Prisma, $Enums } from '@prisma/client'
 import { getServerEnv } from '@/app/utils/env'
-import { getTokenFeed } from '@/app/data/get_token_feed'
+
 import * as AblyEvents from '@/app/webhook/ably'
-import { type SwapEventType, type TokenFeedType, type TopHolderType } from '@/app/utils/schemas'
+import { type TokenFeedType } from '@/app/utils/schemas'
 import { revalidateTag } from 'next/cache'
 import { Decimal } from '@prisma/client/runtime/library'
 import { getDiscordId } from '@/app/data/get_discord_id'
 import * as Ably from 'ably'
 import * as DiscordAlerts from '@/app/webhook/discord'
 import 'server-only'
+import { getTokenCard, TokenCard } from '../data/get_tokens'
 
 const { ABLY_API_KEY } = getServerEnv()
 
@@ -102,7 +103,7 @@ export async function processCreateEvents(createEvents: EventData<'createEvent'>
 	const client = new Ably.Rest(ABLY_API_KEY)
 	const channel = client.channels.get('updateEvent')
 
-	const socialAlerts: Array<{ event: EventData<'createEvent'>; token: TokenFeedType }> = []
+	const socialAlerts: Array<{ event: EventData<'createEvent'>; token: TokenCard }> = []
 
 	for await (const event of createEvents) {
 		try {
@@ -115,13 +116,13 @@ export async function processCreateEvents(createEvents: EventData<'createEvent'>
 
 			await createMarketData(state)
 
-			const token = await getTokenFeed(event.data.mint.toBase58())
+			const token = await getTokenCard(event.data.mint.toBase58())
 
 			await AblyEvents.publishUpdateEvent(channel, token, 'Create')
 
 			revalidateTag(token.id)
 
-			const social: { event: EventData<'createEvent'>; token: TokenFeedType } = { event, token }
+			const social: { event: EventData<'createEvent'>; token: TokenCard } = { event, token }
 
 			socialAlerts.push(social)
 		} catch (err) {

@@ -207,3 +207,14 @@ function calculatePercentage(current: bigint, target: bigint) {
 }
 
 export type TokenCard = ReturnType<typeof toTokenCard>
+
+export async function getTokenCard(mint: string) {
+	const token = await prisma.token.findUniqueOrThrow({
+		where: { id: mint },
+		select,
+	})
+
+	const solPrice = await getSolPrice()
+
+	return toTokenCard(token, solPrice)
+}

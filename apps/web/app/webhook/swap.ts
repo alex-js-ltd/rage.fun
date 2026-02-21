@@ -23,8 +23,8 @@ import { revalidatePath } from 'next/cache'
 
 import { getServerEnv } from '@/app/utils/env'
 
-import { SwapEventSchema, SwapEventType, TokenFeedType, TopHolderType, createPnLSchema } from '@/app/utils/schemas'
-import { getTokenFeed } from '@/app/data/get_token_feed'
+import { SwapEventSchema, SwapEventType, TopHolderType, createPnLSchema } from '@/app/utils/schemas'
+
 import { getSigner } from '@/app/utils/misc'
 import { getTransaction } from '@/app/data/get_single_transaction'
 import { getTopHolders } from '@/app/data/get_top_holders'
@@ -39,8 +39,9 @@ import * as AblyEvents from '@/app/webhook/ably'
 import * as DiscordAlerts from '@/app/webhook/discord'
 import * as TelegramAlerts from '@/app/webhook/telegram'
 
-import 'server-only'
+import { type TokenCard, getTokenCard } from '@/app/data/get_tokens'
 
+import 'server-only'
 const { ABLY_API_KEY, PROXY_PRIVATE_KEY } = getServerEnv()
 
 const { CLUSTER } = getEnv()
@@ -192,7 +193,7 @@ export async function processSwapEvents(swapEvents: EventData<'swapEvent'>[]) {
 	const pnlChannel = client.channels.get('pnlEvent')
 	const payer = getSigner(PROXY_PRIVATE_KEY)
 
-	const socialAlerts: Array<{ swapEvent: SwapEventType; token: TokenFeedType; topHolders: TopHolderType[] }> = []
+	const socialAlerts: Array<{ swapEvent: SwapEventType; token: TokenCard; topHolders: TopHolderType[] }> = []
 
 	for await (const event of swapEvents) {
 		try {
@@ -222,7 +223,7 @@ export async function processSwapEvents(swapEvents: EventData<'swapEvent'>[]) {
 			revalidatePath(`@token/(.)token/${tokenId}`)
 			revalidatePath(`/token/${tokenId}`)
 
-			const [transaction, token] = await Promise.all([getTransaction(swapEvent), getTokenFeed(tokenId)])
+			const [transaction, token] = await Promise.all([getTransaction(swapEvent), getTokenCard(tokenId)])
 
 			await AblyEvents.publishSwapEvent(swapChannel, parsed.data)
 			await AblyEvents.publishTransactionEvent(transactionChannel, transaction)
@@ -250,7 +251,7 @@ export async function processSwapEvents(swapEvents: EventData<'swapEvent'>[]) {
 				await deployToRaydium({ program, mint: event.data.mint, payer })
 			}
 
-			const socialAlert: { swapEvent: SwapEventType; token: TokenFeedType; topHolders: TopHolderType[] } = {
+			const socialAlert: { swapEvent: SwapEventType; token: TokenCard; topHolders: TopHolderType[] } = {
 				swapEvent: parsed.data,
 				token,
 				topHolders,

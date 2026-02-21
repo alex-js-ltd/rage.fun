@@ -10,6 +10,7 @@ import {
 } from '@/app/utils/schemas'
 import { type SignatureStatus } from '@solana/web3.js'
 import 'server-only'
+import { type TokenCard } from '@/app/data/get_tokens'
 
 export async function publishSignatureEvent(
 	channel: Ably.Channel,
@@ -30,7 +31,7 @@ export async function publishSwapEvent(channel: Ably.Channel, event: SwapEventTy
 	}
 }
 
-export async function publishUpdateEvent(channel: Ably.Channel, token: TokenFeedType, updateType: UpdateEnumType) {
+export async function publishUpdateEvent(channel: Ably.Channel, token: TokenCard, updateType: UpdateEnumType) {
 	try {
 		await channel.publish('updateEvent', { ...token, updateType })
 	} catch (error) {
@@ -46,7 +47,7 @@ export async function publishTransactionEvent(channel: Ably.Channel, transaction
 	}
 }
 
-export async function publishTopHoldersEvent(channel: Ably.Channel, holders: TopHolderType[], token: TokenFeedType) {
+export async function publishTopHoldersEvent(channel: Ably.Channel, holders: TopHolderType[], token: TokenCard) {
 	try {
 		await channel.publish('holdersEvent', { holders, id: token.id })
 	} catch (error) {

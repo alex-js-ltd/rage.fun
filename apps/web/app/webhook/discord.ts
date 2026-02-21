@@ -3,7 +3,7 @@ import { getServerEnv } from '@/app/utils/env'
 import { type EventData, fromLamports, amountToUiAmount } from '@repo/rage'
 import { buyBlink, sellBlink } from '@/app/utils/dialect'
 
-import { type TokenFeedType, SwapEventType, PnlType } from '@/app/utils/schemas'
+import { type TokenFeedType, SwapEventType } from '@/app/utils/schemas'
 
 import { BN } from '@coral-xyz/anchor'
 import { formatNumberSmart, formatTokenAmount, shortAddress } from '@/app/utils/misc'
@@ -11,11 +11,12 @@ import { type TopHolderType, type LeaderBoardType } from '@/app/utils/schemas'
 import { getSolPrice } from '@/app/data/get_sol_price'
 
 import { client } from '@/app/utils/client'
-import { HarvestEvent, SwapType } from '@prisma/client'
+import { HarvestEvent } from '@prisma/client'
 import { solToUsd } from '@/app/utils/misc'
 import { Decimal } from '@prisma/client/runtime/library'
 import { prisma } from '@/app/utils/db'
 import { Account } from 'next-auth'
+import { type TokenCard } from '@/app/data/get_tokens'
 
 const {
 	DISCORD_WEBHOOK_ALERT_URL,
@@ -124,7 +125,7 @@ async function getRefund(event: SwapEventType) {
 	return rent
 }
 
-export async function publishCreateAlert(event: EventData<'createEvent'>, token: TokenFeedType) {
+export async function publishCreateAlert(event: EventData<'createEvent'>, token: TokenCard) {
 	const alertMessage = '🆕 **NEW TOKEN** 🆕'
 
 	const mint = event.data.mint.toBase58()

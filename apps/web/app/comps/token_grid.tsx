@@ -1,6 +1,6 @@
 'use client'
 
-import React, { use, useState, useEffect, useRef, FormHTMLAttributes } from 'react'
+import React, { use, useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 
 import { Icon } from './_icon'
