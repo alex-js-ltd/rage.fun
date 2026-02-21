@@ -1,3 +1,5 @@
+'use client'
+import { useState } from 'react'
 import Image, { type ImageProps } from 'next/image'
 import { cn } from '@/app/utils/misc'
 import { createPngDataUri } from 'unlazy/thumbhash'
@@ -5,7 +7,8 @@ import { type TokenMetadataType } from '@/app/utils/schemas'
 
 export { type ImageProps }
 
-export function TokenLogo({ src, alt, className, ...rest }: ImageProps) {
+export function TokenLogo({ alt, className, ...rest }: ImageProps) {
+	const [src, setImgSrc] = useState(rest.src)
 	return (
 		<div className={cn('shrink-0 relative flex items-center overflow-hidden h-5 w-5 rounded pr-1', className)}>
 			<Image
@@ -14,7 +17,9 @@ export function TokenLogo({ src, alt, className, ...rest }: ImageProps) {
 				src={src}
 				alt={alt}
 				placeholder="blur"
-				{...rest}
+				onError={() => {
+					setImgSrc('/fallback.webp')
+				}}
 			/>
 		</div>
 	)
