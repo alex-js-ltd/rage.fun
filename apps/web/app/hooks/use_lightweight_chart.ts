@@ -16,12 +16,9 @@ import {
 import { useEffect, useRef } from 'react'
 import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
-import { isOhlcData } from '@/app/utils/schemas'
 
 import * as Ably from 'ably'
 import { useChannel } from 'ably/react'
-
-import { BN } from '@coral-xyz/anchor'
 
 import { SwapEventType } from '@/app/utils/schemas'
 import Decimal from 'decimal.js'
@@ -123,7 +120,7 @@ export function useLightweightChart(
 		seriesRef.current = series
 		series.setData(data)
 
-		series.setMarkers(markers)
+		// series.setMarkers(markers)
 
 		chart.timeScale().scrollToRealTime()
 
