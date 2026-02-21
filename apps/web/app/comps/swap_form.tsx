@@ -69,9 +69,9 @@ export function SwapForm({ swapConfigPromise }: SwapFormProps) {
 
 	const [state, setState] = useState(token)
 
-	const { channel } = useChannel('updateEvent', (message: Ably.Message) => {
+	const { channel } = useChannel('swapConfigEvent', (message: Ably.Message) => {
 		const updateEvent: SwapConfig = message.data
-
+		console.log('swap config', updateEvent)
 		if (updateEvent.id === state.id) {
 			setState(updateEvent)
 		}

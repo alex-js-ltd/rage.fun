@@ -44,6 +44,7 @@ import { type TokenCard, getTokenCard } from '@/app/data/get_tokens'
 import { type TokenAlert, getTokenAlert } from '@/app/data/get_token_alert'
 
 import 'server-only'
+import { getSwapConfig } from '../data/get_swap_config'
 const { ABLY_API_KEY, PROXY_PRIVATE_KEY } = getServerEnv()
 
 const { CLUSTER } = getEnv()
@@ -189,6 +190,7 @@ export async function processSwapEvents(swapEvents: EventData<'swapEvent'>[]) {
 	const client = new Ably.Rest(ABLY_API_KEY)
 
 	const swapChannel = client.channels.get('swapEvent')
+	const swapConfigChannel = client.channels.get('swapConfigEvent')
 	const updateChannel = client.channels.get('updateEvent')
 	const transactionChannel = client.channels.get('transactionEvent')
 	const holdersChannel = client.channels.get('holdersEvent')
@@ -225,9 +227,14 @@ export async function processSwapEvents(swapEvents: EventData<'swapEvent'>[]) {
 			revalidatePath(`@token/(.)token/${tokenId}`)
 			revalidatePath(`/token/${tokenId}`)
 
-			const [transaction, token] = await Promise.all([getTransaction(swapEvent), getTokenCard(tokenId)])
+			const [transaction, token, swapConfig] = await Promise.all([
+				getTransaction(swapEvent),
+				getTokenCard(tokenId),
+				getSwapConfig(tokenId),
+			])
 
 			await AblyEvents.publishSwapEvent(swapChannel, parsed.data)
+			await AblyEvents.publishSwapConfigEvent(swapConfigChannel, swapConfig)
 			await AblyEvents.publishTransactionEvent(transactionChannel, transaction)
 			await AblyEvents.publishUpdateEvent(updateChannel, token, parsed.data.swapType)
 

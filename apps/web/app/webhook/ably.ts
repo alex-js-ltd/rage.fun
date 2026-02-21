@@ -11,6 +11,7 @@ import {
 import { type SignatureStatus } from '@solana/web3.js'
 import 'server-only'
 import { type TokenCard } from '@/app/data/get_tokens'
+import { type SwapConfig } from '@/app/data/get_swap_config'
 
 export async function publishSignatureEvent(
 	channel: Ably.Channel,
@@ -26,6 +27,14 @@ export async function publishSignatureEvent(
 export async function publishSwapEvent(channel: Ably.Channel, event: SwapEventType) {
 	try {
 		await channel.publish('swapEvent', { ...event })
+	} catch (error) {
+		console.error(error)
+	}
+}
+
+export async function publishSwapConfigEvent(channel: Ably.Channel, event: SwapConfig) {
+	try {
+		await channel.publish('swapConfigEvent', { ...event })
 	} catch (error) {
 		console.error(error)
 	}

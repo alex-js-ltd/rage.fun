@@ -22,8 +22,8 @@ export function UpdateProvider({ children }: { children: ReactNode }) {
 	return <ChannelProvider channelName="updateEvent">{children}</ChannelProvider>
 }
 
-export function AirdropProvider({ children }: { children: ReactNode }) {
-	return <ChannelProvider channelName="airdropEvent">{children}</ChannelProvider>
+export function SwapConfigProvider({ children }: { children: ReactNode }) {
+	return <ChannelProvider channelName="swapConfigEvent">{children}</ChannelProvider>
 }
 
 export function HoldersProvider({ children }: { children: ReactNode }) {
@@ -52,7 +52,7 @@ export function RealTime({ children }: { children: ReactNode }) {
 			<SignatureProvider>
 				<SwapProvider>
 					<UpdateProvider>
-						<AirdropProvider>
+						<SwapConfigProvider>
 							<HoldersProvider>
 								<CommentProvider>
 									<TransactionProvider>
@@ -62,7 +62,7 @@ export function RealTime({ children }: { children: ReactNode }) {
 									</TransactionProvider>
 								</CommentProvider>
 							</HoldersProvider>
-						</AirdropProvider>
+						</SwapConfigProvider>
 					</UpdateProvider>
 				</SwapProvider>
 			</SignatureProvider>
