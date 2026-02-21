@@ -4,7 +4,7 @@ import React, { use, useState, useEffect, useRef, FormHTMLAttributes } from 'rea
 import Link from 'next/link'
 
 import { Icon } from './_icon'
-import { type TokenFeedType, SearchParams } from '@/app/utils/schemas'
+import { SearchParams } from '@/app/utils/schemas'
 
 import { useAsync } from '@/app/hooks/use_async'
 import Image from 'next/image'
@@ -29,29 +29,22 @@ import { useInView } from 'react-intersection-observer'
 import { HarvestYieldForm } from '@/app/comps/harvest_yield_form'
 import { usePathname } from 'next/navigation'
 import { Blink } from './blink'
+import { type TokenCard } from '@/app/data/get_tokens'
 
 export type InitialState = {
-	tokens: TokenFeedType[]
+	tokens: Array<TokenCard>
 	isLastPage: boolean
 	searchParams: SearchParams
 	nextCursorId?: string
 }
 
-function TokenCard({
-	token,
-	pathname,
-	children,
-}: {
-	token: TokenFeedType
-	pathname: string
-	children?: React.ReactNode
-}) {
+function TokenCard({ token, pathname, children }: { token: TokenCard; pathname: string; children?: React.ReactNode }) {
 	const {
 		id: mint,
 		creatorId,
 		metadata: { name, symbol, image, thumbhash },
-		bondingCurve: { updatedAt },
-		marketData: { progress, price, marketCap, liquidity, volume, buyCount, sellCount },
+		bondingCurve: { updatedAt, progress },
+		marketData: { price, marketCap, liquidity, volume, buyCount, sellCount },
 		updateType,
 	} = token
 
@@ -222,7 +215,7 @@ export function TokenGrid({
 	const { tokens, isLastPage, nextCursorId, searchParams } = state || {}
 
 	const { channel } = useChannel('updateEvent', (message: Ably.Message) => {
-		const e: TokenFeedType = message.data
+		const e: TokenCard = message.data
 
 		if (!state || !e.updateType) return
 

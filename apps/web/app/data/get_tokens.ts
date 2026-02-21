@@ -2,8 +2,8 @@ import { type SearchParams, SearchSchema } from '@/app/utils/schemas'
 import { prisma } from '@/app/utils/db'
 import { Prisma } from '@prisma/client'
 import { getSolPrice } from '@/app/data/get_sol_price'
-import { createTokenFeedSchema } from '@/app/utils/schemas'
-import { ZodError } from 'zod'
+import { solToUsd } from '@/app/utils/misc'
+import Decimal from 'decimal.js'
 import 'server-only'
 
 export async function getTokens(searchParams: SearchParams) {
@@ -26,29 +26,8 @@ export async function getTokens(searchParams: SearchParams) {
 	})
 
 	const solPrice = await getSolPrice()
-	const TokenFeedSchema = createTokenFeedSchema({
-		solPrice,
-	})
 
-	const data = tokens.map(token => {
-		const parsed = TokenFeedSchema.safeParse(token)
-
-		if (!parsed.success) {
-			// Optional: prefix the path so it’s obvious the object that failed
-			const issues = parsed.error.issues.map(issue => ({
-				...issue,
-				path: ['token', ...issue.path],
-			}))
-
-			// Log nicely for server debugging
-			console.error('❌ Invalid token with relations:', parsed.error.format())
-
-			// Throw a real ZodError so upstream can `catch (e instanceof ZodError)`
-			throw new ZodError(issues)
-		}
-
-		return parsed.data
-	})
+	const data = tokens.map(item => toTokenCard(item, solPrice))
 
 	const hasMore = data.length > TAKE
 	const section = hasMore ? data.slice(0, TAKE) : data
@@ -110,9 +89,6 @@ function getWhere({ sortType, creatorId }: SearchParams & { creatorId?: string }
 const select = Prisma.validator<Prisma.TokenSelect>()({
 	id: true,
 	creatorId: true,
-	createdAt: true,
-	updatedAt: true,
-
 	metadata: {
 		select: {
 			name: true,
@@ -120,45 +96,19 @@ const select = Prisma.validator<Prisma.TokenSelect>()({
 			description: true,
 			image: true,
 			thumbhash: true,
-
-			createdAt: true,
-			updatedAt: true,
-
-			tokenId: true,
 		},
 	},
-
 	bondingCurve: {
 		select: {
-			id: true,
-
-			connectorWeight: true,
-			decimals: true,
-
-			virtualSupply: true,
-			currentSupply: true,
-			targetSupply: true,
-
-			virtualReserve: true,
+			status: true,
+			tradingFees: true,
+			updatedAt: true,
 			currentReserve: true,
 			targetReserve: true,
-
-			tradingFees: true,
-			openTime: true,
-
-			status: true,
-
-			createdAt: true,
-			updatedAt: true,
-
-			tokenId: true,
 		},
 	},
-
 	marketData: {
 		select: {
-			id: true,
-
 			price: true,
 			marketCap: true,
 
@@ -167,14 +117,13 @@ const select = Prisma.validator<Prisma.TokenSelect>()({
 
 			buyCount: true,
 			sellCount: true,
-
-			createdAt: true,
-			updatedAt: true,
-
-			tokenId: true,
 		},
 	},
 })
+
+type TokenPayload = Prisma.TokenGetPayload<{
+	select: typeof select
+}>
 
 function getCursor(cursorId: SearchParams['cursorId']) {
 	const cursor = cursorId ? { id: cursorId } : undefined
@@ -214,3 +163,47 @@ function getOrderBy({ sortType, sortOrder }: SearchParams) {
 			throw new Error(`Unsupported sortType: ${sortType}`)
 	}
 }
+
+function getMetadata(metadata: NonNullable<TokenPayload['metadata']>) {
+	return { ...metadata, thumbhash: Buffer.from(metadata.thumbhash).toString('base64') }
+}
+
+function getBondingCurve(bondingCurve: NonNullable<TokenPayload['bondingCurve']>, solPrice: number) {
+	return {
+		updatedAt: bondingCurve.updatedAt.toISOString(),
+		tradingFees: solToUsd(new Decimal(bondingCurve.tradingFees).div(1e9), solPrice).toNumber(),
+		progress: calculatePercentage(bondingCurve.currentReserve, bondingCurve.targetReserve),
+	}
+}
+
+function getMarketData(marketData: NonNullable<TokenPayload['marketData']>, solPrice: number) {
+	const price = solToUsd(marketData.price, solPrice).toNumber()
+	const marketCap = solToUsd(marketData.marketCap, solPrice).toNumber()
+	const liquidityInSol = new Decimal(marketData.liquidity).div(1e9)
+	const volumeInSol = new Decimal(marketData.volume).div(1e9)
+	const liquidity = solToUsd(liquidityInSol, solPrice).toNumber()
+	const volume = solToUsd(volumeInSol, solPrice).toNumber()
+
+	return { price, marketCap, liquidity, volume, buyCount: marketData.buyCount, sellCount: marketData.sellCount }
+}
+
+function toTokenCard(token: TokenPayload, solPrice: number) {
+	if (!token.metadata || !token.bondingCurve || !token.marketData) {
+		throw new Error('Missing required relations')
+	}
+
+	return {
+		id: token.id,
+		creatorId: token.creatorId,
+		metadata: getMetadata(token.metadata),
+		bondingCurve: getBondingCurve(token.bondingCurve, solPrice),
+		marketData: getMarketData(token.marketData, solPrice),
+		updateType: undefined,
+	}
+}
+
+function calculatePercentage(current: bigint, target: bigint) {
+	return new Decimal(current.toString()).div(target.toString()).mul(100).toNumber()
+}
+
+export type TokenCard = ReturnType<typeof toTokenCard>

@@ -14,13 +14,13 @@ import { type ToastDescription, useToast } from '@/app/hooks/use_toast'
 import { useSignAndSendTx } from '@/app/hooks/use_sign_and_send_tx'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/app/comps/tooltip'
 
-import { type TokenFeedType } from '@/app/utils/schemas'
 import { formatNumberSmart } from '@/app/utils/misc'
+import { type TokenCard } from '../data/get_tokens'
 
 const initialState: State = {}
 
 interface HarvestYieldProps {
-	token: TokenFeedType
+	token: TokenCard
 }
 
 export function HarvestYieldForm({ token }: HarvestYieldProps) {
