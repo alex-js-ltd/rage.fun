@@ -29,6 +29,9 @@ import { generateSolanaBlink } from '@/app/utils/dialect'
 import { getPnLForToken } from '@/app/data/get_pnl_for_token'
 import { PnLTable } from '@/app/comps/pnl_table'
 
+import { getSwapConfig } from '@/app/data/get_swap_config'
+import { getTokenLogo } from '@/app/data/get_token_logo'
+
 type Props = {
 	params: Promise<{ mint: string }>
 	searchParams: Promise<{ [key: string]: string }>
@@ -43,7 +46,7 @@ export async function Token(props: Props) {
 
 	const chartPromise = getCandlstickData(mint, interval)
 
-	const tokenPromise = getTokenFeed(mint)
+	const swapConfigPromise = getSwapConfig(mint)
 
 	const transactionPromise = getTransactionData(mint)
 
@@ -55,6 +58,8 @@ export async function Token(props: Props) {
 
 	const pnlPromise = getPnLForToken(mint)
 
+	const tokenLogoPromise = getTokenLogo(mint)
+
 	return (
 		<div className="flex flex-col w-full min-h-[100vh] border-x border-white border-opacity-[0.125] bg-background-100 relative max-w-[600px]">
 			<Header />
@@ -63,7 +68,7 @@ export async function Token(props: Props) {
 				<div className="border-t border-white border-opacity-[0.125] h-fit min-h-[255px] w-full">
 					<div className="flex items-center justify-between h-[52px] border-b border-white border-opacity-[0.125] pl-3">
 						<Suspense fallback={<TokenPairFallback />}>
-							<TokenPair tokenPromise={tokenPromise} />
+							<TokenPair tokenLogoPromise={tokenLogoPromise} />
 						</Suspense>
 
 						<Suspense fallback={null}>
@@ -103,7 +108,7 @@ export async function Token(props: Props) {
 						className="data-[state=inactive]:absolute data-[state=inactive]:opacity-0 data-[state=inactive]:pointer-events-none max-h-[172px]"
 					>
 						<Suspense fallback={<Loading i={1} className="w-full h-[172px] " />}>
-							<TransactionTable transactionPromise={transactionPromise} tokenPromise={tokenPromise} />
+							<TransactionTable transactionPromise={transactionPromise} tokenLogoPromise={tokenLogoPromise} />
 						</Suspense>
 					</Content>
 
@@ -147,7 +152,7 @@ export async function Token(props: Props) {
 				}
 			>
 				<Suspense fallback={<SwapFormFallback />}>
-					<SwapForm tokenPromise={tokenPromise} />
+					<SwapForm swapConfigPromise={swapConfigPromise} />
 				</Suspense>
 			</MobileDrawer>
 		</div>

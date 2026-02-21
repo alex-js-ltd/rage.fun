@@ -7,7 +7,6 @@ import { Button } from '@/app/comps/button'
 
 import { usePayer } from '@/app/hooks/use_payer'
 
-import { type TokenFeedType } from '@/app/utils/schemas'
 import { buyAction, sellAction } from '@/app/actions/swap_action'
 import { Input } from '@/app/comps/input'
 
@@ -32,9 +31,10 @@ import { fromLamports } from '@repo/rage'
 import { BN } from '@coral-xyz/anchor'
 import { amountToUiAmount } from '@repo/rage'
 import { calculateBuyAmount, calculateSellPrice } from '@/app/utils/wasm'
+import { type SwapConfig } from '@/app/data/get_swap_config'
 
 export interface SwapFormProps {
-	tokenPromise: Promise<TokenFeedType>
+	swapConfigPromise: Promise<SwapConfig>
 }
 
 interface FormProps {
@@ -64,13 +64,13 @@ async function getQuickOptionForSell(params: URLSearchParams): Promise<string> {
 	})
 }
 
-export function SwapForm({ tokenPromise }: SwapFormProps) {
-	const token = use(tokenPromise)
+export function SwapForm({ swapConfigPromise }: SwapFormProps) {
+	const token = use(swapConfigPromise)
 
 	const [state, setState] = useState(token)
 
 	const { channel } = useChannel('updateEvent', (message: Ably.Message) => {
-		const updateEvent: TokenFeedType = message.data
+		const updateEvent: SwapConfig = message.data
 
 		if (updateEvent.id === state.id) {
 			setState(updateEvent)
@@ -127,12 +127,12 @@ export function SwapForm({ tokenPromise }: SwapFormProps) {
 				<div className="h-[2px] w-full border-b-[2px] border-white opacity-[0.125]" />
 			</div>
 
-			<Progress mint={mint} progress={state.marketData.progress} />
+			<Progress mint={mint} progress={state.bondingCurve.progress} />
 		</>
 	)
 }
 
-function Buy({ token }: { token: TokenFeedType }) {
+function Buy({ token }: { token: SwapConfig }) {
 	const { id: mint } = token
 	const { symbol } = token.metadata
 
@@ -199,7 +199,7 @@ function Buy({ token }: { token: TokenFeedType }) {
 	)
 }
 
-function Sell({ token }: { token: TokenFeedType }) {
+function Sell({ token }: { token: SwapConfig }) {
 	const { id: mint } = token
 	const { symbol } = token.metadata
 

@@ -12,15 +12,16 @@ import * as Ably from 'ably'
 import { useChannel } from 'ably/react'
 import { timeFromNow } from '@/app/utils/misc'
 import { formatTinyNumber } from '@/app/utils/misc'
+import { type TokenLogo } from '@/app/data/get_token_logo'
 
 export type TransactionTableProps = {
 	transactionPromise: Promise<TransactionTableType[]>
-	tokenPromise: Promise<TokenFeedType>
+	tokenLogoPromise: Promise<TokenLogo>
 }
 
-export function TransactionTable({ transactionPromise, tokenPromise }: TransactionTableProps) {
+export function TransactionTable({ transactionPromise, tokenLogoPromise }: TransactionTableProps) {
 	const initial = use(transactionPromise)
-	const token = use(tokenPromise)
+	const token = use(tokenLogoPromise)
 
 	const [rows, setRows] = useState<(TransactionTableType & { animate: boolean })[]>(() =>
 		initial.map(r => ({ ...r, animate: false })),

@@ -3,13 +3,14 @@ import { TokenLogo, getTokenLogoProps, solLogoProps } from '@/app/comps/token_lo
 import { cn } from '@/app/utils/misc'
 import { type TokenFeedType } from '@/app/utils/schemas'
 import { Loading } from './loading'
+import { type TokenLogo as Logo } from '../data/get_token_logo'
 
 export interface TokenPairProps extends React.ComponentProps<'div'> {
-	tokenPromise: Promise<TokenFeedType>
+	tokenLogoPromise: Promise<Logo>
 }
 
-export function TokenPair({ tokenPromise, className, ...props }: TokenPairProps) {
-	const token = use(tokenPromise)
+export function TokenPair({ tokenLogoPromise, className, ...props }: TokenPairProps) {
+	const token = use(tokenLogoPromise)
 
 	return (
 		<div className={cn('flex items-center ', className)} {...props}>
