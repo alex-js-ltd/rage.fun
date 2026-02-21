@@ -62,7 +62,7 @@ function ListItem({ token }: { token: TokenFeedType }) {
 						placeholder="blur"
 						className="w-full h-full object-cover object-center"
 						onError={() => {
-							setImgSrc(createPngDataUri(token.metadata.thumbhash))
+							setImgSrc('/fallback.webp')
 						}}
 					/>
 				</div>

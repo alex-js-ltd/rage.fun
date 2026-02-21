@@ -114,7 +114,7 @@ function TokenCard({ token, pathname, children }: { token: TokenCard; pathname: 
 									placeholder="blur"
 									sizes="(min-width: 1280px) 14vw, (min-width: 1024px) 16vw, (min-width: 768px) 20vw, (min-width: 640px) 25vw, 33vw"
 									onError={() => {
-										setImgSrc(createPngDataUri(thumbhash))
+										setImgSrc('/fallback.webp')
 									}}
 								/>
 							</Link>
