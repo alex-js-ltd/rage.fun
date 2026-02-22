@@ -1,8 +1,8 @@
 import { prisma } from '@/app/utils/db'
-import { Prisma, SwapType, SwapEvent, $Enums, BondingCurve } from '@prisma/client'
+import { Prisma, SwapType, SwapEvent, $Enums } from '@prisma/client'
 
 import { program } from '@/app/utils/setup'
-import { Connection, Keypair, PublicKey } from '@solana/web3.js'
+import { Keypair, PublicKey } from '@solana/web3.js'
 import { getEnv } from '@/app/utils/env'
 import {
 	type Rage,
@@ -10,7 +10,6 @@ import {
 	type EventData,
 	getProxyInitIxs,
 	buildTransaction,
-	getAccountsToAirdrop,
 	getBondingCurveState,
 	fetchBondingCurveState,
 	sendAndConfirm,
@@ -39,12 +38,14 @@ import * as AblyEvents from '@/app/webhook/ably'
 import * as DiscordAlerts from '@/app/webhook/discord'
 import * as TelegramAlerts from '@/app/webhook/telegram'
 
-import { type TokenCard, getTokenCard } from '@/app/data/get_tokens'
+import { getTokenCard } from '@/app/data/get_tokens'
 
 import { type TokenAlert, getTokenAlert } from '@/app/data/get_token_alert'
 
+import { getSwapConfig } from '@/app/data/get_swap_config'
+
 import 'server-only'
-import { getSwapConfig } from '../data/get_swap_config'
+
 const { ABLY_API_KEY, PROXY_PRIVATE_KEY } = getServerEnv()
 
 const { CLUSTER } = getEnv()

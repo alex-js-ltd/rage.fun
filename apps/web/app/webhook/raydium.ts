@@ -4,7 +4,7 @@ import { type EventData, fetchBondingCurveState, getBondingCurveState } from '@r
 import { getTokenFeed } from '@/app/data/get_token_feed'
 import { PublicKey } from '@solana/web3.js'
 import { prisma } from '@/app/utils/db'
-import { Prisma, SwapType, SwapEvent, $Enums } from '@prisma/client'
+import { Prisma, $Enums } from '@prisma/client'
 import 'server-only'
 
 async function updateBondingCurveSupply(mint: PublicKey) {

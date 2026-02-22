@@ -3,7 +3,7 @@ import { getServerEnv } from '@/app/utils/env'
 import { type EventData, fromLamports, amountToUiAmount } from '@repo/rage'
 import { buyBlink, sellBlink } from '@/app/utils/dialect'
 
-import { type TokenFeedType, SwapEventType } from '@/app/utils/schemas'
+import { SwapEventType } from '@/app/utils/schemas'
 
 import { BN } from '@coral-xyz/anchor'
 import { formatNumberSmart, formatTokenAmount, shortAddress } from '@/app/utils/misc'

@@ -3,7 +3,7 @@ import { Prisma, HarvestEvent } from '@prisma/client'
 
 import { type EventData } from '@repo/rage'
 
-import { updateBondingCurveState, updateMarketData } from '@/app/webhook/swap'
+import { updateBondingCurveState } from '@/app/webhook/swap'
 
 import { getServerEnv } from '@/app/utils/env'
 import * as Ably from 'ably'
