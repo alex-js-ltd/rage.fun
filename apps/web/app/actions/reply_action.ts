@@ -5,13 +5,13 @@ import { parseWithZod } from '@conform-to/zod'
 import { ReplySchema, CommentSchema } from '@/app/utils/schemas'
 import { auth } from '@/app/auth'
 import { prisma } from '@/app/utils/db'
-import { Prisma, SwapType } from '@prisma/client'
+import { Prisma } from '@prisma/client'
 
 import * as Ably from 'ably'
 import { getServerEnv } from '@/app/utils/env'
 import * as AblyEvents from '@/app/webhook/ably'
 
-const { ABLY_API_KEY, PROXY_PRIVATE_KEY } = getServerEnv()
+const { ABLY_API_KEY } = getServerEnv()
 
 export type State = SubmissionResult<string[]> | {}
 

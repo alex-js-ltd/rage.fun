@@ -1,8 +1,8 @@
 'use client'
-import { Prisma } from '@prisma/client'
-import { useActionState, use, useState } from 'react'
 
-import { useForm, getFormProps, getInputProps, useInputControl } from '@conform-to/react'
+import { useActionState } from 'react'
+
+import { useForm, getFormProps, getInputProps } from '@conform-to/react'
 import { parseWithZod } from '@conform-to/zod'
 
 import { ReplySchema } from '@/app/utils/schemas'
@@ -10,15 +10,7 @@ import { ReplySchema } from '@/app/utils/schemas'
 import { type State, replyAction } from '@/app/actions/reply_action'
 import { usePayer } from '@/app/hooks/use_payer'
 
-import { SubmitButton } from '@/app/comps/submit_button'
-import { type Comment } from '@prisma/client'
-
-import { Avatar } from './avatar'
-import { timeAgo } from '@/app/utils/misc'
-import { Icon } from './_icon'
 import { Button } from '@/app/comps/button'
-
-import { Accordion, AccordionItem, AccordionHeader, AccordionTrigger, AccordionContent } from './accordion'
 
 import { ConnectWallet } from '@/app/comps/connect_wallet'
 
