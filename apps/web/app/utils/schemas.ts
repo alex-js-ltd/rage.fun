@@ -2,15 +2,8 @@ import type { Intent } from '@conform-to/react'
 import { conformZodMessage } from '@conform-to/zod'
 import { z } from 'zod'
 import { PublicKey } from '@solana/web3.js'
-import Decimal, { Decimal as _Decimal } from 'decimal.js'
-import { BN } from '@coral-xyz/anchor'
+import { Decimal as _Decimal } from 'decimal.js'
 import { Prisma, $Enums } from '@prisma/client'
-import { fromLamports } from '@repo/rage'
-import { formatCompactNumber } from '@/app/utils/misc'
-
-import { solToUsd } from '@/app/utils/misc'
-
-const MAX_UPLOAD_SIZE = 1024 * 1024 * 5
 
 const Wallet = z.preprocess(
 	value => {
@@ -319,18 +312,6 @@ export const UserSchema = z.object({
 		.date()
 		.nullable()
 		.transform(d => d?.toISOString()),
-
-	createdAt: z.date().transform(d => d.toISOString()),
-	updatedAt: z.date().transform(d => d.toISOString()),
-})
-
-export const UserPnlSchema = z.object({
-	userId: z.string(),
-
-	bought: z.bigint().transform(v => v.toString()),
-	sold: z.bigint().transform(v => v.toString()),
-	realizedPnl: z.bigint().transform(v => v.toString()),
-	position: z.bigint().transform(v => v.toString()),
 
 	createdAt: z.date().transform(d => d.toISOString()),
 	updatedAt: z.date().transform(d => d.toISOString()),

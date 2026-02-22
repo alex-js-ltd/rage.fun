@@ -59,3 +59,5 @@ export async function getRageWallet(wallet?: string) {
 
 	return rageWallet
 }
+
+function toRageWallet() {}
