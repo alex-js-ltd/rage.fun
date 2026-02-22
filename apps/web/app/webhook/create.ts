@@ -120,7 +120,7 @@ export async function processCreateEvents(createEvents: EventData<'createEvent'>
 
 			await AblyEvents.publishUpdateEvent(channel, token, 'Create')
 
-			revalidateTag(token.id)
+			revalidateTag(token.id, 'max')
 
 			const social: { event: EventData<'createEvent'>; token: TokenCard } = { event, token }
 

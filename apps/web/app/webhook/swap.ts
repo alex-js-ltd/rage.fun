@@ -242,8 +242,6 @@ export async function processSwapEvents(swapEvents: EventData<'swapEvent'>[]) {
 
 			const topHolders = await getTopHolders(tokenId)
 
-			console.log('top holders', topHolders)
-
 			await AblyEvents.publishTopHoldersEvent(holdersChannel, topHolders, token)
 
 			const pnl = await upsertTokenPnL(tokenId, signer)
