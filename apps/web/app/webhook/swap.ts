@@ -22,10 +22,10 @@ import { revalidatePath } from 'next/cache'
 
 import { getServerEnv } from '@/app/utils/env'
 
-import { SwapEventSchema, SwapEventType, TopHolderType, createPnLSchema } from '@/app/utils/schemas'
+import { SwapEventSchema, SwapEventType, createPnLSchema } from '@/app/utils/schemas'
 
 import { getSigner } from '@/app/utils/misc'
-import { getTransaction } from '@/app/data/get_single_transaction'
+import { getTransaction } from '@/app/data/get_transaction_data'
 import { getTopHolders } from '@/app/data/get_top_holders'
 import { getVolume } from '@/app/data/get_volume'
 import { calculatePrice, calculateMarketCap } from './create'
@@ -41,8 +41,8 @@ import * as TelegramAlerts from '@/app/webhook/telegram'
 import { getTokenCard } from '@/app/data/get_tokens'
 
 import { type TokenAlert, getTokenAlert } from '@/app/data/get_token_alert'
-
 import { getSwapConfig } from '@/app/data/get_swap_config'
+import { type TopHolder } from '@/app/data/get_top_holders'
 
 import 'server-only'
 
@@ -198,7 +198,7 @@ export async function processSwapEvents(swapEvents: EventData<'swapEvent'>[]) {
 	const pnlChannel = client.channels.get('pnlEvent')
 	const payer = getSigner(PROXY_PRIVATE_KEY)
 
-	const socialAlerts: Array<{ swapEvent: SwapEventType; token: TokenAlert; topHolders: TopHolderType[] }> = []
+	const socialAlerts: Array<{ swapEvent: SwapEventType; token: TokenAlert; topHolders: TopHolder[] }> = []
 
 	for await (const event of swapEvents) {
 		try {
@@ -261,7 +261,7 @@ export async function processSwapEvents(swapEvents: EventData<'swapEvent'>[]) {
 				await deployToRaydium({ program, mint: event.data.mint, payer })
 			}
 
-			const socialAlert: { swapEvent: SwapEventType; token: TokenAlert; topHolders: TopHolderType[] } = {
+			const socialAlert: { swapEvent: SwapEventType; token: TokenAlert; topHolders: TopHolder[] } = {
 				swapEvent: parsed.data,
 				token: await getTokenAlert(parsed.data.tokenId),
 				topHolders,

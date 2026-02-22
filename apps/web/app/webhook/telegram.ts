@@ -7,14 +7,14 @@ import { SwapEventType } from '@/app/utils/schemas'
 import { BN } from '@coral-xyz/anchor'
 import { formatTokenAmount } from '@/app/utils/misc'
 
-import { type TopHolderType } from '@/app/utils/schemas'
+import { type TopHolder } from '@/app/data/get_top_holders'
 import { shortAddress } from '@/app/utils/misc'
 import { client } from '@/app/utils/client'
 import { type TokenAlert } from '@/app/data/get_token_alert'
 
 const { TELEGRAM_CHAT_ID, TELEGRAM_BOT_TOKEN } = getServerEnv()
 
-export async function publishSwapEvent(event: SwapEventType, token: TokenAlert, topHolders: TopHolderType[]) {
+export async function publishSwapEvent(event: SwapEventType, token: TokenAlert, topHolders: TopHolder[]) {
 	const { symbol, image } = token.metadata
 	const { currentSupply, decimals, progress } = token.bondingCurve
 

@@ -1,7 +1,6 @@
 import Image, { type ImageProps } from 'next/image'
 import { cn } from '@/app/utils/misc'
 import { createPngDataUri } from 'unlazy/thumbhash'
-import { type TokenMetadataType } from '@/app/utils/schemas'
 
 export { type ImageProps }
 
@@ -20,7 +19,7 @@ export function TokenLogo({ src, alt, className, ...rest }: ImageProps) {
 	)
 }
 
-export function getTokenLogoProps(token: Pick<TokenMetadataType, 'image' | 'thumbhash' | 'symbol'>): ImageProps {
+export function getTokenLogoProps(token: { image: string; thumbhash: string; symbol: string }): ImageProps {
 	const blurDataURL = createPngDataUri(token.thumbhash)
 
 	return { src: token.image, alt: token.symbol, blurDataURL, placeholder: 'blur', sizes: '40px' }

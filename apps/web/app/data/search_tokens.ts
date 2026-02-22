@@ -1,6 +1,6 @@
 import { prisma } from '@/app/utils/db'
 import { Prisma } from '@prisma/client'
-import { type TokenMetadataType, MetadataSchema } from '@/app/utils/schemas'
+
 import 'server-only'
 
 export async function searchTokens(symbol: string) {
@@ -14,36 +14,40 @@ export async function searchTokens(symbol: string) {
 		orderBy: {
 			createdAt: 'asc',
 		},
-		select: {
-			id: true,
-			creatorId: true,
-			metadata: {
-				select: {
-					name: true,
-					symbol: true,
-					description: true,
-					image: true,
-					thumbhash: true,
-					createdAt: true,
-					updatedAt: true,
-					tokenId: true,
-				},
-			},
-		}, // ← Here we apply the defined select
+		select,
 	})
 
-	const tokens = await prisma.token.findMany(query)
+	const data = await prisma.token.findMany(query)
 
-	const data = tokens.reduce<TokenMetadataType[]>((acc, curr) => {
-		const parsed = MetadataSchema.safeParse(curr.metadata)
-
-		if (parsed.success) {
-			acc.push(parsed.data)
-		} else {
-			console.log(parsed.error)
-		}
-
-		return acc
-	}, [])
-	return data
+	return data.map(toSearch)
 }
+
+const select = Prisma.validator<Prisma.TokenSelect>()({
+	id: true,
+
+	metadata: {
+		select: {
+			symbol: true,
+			image: true,
+			thumbhash: true,
+		},
+	},
+})
+
+type SearchPayload = Prisma.TokenGetPayload<{
+	select: typeof select
+}>
+
+function getMetadata(metadata: NonNullable<SearchPayload['metadata']>) {
+	return { ...metadata, thumbhash: Buffer.from(metadata.thumbhash).toString('base64') }
+}
+
+function toSearch(search: SearchPayload) {
+	if (!search.metadata) {
+		throw new Error('Missing required relations')
+	}
+
+	return { id: search.id, metadata: getMetadata(search.metadata) }
+}
+
+export type Search = ReturnType<typeof toSearch>

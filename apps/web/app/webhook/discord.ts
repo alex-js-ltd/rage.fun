@@ -7,7 +7,7 @@ import { SwapEventType } from '@/app/utils/schemas'
 
 import { BN } from '@coral-xyz/anchor'
 import { formatNumberSmart, formatTokenAmount, shortAddress } from '@/app/utils/misc'
-import { type TopHolderType, type LeaderBoardType } from '@/app/utils/schemas'
+import { type TopHolder } from '@/app/data/get_top_holders'
 import { getSolPrice } from '@/app/data/get_sol_price'
 
 import { client } from '@/app/utils/client'
@@ -28,7 +28,7 @@ const {
 	DISCORD_CREATOR_ROLE_ID,
 } = getServerEnv()
 
-export async function publishSwapEvent(event: SwapEventType, token: TokenAlert, topHolders: TopHolderType[]) {
+export async function publishSwapEvent(event: SwapEventType, token: TokenAlert, topHolders: TopHolder[]) {
 	const { symbol } = token.metadata
 	const { currentReserve, currentSupply, decimals, progress } = token.bondingCurve
 
@@ -163,44 +163,6 @@ export async function publishCreateAlert(event: EventData<'createEvent'>, token:
 	})
 
 	console.log('✅ Webhook sent:', res)
-}
-
-export async function publishLeaderBoardAlert(leaderBoard: LeaderBoardType[]) {
-	function formatTraderCard(user: LeaderBoardType, index: number, isLast: boolean) {
-		const medals = ['🥇', '🥈', '🥉', '🏅', '🎖️']
-
-		const medal = medals[index] ?? '🏵️'
-
-		const name = user?.name ? `${user.name} • ${shortAddress(user.userId)}` : `${shortAddress(user.userId)}`
-
-		return [
-			`**\`${medal} ${name}\`**`,
-			`**\`├ R. PNL: +${user.realizedPnl.toFixed(4)}\`** <:sol:1370492439873323028>`,
-			`**\`├ ROI: +${user.roiPct.toFixed(4)}%\`**`,
-			`**\`├ Bought: ${user.bought.toFixed(4)}\`** <:sol:1370492439873323028>`,
-			`**\`├ Position: ${user.position.toFixed(4)}\`** <:sol:1370492439873323028>`,
-		].join('\n')
-	}
-
-	const cards = leaderBoard
-		.slice(0, 5)
-		.map((user, i, arr) => formatTraderCard(user, i, i === arr.length - 1))
-		.join('\n\n') // 👈 adds a blank line between each user
-
-	const caption = ['⚡ **RAGE LEADERBOARD** ⚡', '', cards].join('\n')
-
-	// Then in your Discord webhook payload:
-	const payload = {
-		content: caption,
-	}
-
-	const res = await client(DISCORD_WEBHOOK_CHAT_URL, {
-		method: 'POST',
-		headers: { 'Content-Type': 'application/json' },
-		body: JSON.stringify(payload),
-	})
-
-	console.log('harvest result:', res)
 }
 
 export async function publishHarvestAlert(event: HarvestEvent, token: TokenCard) {

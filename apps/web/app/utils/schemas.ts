@@ -7,7 +7,6 @@ import { BN } from '@coral-xyz/anchor'
 import { Prisma, $Enums } from '@prisma/client'
 import { fromLamports } from '@repo/rage'
 import { formatCompactNumber } from '@/app/utils/misc'
-import { calculatePercentage } from './misc'
 
 import { solToUsd } from '@/app/utils/misc'
 
@@ -236,18 +235,6 @@ export const SwapEventSchema = z.object({
 	tokenId: z.string(),
 })
 
-export function calculateProgress(state: BondingCurveType) {
-	const { currentReserve, targetReserve } = state
-
-	const curr = new Decimal(currentReserve)
-
-	const target = new Decimal(targetReserve)
-
-	const progress = curr.div(target).mul(100)
-
-	return progress.toNumber()
-}
-
 export function createTransactionTableSchema(options: { decimals: number; solPrice: number }) {
 	return SwapEventSchema.transform(data => {
 		const uiResult = fromLamports(new BN(data.tokenAmount), options.decimals)
@@ -268,14 +255,7 @@ export function createTransactionTableSchema(options: { decimals: number; solPri
 	})
 }
 
-// Prisma Types
-export type TokenMetadataType = z.infer<typeof MetadataSchema>
-
-export type BondingCurveType = z.infer<typeof BondingcurveSchema>
-
 export type SwapEventType = z.infer<typeof SwapEventSchema>
-
-export type TransactionTableType = z.infer<ReturnType<typeof createTransactionTableSchema>>
 
 export const AccountSchema = z.object({
 	address: z.instanceof(PublicKey).transform(a => a.toBase58()),
@@ -286,22 +266,6 @@ export const AccountSchema = z.object({
 		.transform(a => a.toString()),
 	isCreator: z.boolean().optional(),
 })
-
-export function createTopHolderSchema(decimals: number, totalSupply: BN) {
-	return AccountSchema.transform(data => {
-		const { owner, address, amount, isCreator } = data
-
-		const uiResult = fromLamports(new BN(amount), decimals)
-
-		const uiAmount = formatCompactNumber(uiResult)
-
-		const percentageOwned = calculatePercentage(new BN(amount), totalSupply, decimals).toFixed(3)
-
-		return { owner, address, uiAmount, percentageOwned, isCreator }
-	})
-}
-
-export type TopHolderType = z.infer<ReturnType<typeof createTopHolderSchema>>
 
 export const WasmSchema = z.object({
 	uiAmount: z.string(),

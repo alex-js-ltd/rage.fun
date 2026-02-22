@@ -5,7 +5,7 @@ import Form from 'next/form'
 import { use, useState, useEffect, useRef } from 'react'
 
 import { usePathname, useSearchParams } from 'next/navigation'
-import { type TokenMetadataType } from '@/app/utils/schemas'
+import { type Search } from '@/app/data/search_tokens'
 import { PopoverContent, PopoverRoot, PopoverPortal, PopoverTrigger } from '@/app/comps/popover'
 import { TokenLogo, getTokenLogoProps } from '@/app/comps/token_logo'
 import Link from 'next/link'
@@ -13,7 +13,7 @@ import { Icon } from './_icon'
 import { cn } from '@/app/utils/misc'
 import { useBackpressure } from '@/app/hooks/use_backpressure'
 
-export function SearchResults({ searchPromise }: { searchPromise: Promise<TokenMetadataType[]> }) {
+export function SearchResults({ searchPromise }: { searchPromise: Promise<Search[]> }) {
 	const tokens = use(searchPromise)
 
 	const [open, setOpen] = useState(false)
@@ -48,17 +48,17 @@ export function SearchResults({ searchPromise }: { searchPromise: Promise<TokenM
 					<div className="w-full max-h-[50vh] overflow-y-auto overscroll-contain">
 						<ul className="">
 							{tokens.map(token => (
-								<li key={token.tokenId} className="text-text-100 hover:bg-white/5 transition-colors p-3">
+								<li key={token.id} className="text-text-100 hover:bg-white/5 transition-colors p-3">
 									<Link
 										className="flex items-center gap-2"
 										href={{
-											pathname: `/token/${token.tokenId}`,
+											pathname: `/token/${token.id}`,
 											query: { interval: '1m' },
 										}}
-										as={`/token/${token.tokenId}?interval=1m`}
+										as={`/token/${token.id}?interval=1m`}
 									>
-										<TokenLogo {...getTokenLogoProps(token)} className="w-[40px] h-[40px] rounded-full" />
-										<span className="text-text-200 uppercase  text-xs text-nowrap">{token.symbol}</span>
+										<TokenLogo {...getTokenLogoProps(token.metadata)} className="w-[40px] h-[40px] rounded-full" />
+										<span className="text-text-200 uppercase  text-xs text-nowrap">{token.metadata.symbol}</span>
 									</Link>
 								</li>
 							))}

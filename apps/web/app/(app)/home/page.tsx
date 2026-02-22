@@ -4,7 +4,6 @@ import { getTokens } from '@/app/data/get_tokens'
 import { TokenGrid, TokenGridFallback } from '@/app/comps/token_grid'
 import { ExploreNav } from '@/app/comps/explore_nav'
 import { Events } from '@/app/comps/events'
-import { getLeaderBoard } from '@/app/data/get_leader_board'
 
 export const dynamic = 'force-dynamic'
 
@@ -18,8 +17,6 @@ export default async function Page(props: Props) {
 	const { sortType = 'createdAt', sortOrder = 'desc', cursorId = '', search = '' } = searchParams
 
 	const tokenPromise = getTokens({ sortOrder, sortType, cursorId })
-
-	console.log(await getLeaderBoard())
 
 	return (
 		<div className="w-full max-w-[600px] border-white border-x border-opacity-[0.125] bg-background-100">

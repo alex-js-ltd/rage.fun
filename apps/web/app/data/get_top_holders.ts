@@ -1,5 +1,5 @@
 import { cache } from 'react'
-import { type TopHolderType } from '@/app/utils/schemas'
+
 import { PublicKey, Connection } from '@solana/web3.js'
 import { program } from '@/app/utils/setup'
 import { TOKEN_2022_PROGRAM_ID, getAccount, getAssociatedTokenAddress } from '@solana/spl-token'
@@ -13,7 +13,7 @@ import 'server-only'
 
 const { RPC_URL } = getServerEnv()
 
-export const getTopHolders = cache(async (address: string): Promise<TopHolderType[]> => {
+export const getTopHolders = cache(async (address: string): Promise<TopHolder[]> => {
 	const connection = new Connection(RPC_URL, 'confirmed')
 
 	const creatorId = await getCreatorId(address)
