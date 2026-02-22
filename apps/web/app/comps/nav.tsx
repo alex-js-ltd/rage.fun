@@ -54,7 +54,7 @@ export function Nav({ nonce, session }: { nonce: string; session: Session | null
 						}}
 						className="xl:ml-0 ml-auto w-[70px] h-[52px] flex items-center justify-center cursor-pointer"
 					>
-						<Image className="" src="/rage.png" alt="logo" width={56} height={56} />
+						<Image className="" src="/rage.png" alt="logo" width={56} height={56} priority fetchPriority="high" />
 					</Link>
 				</div>
 
