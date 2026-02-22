@@ -2,7 +2,6 @@
 
 import React, { type RefObject, type ReactNode, createContext, useMemo, use, useCallback, useRef } from 'react'
 import { type InputProps } from '@/app/comps/input'
-import { type ImageProps } from 'next/image'
 import invariant from 'tiny-invariant'
 import { useAsync } from '@/app/hooks/use_async'
 import { client } from '@/app/utils/client'
@@ -36,9 +35,7 @@ function ImageProvider({ children }: { children: ReactNode }) {
 		}
 	}, [])
 
-	const session = useSession()
-
-	const isAuthenticated = session.status === 'authenticated'
+	const { status } = useSession()
 
 	const uploadImage = useCallback(async (file: File) => {
 		// Optional: validate type/size here to fail fast
@@ -49,32 +46,30 @@ function ImageProvider({ children }: { children: ReactNode }) {
 
 	const getInputProps = useCallback<(name: string) => InputProps>(
 		name => ({
-			className: 'sr-only', // drop pointer-events-none unless you really need it
+			className: 'sr-only',
 			type: 'file',
 			accept: 'image/*',
 			name,
 			ref: fileRef,
+			disabled: status === 'loading', // prevents the race
 			onChange: async e => {
-				console.log('isAuthenticated', isAuthenticated)
+				console.log('status', status)
 				const file = e.target.files?.[0]
-				if (!file) {
-					reset()
-					return
-				}
+				if (!file) return
 
-				// clear immediately so re-selecting same file triggers onChange next time
 				if (fileRef.current) fileRef.current.value = ''
 
-				if (!isAuthenticated) {
-					// ideally set an error state so it’s not “silent”
+				if (status !== 'authenticated') {
+					// show a real error message instead of silent reset
 					reset()
+					// optionally: toast("Sign in to upload an image")
 					return
 				}
 
 				run(uploadImage(file))
 			},
 		}),
-		[isAuthenticated, reset, run, uploadImage],
+		[status, reset, run, uploadImage],
 	)
 
 	const value = useMemo(
