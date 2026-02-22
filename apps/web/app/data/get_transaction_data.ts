@@ -1,5 +1,4 @@
-import { prisma } from '@/app/utils/db'
-import { Prisma, SwapEvent } from '@prisma/client'
+import { SwapEvent } from '@prisma/client'
 import { getSolPrice } from '@/app/data/get_sol_price'
 import { getSwapEvents } from '@/app/data/get_swap_events'
 import { getDecimals } from '@/app/data/get_decimals'

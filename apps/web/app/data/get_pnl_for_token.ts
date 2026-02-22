@@ -1,11 +1,24 @@
 import { prisma } from '@/app/utils/db'
+import { Prisma } from '@prisma/client'
 import { getSolPrice } from '@/app/data/get_sol_price'
-import { createPnLSchema } from '@/app/utils/schemas'
-import { ZodError } from 'zod'
+import Decimal from 'decimal.js'
+import { solToUsd } from '@/app/utils/misc'
 import 'server-only'
 
+const select = Prisma.validator<Prisma.TokenPnlSelect>()({
+	tokenId: true,
+	signer: true,
+	bought: true,
+	sold: true,
+	realizedPnl: true,
+})
+
+type TokenPnlPayload = Prisma.TokenPnlGetPayload<{
+	select: typeof select
+}>
+
 export async function getPnLForToken(mint: string) {
-	const pnl = await prisma.tokenPnl.findMany({
+	const data = await prisma.tokenPnl.findMany({
 		where: {
 			tokenId: mint,
 
@@ -13,6 +26,7 @@ export async function getPnLForToken(mint: string) {
 				gt: 0, // only include wallets that sold something
 			},
 		},
+		select,
 
 		orderBy: {
 			realizedPnl: 'desc', // 👈 biggest profit first
@@ -21,22 +35,16 @@ export async function getPnLForToken(mint: string) {
 
 	const solPrice = await getSolPrice()
 
-	const PnlSchema = createPnLSchema({ solPrice })
-
-	const data = pnl.map(p => {
-		const parsed = PnlSchema.safeParse(p)
-		if (!parsed.success) {
-			// 🧨 Wrap the Zod issues into a thrown ZodError
-			throw new ZodError(
-				parsed.error.issues.map(issue => ({
-					...issue,
-					path: ['pnl', ...issue.path], // optional: prefix path with index
-				})),
-			)
-		}
-
-		return parsed.data
-	})
-
-	return data
+	return data.map(pnl => toPnl(pnl, solPrice))
 }
+
+function toPnl(tokenPnl: TokenPnlPayload, solPrice: number) {
+	const bought = solToUsd(new Decimal(tokenPnl.bought.toString()).div(1e9), solPrice).toNumber()
+	const sold = solToUsd(new Decimal(tokenPnl.sold.toString()).div(1e9), solPrice).toNumber()
+
+	const realizedPnl = solToUsd(new Decimal(tokenPnl.realizedPnl.toString()).div(1e9), solPrice).toNumber()
+
+	return { signer: tokenPnl.signer, bought, sold, realizedPnl }
+}
+
+export type PnL = ReturnType<typeof toPnl>
