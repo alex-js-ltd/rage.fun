@@ -1,15 +1,16 @@
+import { prisma } from '@/app/utils/db'
+import { Prisma, SwapEvent } from '@prisma/client'
 import { getSolPrice } from '@/app/data/get_sol_price'
 import { getSwapEvents } from '@/app/data/get_swap_events'
 import { getDecimals } from '@/app/data/get_decimals'
 import dayjs from 'dayjs'
-import { SwapEvent } from '@prisma/client'
 import { fromLamports } from '@repo/rage'
 import { formatCompactNumber, solToUsd } from '@/app/utils/misc'
 import Decimal from 'decimal.js'
 import { BN } from '@coral-xyz/anchor'
 import 'server-only'
 
-export async function getTransactionData(mint: string) {
+export async function getTransactionTable(mint: string) {
 	const [swapEvents, decimals, solPrice] = await Promise.all([getSwapEvents(mint), getDecimals(mint), getSolPrice()])
 
 	swapEvents.sort(
@@ -48,3 +49,11 @@ function toTransactionData(swapEvent: SwapEvent, decimals: number, solPrice: num
 }
 
 export type TransactionData = ReturnType<typeof toTransactionData>
+
+export async function getTransaction(swapEvent: SwapEvent) {
+	const { tokenId: mint } = swapEvent
+
+	const [decimals, solPrice] = await Promise.all([getDecimals(mint), getSolPrice()])
+
+	return toTransactionData(swapEvent, decimals, solPrice)
+}

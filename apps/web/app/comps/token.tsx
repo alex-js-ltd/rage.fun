@@ -12,7 +12,7 @@ import { Tabs, List, Trigger, Content } from '@/app/comps/tabs'
 import { Button } from '@/app/comps/button'
 
 import { TransactionTable } from '@/app/comps/transaction_table'
-import { getTransactionData } from '@/app/data/get_transaction_data'
+import { getTransactionTable } from '@/app/data/get_transaction_data'
 import { HoldersTable } from '@/app/comps/holders_table'
 import { getTopHolders } from '@/app/data/get_top_holders'
 
@@ -48,7 +48,7 @@ export async function Token(props: Props) {
 
 	const swapConfigPromise = getSwapConfig(mint)
 
-	const transactionPromise = getTransactionData(mint)
+	const transactionPromise = getTransactionTable(mint)
 
 	const holdersPromise = getTopHolders(mint)
 
