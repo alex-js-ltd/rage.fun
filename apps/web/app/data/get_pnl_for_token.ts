@@ -38,7 +38,7 @@ export async function getPnLForToken(mint: string) {
 	return data.map(pnl => toPnl(pnl, solPrice))
 }
 
-function toPnl(tokenPnl: TokenPnlPayload, solPrice: number) {
+export function toPnl(tokenPnl: TokenPnlPayload, solPrice: number) {
 	const bought = solToUsd(new Decimal(tokenPnl.bought.toString()).div(1e9), solPrice).toNumber()
 	const sold = solToUsd(new Decimal(tokenPnl.sold.toString()).div(1e9), solPrice).toNumber()
 

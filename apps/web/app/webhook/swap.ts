@@ -22,7 +22,7 @@ import { revalidatePath } from 'next/cache'
 
 import { getServerEnv } from '@/app/utils/env'
 
-import { SwapEventSchema, SwapEventType, createPnLSchema } from '@/app/utils/schemas'
+import { SwapEventSchema, SwapEventType } from '@/app/utils/schemas'
 
 import { getSigner } from '@/app/utils/misc'
 import { getTransaction } from '@/app/data/get_transaction_data'
@@ -45,6 +45,7 @@ import { getSwapConfig } from '@/app/data/get_swap_config'
 import { type TopHolder } from '@/app/data/get_top_holders'
 
 import 'server-only'
+import { toPnl } from '../data/get_pnl_for_token'
 
 const { ABLY_API_KEY, PROXY_PRIVATE_KEY } = getServerEnv()
 
@@ -249,13 +250,7 @@ export async function processSwapEvents(swapEvents: EventData<'swapEvent'>[]) {
 
 			const solPrice = await getSolPrice()
 
-			const PnlSchema = createPnLSchema({ solPrice })
-
-			const parse = PnlSchema.safeParse(pnl)
-
-			if (parse.success) {
-				await AblyEvents.publishPnLEvent(pnlChannel, parse.data)
-			}
+			await AblyEvents.publishPnLEvent(pnlChannel, { ...toPnl(pnl, solPrice) })
 
 			if (curve.status === 'Complete') {
 				await deployToRaydium({ program, mint: event.data.mint, payer })

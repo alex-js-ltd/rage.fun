@@ -203,23 +203,6 @@ export const BondingcurveSchema = z.object({
 	updatedAt: z.date().transform(d => d.toISOString()),
 })
 
-export const MarketDataSchema = z.object({
-	id: z.string(),
-
-	price: z.instanceof(Prisma.Decimal),
-	marketCap: z.instanceof(Prisma.Decimal),
-
-	liquidity: z.bigint().transform(val => val.toString()),
-	volume: z.bigint().transform(val => val.toString()),
-
-	buyCount: z.number(),
-	sellCount: z.number(),
-
-	tokenId: z.string(),
-	createdAt: z.date().transform(d => d.toISOString()),
-	updatedAt: z.date().transform(d => d.toISOString()),
-})
-
 export const SwapEventSchema = z.object({
 	id: z.string(),
 	signer: z.string(),
@@ -234,26 +217,6 @@ export const SwapEventSchema = z.object({
 
 	tokenId: z.string(),
 })
-
-export function createTransactionTableSchema(options: { decimals: number; solPrice: number }) {
-	return SwapEventSchema.transform(data => {
-		const uiResult = fromLamports(new BN(data.tokenAmount), options.decimals)
-
-		const uiAmount = formatCompactNumber(uiResult)
-
-		const volumeSol = new Decimal(data.lamports).div(1e9)
-
-		const volume = solToUsd(volumeSol, options.solPrice).toNumber()
-
-		const avg = volumeSol.div(new Decimal(uiResult))
-
-		const price = solToUsd(avg, options.solPrice).toNumber()
-
-		const { id, time, swapType, signer, tokenId } = data
-
-		return { id, time, swapType, price, volume, uiAmount, signer, tokenId }
-	})
-}
 
 export type SwapEventType = z.infer<typeof SwapEventSchema>
 
@@ -338,32 +301,6 @@ export const TokenSearchParamsSchema = z
 		}
 	})
 
-export function createPnLSchema(options: { solPrice: number }) {
-	const { solPrice } = options
-	return z
-		.object({
-			tokenId: z.string(),
-			signer: z.string(),
-
-			bought: z.bigint().transform(v => v.toString()),
-			sold: z.bigint().transform(v => v.toString()),
-			realizedPnl: z.bigint().transform(v => v.toString()),
-
-			createdAt: z.date().transform(d => d.toISOString()),
-			updatedAt: z.date().transform(d => d.toISOString()),
-		})
-		.transform(data => {
-			const bought = solToUsd(new Decimal(data.bought).div(1e9), solPrice).toNumber()
-			const sold = solToUsd(new Decimal(data.sold).div(1e9), solPrice).toNumber()
-
-			const realizedPnl = solToUsd(new Decimal(data.realizedPnl).div(1e9), solPrice).toNumber()
-
-			return { ...data, bought, sold, realizedPnl }
-		})
-}
-
-export type PnlType = z.infer<ReturnType<typeof createPnLSchema>>
-
 export const WalletSchema = z.object({
 	metadata: MetadataSchema,
 	tokenAmount: TokenAmountSchema,
@@ -398,21 +335,3 @@ export const UserPnlSchema = z.object({
 	createdAt: z.date().transform(d => d.toISOString()),
 	updatedAt: z.date().transform(d => d.toISOString()),
 })
-
-export const LeaderBoardSchema = UserSchema.extend({
-	pnl: UserPnlSchema,
-}).transform(data => {
-	const { name } = data
-	const { userId } = data.pnl
-
-	const realizedPnl = fromLamports(new BN(data.pnl.realizedPnl), 9)
-	// ROI% on realized PnL only. Guard against divide-by-zero.
-	const roiPct = Number(data.pnl.bought) > 0 ? (Number(data.pnl.realizedPnl) / Number(data.pnl.bought)) * 100 : 0
-
-	const bought = fromLamports(new BN(data.pnl.bought), 9)
-	const position = fromLamports(new BN(data.pnl.position), 9)
-
-	return { userId, name, realizedPnl, roiPct, bought, position }
-})
-
-export type LeaderBoardType = z.infer<typeof LeaderBoardSchema>
