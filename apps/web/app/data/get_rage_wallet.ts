@@ -6,6 +6,13 @@ import { TOKEN_2022_PROGRAM_ID } from '@solana/spl-token'
 import { PublicKey } from '@solana/web3.js'
 import 'server-only'
 
+type TokenAmount = {
+	amount: string // raw base units (numeric string)
+	decimals: number // integer >= 0
+	uiAmount: number // >= 0 (can be null in RPC, see note below)
+	uiAmountString: string // decimal string
+}
+
 export async function getRageWallet(wallet?: string) {
 	if (!wallet) return []
 
@@ -13,7 +20,7 @@ export async function getRageWallet(wallet?: string) {
 		programId: TOKEN_2022_PROGRAM_ID,
 	})
 
-	const allTokens = accounts.value.reduce<Record<string, number>>((acc, curr) => {
+	const allTokens = accounts.value.reduce<Record<string, TokenAmount>>((acc, curr) => {
 		const info = curr.account.data.parsed.info
 		const mint = info.mint
 		const uiAmount = info.tokenAmount.uiAmount
