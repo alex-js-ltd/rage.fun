@@ -4,7 +4,6 @@ import { signIn, useSession } from 'next-auth/react'
 import { useAsync } from '@/app/hooks/use_async'
 import { type ButtonProps, Button } from './button'
 import { storeSession } from '@/app/actions/store_session'
-import Link from 'next/link'
 
 export function LinkDiscord({ onClick, children, discordId, ...rest }: ButtonProps & { discordId: string | null }) {
 	const session = useSession()

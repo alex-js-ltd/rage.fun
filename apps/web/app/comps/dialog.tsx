@@ -2,7 +2,6 @@
 
 import React, { type ReactNode, useRef, useEffect } from 'react'
 import * as DialogPrimitive from '@radix-ui/react-dialog'
-import { useRouter } from 'next/navigation'
 
 export function DialogRoot(props: DialogPrimitive.DialogProps) {
 	return <DialogPrimitive.Root {...props} />

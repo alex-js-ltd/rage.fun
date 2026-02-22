@@ -1,14 +1,14 @@
 'use client'
 
 import Link from 'next/link'
-import type { LinkProps } from 'next/link'
+
 import { Icon } from '@/app/comps/_icon'
 import { Wallet } from './wallet'
 import Image from 'next/image'
 import { NavLink, type NavLinkProps } from './nav_link'
 import { cn } from '@/app/utils/misc'
 import { usePathname } from 'next/navigation'
-import { useUnifiedWallet } from '@jup-ag/wallet-adapter'
+
 import { SignInForm } from './signin_form'
 import { Session } from 'next-auth'
 

@@ -1,9 +1,8 @@
 'use client'
 
-import { ReactNode, useRef, useEffect, useState, useLayoutEffect } from 'react'
-import { DialogRoot, DialogContent, DialogPortal, DialogTitle, DialogTrigger, DialogClose } from './dialog'
+import { ReactNode, useEffect, useState, useLayoutEffect } from 'react'
+import { DialogRoot, DialogContent, DialogTitle, DialogTrigger } from './dialog'
 import { useMediaQuery, useScrollLock } from 'usehooks-ts'
-import { Icon } from './_icon'
 import { useSwipeable } from 'react-swipeable'
 
 export function MobileDrawer({ trigger, children }: { trigger: ReactNode; children: ReactNode }) {

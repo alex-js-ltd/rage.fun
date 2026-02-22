@@ -20,8 +20,6 @@ import { useSignAndSendTx } from '@/app/hooks/use_sign_and_send_tx'
 
 import { Toast } from '@/app/comps/toast'
 import { type ToastDescription, useToast } from '@/app/hooks/use_toast'
-import { ConnectWallet } from '@/app/comps/connect_wallet'
-import { Button } from '@/app/comps/button'
 
 const initialState: State = {
 	serializedTx: undefined,
