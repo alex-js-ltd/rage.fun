@@ -4,8 +4,7 @@ import { Button, type ButtonProps } from '@/app/comps/button'
 import { Icon } from '@/app/comps/_icon'
 import { Spinner } from '@/app/comps/spinner'
 import { useAnchorWallet } from '@jup-ag/wallet-adapter'
-import { type TooltipContentProps, Tooltip, TooltipContent, TooltipTrigger } from '@/app/comps/tooltip'
-import { cn } from '@/app/utils/misc'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/app/comps/tooltip'
 import { useIsMobile } from '@/app/hooks/use_is_mobile'
 
 export type SubmitButtonProps = {

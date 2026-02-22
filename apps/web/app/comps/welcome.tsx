@@ -1,8 +1,5 @@
 'use client'
-import { use, useState } from 'react'
-import { TokenFeedType } from '@/app/utils/schemas'
 
-import Image from 'next/image'
 import { Icon } from './_icon'
 import { LinkDiscord } from './link_discord'
 

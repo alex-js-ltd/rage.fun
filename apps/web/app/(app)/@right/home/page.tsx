@@ -7,8 +7,7 @@ import { Trending, TrendingFallBack } from '@/app/comps/trending'
 import { Welcome } from '@/app/comps/welcome'
 import { auth } from '@/app/auth'
 import { getDiscordId } from '@/app/data/get_discord_id'
-import { TopCreators } from '@/app/comps/top_creators'
-import { getTopCreators } from '@/app/data/get_top_creators'
+
 export const dynamic = 'force-dynamic'
 
 type Props = {
@@ -29,8 +28,6 @@ export default async function Page(props: Props) {
 	const discordId = await getDiscordId(session?.user?.id)
 
 	const isConnected = typeof discordId === 'string'
-
-	const topCreatorsPromise = getTopCreators()
 
 	return (
 		<div className="relative w-full">
