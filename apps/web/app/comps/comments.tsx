@@ -1,17 +1,17 @@
 'use client'
 
-import { use, useMemo, useState } from 'react'
+import { use, useState } from 'react'
 import * as Ably from 'ably'
 import { useChannel } from 'ably/react'
-import { CommentType } from '@/app/utils/schemas'
+import { type Comment } from '@/app/data/get_comments'
 import { shortAddress, timeAgo } from '@/app/utils/misc'
 
-export function Comments({ mint, commentsPromise }: { mint: string; commentsPromise: Promise<CommentType[]> }) {
+export function Comments({ mint, commentsPromise }: { mint: string; commentsPromise: Promise<Comment[]> }) {
 	const comments = use(commentsPromise)
-	const [state, setState] = useState<CommentType[]>(comments)
+	const [state, setState] = useState<Comment[]>(comments)
 
 	useChannel('commentEvent', (message: Ably.Message) => {
-		const updateEvent: CommentType = message.data
+		const updateEvent: Comment = message.data
 		// Only accept events for this token
 		if (!mint || updateEvent.tokenId !== mint) return
 
