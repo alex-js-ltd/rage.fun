@@ -55,6 +55,7 @@ function ImageProvider({ children }: { children: ReactNode }) {
 			name,
 			ref: fileRef,
 			onChange: async e => {
+				console.log('isAuthenticated', isAuthenticated)
 				const file = e.target.files?.[0]
 				if (!file) {
 					reset()
