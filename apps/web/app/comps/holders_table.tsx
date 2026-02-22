@@ -1,7 +1,7 @@
 'use client'
 
 import React, { use, useState } from 'react'
-import { type TopHolderType } from '@/app/utils/schemas'
+import { type TopHolder } from '@/app/data/get_top_holders'
 import { shortAddress } from '@/app/utils/misc'
 
 import * as Ably from 'ably'
@@ -9,18 +9,18 @@ import { useChannel } from 'ably/react'
 import { useParams } from 'next/navigation'
 
 export type HoldersTableProps = {
-	holdersPromise: Promise<TopHolderType[]>
+	holdersPromise: Promise<TopHolder[]>
 }
 
 export function HoldersTable({ holdersPromise }: HoldersTableProps) {
 	const initial = use(holdersPromise)
 
-	const [holdersData, setHoldersData] = useState<TopHolderType[]>(initial)
+	const [holdersData, setHoldersData] = useState<TopHolder[]>(initial)
 
 	const { mint } = useParams()
 
 	const { channel } = useChannel('holdersEvent', (message: Ably.Message) => {
-		const holdersEvent: { holders: TopHolderType[]; id: string } = message.data
+		const holdersEvent: { holders: TopHolder[]; id: string } = message.data
 
 		console.log('💥 Received holdersEvent update:', holdersEvent)
 
