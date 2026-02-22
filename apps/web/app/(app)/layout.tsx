@@ -3,8 +3,6 @@
 import { usePathname, useSelectedLayoutSegment } from 'next/navigation'
 import { cn } from '@/app/utils/misc'
 import { Footer } from '@/app/comps/footer'
-import { LinkDiscord } from '../comps/link_discord'
-import { auth } from '@/app/auth'
 
 export default function Layout(props: {
 	children: React.ReactNode
