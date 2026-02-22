@@ -10,9 +10,7 @@ import { getServerEnv } from '@/app/utils/env'
 
 const { HELIUS_SECRET, CRON_SECRET } = getServerEnv()
 
-export const config = {
-	matcher: ['/((?!api/auth|robots.txt|sitemap.xml|favicon.ico|_next/static|_next/image|.*\\.webp$).*)'],
-}
+export const config = { matcher: ['/((?!api/auth|_next/static|_next/image|.*\\.webp$).*)'] }
 // Rate limiter for APIs (tighter)
 const apiWindow = new Ratelimit({
 	redis: kv,
