@@ -44,7 +44,7 @@ function toPnl(tokenPnl: TokenPnlPayload, solPrice: number) {
 
 	const realizedPnl = solToUsd(new Decimal(tokenPnl.realizedPnl.toString()).div(1e9), solPrice).toNumber()
 
-	return { signer: tokenPnl.signer, bought, sold, realizedPnl }
+	return { signer: tokenPnl.signer, tokenId: tokenPnl.tokenId, bought, sold, realizedPnl }
 }
 
-export type PnL = ReturnType<typeof toPnl>
+export type Pnl = ReturnType<typeof toPnl>
