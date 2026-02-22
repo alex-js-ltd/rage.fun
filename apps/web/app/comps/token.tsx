@@ -6,8 +6,6 @@ import Image from 'next/image'
 import { getCandlstickData } from '@/app/data/get_candlestick_data'
 import { CandlestickChart } from '@/app/comps/candlestick_chart'
 
-import { getTokenFeed } from '@/app/data/get_token_feed'
-
 import { Tabs, List, Trigger, Content } from '@/app/comps/tabs'
 import { Button } from '@/app/comps/button'
 

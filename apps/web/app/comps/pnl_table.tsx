@@ -1,7 +1,7 @@
 'use client'
 
 import React, { use, useState } from 'react'
-import { type PnlType } from '@/app/utils/schemas'
+import { type Pnl } from '@/app/data/get_pnl_for_token'
 import { shortAddress } from '@/app/utils/misc'
 
 import * as Ably from 'ably'
@@ -9,19 +9,15 @@ import { useChannel } from 'ably/react'
 import { useParams } from 'next/navigation'
 import { cn } from '@/app/utils/misc'
 
-export type PnLTableProps = {
-	pnlPromise: Promise<PnlType[]>
-}
-
-export function PnLTable({ pnlPromise }: PnLTableProps) {
+export function PnLTable({ pnlPromise }: { pnlPromise: Promise<Pnl[]> }) {
 	const initial = use(pnlPromise)
 
-	const [state, setState] = useState<PnlType[]>(initial)
+	const [state, setState] = useState<Pnl[]>(initial)
 
 	const { mint } = useParams()
 
 	const { channel } = useChannel('pnlEvent', (message: Ably.Message) => {
-		const e: PnlType = message.data
+		const e: Pnl = message.data
 		console.log('pnl event', e)
 		if (e.tokenId !== mint) return
 
