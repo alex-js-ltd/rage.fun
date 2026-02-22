@@ -158,16 +158,6 @@ export const ReplySchema = z.object({
 	parentCommentId: z.string().optional(),
 })
 
-export const CommentSchema = z.object({
-	id: z.string(),
-	parentCommentId: z.string().nullable().optional(),
-	content: z.string().max(280, 'Comment cannot exceed 280 characters'),
-	createdAt: z.date().transform(d => d.toISOString()),
-	updatedAt: z.date().transform(d => d.toISOString()),
-	ownerId: z.string(),
-	tokenId: z.string(),
-})
-
 export const HarvestYieldSchema = z.object({
 	creator: Wallet,
 	mint: Mint,
@@ -339,8 +329,6 @@ export type TokenFeedType = z.output<Awaited<ReturnType<typeof createTokenFeedSc
 
 export type TransactionTableType = z.infer<ReturnType<typeof createTransactionTableSchema>>
 
-export type CommentType = z.infer<typeof CommentSchema>
-
 export const AccountSchema = z.object({
 	address: z.instanceof(PublicKey).transform(a => a.toBase58()),
 	owner: z.instanceof(PublicKey).transform(o => o.toBase58()),
@@ -394,18 +382,6 @@ export const TokenAmountSchema = z.object({
 		message: 'uiAmountString must be a valid number string',
 	}),
 })
-
-export function isOhlcData(data: unknown): data is OhlcData {
-	return (
-		Boolean(data) &&
-		typeof data === 'object' &&
-		typeof (data as OhlcData).time === 'number' &&
-		typeof (data as OhlcData).open === 'number' &&
-		typeof (data as OhlcData).high === 'number' &&
-		typeof (data as OhlcData).low === 'number' &&
-		typeof (data as OhlcData).close === 'number'
-	)
-}
 
 export const SwapOptionSchema = z.object({
 	mint: Mint,

@@ -1,17 +1,14 @@
 import * as Ably from 'ably'
-import {
-	type SwapEventType,
-	type UpdateEnumType,
-	type TopHolderType,
-	type CommentType,
-	type TransactionTableType,
-	type PnlType,
-} from '@/app/utils/schemas'
+import { type SwapEventType, type UpdateEnumType } from '@/app/utils/schemas'
 import { type SignatureStatus } from '@solana/web3.js'
 
 import { type TokenCard } from '@/app/data/get_tokens'
 import { type SwapConfig } from '@/app/data/get_swap_config'
 import { type TokenTrending } from '@/app/api/cron/trending/route'
+import { type Comment } from '@/app/data/get_comments'
+import { type TransactionData } from '@/app/data/get_transaction_data'
+import { type Pnl } from '@/app/data/get_pnl_for_token'
+import { type TopHolder } from '@/app/data/get_top_holders'
 
 import 'server-only'
 
@@ -50,7 +47,7 @@ export async function publishUpdateEvent(channel: Ably.Channel, token: TokenCard
 	}
 }
 
-export async function publishTransactionEvent(channel: Ably.Channel, transaction: TransactionTableType) {
+export async function publishTransactionEvent(channel: Ably.Channel, transaction: TransactionData) {
 	try {
 		await channel.publish('transactionEvent', { ...transaction })
 	} catch (error) {
@@ -58,7 +55,7 @@ export async function publishTransactionEvent(channel: Ably.Channel, transaction
 	}
 }
 
-export async function publishTopHoldersEvent(channel: Ably.Channel, holders: TopHolderType[], token: TokenCard) {
+export async function publishTopHoldersEvent(channel: Ably.Channel, holders: TopHolder[], token: TokenCard) {
 	try {
 		await channel.publish('holdersEvent', { holders, id: token.id })
 	} catch (error) {
@@ -66,7 +63,7 @@ export async function publishTopHoldersEvent(channel: Ably.Channel, holders: Top
 	}
 }
 
-export async function publishCommentEvent(channel: Ably.Channel, comment: CommentType) {
+export async function publishCommentEvent(channel: Ably.Channel, comment: Comment) {
 	try {
 		await channel.publish('commentEvent', { ...comment })
 	} catch (error) {
@@ -82,7 +79,7 @@ export async function publishTrendingEvent(channel: Ably.Channel, tokens: TokenT
 	}
 }
 
-export async function publishPnLEvent(channel: Ably.Channel, pnl: PnlType) {
+export async function publishPnLEvent(channel: Ably.Channel, pnl: Pnl) {
 	try {
 		await channel.publish('pnlEvent', { ...pnl })
 	} catch (error) {

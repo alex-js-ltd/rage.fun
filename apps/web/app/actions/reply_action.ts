@@ -2,7 +2,7 @@
 
 import { SubmissionResult } from '@conform-to/react'
 import { parseWithZod } from '@conform-to/zod'
-import { ReplySchema, CommentSchema } from '@/app/utils/schemas'
+import { ReplySchema } from '@/app/utils/schemas'
 import { auth } from '@/app/auth'
 import { prisma } from '@/app/utils/db'
 import { Prisma } from '@prisma/client'
@@ -10,6 +10,7 @@ import { Prisma } from '@prisma/client'
 import * as Ably from 'ably'
 import { getServerEnv } from '@/app/utils/env'
 import * as AblyEvents from '@/app/webhook/ably'
+import { type Comment } from '@/app/data/get_comments'
 
 const { ABLY_API_KEY } = getServerEnv()
 
@@ -58,21 +59,17 @@ export async function replyAction(_prevState: State, formData: FormData) {
 
 	const comment = await prisma.comment.create({ data: create })
 
-	const parse = CommentSchema.safeParse(comment)
-
-	if (parse.error) {
-		console.error(parse)
-
-		return {}
-	}
-
 	const client = new Ably.Rest(ABLY_API_KEY)
 
 	const commentChannel = client.channels.get('commentEvent')
 
-	await AblyEvents.publishCommentEvent(commentChannel, parse.data)
-
-	console.log(parse)
+	await AblyEvents.publishCommentEvent(commentChannel, {
+		id: comment.id,
+		ownerId: comment.ownerId,
+		content: comment.content,
+		tokenId: comment.tokenId,
+		createdAt: comment.createdAt.toISOString(),
+	})
 
 	return {}
 }
