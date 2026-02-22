@@ -1,4 +1,3 @@
-import { WalletSchema, WalletType } from '@/app/utils/schemas'
 import { prisma } from '@/app/utils/db'
 
 import { connection } from '@/app/utils/setup'
@@ -13,58 +12,40 @@ type TokenAmount = {
 	uiAmountString: string // decimal string
 }
 
-export async function getRageWallet(wallet?: string) {
-	if (!wallet) return []
+export type RageWallet = Record<string, TokenAmount>
+
+export async function getRageWallet(wallet?: string): Promise<RageWallet> {
+	if (!wallet) return {}
+
+	const rageTokens = await prisma.token.findMany({
+		where: {
+			bondingCurve: {
+				isNot: null,
+			},
+			metadata: { isNot: null },
+		},
+
+		select: { id: true },
+	})
+
+	const rageTokenSet = new Set(rageTokens.map(({ id }) => id))
 
 	const accounts = await connection.getParsedTokenAccountsByOwner(new PublicKey(wallet), {
 		programId: TOKEN_2022_PROGRAM_ID,
 	})
 
-	const allTokens = accounts.value.reduce<Record<string, TokenAmount>>((acc, curr) => {
+	const userTokens = accounts.value.reduce<Record<string, TokenAmount>>((acc, curr) => {
 		const info = curr.account.data.parsed.info
 		const mint = info.mint
 		const uiAmount = info.tokenAmount.uiAmount
 		const tokenAmount = info.tokenAmount
 
-		if (uiAmount > 0) {
+		if (uiAmount && uiAmount > 0 && rageTokenSet.has(mint)) {
 			acc[mint] = tokenAmount
 		}
 
 		return acc
 	}, {})
 
-	const mints = Object.keys(allTokens)
-
-	const rageTokens = await prisma.token.findMany({
-		where: {
-			id: {
-				in: mints,
-			},
-			bondingCurve: {
-				isNot: null,
-			},
-			metadata: { isNot: null },
-		},
-		include: { metadata: true },
-	})
-
-	const rageWallet = rageTokens.reduce<WalletType[]>((acc, curr) => {
-		const mint = curr.id
-
-		const tokenAmount = allTokens[mint]
-
-		const value = { metadata: curr.metadata, tokenAmount }
-
-		const parsed = WalletSchema.safeParse(value)
-
-		if (parsed.success) {
-			acc.push(parsed.data)
-		}
-
-		return acc
-	}, [])
-
-	return rageWallet
+	return userTokens
 }
-
-function toRageWallet() {}

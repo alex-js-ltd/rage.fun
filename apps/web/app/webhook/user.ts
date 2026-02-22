@@ -56,11 +56,13 @@ export async function upsertUserPnL(userId: string) {
 }
 
 export async function getUserPosition(userId: string) {
-	const wallet = await getRageWallet(userId)
+	const wallet = await getRageWallet(userId) // RageWallet = Record<mint, TokenAmount>
+
+	const entries = Object.entries(wallet) // [mint, tokenAmount][]
 
 	const results = await Promise.all(
-		wallet.map(async item => {
-			const { bondingCurve } = await getSwapConfig(item.metadata.tokenId)
+		entries.map(async ([mint, tokenAmount]) => {
+			const { bondingCurve } = await getSwapConfig(mint)
 
 			const {
 				virtualReserve,
@@ -73,7 +75,7 @@ export async function getUserPosition(userId: string) {
 				decimals,
 			} = bondingCurve
 
-			const uiAmount = item.tokenAmount.uiAmountString
+			const uiAmount = tokenAmount.uiAmountString
 
 			const position = await calculateSellPrice({
 				uiAmount,
@@ -91,8 +93,6 @@ export async function getUserPosition(userId: string) {
 		}),
 	)
 
-	// aggregate positions (example: sum them)
 	const total = results.reduce((acc, pos) => acc + Number(pos), 0)
-
 	return total
 }
