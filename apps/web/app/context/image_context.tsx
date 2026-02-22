@@ -57,19 +57,20 @@ function ImageProvider({ children }: { children: ReactNode }) {
 				const file = e.target.files?.[0]
 				if (!file) return
 
-				if (fileRef.current) fileRef.current.value = ''
-
-				if (status !== 'authenticated') {
-					// show a real error message instead of silent reset
-					reset()
-					// optionally: toast("Sign in to upload an image")
-					return
+				try {
+					await run(uploadImage(file))
+				} catch (err) {
+					if (fileRef.current) {
+						fileRef.current.value = ''
+					}
+				} finally {
+					if (fileRef.current) {
+						fileRef.current.value = ''
+					}
 				}
-
-				run(uploadImage(file))
 			},
 		}),
-		[status, reset, run, uploadImage],
+		[status, run, uploadImage],
 	)
 
 	const value = useMemo(
