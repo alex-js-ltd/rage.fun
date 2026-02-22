@@ -1,7 +1,7 @@
 import { prisma } from '@/app/utils/db'
 import { getRageWallet } from '@/app/data/get_rage_wallet'
 import { calculateSellPrice } from '@/app/utils/wasm'
-import { getTokenFeed } from '@/app/data/get_token_feed'
+import { getSwapConfig } from '@/app/data/get_swap_config'
 
 export async function upsertUserPnL(userId: string) {
 	try {
@@ -60,7 +60,7 @@ export async function getUserPosition(userId: string) {
 
 	const results = await Promise.all(
 		wallet.map(async item => {
-			const { bondingCurve } = await getTokenFeed(item.metadata.tokenId)
+			const { bondingCurve } = await getSwapConfig(item.metadata.tokenId)
 
 			const {
 				virtualReserve,

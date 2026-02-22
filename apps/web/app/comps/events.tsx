@@ -8,19 +8,18 @@ import { Icon } from './_icon'
 import { Collapsible, CollapsibleContent } from './collapsible'
 import { useAsync } from '@/app/hooks/use_async'
 
-import { type TokenFeedType } from '@/app/utils/schemas'
-
 import { Button } from '@/app/comps/button'
 import Link from 'next/link'
+import { type TokenCard } from '../data/get_tokens'
 
 export function Events() {
-	const { run, data: current, reset, setData } = useAsync<TokenFeedType>()
+	const { run, data: current, reset, setData } = useAsync<TokenCard>()
 
 	const timerRef = useRef<NodeJS.Timeout | null>(null) // Best practice
 
 	// Listen for new events and add them to the queue
 	useChannel('updateEvent', async (message: Ably.Message) => {
-		const updateEvent: TokenFeedType = message.data
+		const updateEvent: TokenCard = message.data
 
 		setData(updateEvent)
 

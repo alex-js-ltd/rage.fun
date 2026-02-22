@@ -8,7 +8,6 @@ import { Prisma, $Enums } from '@prisma/client'
 import { fromLamports } from '@repo/rage'
 import { formatCompactNumber } from '@/app/utils/misc'
 import { calculatePercentage } from './misc'
-import { OhlcData } from 'lightweight-charts'
 
 import { solToUsd } from '@/app/utils/misc'
 
@@ -237,55 +236,6 @@ export const SwapEventSchema = z.object({
 	tokenId: z.string(),
 })
 
-export function createTokenFeedSchema(options: { solPrice: number }) {
-	const { solPrice } = options
-	return z
-		.object({
-			id: z.string(),
-			creatorId: z.string(),
-			metadata: MetadataSchema,
-			bondingCurve: BondingcurveSchema,
-			marketData: MarketDataSchema,
-			updateType: UpdateEnumSchema.optional(),
-		})
-		.transform(data => {
-			const { metadata, bondingCurve, marketData, updateType } = data
-
-			const progress = calculateProgress(bondingCurve)
-
-			const price = solToUsd(marketData.price, solPrice).toNumber()
-			const marketCap = solToUsd(marketData.marketCap, solPrice).toNumber()
-			const liquidityInSol = new Decimal(marketData.liquidity).div(1e9)
-			const volumeInSol = new Decimal(marketData.volume).div(1e9)
-			const liquidity = solToUsd(liquidityInSol, solPrice).toNumber()
-			const volume = solToUsd(volumeInSol, solPrice).toNumber()
-
-			const tradingFees = solToUsd(new Decimal(bondingCurve.tradingFees).div(1e9), solPrice).toNumber()
-
-			return {
-				id: data.id,
-				creatorId: data.creatorId,
-				metadata,
-
-				updateType,
-
-				bondingCurve: {
-					...bondingCurve,
-					tradingFees,
-				},
-
-				marketData: {
-					...marketData,
-					price,
-					marketCap,
-					liquidity,
-					volume,
-					progress,
-				},
-			}
-		})
-}
-
 export function calculateProgress(state: BondingCurveType) {
 	const { currentReserve, targetReserve } = state
 
@@ -324,8 +274,6 @@ export type TokenMetadataType = z.infer<typeof MetadataSchema>
 export type BondingCurveType = z.infer<typeof BondingcurveSchema>
 
 export type SwapEventType = z.infer<typeof SwapEventSchema>
-
-export type TokenFeedType = z.output<Awaited<ReturnType<typeof createTokenFeedSchema>>>
 
 export type TransactionTableType = z.infer<ReturnType<typeof createTransactionTableSchema>>
 

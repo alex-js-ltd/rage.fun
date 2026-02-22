@@ -1,7 +1,6 @@
 import { use } from 'react'
 import { TokenLogo, getTokenLogoProps, solLogoProps } from '@/app/comps/token_logo'
 import { cn } from '@/app/utils/misc'
-import { type TokenFeedType } from '@/app/utils/schemas'
 import { Loading } from './loading'
 import { type TokenLogo as Logo } from '../data/get_token_logo'
 

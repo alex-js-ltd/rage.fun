@@ -2,12 +2,8 @@ import { NextRequest, NextResponse } from 'next/server'
 import { kv } from '@vercel/kv'
 import { getServerEnv } from '@/app/utils/env'
 import { prisma } from '@/app/utils/db'
-import { createTokenFeedSchema, type TokenFeedType } from '@/app/utils/schemas'
-import { getSolPrice } from '@/app/data/get_sol_price'
+
 import dayjs from 'dayjs'
-import { getTrendingTokens } from '@/app/data/get_trending_tokens'
-import * as Ably from 'ably'
-import * as AblyEvents from '@/app/webhook/ably'
 
 import 'server-only'
 
