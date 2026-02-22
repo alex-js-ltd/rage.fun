@@ -1,5 +1,5 @@
 import type { Metadata, ResolvingMetadata } from 'next'
-import { getCachedTokenMetadata } from '@/app/data/get_token_metadata'
+import { getTokenMetadata } from '@/app/data/get_token_metadata'
 import { Token } from '@/app/comps/token'
 
 export const dynamic = 'force-dynamic'
@@ -17,7 +17,7 @@ export async function generateMetadata({ params, searchParams }: Props, parent: 
 	const id = (await params).mint
 
 	// fetch post information
-	const meta = await getCachedTokenMetadata(id)
+	const meta = await getTokenMetadata(id)
 
 	return {
 		title: meta.name,

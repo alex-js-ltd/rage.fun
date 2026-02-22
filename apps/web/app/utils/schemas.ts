@@ -158,44 +158,6 @@ export const UpdateEnumSchema = z.enum(['Buy', 'Sell', 'Create', 'Harvest'])
 
 export type UpdateEnumType = z.infer<typeof UpdateEnumSchema>
 
-// Prisma Schemas
-export const MetadataSchema = z.object({
-	tokenId: z.string(),
-	name: z.string(),
-	symbol: z.string(),
-	description: z.string(),
-	image: z.string(),
-	thumbhash: z
-		.union([z.instanceof(Buffer), z.instanceof(Uint8Array)])
-		.transform(val => Buffer.from(val).toString('base64')),
-	createdAt: z.date().transform(d => d.toISOString()),
-	updatedAt: z.date().transform(d => d.toISOString()),
-})
-
-export const BondingcurveSchema = z.object({
-	id: z.string(),
-
-	connectorWeight: z.instanceof(Prisma.Decimal).transform(val => val.toNumber()),
-	decimals: z.number(),
-
-	virtualSupply: z.bigint().transform(val => val.toString()),
-	currentSupply: z.bigint().transform(val => val.toString()),
-	targetSupply: z.bigint().transform(val => val.toString()),
-
-	virtualReserve: z.bigint().transform(val => val.toString()),
-	currentReserve: z.bigint().transform(val => val.toString()),
-	targetReserve: z.bigint().transform(val => val.toString()),
-
-	tradingFees: z.bigint().transform(val => val.toString()),
-	openTime: z.bigint().transform(val => val.toString()),
-
-	status: z.enum(['Funding', 'Complete', 'Migrated']),
-
-	tokenId: z.string(),
-	createdAt: z.date().transform(d => d.toISOString()),
-	updatedAt: z.date().transform(d => d.toISOString()),
-})
-
 export const SwapEventSchema = z.object({
 	id: z.string(),
 	signer: z.string(),
@@ -212,16 +174,6 @@ export const SwapEventSchema = z.object({
 })
 
 export type SwapEventType = z.infer<typeof SwapEventSchema>
-
-export const AccountSchema = z.object({
-	address: z.instanceof(PublicKey).transform(a => a.toBase58()),
-	owner: z.instanceof(PublicKey).transform(o => o.toBase58()),
-	amount: z
-		.bigint()
-		.refine(a => a > BigInt('0'), { message: 'Amount must be greater than 0' })
-		.transform(a => a.toString()),
-	isCreator: z.boolean().optional(),
-})
 
 export const WasmSchema = z.object({
 	uiAmount: z.string(),
@@ -293,26 +245,3 @@ export const TokenSearchParamsSchema = z
 				return { interval: 300 } // fallback to 5m
 		}
 	})
-
-export const WalletSchema = z.object({
-	metadata: MetadataSchema,
-	tokenAmount: TokenAmountSchema,
-})
-
-export type WalletType = z.infer<typeof WalletSchema>
-
-export const UserSchema = z.object({
-	id: z.string(),
-
-	name: z.string().nullable(),
-	email: z.string().email().nullable(),
-	image: z.string().url().nullable(),
-
-	emailVerified: z
-		.date()
-		.nullable()
-		.transform(d => d?.toISOString()),
-
-	createdAt: z.date().transform(d => d.toISOString()),
-	updatedAt: z.date().transform(d => d.toISOString()),
-})
