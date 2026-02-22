@@ -1,21 +1,18 @@
 'use client'
 
-import React, { type ReactNode, use, useState } from 'react'
-import { type TransactionTableType } from '@/app/utils/schemas'
-
-import { cn, formatNumberSmart } from '@/app/utils/misc'
-import { type TokenFeedType } from '@/app/utils/schemas'
+import React, { use, useState } from 'react'
+import { cn } from '@/app/utils/misc'
 import { shortAddress } from '@/app/utils/misc'
 import { Icon } from './_icon'
-
 import * as Ably from 'ably'
 import { useChannel } from 'ably/react'
 import { timeFromNow } from '@/app/utils/misc'
 import { formatTinyNumber } from '@/app/utils/misc'
 import { type TokenLogo } from '@/app/data/get_token_logo'
+import { type TransactionData } from '@/app/data/get_transaction_data'
 
 export type TransactionTableProps = {
-	transactionPromise: Promise<TransactionTableType[]>
+	transactionPromise: Promise<TransactionData[]>
 	tokenLogoPromise: Promise<TokenLogo>
 }
 
@@ -23,12 +20,12 @@ export function TransactionTable({ transactionPromise, tokenLogoPromise }: Trans
 	const initial = use(transactionPromise)
 	const token = use(tokenLogoPromise)
 
-	const [rows, setRows] = useState<(TransactionTableType & { animate: boolean })[]>(() =>
+	const [rows, setRows] = useState<(TransactionData & { animate: boolean })[]>(() =>
 		initial.map(r => ({ ...r, animate: false })),
 	)
 
 	const { channel } = useChannel('transactionEvent', (message: Ably.Message) => {
-		const transactionEvent: TransactionTableType = message.data
+		const transactionEvent: TransactionData = message.data
 
 		if (transactionEvent.tokenId !== token.id) return
 
@@ -85,7 +82,7 @@ export function TransactionTable({ transactionPromise, tokenLogoPromise }: Trans
 	)
 }
 
-function TableRow({ row, animate }: { row: TransactionTableType; animate: boolean }) {
+function TableRow({ row, animate }: { row: TransactionData; animate: boolean }) {
 	return (
 		<tr
 			className={cn(
@@ -131,7 +128,7 @@ function TableRow({ row, animate }: { row: TransactionTableType; animate: boolea
 	)
 }
 
-function SwapType({ swapType }: { swapType: TransactionTableType['swapType'] }) {
+function SwapType({ swapType }: { swapType: TransactionData['swapType'] }) {
 	const color = swapType === 'Buy' ? 'text-buy-100' : 'text-sell-100'
 	return <div className={cn('inline-flex items-center rounded px-1 py-0.5 text-xs font-medium', color)}>{swapType}</div>
 }
