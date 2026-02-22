@@ -8,6 +8,13 @@ import { client } from '@/app/utils/client'
 import { PinataSDK } from 'pinata'
 import { useSession } from 'next-auth/react'
 
+async function uploadImage(file: File) {
+	// Optional: validate type/size here to fail fast
+	const res = await client<{ url: string }>(`/api/pinata/presign`, {})
+	const upload = await pinata.upload.public.file(file).url(res.url)
+	return `https://indigo-adverse-vicuna-777.mypinata.cloud/ipfs/${upload.cid}`
+}
+
 const pinata = new PinataSDK({
 	pinataGateway: 'indigo-adverse-vicuna-777.mypinata.cloud',
 })
@@ -37,13 +44,6 @@ function ImageProvider({ children }: { children: ReactNode }) {
 
 	const { status } = useSession()
 
-	const uploadImage = useCallback(async (file: File) => {
-		// Optional: validate type/size here to fail fast
-		const res = await client<{ url: string }>(`/api/pinata/presign`, {})
-		const upload = await pinata.upload.public.file(file).url(res.url)
-		return `https://indigo-adverse-vicuna-777.mypinata.cloud/ipfs/${upload.cid}`
-	}, [])
-
 	const getInputProps = useCallback<(name: string) => InputProps>(
 		name => ({
 			className: 'sr-only',
@@ -54,6 +54,10 @@ function ImageProvider({ children }: { children: ReactNode }) {
 			disabled: status === 'loading', // prevents the race
 			onChange: async e => {
 				console.log('status', status)
+
+				if (status === 'unauthenticated') {
+					return
+				}
 				const file = e.target.files?.[0]
 				if (!file) return
 
@@ -70,7 +74,7 @@ function ImageProvider({ children }: { children: ReactNode }) {
 				}
 			},
 		}),
-		[status, run, uploadImage],
+		[status, run],
 	)
 
 	const value = useMemo(
