@@ -1,6 +1,5 @@
 import * as Ably from 'ably'
 import {
-	type TokenFeedType,
 	type SwapEventType,
 	type UpdateEnumType,
 	type TopHolderType,
@@ -9,9 +8,12 @@ import {
 	type PnlType,
 } from '@/app/utils/schemas'
 import { type SignatureStatus } from '@solana/web3.js'
-import 'server-only'
+
 import { type TokenCard } from '@/app/data/get_tokens'
 import { type SwapConfig } from '@/app/data/get_swap_config'
+import { type TokenTrending } from '@/app/api/cron/trending/route'
+
+import 'server-only'
 
 export async function publishSignatureEvent(
 	channel: Ably.Channel,
@@ -72,7 +74,7 @@ export async function publishCommentEvent(channel: Ably.Channel, comment: Commen
 	}
 }
 
-export async function publishTrendingEvent(channel: Ably.Channel, tokens: TokenFeedType[]) {
+export async function publishTrendingEvent(channel: Ably.Channel, tokens: TokenTrending[]) {
 	try {
 		await channel.publish('trendingEvent', { tokens })
 	} catch (error) {

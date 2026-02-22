@@ -1,10 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { parseWithZod } from '@conform-to/zod'
 import { WasmSchema } from '@/app/utils/schemas'
-import { fetchBondingCurveState, fromLamports, uiAmountToAmount } from '@repo/rage'
-import { program } from '@/app/utils/setup'
-import { formatCompactNumber } from '@/app/utils/misc'
-import { BN } from '@coral-xyz/anchor'
 
 import type * as calculateWasmModule from '../../../../calculate.wasm'
 // @ts-ignore

@@ -1,9 +1,9 @@
-import { TokenFeedType } from '@/app/utils/schemas'
+import { type TokenTrending } from '@/app/api/cron/trending/route'
 import { kv } from '@vercel/kv'
 import 'server-only'
 
-export async function getTrendingTokens(): Promise<TokenFeedType[]> {
-	const res = await kv.get<TokenFeedType[]>('trending_tokens')
+export async function getTrendingTokens(): Promise<TokenTrending[]> {
+	const res = await kv.get<TokenTrending[]>('trending_tokens')
 
 	if (!res) {
 		return []

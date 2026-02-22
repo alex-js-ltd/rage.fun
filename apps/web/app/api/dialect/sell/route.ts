@@ -1,5 +1,5 @@
 import { type NextRequest, NextResponse } from 'next/server'
-import { prisma } from '@/app/utils/db'
+
 import {
 	type ActionGetResponse,
 	type ActionPostResponse,

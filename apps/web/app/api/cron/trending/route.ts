@@ -2,10 +2,10 @@ import { NextRequest, NextResponse } from 'next/server'
 import { kv } from '@vercel/kv'
 import { getServerEnv } from '@/app/utils/env'
 import { prisma } from '@/app/utils/db'
-import { createTokenFeedSchema, type TokenFeedType } from '@/app/utils/schemas'
-import { getSolPrice } from '@/app/data/get_sol_price'
+import { Prisma } from '@prisma/client'
 import dayjs from 'dayjs'
 import { getTrendingTokens } from '@/app/data/get_trending_tokens'
+
 import * as Ably from 'ably'
 import * as AblyEvents from '@/app/webhook/ably'
 
@@ -38,27 +38,12 @@ export async function GET(req: NextRequest) {
 			bondingCurve: { isNot: null },
 			metadata: { isNot: null },
 		},
-		include: { metadata: true, bondingCurve: true, marketData: true },
+		select,
 		orderBy: { marketData: { volume: 'desc' } },
 		take: 3,
 	})
 
-	const solPrice = await getSolPrice()
-
-	const data = rows.map(token => {
-		const TokenFeedSchema = createTokenFeedSchema({
-			solPrice,
-		})
-
-		const parsed = TokenFeedSchema.safeParse(token)
-
-		if (!parsed.success) {
-			console.error(parsed.error.format())
-			throw new Error('Invalid token with relations')
-		}
-
-		return parsed.data
-	})
+	const data = rows.map(toTrending)
 
 	const merged = [...data, ...previous]
 	const deduped = merged.filter((item, index, self) => index === self.findIndex(t => t.id === item.id))
@@ -69,6 +54,7 @@ export async function GET(req: NextRequest) {
 	const client = new Ably.Rest(ABLY_API_KEY)
 
 	const trendingChannel = client.channels.get('trendingEvent')
+
 	await AblyEvents.publishTrendingEvent(trendingChannel, trending)
 
 	// Return a success response
@@ -79,3 +65,40 @@ export async function GET(req: NextRequest) {
 		{ status: 200 },
 	)
 }
+
+const select = Prisma.validator<Prisma.TokenSelect>()({
+	id: true,
+
+	metadata: {
+		select: {
+			symbol: true,
+
+			image: true,
+			thumbhash: true,
+		},
+	},
+
+	marketData: {
+		select: {
+			volume: true,
+		},
+	},
+})
+
+type TokenPayload = Prisma.TokenGetPayload<{
+	select: typeof select
+}>
+
+function getMetadata(metadata: NonNullable<TokenPayload['metadata']>) {
+	return { ...metadata, thumbhash: Buffer.from(metadata.thumbhash).toString('base64') }
+}
+
+function toTrending(token: TokenPayload) {
+	if (!token.metadata || !token.marketData) {
+		throw new Error('Missing required relations')
+	}
+
+	return { id: token.id, metadata: getMetadata(token.metadata) }
+}
+
+export type TokenTrending = ReturnType<typeof toTrending>

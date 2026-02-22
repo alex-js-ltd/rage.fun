@@ -1,6 +1,7 @@
 'use client'
 import { use, useState } from 'react'
-import { TokenFeedType } from '@/app/utils/schemas'
+
+import { type TokenTrending } from '@/app/api/cron/trending/route'
 
 import Image from 'next/image'
 import Link from 'next/link'
@@ -12,13 +13,13 @@ import { useChannel } from 'ably/react'
 import { Loading } from './loading'
 import { Icon } from './_icon'
 
-export function Trending({ trendingPromise }: { trendingPromise: Promise<TokenFeedType[]> }) {
+export function Trending({ trendingPromise }: { trendingPromise: Promise<TokenTrending[]> }) {
 	const data = use(trendingPromise)
 
 	const [state, setState] = useState(data)
 
 	const { channel } = useChannel('trendingEvent', (message: Ably.Message) => {
-		const e: { tokens: TokenFeedType[] } = message.data
+		const e: { tokens: TokenTrending[] } = message.data
 
 		setState(e.tokens)
 	})
@@ -38,12 +39,12 @@ export function Trending({ trendingPromise }: { trendingPromise: Promise<TokenFe
 	)
 }
 
-function ListItem({ token }: { token: TokenFeedType }) {
+function ListItem({ token }: { token: TokenTrending }) {
 	const [src, setImgSrc] = useState(token.metadata.image)
 	return (
 		<li key={token.id} className="w-full hover:bg-white/10 h-[65.55px] px-3">
 			<Link
-				aria-label={`View ${token.metadata.name}`}
+				aria-label={`View ${token.id}`}
 				href={{
 					pathname: `/token/${token.id}`,
 					query: { interval: '5m' },
@@ -55,7 +56,7 @@ function ListItem({ token }: { token: TokenFeedType }) {
 				<div className="relative size-[40px] rounded-full overflow-hidden">
 					<Image
 						src={src}
-						alt={token.metadata.name}
+						alt={token.metadata.symbol}
 						width={40}
 						height={40}
 						blurDataURL={createPngDataUri(token.metadata.thumbhash)}
