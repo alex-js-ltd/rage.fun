@@ -1,7 +1,18 @@
 import { prisma } from '@/app/utils/db'
 import { Prisma } from '@prisma/client'
-import { CommentSchema, CommentType } from '@/app/utils/schemas'
 import 'server-only'
+
+const select = Prisma.validator<Prisma.CommentSelect>()({
+	id: true,
+	ownerId: true,
+	createdAt: true,
+	content: true,
+	tokenId: true,
+})
+
+type CommentPayload = Prisma.CommentGetPayload<{
+	select: typeof select
+}>
 
 // Function to fetch comments dynamically with a token filter
 export async function getComments(mint: string) {
@@ -10,32 +21,25 @@ export async function getComments(mint: string) {
 			tokenId: mint,
 			parentCommentId: null, // Only top-level comments
 		},
-		include: {
-			owner: true, // Include owner data
-			childComments: {
-				include: {
-					owner: true,
-				},
-			},
-		},
+		select,
 		orderBy: {
 			createdAt: 'desc', // Order comments by creation time
 		},
 	})
 
-	const comments = await prisma.comment.findMany(query)
+	const data = await prisma.comment.findMany(query)
 
-	const data = comments.reduce<CommentType[]>((acc, curr) => {
-		const parsed = CommentSchema.safeParse(curr)
-
-		if (parsed.success) {
-			acc.push(parsed.data)
-		} else {
-			console.log(parsed)
-		}
-
-		return acc
-	}, [])
-
-	return data
+	return data.map(toComment)
 }
+
+function toComment(comment: CommentPayload) {
+	return {
+		id: comment.id,
+		ownerId: comment.ownerId,
+		content: comment.content,
+		tokenId: comment.tokenId,
+		createdAt: comment.createdAt.toISOString(),
+	}
+}
+
+export type Comment = ReturnType<typeof toComment>
