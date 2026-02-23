@@ -1,7 +1,7 @@
 import { Suspense } from 'react'
 import { type SearchParams } from '@/app/utils/schemas'
 import { getTokenFeed } from '@/app/data/get_token_feed'
-import { TokenGrid, TokenGridFallback } from '@/app/comps/token_grid'
+import { TokenFeed, TokenFeedFallback } from '@/app/comps/token_feed'
 import { ExploreNav } from '@/app/comps/explore_nav'
 import { Events } from '@/app/comps/events'
 
@@ -32,11 +32,11 @@ export default async function Page(props: Props) {
 						key={[sortType, sortOrder].toString()}
 						fallback={
 							<ul className="mx-auto grid w-full grid-cols-1 gap-0">
-								<TokenGridFallback />
+								<TokenFeedFallback />
 							</ul>
 						}
 					>
-						<TokenGrid tokenPromise={tokenPromise} />
+						<TokenFeed tokenPromise={tokenPromise} />
 					</Suspense>
 				</section>
 			</div>

@@ -3,12 +3,11 @@ import { Suspense } from 'react'
 // Explore
 import { type SearchParams } from '@/app/utils/schemas'
 import { getTokenFeed } from '@/app/data/get_token_feed'
-import { TokenGrid, TokenGridFallback } from '@/app/comps/token_grid'
+import { TokenFeed, TokenFeedFallback } from '@/app/comps/token_feed'
 
 import { getIsCreator } from '@/app/data/get_is_creator'
 import { auth } from '@/app/auth'
 
-import { Back } from '@/app/comps/back'
 import { Header } from '@/app/comps/header'
 
 export const dynamic = 'force-dynamic'
@@ -40,11 +39,11 @@ export default async function Page(props: Props) {
 						<Suspense
 							fallback={
 								<ul className="mx-auto grid w-full grid-cols-1 gap-0">
-									<TokenGridFallback isEarnPage={true} />
+									<TokenFeedFallback isEarnPage={true} />
 								</ul>
 							}
 						>
-							<TokenGrid tokenPromise={tokenPromise} creatorId={creatorId} />
+							<TokenFeed tokenPromise={tokenPromise} creatorId={creatorId} />
 						</Suspense>
 					) : (
 						<div className="p-4 flex flex-col gap-4">

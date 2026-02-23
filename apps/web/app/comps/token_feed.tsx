@@ -202,7 +202,7 @@ export function Pill({ label, value, tooltip, className }: PillProps) {
 	)
 }
 
-export function TokenGrid({
+export function TokenFeed({
 	tokenPromise,
 	creatorId,
 }: {
@@ -334,7 +334,7 @@ export function TokenGrid({
 				})}
 
 				{/* Show loader card while fetching */}
-				{isLoading ? <TokenGridFallback isEarnPage={isEarnPage} /> : null}
+				{isLoading ? <TokenFeedFallback isEarnPage={isEarnPage} /> : null}
 			</ul>
 
 			<form
@@ -448,7 +448,7 @@ export function TokenCardFallback({ i, children }: { i: number; children?: React
 	)
 }
 
-export function TokenGridFallback({ count = 12, isEarnPage }: { count?: number; isEarnPage?: boolean }) {
+export function TokenFeedFallback({ count = 12, isEarnPage }: { count?: number; isEarnPage?: boolean }) {
 	return (
 		<>
 			{Array.from({ length: count }, (_, i) => (

@@ -3,7 +3,7 @@ import { Suspense } from 'react'
 // Explore
 import { type SearchParams } from '@/app/utils/schemas'
 import { getTokenFeed } from '@/app/data/get_token_feed'
-import { TokenGrid, TokenGridFallback } from '@/app/comps/token_grid'
+import { TokenFeed, TokenFeedFallback } from '@/app/comps/token_feed'
 
 import { Header } from '@/app/comps/header'
 import { getUser } from '@/app/data/get_user'
@@ -51,11 +51,11 @@ export default async function Page(props: Props) {
 					<Suspense
 						fallback={
 							<ul className="mx-auto grid w-full grid-cols-1 gap-0">
-								<TokenGridFallback />
+								<TokenFeedFallback />
 							</ul>
 						}
 					>
-						<TokenGrid tokenPromise={tokenPromise} creatorId={creatorId} />
+						<TokenFeed tokenPromise={tokenPromise} creatorId={creatorId} />
 					</Suspense>
 				</section>
 			</div>
