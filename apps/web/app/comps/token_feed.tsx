@@ -38,7 +38,9 @@ export type InitialState = {
 	nextCursorId?: string
 }
 
-function TokenCard({ token, pathname, children }: { token: TokenCard; pathname: string; children?: React.ReactNode }) {
+type Mode = 'home' | 'earn' | 'profile'
+
+function TokenCard({ token, mode }: { token: TokenCard; mode: Mode; children?: React.ReactNode }) {
 	const {
 		id: mint,
 		creatorId,
@@ -47,8 +49,6 @@ function TokenCard({ token, pathname, children }: { token: TokenCard; pathname: 
 		marketData: { price, marketCap, liquidity, volume, buyCount, sellCount },
 		updateType,
 	} = token
-
-	const disableCreatorLink = pathname !== '/home'
 
 	const prevUpdatedAtRef = useRef(updatedAt)
 
@@ -135,7 +135,7 @@ function TokenCard({ token, pathname, children }: { token: TokenCard; pathname: 
 							<span className="text-rage-100 font-medium font-mono text-[15px]">{`$${formatNumberSmart(marketCap)}`}</span>
 						</div>
 
-						{disableCreatorLink ? null : (
+						{mode === 'home' && (
 							<Link
 								href={{
 									pathname: `/${creatorId}`,
@@ -167,7 +167,10 @@ function TokenCard({ token, pathname, children }: { token: TokenCard; pathname: 
 						/>
 					</div>
 
-					<div className="flex-1 xxs:justify-end items-center flex">{children ? children : null}</div>
+					<div className="flex-1 xxs:justify-end items-center flex">
+						{mode === 'home' || mode === 'profile' ? <Blink mint={mint} /> : null}
+						{mode === 'earn' ? <HarvestYieldForm token={token} /> : null}
+					</div>
 				</div>
 			</div>
 		</article>
@@ -205,9 +208,11 @@ export function Pill({ label, value, tooltip, className }: PillProps) {
 export function TokenFeed({
 	tokenPromise,
 	creatorId,
+	mode,
 }: {
 	tokenPromise: Promise<InitialState>
 	creatorId?: string | undefined
+	mode: Mode
 }) {
 	const pathname = usePathname()
 
@@ -326,9 +331,7 @@ export function TokenFeed({
 							ref={isPenultimate && !isLastPage && !isLoading ? ref : undefined}
 							className="space-y-4 w-full"
 						>
-							<TokenCard token={token} pathname={pathname}>
-								{creatorId ? <HarvestYieldForm token={token} /> : <Blink mint={token.id} />}
-							</TokenCard>
+							<TokenCard token={token} mode={mode} />
 						</li>
 					)
 				})}

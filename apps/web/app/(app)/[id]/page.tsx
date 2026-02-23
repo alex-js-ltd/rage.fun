@@ -53,7 +53,7 @@ export default async function Page(props: Props) {
 							</ul>
 						}
 					>
-						<TokenFeed tokenPromise={tokenPromise} creatorId={creatorId} />
+						<TokenFeed tokenPromise={tokenPromise} creatorId={creatorId} mode="profile" />
 					</Suspense>
 				</section>
 			</div>

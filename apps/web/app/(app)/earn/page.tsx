@@ -41,7 +41,7 @@ export default async function Page(props: Props) {
 								</ul>
 							}
 						>
-							<TokenFeed tokenPromise={tokenPromise} creatorId={creatorId} />
+							<TokenFeed tokenPromise={tokenPromise} creatorId={creatorId} mode="earn" />
 						</Suspense>
 					) : (
 						<div className="p-4 flex flex-col gap-4">

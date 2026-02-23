@@ -34,7 +34,7 @@ export default async function Page(props: Props) {
 							</ul>
 						}
 					>
-						<TokenFeed tokenPromise={tokenPromise} />
+						<TokenFeed tokenPromise={tokenPromise} mode="home" />
 					</Suspense>
 				</section>
 			</div>
