@@ -1,11 +1,11 @@
 import { type Metadata } from 'next'
-import { type ReactNode } from 'react'
+import { type ReactNode, Suspense } from 'react'
 import { AppProviders } from '@/app/context'
 import { GeistSans } from 'geist/font/sans'
 import { GeistMono } from 'geist/font/mono'
 import { Analytics } from '@vercel/analytics/next'
 import { auth } from '@/app/auth'
-import { getTopCreators } from './data/get_top_creators'
+
 import './globals.css'
 
 export const metadata: Metadata = {
@@ -20,13 +20,15 @@ export const metadata: Metadata = {
 }
 
 export default async function RootLayout(props: { children: ReactNode }) {
-	const session = await auth()
+	const sessionPromise = auth()
 
 	return (
 		<html className={`${GeistSans.variable} ${GeistMono.variable}`} lang="en">
 			<body className="font-sans max-h-[100vh] dark cursor-default scrollbar-hide">
 				<div className="min-h-screen-patched flex flex-col w-full bg-background-100 scrollbar-hide">
-					<AppProviders session={session}>{props.children}</AppProviders>
+					<Suspense fallback={null}>
+						<AppProviders sessionPromise={sessionPromise}>{props.children}</AppProviders>
+					</Suspense>
 				</div>
 				<Analytics />
 			</body>

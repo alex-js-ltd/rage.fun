@@ -33,13 +33,14 @@ function toLogo(token: TokenPayload) {
 	return { id, metadata: getMetadata(metadata) }
 }
 
-export const getTokenLogo = cache(async (mint: string) => {
+export async function getTokenLogo(mint: string) {
+	'use cache'
 	const token = await prisma.token.findUniqueOrThrow({
 		where: { id: mint },
 		select,
 	})
 
 	return toLogo(token)
-})
+}
 
 export type TokenLogo = ReturnType<typeof toLogo>

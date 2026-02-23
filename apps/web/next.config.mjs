@@ -11,7 +11,7 @@ const nextConfig = {
 		serverComponentsExternalPackages: ['ably', 'twitter-api-v2'],
 		bodySizeLimit: '1mb',
 	},
-
+	cacheComponents: true,
 	images: {
 		formats: ['image/webp'],
 

@@ -1,6 +1,6 @@
 'use client'
 
-import type { ReactNode } from 'react'
+import { type ReactNode, use } from 'react'
 import { ToastProvider } from './toast_context'
 import { type Session } from 'next-auth'
 import dynamic from 'next/dynamic'
@@ -17,7 +17,14 @@ const WalletProvider = dynamic(() => import('@/app/context/wallet_context.tsx').
 	ssr: false,
 })
 
-export function AppProviders({ session, children }: { session: Session | null; children: ReactNode }) {
+export function AppProviders({
+	sessionPromise,
+	children,
+}: {
+	sessionPromise: Promise<Session | null>
+	children: ReactNode
+}) {
+	const session = use(sessionPromise)
 	return (
 		<AuthProvider session={session} baseUrl="/api/auth">
 			<WalletProvider>
