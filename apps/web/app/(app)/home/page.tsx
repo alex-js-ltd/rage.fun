@@ -1,6 +1,6 @@
 import { Suspense } from 'react'
 import { type SearchParams } from '@/app/utils/schemas'
-import { getTokens } from '@/app/data/get_tokens'
+import { getTokenFeed } from '@/app/data/get_token_feed'
 import { TokenGrid, TokenGridFallback } from '@/app/comps/token_grid'
 import { ExploreNav } from '@/app/comps/explore_nav'
 import { Events } from '@/app/comps/events'
@@ -16,7 +16,7 @@ export default async function Page(props: Props) {
 
 	const { sortType = 'createdAt', sortOrder = 'desc', cursorId = '', search = '' } = searchParams
 
-	const tokenPromise = getTokens({ sortOrder, sortType, cursorId })
+	const tokenPromise = getTokenFeed({ sortOrder, sortType, cursorId })
 
 	return (
 		<div className="w-full max-w-[600px] border-white border-x border-opacity-[0.125] bg-background-100">

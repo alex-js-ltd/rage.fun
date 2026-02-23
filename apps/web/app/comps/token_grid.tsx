@@ -29,7 +29,7 @@ import { useInView } from 'react-intersection-observer'
 import { HarvestYieldForm } from '@/app/comps/harvest_yield_form'
 import { usePathname } from 'next/navigation'
 import { Blink } from './blink'
-import { type TokenCard } from '@/app/data/get_tokens'
+import { type TokenCard } from '@/app/data/get_token_feed'
 
 export type InitialState = {
 	tokens: Array<TokenCard>

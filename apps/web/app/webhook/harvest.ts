@@ -15,7 +15,7 @@ import { revalidatePath } from 'next/cache'
 import * as AblyEvents from '@/app/webhook/ably'
 import * as DiscordAlerts from '@/app/webhook/discord'
 
-import { getTokenCard, type TokenCard } from '@/app/data/get_tokens'
+import { getTokenCard, type TokenCard } from '@/app/data/get_token_feed'
 
 import 'server-only'
 

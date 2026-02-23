@@ -15,7 +15,7 @@ import { useSignAndSendTx } from '@/app/hooks/use_sign_and_send_tx'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/app/comps/tooltip'
 
 import { formatNumberSmart } from '@/app/utils/misc'
-import { type TokenCard } from '@/app/data/get_tokens'
+import { type TokenCard } from '@/app/data/get_token_feed'
 
 const initialState: State = {}
 

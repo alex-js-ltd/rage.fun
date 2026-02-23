@@ -2,7 +2,7 @@ import * as Ably from 'ably'
 import { type SwapEventType, type UpdateEnumType } from '@/app/utils/schemas'
 import { type SignatureStatus } from '@solana/web3.js'
 
-import { type TokenCard } from '@/app/data/get_tokens'
+import { type TokenCard } from '@/app/data/get_token_feed'
 import { type SwapConfig } from '@/app/data/get_swap_config'
 import { type TokenTrending } from '@/app/api/cron/trending/route'
 import { type Comment } from '@/app/data/get_comments'

@@ -16,7 +16,7 @@ import { solToUsd } from '@/app/utils/misc'
 import { Decimal } from '@prisma/client/runtime/library'
 import { prisma } from '@/app/utils/db'
 import { Account } from 'next-auth'
-import { type TokenCard } from '@/app/data/get_tokens'
+import { type TokenCard } from '@/app/data/get_token_feed'
 import { TokenAlert } from '../data/get_token_alert'
 
 const {

@@ -11,7 +11,7 @@ import { getDiscordId } from '@/app/data/get_discord_id'
 import * as Ably from 'ably'
 import * as DiscordAlerts from '@/app/webhook/discord'
 
-import { getTokenCard, TokenCard } from '@/app/data/get_tokens'
+import { getTokenCard, TokenCard } from '@/app/data/get_token_feed'
 
 import 'server-only'
 

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { SearchSchema } from '@/app/utils/schemas'
 import { parseWithZod } from '@conform-to/zod'
-import { getTokens } from '@/app/data/get_tokens'
+import { getTokenFeed } from '@/app/data/get_token_feed'
 
 export async function GET(req: NextRequest) {
 	const searchParams = req.nextUrl.searchParams
@@ -16,7 +16,7 @@ export async function GET(req: NextRequest) {
 
 	const { sortType, sortOrder, cursorId, creatorId } = submission.value
 
-	const data = await getTokens({ sortOrder, sortType, cursorId, creatorId })
+	const data = await getTokenFeed({ sortOrder, sortType, cursorId, creatorId })
 
 	// Return a success response
 	return NextResponse.json(

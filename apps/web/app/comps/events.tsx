@@ -10,7 +10,7 @@ import { useAsync } from '@/app/hooks/use_async'
 
 import { Button } from '@/app/comps/button'
 import Link from 'next/link'
-import { type TokenCard } from '../data/get_tokens'
+import { type TokenCard } from '@/app/data/get_token_feed'
 
 export function Events() {
 	const { run, data: current, reset, setData } = useAsync<TokenCard>()

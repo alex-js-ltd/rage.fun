@@ -6,7 +6,7 @@ import { solToUsd } from '@/app/utils/misc'
 import Decimal from 'decimal.js'
 import 'server-only'
 
-export async function getTokens(searchParams: SearchParams) {
+export async function getTokenFeed(searchParams: SearchParams) {
 	const submission = SearchSchema.safeParse(searchParams)
 
 	if (submission.error) {

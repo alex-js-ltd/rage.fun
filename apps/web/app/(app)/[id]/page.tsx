@@ -2,7 +2,7 @@ import { Suspense } from 'react'
 
 // Explore
 import { type SearchParams } from '@/app/utils/schemas'
-import { getTokens } from '@/app/data/get_tokens'
+import { getTokenFeed } from '@/app/data/get_token_feed'
 import { TokenGrid, TokenGridFallback } from '@/app/comps/token_grid'
 
 import { Header } from '@/app/comps/header'
@@ -24,7 +24,7 @@ export default async function Page(props: Props) {
 
 	const { sortType = 'createdAt', sortOrder = 'desc', cursorId = '', search = '' } = searchParams
 
-	const tokenPromise = getTokens({ sortType, sortOrder, cursorId, creatorId })
+	const tokenPromise = getTokenFeed({ sortType, sortOrder, cursorId, creatorId })
 
 	const user = await getUser(creatorId)
 

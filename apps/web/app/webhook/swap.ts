@@ -38,7 +38,7 @@ import * as AblyEvents from '@/app/webhook/ably'
 import * as DiscordAlerts from '@/app/webhook/discord'
 import * as TelegramAlerts from '@/app/webhook/telegram'
 
-import { getTokenCard } from '@/app/data/get_tokens'
+import { getTokenCard } from '@/app/data/get_token_feed'
 
 import { type TokenAlert, getTokenAlert } from '@/app/data/get_token_alert'
 import { getSwapConfig } from '@/app/data/get_swap_config'
