@@ -34,7 +34,6 @@ function toLogo(token: TokenPayload) {
 }
 
 export async function getTokenLogo(mint: string) {
-	'use cache'
 	const token = await prisma.token.findUniqueOrThrow({
 		where: { id: mint },
 		select,
