@@ -7,8 +7,6 @@ import calculateWasm from '../../../../calculate.wasm?module'
 
 const module$ = WebAssembly.instantiate(calculateWasm)
 
-export const runtime = 'edge'
-
 export async function POST(req: NextRequest) {
 	const instance = (await module$) as any
 	const exports = instance.exports as typeof calculateWasmModule

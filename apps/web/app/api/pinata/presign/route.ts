@@ -2,10 +2,6 @@ import { type NextRequest, NextResponse } from 'next/server'
 import { PinataSDK } from 'pinata'
 import { getServerEnv } from '@/app/utils/env'
 
-export const dynamic = 'force-dynamic'
-
-export const runtime = 'nodejs' // important
-
 const { PINATA_JWT, PROXY_PRIVATE_KEY } = getServerEnv()
 
 const pinata = new PinataSDK({

@@ -10,8 +10,6 @@ import { getUser } from '@/app/data/get_user'
 import Image from 'next/image'
 import { shortAddress } from '@/app/utils/misc'
 
-export const dynamic = 'force-dynamic'
-
 type Props = {
 	searchParams: Promise<SearchParams>
 	params: Promise<{ id: string }>
