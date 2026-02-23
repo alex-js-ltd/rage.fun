@@ -5,8 +5,6 @@ import { TokenFeed, TokenFeedFallback } from '@/app/comps/token_feed'
 import { ExploreNav } from '@/app/comps/explore_nav'
 import { Events } from '@/app/comps/events'
 
-export const dynamic = 'force-dynamic'
-
 type Props = {
 	searchParams: Promise<SearchParams>
 }

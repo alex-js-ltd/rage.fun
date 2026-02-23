@@ -2,8 +2,6 @@ import { cookies } from 'next/headers'
 import { Nav } from '@/app/comps/nav'
 import { auth } from '@/app/auth'
 
-export const dynamic = 'force-dynamic'
-
 export default async function Default() {
 	const nonce = await getNonceFromCookie()
 	const session = await auth()

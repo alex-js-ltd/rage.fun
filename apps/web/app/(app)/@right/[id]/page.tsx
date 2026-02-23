@@ -5,8 +5,6 @@ import { type SearchParams } from '@/app/utils/schemas'
 import { getTrendingTokens } from '@/app/data/get_trending_tokens'
 import { Trending, TrendingFallBack } from '@/app/comps/trending'
 
-export const dynamic = 'force-dynamic'
-
 type Props = {
 	searchParams: Promise<SearchParams>
 }

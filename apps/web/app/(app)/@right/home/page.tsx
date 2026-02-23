@@ -8,8 +8,6 @@ import { Welcome } from '@/app/comps/welcome'
 import { auth } from '@/app/auth'
 import { getDiscordId } from '@/app/data/get_discord_id'
 
-export const dynamic = 'force-dynamic'
-
 type Props = {
 	searchParams: Promise<SearchParams>
 }

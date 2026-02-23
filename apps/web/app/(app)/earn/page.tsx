@@ -10,8 +10,6 @@ import { auth } from '@/app/auth'
 
 import { Header } from '@/app/comps/header'
 
-export const dynamic = 'force-dynamic'
-
 type Props = {
 	searchParams: Promise<SearchParams>
 }

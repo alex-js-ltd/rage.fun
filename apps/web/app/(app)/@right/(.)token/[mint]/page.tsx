@@ -1,7 +1,5 @@
 import { Suspense } from 'react'
 import { SwapForm, SwapFormFallback } from '@/app/comps/swap_form'
-
-import { getTopHolders } from '@/app/data/get_top_holders'
 import { getSwapConfig } from '@/app/data/get_swap_config'
 
 type Props = {
@@ -10,8 +8,6 @@ type Props = {
 
 export default async function Page(props: Props) {
 	const { mint } = await props.params
-
-	const holdersPromise = getTopHolders(mint)
 
 	const swapConfigPromise = getSwapConfig(mint)
 
