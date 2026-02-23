@@ -44,42 +44,22 @@ export async function getTokens(searchParams: SearchParams) {
 const TAKE: number = 12
 
 function getWhere({ sortType, creatorId }: SearchParams & { creatorId?: string }) {
+	const base = Prisma.validator<Prisma.TokenWhereInput>()({
+		bondingCurve: { isNot: null },
+		...(creatorId ? { creatorId: { equals: creatorId } } : {}),
+	})
+
 	switch (sortType) {
-		case 'createdAt':
-			return Prisma.validator<Prisma.TokenWhereInput>()({
-				bondingCurve: {
-					isNot: null,
-				},
-
-				...(creatorId && { creatorId: { equals: creatorId } }),
-			})
-
 		case 'lastTrade':
 			return Prisma.validator<Prisma.TokenWhereInput>()({
-				bondingCurve: {
-					isNot: null,
-				},
+				...base,
 				swapEvents: { some: {} },
-				...(creatorId && { creatorId: { equals: creatorId } }),
 			})
 
+		case 'createdAt':
 		case 'volume':
-			return Prisma.validator<Prisma.TokenWhereInput>()({
-				bondingCurve: {
-					isNot: null,
-				},
-
-				...(creatorId && { creatorId: { equals: creatorId } }),
-			})
-
 		case 'marketCap':
-			return Prisma.validator<Prisma.TokenWhereInput>()({
-				bondingCurve: {
-					isNot: null,
-				},
-
-				...(creatorId && { creatorId: { equals: creatorId } }),
-			})
+			return base
 
 		default:
 			throw new Error(`Unsupported sortType: ${sortType}`)
@@ -131,34 +111,31 @@ function getCursor(cursorId: SearchParams['cursorId']) {
 }
 
 function getOrderBy({ sortType, sortOrder }: SearchParams) {
+	const base = [{ createdAt: sortOrder }, { id: sortOrder }] as const
+
 	switch (sortType) {
 		case 'createdAt':
-			return Prisma.validator<Prisma.TokenOrderByWithRelationInput[]>()([{ createdAt: sortOrder }, { id: sortOrder }])
+			return Prisma.validator<Prisma.TokenOrderByWithRelationInput[]>()([...base])
 
 		case 'lastTrade':
-			// Order by the bonding curve row's updatedAt (updated on every swap)
 			return Prisma.validator<Prisma.TokenOrderByWithRelationInput[]>()([
 				{ bondingCurve: { updatedAt: sortOrder } },
-				{ createdAt: sortOrder },
-				{ id: sortOrder },
+				...base,
 			])
 
 		case 'volume':
-			// Order by the bonding curve row's updatedAt (updated on every swap)
 			return Prisma.validator<Prisma.TokenOrderByWithRelationInput[]>()([
 				{ marketData: { volume: sortOrder } },
-				{ createdAt: sortOrder },
-				{ id: sortOrder },
+				...base,
 			])
 
 		case 'marketCap':
-			// Order by the bonding curve row's updatedAt (updated on every swap)
 			return Prisma.validator<Prisma.TokenOrderByWithRelationInput[]>()([
 				{ marketData: { marketCap: sortOrder } },
 				{ marketData: { liquidity: sortOrder } },
-				{ createdAt: sortOrder },
-				{ id: sortOrder },
+				...base,
 			])
+
 		default:
 			throw new Error(`Unsupported sortType: ${sortType}`)
 	}
