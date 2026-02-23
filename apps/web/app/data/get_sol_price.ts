@@ -1,6 +1,6 @@
 import { kv } from '@vercel/kv'
 
-export async function getSolPrice<DataType>(): Promise<number> {
+export async function getSolPrice(): Promise<number> {
 	const res = await kv.get<{ usd: number }>(`sol_price`)
 
 	if (!res) {

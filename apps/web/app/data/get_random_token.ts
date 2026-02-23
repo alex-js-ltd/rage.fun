@@ -1,4 +1,4 @@
-import { Prisma, Token } from '@prisma/client'
+import { Token } from '@prisma/client'
 import { kv } from '@vercel/kv'
 import 'server-only'
 

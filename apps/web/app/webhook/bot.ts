@@ -2,7 +2,7 @@ import { Keypair } from '@solana/web3.js'
 import { prisma } from '@/app/utils/db'
 
 import bs58 from 'bs58'
-import { getWallet } from '@/app/data/get_wallet'
+import { getRageWallet } from '@/app/data/get_rage_wallet'
 
 function keypairToSecretKeyArray(keypair: Keypair) {
 	return Array.from(keypair.secretKey)
@@ -34,7 +34,7 @@ export async function getBotWallets() {
 
 		const keypair = Keypair.fromSecretKey(new Uint8Array(arr))
 
-		const wallet = await getWallet(keypair.publicKey)
+		const wallet = await getRageWallet(keypair.publicKey.toBase58())
 
 		return { keypair, wallet }
 	})
