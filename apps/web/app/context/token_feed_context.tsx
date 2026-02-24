@@ -15,6 +15,9 @@ import React, {
 import { type TokenCard } from '@/app/data/get_token_feed'
 import { SearchParams } from '@/app/utils/schemas'
 
+import * as Ably from 'ably'
+import { useChannel } from 'ably/react'
+
 type TokenFeed = {
 	tokens: Array<TokenCard>
 	isLastPage: boolean
@@ -23,14 +26,8 @@ type TokenFeed = {
 }
 
 type Context = {
-	state: TokenFeed
+	initialState: TokenFeed
 }
-
-type Action =
-	| { type: 'CREATE'; token: TokenCard }
-	| { type: 'BUY'; token: TokenCard }
-	| { type: 'SELL'; token: TokenCard }
-	| { type: 'HARVEST'; token: TokenCard }
 
 const TokenFeedContext = createContext<Context | undefined>(undefined)
 TokenFeedContext.displayName = 'TokenFeedContext'
@@ -44,37 +41,9 @@ function TokenFeedProvider({
 	tokenFeedPromise: Promise<TokenFeed>
 	creatorId?: string | undefined
 }) {
-	const initialTokenFeed = use(tokenFeedPromise)
+	const initialState = use(tokenFeedPromise)
 
-	const [state, dispatch] = useReducer((prev: TokenFeed, action: Action) => {
-		switch (action.type) {
-			case 'CREATE': {
-				const next = [action.token, ...prev.tokens]
-				const nextCursorId = next?.length ? next[next.length - 1]?.id : undefined
-
-				return { ...prev, tokens: next, nextCursorId }
-			}
-
-			case 'BUY':
-			case 'SELL':
-			case 'HARVEST': {
-				const idx = prev.tokens.findIndex(t => t.id === action.token.id)
-				if (idx === -1) {
-					return prev
-				}
-
-				const next = prev.tokens.slice()
-				next[idx] = { ...action.token }
-
-				const nextCursorId = next?.length ? next[next.length - 1]?.id : undefined
-
-				return { ...prev, tokens: next, nextCursorId }
-			}
-		}
-		return prev
-	}, initialTokenFeed)
-
-	const value = { state }
+	const value = { initialState }
 
 	return <TokenFeedContext.Provider value={value}> {children}</TokenFeedContext.Provider>
 }
@@ -85,4 +54,34 @@ function useTokenFeed() {
 		throw new Error('useTokenFeed must be used within a TokenFeedProvider')
 	}
 	return context
+}
+
+function useCreatedAtFeed() {
+	const { initialState } = useTokenFeed()
+
+	const [state, setState] = useState(initialState)
+
+	const { channel } = useChannel('updateEvent', (message: Ably.Message) => {
+		const e: TokenCard = message.data
+
+		const { updateType } = e
+
+		setState(prev => {
+			switch (updateType) {
+				case 'Create': {
+					const filtered = prev.tokens.filter(t => t.id !== e.id)
+
+					const next = [e, ...filtered]
+					const nextCursorId = next?.length ? next[next.length - 1]?.id : undefined
+					return { ...prev, tokens: next, nextCursorId }
+				}
+				case 'Buy':
+				case 'Sell':
+				case 'Harvest': {
+					return prev
+				}
+			}
+			return prev
+		})
+	})
 }

@@ -1,4 +1,4 @@
-import { type SearchParams, SearchSchema } from '@/app/utils/schemas'
+import { type SearchParams, SearchSchema, UpdateEnumType } from '@/app/utils/schemas'
 import { prisma } from '@/app/utils/db'
 import { Prisma } from '@prisma/client'
 import { getSolPrice } from '@/app/data/get_sol_price'
@@ -175,7 +175,7 @@ function toTokenCard(token: TokenPayload, solPrice: number) {
 		metadata: getMetadata(token.metadata),
 		bondingCurve: getBondingCurve(token.bondingCurve, solPrice),
 		marketData: getMarketData(token.marketData, solPrice),
-		updateType: undefined,
+		updateType: undefined as UpdateType,
 	}
 }
 
@@ -195,3 +195,5 @@ export async function getTokenCard(mint: string) {
 
 	return toTokenCard(token, solPrice)
 }
+
+type UpdateType = 'Buy' | 'Sell' | 'Create' | 'Harvest' | undefined
