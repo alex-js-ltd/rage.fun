@@ -54,6 +54,22 @@ function TokenFeedProvider({
 
 				return { ...prev, tokens: next, nextCursorId }
 			}
+
+			case 'BUY':
+			case 'SELL':
+			case 'HARVEST': {
+				const idx = prev.tokens.findIndex(t => t.id === action.token.id)
+				if (idx === -1) {
+					return prev
+				}
+
+				const next = prev.tokens.slice()
+				next[idx] = { ...action.token }
+
+				const nextCursorId = next?.length ? next[next.length - 1]?.id : undefined
+
+				return { ...prev, tokens: next, nextCursorId }
+			}
 		}
 		return prev
 	}, initialTokenFeed)
