@@ -9,6 +9,7 @@ import React, {
 	useCallback,
 	useRef,
 	useState,
+	useReducer,
 } from 'react'
 
 import { type TokenCard } from '@/app/data/get_token_feed'
@@ -25,6 +26,8 @@ type Context = {
 	state: TokenFeed
 }
 
+type Action = { type: 'CREATED_AT' } | { type: 'LAST_TRADE' } | { type: 'MARKET_CAP' }
+
 const TokenFeedContext = createContext<Context | undefined>(undefined)
 TokenFeedContext.displayName = 'TokenFeedContext'
 
@@ -39,7 +42,9 @@ function TokenFeedProvider({
 }) {
 	const initialTokenFeed = use(tokenFeedPromise)
 
-	const [state, setState] = useState<TokenFeed>(initialTokenFeed)
+	const [state, dispatch] = useReducer((state: TokenFeed, action: Action) => {
+		return state
+	}, initialTokenFeed)
 
 	const value = { state }
 
