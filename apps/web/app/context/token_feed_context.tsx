@@ -26,7 +26,11 @@ type Context = {
 	state: TokenFeed
 }
 
-type Action = { type: 'CREATED_AT' } | { type: 'LAST_TRADE' } | { type: 'MARKET_CAP' }
+type Action =
+	| { type: 'CREATE'; token: TokenCard }
+	| { type: 'BUY'; token: TokenCard }
+	| { type: 'SELL'; token: TokenCard }
+	| { type: 'HARVEST'; token: TokenCard }
 
 const TokenFeedContext = createContext<Context | undefined>(undefined)
 TokenFeedContext.displayName = 'TokenFeedContext'
@@ -42,13 +46,21 @@ function TokenFeedProvider({
 }) {
 	const initialTokenFeed = use(tokenFeedPromise)
 
-	const [state, dispatch] = useReducer((state: TokenFeed, action: Action) => {
-		return state
+	const [state, dispatch] = useReducer((prev: TokenFeed, action: Action) => {
+		switch (action.type) {
+			case 'CREATE': {
+				const next = [action.token, ...prev.tokens]
+				const nextCursorId = next?.length ? next[next.length - 1]?.id : undefined
+
+				return { ...prev, tokens: next, nextCursorId }
+			}
+		}
+		return prev
 	}, initialTokenFeed)
 
 	const value = { state }
 
-	return <TokenFeedContext.Provider value={value}>{children}</TokenFeedContext.Provider>
+	return <TokenFeedContext.Provider value={value}> {children}</TokenFeedContext.Provider>
 }
 
 function useTokenFeed() {
