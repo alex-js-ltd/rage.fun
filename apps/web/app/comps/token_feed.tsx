@@ -1,6 +1,6 @@
 'use client'
 
-import React, { use, useState, useEffect, useRef } from 'react'
+import React, { use, useState, useEffect, useRef, ReactNode } from 'react'
 import { SearchParams } from '@/app/utils/schemas'
 import { useAsync } from '@/app/hooks/use_async'
 import * as Ably from 'ably'
@@ -11,7 +11,6 @@ import { parseWithZod } from '@conform-to/zod'
 import { SearchSchema } from '@/app/utils/schemas'
 import { client } from '@/app/utils/client'
 import { useInView } from 'react-intersection-observer'
-import { usePathname } from 'next/navigation'
 import { type TokenCard } from '@/app/data/get_token_feed'
 import { TokenCardFallback } from '@/app/comps/token_card'
 
@@ -26,13 +25,13 @@ export function TokenFeed({
 	tokenPromise,
 	creatorId,
 	Component,
+	fallback,
 }: {
 	tokenPromise: Promise<InitialState>
 	creatorId?: string | undefined
 	Component: React.ComponentType<{ token: TokenCard }>
+	fallback: ReactNode
 }) {
-	const pathname = usePathname()
-
 	const initialState = use(tokenPromise)
 
 	const [state, setState] = useState<InitialState>(initialState)
@@ -134,8 +133,6 @@ export function TokenFeed({
 		}
 	}, [inView, isLoading, isLastPage])
 
-	const isEarnPage = pathname === '/earn' && !!creatorId
-
 	return (
 		<div className="grid">
 			<ul className="mx-auto grid w-full grid-cols-1 gap-0">
@@ -154,7 +151,7 @@ export function TokenFeed({
 				})}
 
 				{/* Show loader card while fetching */}
-				{isLoading ? <TokenFeedFallback isEarnPage={isEarnPage} /> : null}
+				{isLoading ? fallback : null}
 			</ul>
 
 			<form

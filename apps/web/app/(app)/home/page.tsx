@@ -35,7 +35,7 @@ export default async function Page(props: Props) {
 							</ul>
 						}
 					>
-						<TokenFeed tokenPromise={tokenPromise} Component={TokenCard.Home} />
+						<TokenFeed tokenPromise={tokenPromise} Component={TokenCard.Home} fallback={<TokenFeedFallback />} />
 					</Suspense>
 				</section>
 			</div>

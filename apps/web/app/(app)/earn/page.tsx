@@ -43,7 +43,12 @@ export default async function Page(props: Props) {
 								</ul>
 							}
 						>
-							<TokenFeed tokenPromise={tokenPromise} creatorId={creatorId} Component={TokenCard.Earn} />
+							<TokenFeed
+								tokenPromise={tokenPromise}
+								creatorId={creatorId}
+								Component={TokenCard.Earn}
+								fallback={<TokenFeedFallback isEarnPage />}
+							/>
 						</Suspense>
 					) : (
 						<div className="p-4 flex flex-col gap-4">
