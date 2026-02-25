@@ -32,7 +32,7 @@ type Context = {
 const TokenFeedContext = createContext<Context | undefined>(undefined)
 TokenFeedContext.displayName = 'TokenFeedContext'
 
-function TokenFeed({
+function TokenFeedProvider({
 	children,
 	tokenFeedPromise,
 	creatorId,
