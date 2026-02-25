@@ -273,6 +273,8 @@ function Home({ token }: { token: TokenCard }) {
 					}}
 					as={`/${token.creatorId}`}
 					className="size-4"
+					prefetch={false}
+					replace
 				>
 					<Icon className="size-4 text-cyan-400" name="creator" />
 				</Link>
