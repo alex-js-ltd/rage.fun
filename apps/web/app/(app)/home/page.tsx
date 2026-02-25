@@ -1,9 +1,10 @@
 import { Suspense } from 'react'
 import { type SearchParams } from '@/app/utils/schemas'
 import { getTokenFeed } from '@/app/data/get_token_feed'
-import { TokenFeed, TokenFeedFallback } from '@/app/comps/token_feed'
+import { TokenFeedFallback } from '@/app/comps/token_feed'
 import { ExploreNav } from '@/app/comps/explore_nav'
 import { Events } from '@/app/comps/events'
+import * as TokenFeed from '@/app/context/token_feed_context'
 
 type Props = {
 	searchParams: Promise<SearchParams>
@@ -14,7 +15,7 @@ export default async function Page(props: Props) {
 
 	const { sortType = 'createdAt', sortOrder = 'desc', cursorId = '', search = '' } = searchParams
 
-	const tokenPromise = getTokenFeed({ sortOrder, sortType, cursorId })
+	const tokenFeedPromise = getTokenFeed({ sortOrder, sortType, cursorId })
 
 	return (
 		<div className="w-full max-w-[600px] border-white border-x border-opacity-[0.125] bg-background-100">
@@ -34,7 +35,7 @@ export default async function Page(props: Props) {
 							</ul>
 						}
 					>
-						<TokenFeed tokenPromise={tokenPromise} mode="home" />
+						<TokenFeed.Root tokenFeedPromise={tokenFeedPromise}>n</TokenFeed.Root>
 					</Suspense>
 				</section>
 			</div>

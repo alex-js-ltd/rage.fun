@@ -1,16 +1,6 @@
 'use client'
 
-import React, {
-	type RefObject,
-	type ReactNode,
-	createContext,
-	useMemo,
-	use,
-	useCallback,
-	useRef,
-	useState,
-	useReducer,
-} from 'react'
+import React, { type ReactNode, createContext, use, useState } from 'react'
 
 import { type TokenCard } from '@/app/data/get_token_feed'
 import { SearchParams } from '@/app/utils/schemas'
@@ -161,3 +151,13 @@ function useMarketCap() {
 
 	return { state }
 }
+
+function CreatedAt({ children }: { children: ReactNode }) {
+	const { state } = useCreatedAt()
+
+	return <div>{children}</div>
+}
+
+const Root = TokenFeedProvider
+
+export { Root, CreatedAt }
