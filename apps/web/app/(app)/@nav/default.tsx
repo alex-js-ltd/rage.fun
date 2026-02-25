@@ -1,10 +1,13 @@
 import { cookies } from 'next/headers'
 import { Nav } from '@/app/comps/nav'
+import { auth } from '@/app/auth'
 
 export default async function Default() {
-	const noncePromise = getNonceFromCookie()
+	const nonce = await getNonceFromCookie()
 
-	return <Nav noncePromise={noncePromise} />
+	const session = await auth()
+
+	return <Nav nonce={nonce} session={session} />
 }
 
 async function getNonceFromCookie() {

@@ -6,8 +6,7 @@ import bs58 from 'bs58'
 import { authenticate } from '@/app/actions/authenticate'
 import { useLatestRef } from '@/app/hooks/use_latest_ref'
 
-export function SignInForm({ noncePromise }: { noncePromise: Promise<string> }) {
-	const nonce = use(noncePromise)
+export function SignInForm({ nonce }: { nonce: string }) {
 	const { publicKey, signMessage, connected } = useUnifiedWallet()
 
 	const message = new SigninMessage({
