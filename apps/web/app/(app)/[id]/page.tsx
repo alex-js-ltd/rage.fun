@@ -9,6 +9,7 @@ import { Header } from '@/app/comps/header'
 import { getUser } from '@/app/data/get_user'
 import Image from 'next/image'
 import { shortAddress } from '@/app/utils/misc'
+import * as TokenCard from '@/app/comps/token_card'
 
 type Props = {
 	searchParams: Promise<SearchParams>
@@ -53,7 +54,7 @@ export default async function Page(props: Props) {
 							</ul>
 						}
 					>
-						<TokenFeed tokenPromise={tokenPromise} creatorId={creatorId} mode="profile" />
+						<TokenFeed tokenPromise={tokenPromise} creatorId={creatorId} Component={TokenCard.Profile} />
 					</Suspense>
 				</section>
 			</div>

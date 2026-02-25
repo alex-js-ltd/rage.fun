@@ -10,6 +10,8 @@ import { auth } from '@/app/auth'
 
 import { Header } from '@/app/comps/header'
 
+import * as TokenCard from '@/app/comps/token_card'
+
 type Props = {
 	searchParams: Promise<SearchParams>
 }
@@ -41,7 +43,7 @@ export default async function Page(props: Props) {
 								</ul>
 							}
 						>
-							<TokenFeed tokenPromise={tokenPromise} creatorId={creatorId} mode="earn" />
+							<TokenFeed tokenPromise={tokenPromise} creatorId={creatorId} Component={TokenCard.Earn} />
 						</Suspense>
 					) : (
 						<div className="p-4 flex flex-col gap-4">

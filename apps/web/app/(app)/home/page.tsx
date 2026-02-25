@@ -4,6 +4,7 @@ import { getTokenFeed } from '@/app/data/get_token_feed'
 import { TokenFeed, TokenFeedFallback } from '@/app/comps/token_feed'
 import { ExploreNav } from '@/app/comps/explore_nav'
 import { Events } from '@/app/comps/events'
+import * as TokenCard from '@/app/comps/token_card'
 
 type Props = {
 	searchParams: Promise<SearchParams>
@@ -34,7 +35,7 @@ export default async function Page(props: Props) {
 							</ul>
 						}
 					>
-						<TokenFeed tokenPromise={tokenPromise} mode="home" />
+						<TokenFeed tokenPromise={tokenPromise} Component={TokenCard.Home} />
 					</Suspense>
 				</section>
 			</div>
