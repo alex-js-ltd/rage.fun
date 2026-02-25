@@ -28,14 +28,19 @@ export default async function Page(props: Props) {
 			<div className="relative mx-auto flex max-w-[600px] flex-col pb-0">
 				<section className="p-0 ">
 					<Suspense
-						key={[sortType, sortOrder].toString()}
+						key={`${sortType}:${sortOrder}`}
 						fallback={
 							<ul className="mx-auto grid w-full grid-cols-1 gap-0">
 								<TokenFeedFallback />
 							</ul>
 						}
 					>
-						<TokenFeed tokenPromise={tokenPromise} Component={TokenCard.Home} fallback={<TokenFeedFallback />} />
+						<TokenFeed
+							key={`${sortType}:${sortOrder}`}
+							tokenPromise={tokenPromise}
+							Component={TokenCard.Home}
+							fallback={<TokenFeedFallback />}
+						/>
 					</Suspense>
 				</section>
 			</div>
