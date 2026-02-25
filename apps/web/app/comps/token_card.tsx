@@ -25,7 +25,6 @@ type TokenCardProps = {
 function TokenCard({ token, action, link }: TokenCardProps) {
 	const {
 		id: mint,
-
 		metadata: { name, symbol, image, thumbhash },
 		bondingCurve: { updatedAt, progress },
 		marketData: { price, marketCap, liquidity, volume, buyCount, sellCount },
