@@ -32,7 +32,7 @@ type Context = {
 const TokenFeedContext = createContext<Context | undefined>(undefined)
 TokenFeedContext.displayName = 'TokenFeedContext'
 
-function TokenFeedProvider({
+function TokenFeed({
 	children,
 	tokenFeedPromise,
 	creatorId,
@@ -56,7 +56,7 @@ function useTokenFeed() {
 	return context
 }
 
-function useCreatedAtFeed() {
+function useCreatedAt() {
 	const { initialState } = useTokenFeed()
 
 	const [state, setState] = useState(initialState)
@@ -78,10 +78,86 @@ function useCreatedAtFeed() {
 				case 'Buy':
 				case 'Sell':
 				case 'Harvest': {
-					return prev
+					const idx = prev.tokens.findIndex(t => t.id === e.id)
+					if (idx === -1) {
+						return prev
+					}
+
+					const next = prev.tokens.slice()
+					next[idx] = { ...e }
+
+					const nextCursorId = next?.length ? next[next.length - 1]?.id : undefined
+
+					return { ...prev, tokens: next, nextCursorId }
 				}
 			}
 			return prev
 		})
 	})
+
+	return { state }
+}
+
+function useLastTrade() {
+	const { initialState } = useTokenFeed()
+
+	const [state, setState] = useState(initialState)
+
+	const { channel } = useChannel('updateEvent', (message: Ably.Message) => {
+		const e: TokenCard = message.data
+
+		const { updateType } = e
+
+		setState(prev => {
+			switch (updateType) {
+				case 'Buy':
+				case 'Sell': {
+					const filtered = prev.tokens.filter(t => t.id !== e.id)
+
+					const next = [e, ...filtered]
+					const nextCursorId = next?.length ? next[next.length - 1]?.id : undefined
+					return { ...prev, tokens: next, nextCursorId }
+				}
+			}
+			return prev
+		})
+	})
+
+	return { state }
+}
+
+function useMarketCap() {
+	const { initialState } = useTokenFeed()
+
+	const [state, setState] = useState(initialState)
+
+	const { channel } = useChannel('updateEvent', (message: Ably.Message) => {
+		const e: TokenCard = message.data
+
+		const { updateType } = e
+
+		setState(prev => {
+			switch (updateType) {
+				case 'Buy':
+				case 'Sell': {
+					const idx = prev.tokens.findIndex(t => t.id === e.id)
+					if (idx === -1) {
+						return prev
+					}
+
+					const next = prev.tokens.slice()
+					next[idx] = { ...e }
+
+					next.sort((a, b) => b?.marketData?.marketCap - a?.marketData?.marketCap)
+
+					const nextCursorId = next?.length ? next[next.length - 1]?.id : undefined
+
+					return { ...prev, tokens: next, nextCursorId }
+				}
+			}
+			return prev
+		})
+	})
+
+	return { state }
 }
