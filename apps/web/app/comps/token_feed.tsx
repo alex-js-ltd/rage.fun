@@ -21,6 +21,47 @@ export type InitialState = {
 	nextCursorId?: string
 }
 
+function prepend(prev: InitialState, token: TokenCard) {
+	const filtered = prev.tokens.filter(t => t.id !== token.id)
+
+	const next = [token, ...filtered]
+	const nextCursorId = next?.length ? next[next.length - 1]?.id : undefined
+
+	return { ...prev, tokens: next, nextCursorId }
+}
+
+function replace(prev: InitialState, token: TokenCard) {
+	const idx = prev.tokens.findIndex(t => t.id === token.id)
+
+	if (idx === -1) {
+		return prev
+	}
+
+	const next = prev.tokens.slice()
+	next[idx] = { ...token }
+
+	const nextCursorId = next?.length ? next[next.length - 1]?.id : undefined
+
+	return { ...prev, tokens: next, nextCursorId }
+}
+
+function sortByMarketCap(prev: InitialState, token: TokenCard) {
+	const idx = prev.tokens.findIndex(t => t.id === token.id)
+
+	if (idx === -1) {
+		return prev
+	}
+
+	const copy = prev.tokens.slice()
+	copy[idx] = { ...token }
+
+	const next = copy.toSorted((a, b) => b.marketData.marketCap - a.marketData.marketCap)
+
+	const nextCursorId = next?.length ? next[next.length - 1]?.id : undefined
+
+	return { ...prev, tokens: next, nextCursorId }
+}
+
 export function TokenFeed({
 	tokenPromise,
 	creatorId,
@@ -42,75 +83,40 @@ export function TokenFeed({
 		const e: TokenCard = message.data
 
 		setState(prev => {
-			if (!prev) return prev
-			const sortType = prev.searchParams?.sortType ?? 'createdAt'
+			const { sortType } = prev.searchParams
 
-			switch (sortType) {
-				case 'createdAt': {
-					if (e.updateType === 'Create') {
-						const filtered = prev.tokens.filter(t => t.id !== e.id)
-
-						const next = [e, ...filtered]
-						const nextCursorId = next?.length ? next[next.length - 1]?.id : undefined
-
-						return { ...prev, tokens: next, nextCursorId }
+			switch (e.updateType) {
+				case 'Create': {
+					if (sortType !== 'createdAt') {
+						return prev
 					}
 
-					if (e.updateType === 'Buy' || e.updateType === 'Sell' || e.updateType === 'Harvest') {
-						const idx = prev.tokens.findIndex(t => t.id === e.id)
-						if (idx === -1) return prev
+					return prepend(prev, e)
+				}
 
-						const next = prev.tokens.slice()
-						next[idx] = { ...e }
-
-						const nextCursorId = next?.length ? next[next.length - 1]?.id : undefined
-
-						return { ...prev, tokens: next, nextCursorId }
+				case 'Buy':
+				case 'Sell': {
+					if (sortType === 'createdAt') {
+						return replace(prev, e)
 					}
+
+					if (sortType === 'lastTrade') {
+						return prepend(prev, e)
+					}
+
+					if (sortType === 'marketCap') {
+						return sortByMarketCap(prev, e)
+					}
+
+					return prev
 				}
-				case 'lastTrade': {
-					if (e.updateType !== 'Buy' && e.updateType !== 'Sell') return prev
 
-					const first = prev.tokens[0]
-
-					if (first.id === e.id) return prev
-
-					const next = [e, ...prev.tokens.filter(t => t.id !== e.id)]
-
-					next.sort(
-						(a, b) =>
-							dayjs.unix(Number(b?.bondingCurve?.updatedAt)).valueOf() -
-							dayjs.unix(Number(a?.bondingCurve?.updatedAt)).valueOf(),
-					)
-
-					const nextCursorId = next?.length ? next[next.length - 1]?.id : undefined
-
-					return { ...prev, tokens: next, nextCursorId }
+				case 'Harvest': {
+					return replace(prev, e)
 				}
-				case 'marketCap': {
-					if (e.updateType !== 'Buy' && e.updateType !== 'Sell') return prev
-
-					const idx = prev.tokens.findIndex(t => t.id === e.id)
-					if (idx === -1) return prev
-					const next = prev.tokens.slice()
-					next[idx] = { ...e }
-					next.sort((a, b) => b?.marketData?.marketCap - a?.marketData?.marketCap)
-
-					const nextCursorId = next?.length ? next[next.length - 1]?.id : undefined
-
-					return { ...prev, tokens: next, nextCursorId }
-				}
-				default:
-					const idx = prev.tokens.findIndex(t => t.id === e.id)
-					if (idx === -1) return prev
-
-					const next = prev.tokens.slice()
-					next[idx] = { ...e }
-
-					const nextCursorId = next?.length ? next[next.length - 1]?.id : undefined
-
-					return { ...prev, tokens: next, nextCursorId }
 			}
+
+			return prev
 		})
 	})
 
