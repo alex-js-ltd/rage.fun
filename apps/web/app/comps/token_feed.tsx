@@ -41,8 +41,6 @@ export function TokenFeed({
 	const { channel } = useChannel('updateEvent', (message: Ably.Message) => {
 		const e: TokenCard = message.data
 
-		if (!state || !e.updateType) return
-
 		setState(prev => {
 			if (!prev) return prev
 			const sortType = prev.searchParams?.sortType ?? 'createdAt'
