@@ -113,9 +113,10 @@ export function TokenFeed({
 				case 'Harvest': {
 					return replace(prev, e)
 				}
-			}
 
-			return prev
+				default:
+					return prev
+			}
 		})
 	})
 
