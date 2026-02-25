@@ -35,7 +35,9 @@ export default async function Page(props: Props) {
 							</ul>
 						}
 					>
-						<TokenFeed.Root tokenFeedPromise={tokenFeedPromise}>n</TokenFeed.Root>
+						<TokenFeed.Root tokenFeedPromise={tokenFeedPromise}>
+							<TokenFeed.CreatedAt />
+						</TokenFeed.Root>
 					</Suspense>
 				</section>
 			</div>

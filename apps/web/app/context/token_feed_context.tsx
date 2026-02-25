@@ -2,7 +2,9 @@
 
 import React, { type ReactNode, createContext, use, useState } from 'react'
 
-import { type TokenCard } from '@/app/data/get_token_feed'
+import type { TokenCard } from '@/app/data/get_token_feed'
+import { TokenCard as Card } from '@/app/comps/token_card'
+
 import { SearchParams } from '@/app/utils/schemas'
 
 import * as Ably from 'ably'
@@ -152,12 +154,35 @@ function useMarketCap() {
 	return { state }
 }
 
-function CreatedAt({ children }: { children: ReactNode }) {
+function CreatedAt() {
 	const { state } = useCreatedAt()
 
-	return <div>{children}</div>
+	const { tokens, isLastPage } = state
+	return (
+		<div className="grid">
+			<TokenList tokens={tokens} />
+		</div>
+	)
 }
 
 const Root = TokenFeedProvider
 
 export { Root, CreatedAt }
+
+function TokenList({ tokens }: { tokens: Array<TokenCard> }) {
+	return (
+		<ul className="mx-auto grid w-full grid-cols-1 gap-0">
+			{tokens.map((token, i) => {
+				const isPenultimate = i === tokens.length - 2
+
+				return (
+					<li key={token.id} className="space-y-4 w-full">
+						<Card token={token} />
+					</li>
+				)
+			})}
+
+			{/* Show loader card while fetching */}
+		</ul>
+	)
+}
