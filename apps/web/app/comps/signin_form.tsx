@@ -1,4 +1,4 @@
-import { useActionState, useEffect, useRef } from 'react'
+import { useActionState, useEffect, useRef, use } from 'react'
 import { useAsync } from '@/app/hooks/use_async'
 import { useUnifiedWallet } from '@jup-ag/wallet-adapter'
 import { SigninMessage } from '@/app/utils/sign_in'
@@ -6,7 +6,8 @@ import bs58 from 'bs58'
 import { authenticate } from '@/app/actions/authenticate'
 import { useLatestRef } from '@/app/hooks/use_latest_ref'
 
-export function SignInForm({ nonce }: { nonce: string }) {
+export function SignInForm({ noncePromise }: { noncePromise: Promise<string> }) {
+	const nonce = use(noncePromise)
 	const { publicKey, signMessage, connected } = useUnifiedWallet()
 
 	const message = new SigninMessage({

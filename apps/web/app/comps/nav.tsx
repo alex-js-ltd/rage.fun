@@ -10,7 +10,8 @@ import { cn } from '@/app/utils/misc'
 import { usePathname } from 'next/navigation'
 
 import { SignInForm } from './signin_form'
-import { Session } from 'next-auth'
+import { useSession } from 'next-auth/react'
+import { Suspense } from 'react'
 
 // Only the fields you put in NAV_ITEMS, plus label/icon
 type NavItem = NavLinkProps & { label: string; icon: string }
@@ -113,12 +114,17 @@ function Mobile() {
 	)
 }
 
-export function Nav({ nonce, session }: { nonce: string; session: Session | null }) {
+export function Nav({ noncePromise }: { noncePromise: Promise<string> }) {
+	const session = useSession()
 	return (
 		<>
 			<Desktop />
 			<Mobile />
-			{session ? null : <SignInForm nonce={nonce} />}
+			{session ? null : (
+				<Suspense fallback={null}>
+					<SignInForm noncePromise={noncePromise} />
+				</Suspense>
+			)}
 		</>
 	)
 }
