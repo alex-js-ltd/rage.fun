@@ -18,8 +18,13 @@ type TokenFeed = {
 }
 
 type Context = {
-	initialState: TokenFeed
+	data: TokenFeed
 }
+
+type Action =
+	| { type: 'CREATE'; token: TokenCard }
+	| { type: 'SWAP'; token: TokenCard }
+	| { type: 'HARVEST'; token: TokenCard }
 
 const TokenFeedContext = createContext<Context | undefined>(undefined)
 TokenFeedContext.displayName = 'TokenFeedContext'
@@ -35,9 +40,18 @@ function TokenFeedProvider({
 }) {
 	const initialState = use(tokenFeedPromise)
 
-	const value = { initialState }
+	const [state, dispatch] = useReducer((state: TokenFeed, action: Action) => {
+		switch (action.type) {
+			case 'CREATE': {
+				const next = [action.token, ...state.tokens]
+				const nextCursorId = next?.length ? next[next.length - 1]?.id : undefined
+				return { ...state, tokens: next, nextCursorId }
+			}
+		}
+		return state
+	}, initialTokenFeed)
 
-	return <TokenFeedContext.Provider value={value}> {children}</TokenFeedContext.Provider>
+	return <TokenFeedContext.Provider value={{ data: initialTokenFeed }}>{children}</TokenFeedContext.Provider>
 }
 
 function useTokenFeed() {
