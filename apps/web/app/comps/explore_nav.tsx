@@ -13,9 +13,9 @@ export function ExploreNav({ searchParams }: { searchParams: { sortType: string 
 				)}
 				href={{
 					pathname: `/home`,
-					query: { sortType: '' },
+					query: { sortType: 'createdAt' },
 				}}
-				as={`/home`}
+				as={`/home?sortType=createdAt`}
 				replace
 				prefetch={false}
 			>
