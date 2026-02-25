@@ -17,6 +17,7 @@ export function ExploreNav({ searchParams }: { searchParams: { sortType: string 
 				}}
 				as={`/home`}
 				replace
+				prefetch={false}
 			>
 				{({ isActive }) => (
 					<div className="relative w-fit h-full flex items-center">
