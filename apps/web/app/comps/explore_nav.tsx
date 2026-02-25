@@ -47,7 +47,7 @@ export function ExploreNav({ searchParams }: { searchParams: { sortType: string 
 				}}
 				as={`/home?sortType=lastTrade`}
 				replace
-				prefetch={true}
+				prefetch={false}
 			>
 				{({ isActive }) => (
 					<div className="relative w-fit h-full flex items-center">
@@ -77,7 +77,7 @@ export function ExploreNav({ searchParams }: { searchParams: { sortType: string 
 				}}
 				as={`/home?sortType=marketCap`}
 				replace
-				prefetch={true}
+				prefetch={false}
 			>
 				{({ isActive }) => (
 					<div className="relative w-fit h-full flex items-center">
