@@ -48,6 +48,7 @@ export default async function Page(props: Props) {
 			<div className="relative mx-auto flex max-w-[600px] flex-col pb-0 border-t border-white border-opacity-[0.125] min-h-[calc(100vh-52px)]">
 				<section className="p-0 ">
 					<Suspense
+						key={`${sortType}:${sortOrder}`}
 						fallback={
 							<ul className="mx-auto grid w-full grid-cols-1 gap-0">
 								<TokenFeedFallback />
@@ -55,6 +56,7 @@ export default async function Page(props: Props) {
 						}
 					>
 						<TokenFeed
+							key={`${sortType}:${sortOrder}`}
 							tokenPromise={tokenPromise}
 							creatorId={creatorId}
 							Component={TokenCard.Profile}

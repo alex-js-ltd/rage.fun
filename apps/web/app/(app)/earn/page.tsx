@@ -37,6 +37,7 @@ export default async function Page(props: Props) {
 				<section className="p-0 ">
 					{isCreator ? (
 						<Suspense
+							key={`${sortType}:${sortOrder}`}
 							fallback={
 								<ul className="mx-auto grid w-full grid-cols-1 gap-0">
 									<TokenFeedFallback isEarnPage={true} />
@@ -44,6 +45,7 @@ export default async function Page(props: Props) {
 							}
 						>
 							<TokenFeed
+								key={`${sortType}:${sortOrder}`}
 								tokenPromise={tokenPromise}
 								creatorId={creatorId}
 								Component={TokenCard.Earn}
