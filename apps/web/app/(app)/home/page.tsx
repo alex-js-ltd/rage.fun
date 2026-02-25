@@ -6,6 +6,9 @@ import { ExploreNav } from '@/app/comps/explore_nav'
 import { Events } from '@/app/comps/events'
 import * as TokenCard from '@/app/comps/token_card'
 
+// 'auto' | 'force-dynamic' | 'error' | 'force-static'
+export const dynamic = 'force-dynamic'
+
 type Props = {
 	searchParams: Promise<SearchParams>
 }
