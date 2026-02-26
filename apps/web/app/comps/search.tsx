@@ -72,16 +72,23 @@ export function SearchResults({ searchPromise }: { searchPromise: Promise<Search
 
 export function SearchBase({ initialQuery }: { initialQuery: string }) {
 	let pathname = usePathname()
+	const searchParams = useSearchParams()
 	let [inputValue, setInputValue] = useState(initialQuery)
 	let inputRef = useRef<HTMLInputElement>(null)
 	let { triggerUpdate, shouldSuspend, formRef } = useBackpressure()
 
 	async function handleSubmit(formData: FormData) {
-		let query = formData.get('search') as string
-		let newUrl = `${pathname}?search=${encodeURIComponent(query)}`
+		const query = (formData.get('search') as string) ?? ''
+
+		// clone current params (useSearchParams is read-only)
+		const next = new URLSearchParams(searchParams.toString())
+
+		if (query.trim()) next.set('search', query.trim())
+		else next.delete('search')
+
+		const newUrl = `${pathname}?${next.toString()}`
 		await triggerUpdate(newUrl)
 	}
-
 	function handleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
 		let newValue = e.target.value
 		setInputValue(newValue)
@@ -128,5 +135,6 @@ export function SearchFallback() {
 
 export function SearchField() {
 	let query = useSearchParams().get('search') ?? ''
+
 	return <SearchBase initialQuery={query} />
 }

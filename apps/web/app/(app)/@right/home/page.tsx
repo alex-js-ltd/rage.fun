@@ -25,8 +25,6 @@ export default async function Page(props: Props) {
 
 	const discordId = await getDiscordId(session?.user?.id)
 
-	const isConnected = typeof discordId === 'string'
-
 	return (
 		<div className="relative w-full">
 			<div className="sticky top-0 z-40">
