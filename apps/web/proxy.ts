@@ -2,7 +2,7 @@ import { ipAddress } from '@vercel/edge'
 import { Ratelimit } from '@upstash/ratelimit'
 import { kv } from '@vercel/kv'
 
-import { type NextRequest, NextResponse, type NextFetchEvent } from 'next/server'
+import { type NextRequest, NextResponse } from 'next/server'
 import { NextURL } from 'next/dist/server/web/next-url'
 import NextAuth, { type Session } from 'next-auth'
 import { authConfig } from '@/app/auth.config'
