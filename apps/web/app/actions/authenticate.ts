@@ -1,6 +1,6 @@
 'use server'
 
-import { signIn, signOut, auth } from '@/app/auth'
+import { signIn, signOut } from '@/app/auth'
 import { AuthError } from 'next-auth'
 import { parseWithZod } from '@conform-to/zod'
 import { AuthSchema } from '@/app/utils/schemas'

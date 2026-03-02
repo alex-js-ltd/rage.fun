@@ -18,7 +18,7 @@ import { isInstructionError, getErrorMessage } from '@/app/utils/setup'
 import sharp from 'sharp'
 import * as ThumbHash from 'thumbhash'
 
-const { PINATA_JWT, PROXY_PRIVATE_KEY } = getServerEnv()
+const { PINATA_JWT } = getServerEnv()
 
 const pinata = new PinataSDK({
 	pinataJwt: PINATA_JWT,
@@ -48,8 +48,6 @@ export async function initializeAction(_prevState: State, formData: FormData) {
 			}),
 		async: true,
 	})
-
-	console.log('submission', submission)
 
 	if (submission.status !== 'success') {
 		return {
