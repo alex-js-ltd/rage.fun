@@ -8,7 +8,7 @@ import NextAuth, { type Session } from 'next-auth'
 import { authConfig } from '@/app/auth.config'
 import { getServerEnv } from '@/app/utils/env'
 
-const { HELIUS_SECRET, CRON_SECRET } = getServerEnv()
+const { HELIUS_SECRET } = getServerEnv()
 
 export const config = { matcher: ['/((?!api/auth|_next/static|_next/image|.*\\.webp$).*)'] }
 // Rate limiter for APIs (tighter)
@@ -36,7 +36,7 @@ const pageLimit = new Ratelimit({
 // 2. Wrapped middleware option
 const { auth } = NextAuth(authConfig)
 
-export default auth(async function middleware(req: NextRequest & { auth: Session | null }) {
+export default auth(async function proxy(req: NextRequest & { auth: Session | null }) {
 	console.log('[Middleware] Triggered for:', req.nextUrl.pathname)
 
 	const requestHeaders = new Headers(req.headers)
