@@ -10,7 +10,6 @@ import { Prisma } from '@prisma/client'
 import * as Ably from 'ably'
 import { getServerEnv } from '@/app/utils/env'
 import * as AblyEvents from '@/app/webhook/ably'
-import { type Comment } from '@/app/data/get_comments'
 
 const { ABLY_API_KEY } = getServerEnv()
 
