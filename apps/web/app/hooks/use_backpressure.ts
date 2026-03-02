@@ -37,7 +37,7 @@ export function useBackpressure(delay: number = 300) {
 			isUpdatingRef.current = true
 			let currentUpdateCount = updateCountRef.current
 
-			router.replace(newUrl)
+			router.replace(newUrl, { scroll: false })
 
 			await new Promise<void>(resolve => {
 				setTimeout(() => {
