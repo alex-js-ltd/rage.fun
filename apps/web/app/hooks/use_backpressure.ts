@@ -37,6 +37,7 @@ export function useBackpressure(delay: number = 300) {
 			isUpdatingRef.current = true
 			let currentUpdateCount = updateCountRef.current
 
+			// prevent scroll to top
 			router.replace(newUrl, { scroll: false })
 
 			await new Promise<void>(resolve => {
