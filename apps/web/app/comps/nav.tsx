@@ -6,6 +6,7 @@ import { Wallet } from './wallet'
 import Image from 'next/image'
 import { NavLink, type NavLinkProps } from './nav_link'
 import { cn } from '@/app/utils/misc'
+import { ReactNode } from 'react'
 
 // Only the fields you put in NAV_ITEMS, plus label/icon
 type NavItem = NavLinkProps & { label: string; icon: string }
@@ -37,7 +38,7 @@ const NAV_ITEMS = [
 	},
 ] as const satisfies readonly NavItem[]
 
-function Desktop() {
+function Desktop({ children }: { children: ReactNode }) {
 	return (
 		<nav className="hidden sm:block sticky top-0 ">
 			<div className="h-[52px] flex items-center w-full ">
@@ -47,7 +48,7 @@ function Desktop() {
 					}}
 					className="xl:ml-0 ml-auto w-[70px] h-[52px] flex items-center justify-center cursor-pointer"
 				>
-					<Image className="" src="/rage.png" alt="logo" width={56} height={56} priority fetchPriority="high" />
+					{children}
 				</Link>
 			</div>
 
@@ -105,10 +106,10 @@ function Mobile() {
 	)
 }
 
-export function Nav() {
+export function Nav({ children }: { children: ReactNode }) {
 	return (
 		<>
-			<Desktop />
+			<Desktop children={children} />
 			<Mobile />
 		</>
 	)
