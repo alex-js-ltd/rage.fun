@@ -23,7 +23,7 @@ export function Blink({ mint }: { mint: string }) {
 			className="w-fit h-7 rounded-full flex items-center justify-center px-4 gap-1.5 border border-white border-opacity-[0.05]"
 		>
 			<Icon name="dialect" className="w-[15px] h-[14px] text-white" />
-			<span className="text-xs font-medium text-text-200">{data ? 'Copied' : 'Share Blink'}</span>
+			<span className="text-xs font-medium text-text-200 whitespace-nowrap">{data ? 'Copied' : 'Share Blink'}</span>
 		</button>
 	)
 }
