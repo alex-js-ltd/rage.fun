@@ -4,6 +4,8 @@ import { getServerEnv } from '@/app/utils/env'
 
 const { PINATA_JWT, PROXY_PRIVATE_KEY } = getServerEnv()
 
+export const dynamic = 'force-dynamic'
+
 const pinata = new PinataSDK({
 	pinataJwt: PINATA_JWT,
 	pinataGateway: 'indigo-adverse-vicuna-777.mypinata.cloud',
