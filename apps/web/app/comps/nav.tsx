@@ -6,7 +6,6 @@ import { Wallet } from './wallet'
 import Image from 'next/image'
 import { NavLink, type NavLinkProps } from './nav_link'
 import { cn } from '@/app/utils/misc'
-import { usePathname } from 'next/navigation'
 
 // Only the fields you put in NAV_ITEMS, plus label/icon
 type NavItem = NavLinkProps & { label: string; icon: string }
@@ -107,11 +106,4 @@ function Mobile() {
 	)
 }
 
-export function Nav() {
-	return (
-		<>
-			<Desktop />
-			<Mobile />
-		</>
-	)
-}
+export { Desktop, Mobile }

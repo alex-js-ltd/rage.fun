@@ -1,5 +1,5 @@
 import { cookies } from 'next/headers'
-import { Nav } from '@/app/comps/nav'
+import * as Nav from '@/app/comps/nav'
 import { auth } from '@/app/auth'
 import { SignInForm } from '@/app/comps/signin_form'
 
@@ -9,7 +9,9 @@ export default async function Default() {
 
 	return (
 		<>
-			<Nav />
+			<Nav.Desktop />
+			<Nav.Mobile />
+
 			{session ? null : <SignInForm nonce={nonce} />}
 		</>
 	)
