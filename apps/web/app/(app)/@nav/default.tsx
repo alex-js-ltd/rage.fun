@@ -5,15 +5,12 @@ import { SignInForm } from '@/app/comps/signin_form'
 import Image from 'next/image'
 
 export default async function Default() {
-	const nonce = await getNonceFromCookie()
-	const session = await auth()
-
 	return (
 		<>
 			<Nav>
 				<Image className="" src="/rage.png" alt="logo" width={56} height={56} priority fetchPriority="high" />
 			</Nav>
-			{session ? null : <SignInForm nonce={nonce} />}
+			<Auth />
 		</>
 	)
 }
@@ -36,4 +33,11 @@ async function getNonceFromCookie() {
 	// Sometimes cookie is "nonce|hash"
 	const nonce = raw.split('|')[0] ?? ''
 	return nonce
+}
+
+async function Auth() {
+	const nonce = await getNonceFromCookie()
+	const session = await auth()
+
+	return session ? null : <SignInForm nonce={nonce} />
 }
