@@ -1,3 +1,5 @@
+'use client'
+
 import { useActionState, useEffect, useRef, use } from 'react'
 import { useAsync } from '@/app/hooks/use_async'
 import { useUnifiedWallet } from '@jup-ag/wallet-adapter'

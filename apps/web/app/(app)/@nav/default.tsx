@@ -1,13 +1,19 @@
 import { cookies } from 'next/headers'
 import { Nav } from '@/app/comps/nav'
 import { auth } from '@/app/auth'
+import { SignInForm } from '@/app/comps/signin_form'
 
 export default async function Default() {
 	const nonce = await getNonceFromCookie()
 
 	const session = await auth()
 
-	return <Nav nonce={nonce} session={session} />
+	return (
+		<>
+			<Nav />
+			{session ? null : <SignInForm nonce={nonce} />}
+		</>
+	)
 }
 
 async function getNonceFromCookie() {

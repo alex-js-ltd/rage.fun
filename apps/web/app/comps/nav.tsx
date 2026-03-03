@@ -1,16 +1,11 @@
 'use client'
 
 import Link from 'next/link'
-
 import { Icon } from '@/app/comps/_icon'
 import { Wallet } from './wallet'
 import Image from 'next/image'
 import { NavLink, type NavLinkProps } from './nav_link'
 import { cn } from '@/app/utils/misc'
-import { usePathname } from 'next/navigation'
-
-import { SignInForm } from './signin_form'
-import { Session } from 'next-auth'
 
 // Only the fields you put in NAV_ITEMS, plus label/icon
 type NavItem = NavLinkProps & { label: string; icon: string }
@@ -43,7 +38,6 @@ const NAV_ITEMS = [
 ] as const satisfies readonly NavItem[]
 
 function Desktop() {
-	const pathname = usePathname()
 	return (
 		<nav className="hidden sm:block sticky top-0 ">
 			<div className="h-[52px] flex items-center w-full ">
@@ -64,7 +58,6 @@ function Desktop() {
 						href={l.href}
 						className={cn(
 							'flex items-center gap-2 rounded-full hover:bg-white/10 w-fit h-[50.25px] p-3 text-text-200 hover:text-white ',
-							pathname === l.as && 'text-white',
 						)}
 						scroll={l.scroll}
 						as={l.as}
@@ -73,7 +66,6 @@ function Desktop() {
 						{({ isActive }) => (
 							<>
 								<Icon className={cn('size-6', isActive && 'text-white')} name={l.icon} />
-
 								<span className={cn('hidden xl:block  font-semibold text-lg', isActive && 'text-white')}>
 									{l.label}
 								</span>
@@ -113,12 +105,11 @@ function Mobile() {
 	)
 }
 
-export function Nav({ nonce, session }: { nonce: string; session: Session | null }) {
+export function Nav() {
 	return (
 		<>
 			<Desktop />
 			<Mobile />
-			{session ? null : <SignInForm nonce={nonce} />}
 		</>
 	)
 }
