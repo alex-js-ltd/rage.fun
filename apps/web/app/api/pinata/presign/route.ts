@@ -11,7 +11,13 @@ const pinata = new PinataSDK({
 	pinataGateway: 'indigo-adverse-vicuna-777.mypinata.cloud',
 })
 
-export async function GET() {
+export async function GET(req: NextRequest) {
+	console.log('--- /api/pinata/presign ---')
+	console.log('method:', req.method)
+	console.log('origin:', req.headers.get('origin'))
+	console.log('user-agent:', req.headers.get('user-agent'))
+	console.log('cookies:', req.headers.get('cookie'))
+
 	// Handle your auth here to protect the endpoint
 	try {
 		const url = await pinata.upload.public.createSignedURL({
@@ -19,7 +25,7 @@ export async function GET() {
 			mimeTypes: ['image/*', 'image/gif'],
 			maxFileSize: 5000000, // Optional file size limit
 		})
-		return NextResponse.json({ url: url }, { status: 200 }) // Returns the signed upload URL
+		return NextResponse.json({ url }, { status: 200 }) // Returns the signed upload URL
 	} catch (error) {
 		console.log(error)
 		return NextResponse.json({ text: 'Error creating signed URL:' }, { status: 500 })
