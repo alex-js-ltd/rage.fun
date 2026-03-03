@@ -51,7 +51,7 @@ function ImageProvider({ children }: { children: ReactNode }) {
 			accept: 'image/*',
 			name,
 			ref: fileRef,
-			disabled: status === 'loading', // prevents the race
+
 			onChange: async e => {
 				console.log('status', status)
 
@@ -59,6 +59,7 @@ function ImageProvider({ children }: { children: ReactNode }) {
 					return
 				}
 				const file = e.target.files?.[0]
+
 				if (!file) return
 
 				try {

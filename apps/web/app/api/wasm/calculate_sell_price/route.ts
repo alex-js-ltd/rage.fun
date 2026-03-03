@@ -79,3 +79,5 @@ function calculateTradingFee(
 	const fee = (product + denominator - BigInt(1)) / denominator // ceiling div
 	return fee
 }
+
+export const runtime = 'edge'
