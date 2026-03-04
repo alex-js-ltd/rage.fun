@@ -47,7 +47,14 @@ function Desktop() {
 					}}
 					className="xl:ml-0 ml-auto w-[70px] h-[52px] flex items-center justify-center cursor-pointer"
 				>
-					<Image className="" src="/rage.png" alt="logo" width={56} height={56} preload={true} />
+					<Image
+						className=""
+						src="https://indigo-adverse-vicuna-777.mypinata.cloud/ipfs/bafybeigultuizr56srmyhlyohecdhkbpbvoout57oe4gheycppgaygef4u"
+						alt="logo"
+						width={56}
+						height={56}
+						preload={true}
+					/>
 				</Link>
 			</div>
 
