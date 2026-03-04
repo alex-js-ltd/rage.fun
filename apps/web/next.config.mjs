@@ -12,8 +12,6 @@ const nextConfig = {
 		bodySizeLimit: '1mb',
 	},
 
-	cacheComponents: true,
-
 	images: {
 		formats: ['image/webp'],
 
