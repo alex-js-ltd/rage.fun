@@ -3,26 +3,6 @@
     {
       "path": "/api/cron/trending",
       "schedule": "*/5 * * * *"
-    },
-
-    {
-      "path": "/api/cron/reset",
-      "schedule": "0 0 * * *"
-    },
-
-    {
-      "path": "/api/cron/random",
-      "schedule": "* * * * *"
-    },
-
-    {
-      "path": "/api/cron/pnl",
-      "schedule": "0 0 * * *"
-    },
-
-    {
-      "path": "/api/cron/leaderboard",
-      "schedule": "0 0 * * *"
     }
   ]
 }
