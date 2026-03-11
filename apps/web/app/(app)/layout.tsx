@@ -25,8 +25,6 @@ export default function Layout(props: {
 
 	const hide = isOnToken && isTokenFeed
 
-	console.log('seg', segment)
-
 	const isOnTokenSegment = segment === 'token'
 
 	const isOnCreateSegment = segment === 'create'
