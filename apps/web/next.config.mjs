@@ -12,6 +12,8 @@ const nextConfig = {
 		bodySizeLimit: '1mb',
 	},
 
+	reactCompiler: true,
+
 	images: {
 		formats: ['image/webp'],
 
