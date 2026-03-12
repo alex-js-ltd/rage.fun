@@ -1,7 +1,9 @@
 {
   "name": "@repo/db",
   "version": "0.0.0",
-  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
   "scripts": {
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev",
@@ -17,11 +19,9 @@
     "@prisma/adapter-neon": "^6.15.0",
     "@prisma/adapter-pg": "^7.0.0",
     "@prisma/client": "^7.0.0",
+    "@prisma/client-runtime-utils": "^7.5.0",
     "dotenv": "^16.0.0",
     "pg": "^8.0.0",
     "ws": "^8.18.0"
-  },
-  "exports": {
-    ".": "./src/index.ts"
   }
 }

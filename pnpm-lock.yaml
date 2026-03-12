@@ -326,6 +326,9 @@ importers:
       '@prisma/client':
         specifier: ^7.0.0
         version: 7.5.0(prisma@7.5.0)
+      '@prisma/client-runtime-utils':
+        specifier: ^7.5.0
+        version: 7.5.0
       dotenv:
         specifier: ^16.0.0
         version: 16.6.1
