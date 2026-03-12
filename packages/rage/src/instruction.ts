@@ -1,6 +1,6 @@
 import { Rage } from '../target/types/rage'
-import { Program, BN, web3, EventParser, BorshCoder, IdlEvents } from '@coral-xyz/anchor'
-import { type Connection, PublicKey, ComputeBudgetProgram, Keypair } from '@solana/web3.js'
+import { Program, BN, web3 } from '@coral-xyz/anchor'
+import { PublicKey, ComputeBudgetProgram } from '@solana/web3.js'
 import {
 	TOKEN_2022_PROGRAM_ID,
 	TOKEN_PROGRAM_ID,
@@ -8,9 +8,8 @@ import {
 	getAssociatedTokenAddress,
 	NATIVE_MINT,
 	getAssociatedTokenAddressSync,
-	getAccount,
 } from '@solana/spl-token'
-import { TokenMetadata } from '@solana/spl-token-metadata'
+
 import {
 	type CLUSTER,
 	getExtraMetas,
@@ -23,8 +22,6 @@ import {
 	getPoolVaultAddress,
 	getOracleAccountAddress,
 	getCPMMConfig,
-	fetchBondingCurveState,
-	isRentExempt,
 	getBondingCurveAuth,
 	getTradingFeeAuth,
 	getRageToken,

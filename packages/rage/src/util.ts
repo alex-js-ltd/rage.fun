@@ -3,7 +3,7 @@ import { PublicKey, Keypair } from '@solana/web3.js'
 import { type TokenMetadata } from '@solana/spl-token-metadata'
 import { getRageToken } from './pda'
 import { Rage } from '../target/types/rage'
-import { Program, BN, web3, EventParser, BorshCoder, IdlEvents } from '@coral-xyz/anchor'
+import { Program } from '@coral-xyz/anchor'
 
 interface Token {
 	keypair: Keypair

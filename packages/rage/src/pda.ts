@@ -1,7 +1,6 @@
 import { Rage } from '../target/types/rage'
 import { Program, BN, utils } from '@coral-xyz/anchor'
 import { Connection, PublicKey } from '@solana/web3.js'
-import { getAccount } from '@solana/spl-token'
 
 export function getExtraMetas({ program, mint }: { program: Program<Rage>; mint: PublicKey }): PublicKey {
 	return PublicKey.findProgramAddressSync(
