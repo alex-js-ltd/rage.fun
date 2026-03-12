@@ -6,6 +6,7 @@ import { GeistMono } from 'geist/font/mono'
 import { Analytics } from '@vercel/analytics/next'
 import { auth } from '@/app/auth'
 import Head from 'next/head'
+import { Prisma, prisma } from '@repo/database'
 
 import './globals.css'
 

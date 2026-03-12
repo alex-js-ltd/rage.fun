@@ -1,3 +1,0 @@
--- AlterTable
-ALTER TABLE "public"."MarketData" ALTER COLUMN "price" SET DATA TYPE DECIMAL(65,30),
-ALTER COLUMN "marketCap" SET DATA TYPE DECIMAL(65,30);
