@@ -88,4 +88,4 @@ function calculateTradingFee(
 	return fee
 }
 
-// export const runtime = 'edge'
+export const runtime = 'edge'
