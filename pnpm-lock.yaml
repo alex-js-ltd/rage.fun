@@ -104,6 +104,9 @@ importers:
       '@raydium-io/raydium-sdk-v2':
         specifier: 0.1.94-alpha
         version: 0.1.94-alpha(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.5.2)
+      '@repo/database':
+        specifier: workspace:*
+        version: link:../../packages/database
       '@repo/rage':
         specifier: workspace:*
         version: link:../../packages/rage
