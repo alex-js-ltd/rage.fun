@@ -1,0 +1,282 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id String @id // use wallet address as id
+
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+
+  accounts      Account[]
+  sessions      Session[]
+  // Optional for WebAuthn support
+  Authenticator Authenticator[]
+
+  tokens   Token[]
+  comments Comment[]
+
+  pnl UserPnl?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Account {
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+
+  refresh_token String?
+  access_token  String?
+  expires_at    Int?
+  token_type    String?
+  scope         String?
+  id_token      String?
+  session_state String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([provider, providerAccountId])
+}
+
+model Session {
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model VerificationToken {
+  identifier String
+  token      String
+  expires    DateTime
+
+  @@id([identifier, token])
+}
+
+// Optional for WebAuthn support
+model Authenticator {
+  credentialID         String  @unique
+  userId               String
+  providerAccountId    String
+  credentialPublicKey  String
+  counter              Int
+  credentialDeviceType String
+  credentialBackedUp   Boolean
+  transports           String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([userId, credentialID])
+}
+
+model Token {
+  id String @id // use mint address as id
+
+  metadata Metadata?
+
+  bondingCurve BondingCurve?
+
+  marketData MarketData?
+
+  swapEvents    SwapEvent[]
+  comments      Comment[]
+  harvestEvents HarvestEvent[]
+
+  pnl TokenPnl[]
+
+  creator   User   @relation(fields: [creatorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  creatorId String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // non-unique foreign key
+  @@index([creatorId])
+  // This helps our order by in the user search a LOT
+  @@index([creatorId, createdAt])
+}
+
+model Metadata {
+  name        String   @db.VarChar(32)
+  symbol      String   @unique @db.VarChar(12)
+  description String   @db.VarChar(280)
+  image       String
+  thumbhash   Bytes
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  token   Token  @relation(fields: [tokenId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  tokenId String @unique
+}
+
+enum Status {
+  Funding
+  Complete
+  Migrated
+}
+
+model BondingCurve {
+  id String @id // use bonding curve pda address as id
+
+  connectorWeight Decimal
+  decimals        Int
+
+  virtualSupply BigInt
+  currentSupply BigInt
+  targetSupply  BigInt
+
+  virtualReserve BigInt
+  currentReserve BigInt
+  targetReserve  BigInt
+
+  tradingFees BigInt
+  openTime    BigInt
+
+  status Status
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  token   Token  @relation(fields: [tokenId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  tokenId String @unique
+
+  @@index([tokenId])
+}
+
+enum SwapType {
+  Buy
+  Sell
+}
+
+model SwapEvent {
+  id          String   @id @default(cuid())
+  signer      String
+  time        BigInt
+  price       Decimal
+  tokenAmount BigInt
+  swapType    SwapType
+  lamports    BigInt
+  rentAmount  BigInt
+
+  token   Token  @relation(fields: [tokenId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  tokenId String // Foreign key to TokenMetadata
+
+  @@index([tokenId])
+}
+
+model Comment {
+  id        String   @id @default(cuid())
+  content   String   @db.VarChar(280)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Self-referential relationship for nested comments
+  parentComment   Comment?  @relation("CommentToComment", fields: [parentCommentId], references: [id])
+  parentCommentId String?
+  childComments   Comment[] @relation("CommentToComment")
+
+  owner   User   @relation(fields: [ownerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  ownerId String
+
+  // Relation to the main entity being commented on (e.g., Post, TokenMetadata)
+  token   Token  @relation(fields: [tokenId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  tokenId String // Foreign key to TokenMetadata
+
+  @@index([tokenId])
+}
+
+model HarvestEvent {
+  id       String @id @default(cuid())
+  signer   String
+  time     BigInt
+  lamports BigInt
+
+  token   Token  @relation(fields: [tokenId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  tokenId String // Foreign key to TokenMetadata
+
+  @@index([tokenId])
+}
+
+model BotWallet {
+  id        String @id @default(cuid())
+  secretKey Json
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model MarketData {
+  id String @id @default(cuid())
+
+  price     Decimal
+  marketCap Decimal
+
+  liquidity BigInt
+  volume    BigInt
+
+  buyCount  Int
+  sellCount Int
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  token   Token  @relation(fields: [tokenId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  tokenId String @unique
+
+  @@index([tokenId])
+}
+
+model TokenPnl {
+  signer  String
+  tokenId String
+
+  bought BigInt
+  sold   BigInt
+
+  realizedPnl BigInt
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  token Token @relation(fields: [tokenId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@id([signer, tokenId])
+  @@index([tokenId])
+  @@index([signer])
+}
+
+model UserPnl {
+  userId String @id // use bonding curve pda address as id
+
+  bought BigInt
+  sold   BigInt
+
+  realizedPnl BigInt
+  position    BigInt?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+}
