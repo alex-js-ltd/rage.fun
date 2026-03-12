@@ -8,8 +8,9 @@ import { prisma } from '@/app/utils/db'
 import { Prisma } from '@prisma/client'
 
 import * as Ably from 'ably'
-import { getServerEnv } from '@/app/utils/env'
 import * as AblyEvents from '@/app/webhook/ably'
+
+import { getServerEnv } from '@/app/utils/env'
 
 const { ABLY_API_KEY } = getServerEnv()
 
