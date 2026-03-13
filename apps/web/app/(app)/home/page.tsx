@@ -1,7 +1,8 @@
 import { Suspense } from 'react'
+import { SearchParams } from '@/app/utils/types'
 
 type Props = {
-	// searchParams: Promise<SearchParams>
+	searchParams: Promise<SearchParams>
 }
 
 export default async function Page(props: Props) {

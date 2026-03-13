@@ -9,11 +9,12 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@repo/database": "workspace:*",
+    "@repo/rage": "workspace:*",
     "next": "16.1.6",
     "react": "19.2.3",
     "react-dom": "19.2.3",
-    "@repo/rage": "workspace:*",
-    "@repo/database": "workspace:*"
+    "zod": "^4.3.6"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
