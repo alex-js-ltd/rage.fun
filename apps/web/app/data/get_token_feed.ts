@@ -1,6 +1,6 @@
 import { type SearchParams, SearchSchema, UpdateEnumType } from '@/app/utils/schemas'
-import { prisma } from '@/app/utils/db'
-import { Prisma } from '@prisma/client'
+import { prisma, type Prisma } from '@repo/database'
+
 import { getSolPrice } from '@/app/data/get_sol_price'
 import { solToUsd } from '@/app/utils/misc'
 import Decimal from 'decimal.js'
@@ -43,18 +43,18 @@ export async function getTokenFeed(searchParams: SearchParams) {
 
 const TAKE: number = 12
 
-function getWhere({ sortType, creatorId }: SearchParams & { creatorId?: string }) {
-	const base = Prisma.validator<Prisma.TokenWhereInput>()({
+function getWhere({ sortType, creatorId }: SearchParams & { creatorId?: string }): Prisma.TokenWhereInput {
+	const base = {
 		bondingCurve: { isNot: null },
 		...(creatorId ? { creatorId: { equals: creatorId } } : {}),
-	})
+	} satisfies Prisma.TokenWhereInput
 
 	switch (sortType) {
 		case 'lastTrade':
-			return Prisma.validator<Prisma.TokenWhereInput>()({
+			return {
 				...base,
 				swapEvents: { some: {} },
-			})
+			} satisfies Prisma.TokenWhereInput
 
 		case 'createdAt':
 		case 'volume':
