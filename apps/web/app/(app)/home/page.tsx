@@ -1,6 +1,8 @@
 import { Suspense } from 'react'
+import { SearchParamsSchema } from '@/app/utils/schema'
 import { SearchParams } from '@/app/utils/types'
 import { getTokenFeed } from '@/app/data/get_token_feed'
+import { notFound } from 'next/navigation'
 
 type Props = {
 	searchParams: Promise<SearchParams>
@@ -9,7 +11,14 @@ type Props = {
 export default async function Page(props: Props) {
 	const searchParams = await props.searchParams
 
-	const { sortType = 'createdAt', sortOrder = 'desc', cursorId = '', search = '' } = searchParams
+	const submission = SearchParamsSchema.safeParse(searchParams)
+
+	if (submission.error) {
+		console.error(submission)
+		notFound()
+	}
+
+	const { sortType, sortOrder } = submission.data
 
 	const tokenFeedPromise = getTokenFeed({ sortOrder, sortType })
 

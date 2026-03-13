@@ -1,4 +1,4 @@
 import { z } from 'zod'
-import { SearchSchema } from './schema'
+import { SearchParamsSchema } from './schema'
 
-export type SearchParams = z.infer<typeof SearchSchema>
+export type SearchParams = z.infer<typeof SearchParamsSchema>
