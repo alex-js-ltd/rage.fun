@@ -1,10 +1,12 @@
 import { type SearchParams, SearchSchema, UpdateEnumType } from '@/app/utils/schemas'
-import { prisma, type Prisma } from '@repo/database'
+import { prisma, type Prisma, selectSwapEvents } from '@repo/database'
 
 import { getSolPrice } from '@/app/data/get_sol_price'
 import { solToUsd } from '@/app/utils/misc'
 import Decimal from 'decimal.js'
 import 'server-only'
+
+const select = selectSwapEvents
 
 export async function getTokenFeed(searchParams: SearchParams) {
 	const submission = SearchSchema.safeParse(searchParams)
@@ -65,41 +67,6 @@ function getWhere({ sortType, creatorId }: SearchParams & { creatorId?: string }
 			throw new Error(`Unsupported sortType: ${sortType}`)
 	}
 }
-
-const select = Prisma.validator<Prisma.TokenSelect>()({
-	id: true,
-	creatorId: true,
-	metadata: {
-		select: {
-			name: true,
-			symbol: true,
-			description: true,
-			image: true,
-			thumbhash: true,
-		},
-	},
-	bondingCurve: {
-		select: {
-			status: true,
-			tradingFees: true,
-			updatedAt: true,
-			currentReserve: true,
-			targetReserve: true,
-		},
-	},
-	marketData: {
-		select: {
-			price: true,
-			marketCap: true,
-
-			liquidity: true,
-			volume: true,
-
-			buyCount: true,
-			sellCount: true,
-		},
-	},
-})
 
 type TokenPayload = Prisma.TokenGetPayload<{
 	select: typeof select
