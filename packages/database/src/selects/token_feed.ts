@@ -1,6 +1,6 @@
 import { type Prisma } from '../../generated/prisma/client'
 
-export const select = {
+export const selectTokenFeed = {
 	id: true,
 	creatorId: true,
 	metadata: {
