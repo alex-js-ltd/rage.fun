@@ -34,5 +34,3 @@ export const selectTokenFeed = {
 		},
 	},
 } satisfies Prisma.TokenSelect
-
-type TokenFeed = Prisma.TokenGetPayload<{ select: typeof selectTokenFeed }>

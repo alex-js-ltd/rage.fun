@@ -25,7 +25,6 @@ export default async function RootLayout({
 }>) {
 	const data = await prisma.token.findMany()
 
-	console.log(data)
 	return (
 		<html lang="en">
 			<body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>{children}</body>
