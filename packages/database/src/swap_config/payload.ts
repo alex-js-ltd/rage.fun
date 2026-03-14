@@ -1,4 +1,4 @@
 import { type Prisma } from '../../generated/prisma/client'
-import { selectSwapConfig } from '../selects'
+import { selectSwapConfig } from './select'
 
 export type SwapConfigRow = Prisma.TokenGetPayload<{ select: typeof selectSwapConfig }>
