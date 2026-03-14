@@ -78,7 +78,7 @@ export function TokenFeed({
 
 	const { tokens, isLastPage, nextCursorId, searchParams } = state || {}
 
-	const { channel } = useChannel('updateEvent', (message: Ably.Message) => {
+	useChannel('updateEvent', (message: Ably.Message) => {
 		const e: TokenCard = message.data
 
 		setState(prev => {
