@@ -122,7 +122,7 @@ export function TokenFeed({
 
 	const { run, isLoading } = useAsync<InitialState>()
 
-	const { ref, inView, entry } = useInView({
+	const { ref, inView } = useInView({
 		/* Optional options */
 		threshold: 0,
 
