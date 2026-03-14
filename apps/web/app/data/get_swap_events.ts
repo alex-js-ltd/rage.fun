@@ -1,7 +1,6 @@
 import { cache } from 'react'
 import { prisma, selectSwapEvents as select } from '@repo/database'
-import type { Prisma } from '@repo/database'
-
+import type { Prisma, SwapEventRow } from '@repo/database'
 import 'server-only'
 
 export const getSwapEvents = cache(async (mint: string) => {
@@ -23,3 +22,5 @@ export const getSwapEvents = cache(async (mint: string) => {
 
 	return swapEvents
 })
+
+export function toSwapEvent(data: SwapEventRow) {}
