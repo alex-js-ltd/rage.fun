@@ -5,6 +5,7 @@ import { prisma, selectTokenFeed as select } from '@repo/database'
 import { getSolPrice } from '@/app/data/get_sol_price'
 import { calculatePercentage, solToUsd } from '@/app/utils/misc'
 import Decimal from 'decimal.js'
+import 'server-only'
 
 // Number of items we want to return per page
 const TAKE = 12
