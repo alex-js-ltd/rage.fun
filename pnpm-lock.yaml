@@ -30,6 +30,9 @@ importers:
 
   apps/web:
     dependencies:
+      '@conform-to/react':
+        specifier: ^1.17.1
+        version: 1.17.1(react@19.2.3)
       '@conform-to/zod':
         specifier: ^1.17.1
         version: 1.17.1(zod@4.3.6)
@@ -677,6 +680,15 @@ packages:
 
   /@conform-to/dom@1.17.1:
     resolution: {integrity: sha512-vpwCodVVWpQ6kbrlu5F85BC99ozDxqcrhmt+YDD81bCwvt6NtiycFID3NQQGQyn+bzmpb4qlF3Ay9YcljnrNHw==}
+    dev: false
+
+  /@conform-to/react@1.17.1(react@19.2.3):
+    resolution: {integrity: sha512-AXj6HMiG0e6mJXzVNDmeQ9FH4LbGA4HdSt+a0Yb09kEnpESkK3zCopFb8RkO8kls4XMQO05KAmaE6KDlhSzprQ==}
+    peerDependencies:
+      react: '>=18'
+    dependencies:
+      '@conform-to/dom': 1.17.1
+      react: 19.2.3
     dev: false
 
   /@conform-to/zod@1.17.1(zod@4.3.6):
