@@ -28,3 +28,24 @@ export function formatNumberSmart(num: number): string {
 export function shortAddress(addr: string) {
 	return `${addr.slice(0, 4)}...${addr.slice(-4)}`
 }
+
+export function formatTokenAmount(bn: string) {
+	const [whole] = bn.split('.') // get only the part before the decimal
+	return whole.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+}
+
+export function formatCompactNumber(
+	value: number,
+	options?: {
+		locale?: string
+		maximumFractionDigits?: number
+	},
+): string {
+	const { locale = 'en-US', maximumFractionDigits = 2 } = options ?? {}
+
+	return new Intl.NumberFormat(locale, {
+		notation: 'compact',
+		compactDisplay: 'short',
+		maximumFractionDigits,
+	}).format(value)
+}
