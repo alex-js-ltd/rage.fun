@@ -12,10 +12,13 @@
     "@repo/database": "workspace:*",
     "@repo/rage": "workspace:*",
     "@vercel/kv": "^3.0.0",
+    "ably": "^2.20.0",
+    "clsx": "^2.1.1",
     "decimal.js": "^10.4.3",
     "next": "16.1.6",
     "react": "19.2.3",
     "react-dom": "19.2.3",
+    "tailwind-merge": "^3.5.0",
     "zod": "^4.3.6"
   },
   "devDependencies": {
