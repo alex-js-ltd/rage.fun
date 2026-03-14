@@ -1,7 +1,7 @@
 import { Suspense } from 'react'
 import { SearchParamsSchema } from '@/app/feature/token_feed/schema'
 import type { SearchParams } from '@/app/feature/token_feed/schema'
-import { getTokenFeed } from '@/app/data/get_token_feed'
+import { getTokenFeed } from '@/app/feature/token_feed/query'
 import { notFound } from 'next/navigation'
 
 type Props = {

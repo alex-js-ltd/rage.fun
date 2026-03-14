@@ -9,6 +9,7 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@conform-to/zod": "^1.17.1",
     "@repo/database": "workspace:*",
     "@repo/rage": "workspace:*",
     "@vercel/kv": "^3.0.0",
@@ -18,6 +19,7 @@
     "next": "16.1.6",
     "react": "19.2.3",
     "react-dom": "19.2.3",
+    "react-intersection-observer": "^10.0.3",
     "tailwind-merge": "^3.5.0",
     "zod": "^4.3.6"
   },

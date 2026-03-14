@@ -1,17 +1,18 @@
 'use client'
 
 import React, { use, useState, useEffect, useRef, ReactNode } from 'react'
-import { SearchParams } from '@/app/feature/token_feed/schema'
+import type { SearchParams } from '@/app/feature/token_feed/schema'
+import { SearchParamsSchema } from '@/app/feature/token_feed/schema'
 import { useAsync } from '@/app/hooks/use_async'
 import * as Ably from 'ably'
 import { useChannel } from 'ably/react'
-import { Loading } from '@/app/comps/loading'
+import { Loading } from '@/app/comps/ui/loading'
 import { parseWithZod } from '@conform-to/zod'
-import { SearchSchema } from '@/app/utils/schemas'
+
 import { client } from '@/app/utils/client'
 import { useInView } from 'react-intersection-observer'
-import { type TokenCard } from '@/app/data/get_token_feed'
-import { TokenCardFallback } from '@/app/comps/token_card'
+import { type TokenCard } from '@/app/feature/token_feed/query'
+import { TokenCardFallback } from '@/app/feature/token_feed/token_card'
 
 export type InitialState = {
 	tokens: Array<TokenCard>
@@ -168,7 +169,7 @@ export function TokenFeed({
 					const formData = new FormData(e.currentTarget)
 
 					const submission = parseWithZod(formData, {
-						schema: SearchSchema,
+						schema: SearchParamsSchema,
 					})
 
 					if (submission.status !== 'success') {
