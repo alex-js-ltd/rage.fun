@@ -3,10 +3,10 @@ import { cache } from 'react'
 import { PublicKey, Connection } from '@solana/web3.js'
 import { program } from '@/app/utils/setup'
 import { TOKEN_2022_PROGRAM_ID, getAccount, getAssociatedTokenAddress } from '@solana/spl-token'
-import { fetchBondingCurveState } from '@repo/rage'
+import { fetchBondingCurveState, fromLamports } from '@repo/rage'
 import { getCreatorId } from '@/app/data/get_creator_id'
 import { getServerEnv } from '@/app/utils/env'
-import { fromLamports } from '@repo/rage'
+
 import { formatCompactNumber, calculatePercentage } from '@/app/utils/misc'
 import { BN } from '@coral-xyz/anchor'
 import 'server-only'
@@ -59,7 +59,7 @@ function toTopHolder(decimals: number, totalSupply: BN) {
 
 		const uiAmount = formatCompactNumber(uiResult)
 
-		const percentageOwned = calculatePercentage(new BN(amount), totalSupply, decimals).toFixed(3)
+		const percentageOwned = calculatePercentage(new BN(amount), totalSupply).toFixed(3)
 
 		return { owner: owner.toBase58(), address: address.toBase58(), uiAmount, percentageOwned, isCreator }
 	}
