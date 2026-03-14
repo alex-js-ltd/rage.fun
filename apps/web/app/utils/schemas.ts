@@ -1,6 +1,24 @@
 import type { Intent } from '@conform-to/react'
 import { conformZodMessage } from '@conform-to/zod'
 import { z } from 'zod'
+import { PublicKey } from '@solana/web3.js'
+
+const Wallet = z.preprocess(
+	value => {
+		try {
+			if (typeof value === 'string') {
+				return new PublicKey(value)
+			}
+		} catch {
+			return undefined
+		}
+	},
+	z.instanceof(PublicKey, { message: 'Invalid public key' }).refine(pk => PublicKey.isOnCurve(pk.toBytes()), {
+		message: 'Not on the ed25519 curve',
+	}),
+)
+
+const Mint = z.string().transform(val => new PublicKey(val))
 
 export const SearchParamsSchema = z.object({
 	sortType: z.enum(['createdAt', 'lastTrade', 'marketCap', 'volume']).default('createdAt'),
@@ -11,3 +29,8 @@ export const SearchParamsSchema = z.object({
 })
 
 export type SearchParams = z.infer<typeof SearchParamsSchema>
+
+export const HarvestYieldSchema = z.object({
+	creator: Wallet,
+	mint: Mint,
+})
