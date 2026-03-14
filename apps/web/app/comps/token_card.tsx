@@ -1,20 +1,21 @@
 'use client'
 
 import React, { useState, useEffect, useRef } from 'react'
-import Link from 'next/link'
 
-import { Icon } from '@/app/comps/ui/tooltip'
+import Link from 'next/link'
 import Image from 'next/image'
-import { cn, formatNumberSmart } from '@/app/utils/misc'
-import { Loading } from './loading'
-import { createPngDataUri } from 'unlazy/thumbhash'
-import { SquareProgress } from './square_progress'
-import { shortAddress } from '@/app/utils/misc'
-import { Tooltip, TooltipContent, TooltipTrigger } from '@/app/comps/tooltip'
+
+import { Loading } from '@/app/comps/ui/loading'
+import { Icon } from '@/app/comps/ui/_icon'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/app/comps/ui/tooltip'
+import { SquareProgress } from '@/app/comps/square_progress'
+import { Blink } from '@/app/comps/blink'
+
+import { HarvestYieldForm } from '@/app/comps/harvest_yield_form'
 import { type TokenCard } from '@/app/data/get_token_feed'
 
-import { Blink } from './blink'
-import { HarvestYieldForm } from './harvest_yield_form'
+import { cn, formatNumberSmart, shortAddress } from '@/app/utils/misc'
+import { createPngDataUri } from 'unlazy/thumbhash'
 
 type TokenCardProps = {
 	token: TokenCard
