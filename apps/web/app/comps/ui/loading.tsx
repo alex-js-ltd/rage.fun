@@ -27,7 +27,8 @@ export function Loading({ i, className, children }: LoadingProps) {
 					'--animationDelay': `calc(${i} * var(--glimmer-stagger-time, 200ms))`,
 				} as React.CSSProperties
 			}
-			children={children}
-		/>
+		>
+			{children}
+		</div>
 	)
 }
