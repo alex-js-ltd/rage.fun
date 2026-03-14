@@ -1,7 +1,7 @@
 import type { TokenFeedRow, Prisma } from '@repo/database'
 import { prisma, selectTokenFeed as select } from '@repo/database'
 
-import type { SearchParams } from './schema'
+import type { SearchParams } from '@/app/feature/token_feed/schema'
 
 import { getSolPrice } from '@/app/data/get_sol_price'
 import { calculatePercentage, solToUsd } from '@/app/utils/misc'
