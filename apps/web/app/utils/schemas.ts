@@ -34,3 +34,11 @@ export const HarvestYieldSchema = z.object({
 	creator: Wallet,
 	mint: Mint,
 })
+
+export const AuthSchema = z.object({
+	domain: z.string(),
+	publicKey: z.string(),
+	statement: z.string(),
+	nonce: z.string(),
+	signature: z.string(),
+})

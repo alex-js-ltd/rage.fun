@@ -7,7 +7,7 @@ import { calculatePercentage, solToUsd } from '@/app/utils/misc'
 import Decimal from 'decimal.js'
 
 // Number of items we want to return per page
-const TAKE: number = 12
+const TAKE = 12
 
 export async function getTokenFeed(searchParams: SearchParams) {
 	const { sortType, sortOrder, cursorId, creatorId } = searchParams
