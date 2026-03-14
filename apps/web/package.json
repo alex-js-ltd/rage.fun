@@ -9,6 +9,7 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@auth/prisma-adapter": "^2.11.1",
     "@conform-to/react": "^1.17.1",
     "@conform-to/zod": "^1.17.1",
     "@coral-xyz/anchor": "^0.30.1",
@@ -24,6 +25,7 @@
     "clsx": "^2.1.1",
     "decimal.js": "^10.4.3",
     "next": "16.1.6",
+    "next-auth": "5.0.0-beta.29",
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "react-intersection-observer": "^10.0.3",
