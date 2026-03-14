@@ -13,3 +13,18 @@ export function solToUsd(amountInSol: Decimal, solPrice: number): Decimal {
 export function cn(...inputs: ClassValue[]) {
 	return twMerge(clsx(inputs))
 }
+
+export function formatNumberSmart(num: number): string {
+	if (num === 0) return '0'
+
+	if (num >= 0.01) {
+		return num.toFixed(2) // two decimals for "normal" numbers
+	}
+
+	// fallback for ultra tiny numbers
+	return num.toExponential(2) // scientific notation
+}
+
+export function shortAddress(addr: string) {
+	return `${addr.slice(0, 4)}...${addr.slice(-4)}`
+}

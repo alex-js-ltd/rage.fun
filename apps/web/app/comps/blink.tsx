@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Icon } from '@/app/comps/ui/icon'
+import { Icon } from '@/app/comps/ui/_icon'
 import { buyBlink } from '@/app/utils/dialect'
 import { useCopyToClipboard } from 'usehooks-ts'
 
