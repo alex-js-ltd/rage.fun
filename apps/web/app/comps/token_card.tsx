@@ -12,10 +12,11 @@ import { SquareProgress } from '@/app/comps/square_progress'
 import { Blink } from '@/app/comps/blink'
 
 import { HarvestYieldForm } from '@/app/comps/harvest_yield_form'
-import { type TokenCard } from '@/app/data/get_token_feed'
 
 import { cn, formatNumberSmart, shortAddress } from '@/app/utils/misc'
 import { createPngDataUri } from 'unlazy/thumbhash'
+
+import type { TokenCard } from '@/app/data/get_token_feed'
 
 type TokenCardProps = {
 	token: TokenCard

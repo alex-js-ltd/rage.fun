@@ -203,3 +203,5 @@ function toTokenCard(token: TokenFeedRow, solPrice: number) {
 }
 
 type UpdateType = 'Buy' | 'Sell' | 'Create' | 'Harvest' | undefined
+
+export type TokenCard = ReturnType<typeof toTokenCard>
