@@ -1,6 +1,6 @@
 import { Suspense } from 'react'
-import { SearchParamsSchema } from '@/app/utils/schema'
-import { SearchParams } from '@/app/utils/types'
+import { SearchParamsSchema } from '@/app/feature/token_feed/schema'
+import type { SearchParams } from '@/app/feature/token_feed/schema'
 import { getTokenFeed } from '@/app/data/get_token_feed'
 import { notFound } from 'next/navigation'
 
