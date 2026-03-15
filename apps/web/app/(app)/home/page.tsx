@@ -26,14 +26,14 @@ export default async function Page(props: Props) {
 	const tokenFeedPromise = getTokenFeed({ sortOrder, sortType })
 
 	return (
-		<div className="w-full max-w-[600px] border-white/5 border-x bg-background-100">
+		<div className="w-full max-w-150 border-white/5 border-x bg-background-100">
 			{/* <Events /> */}
 
-			<div className="sticky top-0 h-[52px] flex items-center z-50 w-full bg-background-100/75 backdrop-blur-md  border-b border-white/5">
+			<div className="sticky top-0 h-13 flex items-center z-50 w-full bg-background-100/75 backdrop-blur-md  border-b border-white/5">
 				<TokenNav searchParams={{ sortType }} />
 			</div>
 
-			<div className="relative mx-auto flex max-w-[600px] flex-col pb-0">
+			<div className="relative mx-auto flex max-w-150 flex-col pb-0">
 				<section className="p-0 ">
 					<Suspense
 						key={`${sortType}:${sortOrder}`}

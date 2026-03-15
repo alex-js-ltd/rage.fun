@@ -64,7 +64,7 @@ function TokenCard({ token, action, link }: TokenCardProps) {
 	const [src, setImgSrc] = useState(image)
 
 	return (
-		<article className="group relative flex flex-col w-full h-full min-h-[178px] border-b border-white/5  hover:bg-white/10 bg-background-100">
+		<article className="group relative flex flex-col w-full h-full min-h-44.5 border-b border-white/5  hover:bg-white/10 bg-background-100">
 			<div
 				onAnimationEnd={() => setAnimate(false)}
 				className={cn(
@@ -76,10 +76,10 @@ function TokenCard({ token, action, link }: TokenCardProps) {
 
 			<div className="relative p-4 flex flex-col gap-4 ">
 				<div className="flex gap-4">
-					<div className="flex flex-col items-center gap-[4px]">
+					<div className="flex flex-col items-center gap-1">
 						<SquareProgress progress={progress} size={74}>
 							<Link
-								className="w-[72px] h-[72px] cursor-pointer relative rounded-md overflow-hidden flex-shrink-0"
+								className="w-18 h-18 cursor-pointer relative rounded-md overflow-hidden shrink-0"
 								aria-label={`View ${name}`}
 								href={{
 									pathname: `/token/${mint}`,
@@ -123,7 +123,7 @@ function TokenCard({ token, action, link }: TokenCardProps) {
 					</div>
 				</div>
 
-				<div className="flex gap-2 items-center flex-wrap sm:h-[32px]">
+				<div className="flex gap-2 items-center flex-wrap sm:h-8">
 					<div className="flex gap-0 items-center flex-wrap border border-white/5 rounded-full px-1 py-1">
 						<Pill label="P" value={`$${formatNumberSmart(price)}`} tooltip="Price" />
 						<Pill label="L" value={`$${formatNumberSmart(liquidity)}`} tooltip="Liquidity" />
@@ -156,7 +156,7 @@ type PillProps = {
 }
 export function Pill({ label, value, tooltip, className }: PillProps) {
 	const body = (
-		<div className={`flex py-1 px-[8px] rounded-full w-fit hover:bg-background-100 ${className ?? ''}`}>
+		<div className={`flex py-1 px-2 rounded-full w-fit hover:bg-background-100 ${className ?? ''}`}>
 			<div className="flex gap-1">
 				<span className="text-xs text-text-200">{label}</span>
 				<span className="text-xs text-text-200">{value}</span>
@@ -178,20 +178,20 @@ export function Pill({ label, value, tooltip, className }: PillProps) {
 
 export function TokenCardFallback({ i, children }: { i: number; children?: React.ReactNode }) {
 	return (
-		<article className="group relative flex flex-col w-full h-full min-h-[178px] border-b border-white/5 hover:bg-white/10 bg-background-100">
+		<article className="group relative flex flex-col w-full h-full min-h-44.5 border-b border-white/5 hover:bg-white/10 bg-background-100">
 			<div className="relative p-4 flex flex-col gap-4 ">
 				<div className="flex gap-4">
-					<div className="flex flex-col items-center gap-[4px]">
+					<div className="flex flex-col items-center gap-1">
 						<SquareProgress progress={0} size={74}>
 							<Loading
-								className="w-[72px] h-[72px] cursor-pointer relative rounded-md overflow-hidden flex-shrink-0"
+								className="w-18 h-18 cursor-pointer relative rounded-md overflow-hidden shrink-0"
 								i={0}
 							></Loading>
 						</SquareProgress>
 
 						<span className="text-xs text-text-200 font-medium">
 							<Loading
-								className="w-[72px] h-[10px] cursor-pointer relative rounded-full overflow-hidden flex-shrink-0"
+								className="w-18 h-2.5 cursor-pointer relative rounded-full overflow-hidden shrink-0"
 								i={1}
 							></Loading>
 						</span>
@@ -200,7 +200,7 @@ export function TokenCardFallback({ i, children }: { i: number; children?: React
 					<div className="flex flex-col gap-2 w-full">
 						<div className="text-[16px] font-medium text-text-100 w-full">
 							<Loading
-								className="w-[72px] h-[24px] cursor-pointer relative rounded-full overflow-hidden flex-shrink-0"
+								className="w-18 h-6 cursor-pointer relative rounded-full overflow-hidden shrink-0"
 								i={2}
 							></Loading>
 						</div>

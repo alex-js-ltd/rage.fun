@@ -20,7 +20,7 @@ export function NavLink({ href, children, className, ...props }: NavLinkProps) {
 
 	const isActive = url.startsWith(props.as as string)
 
-	let renderProps = {
+	const renderProps = {
 		isActive,
 	}
 
