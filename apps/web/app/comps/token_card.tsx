@@ -178,7 +178,7 @@ export function Pill({ label, value, tooltip, className }: PillProps) {
 
 export function TokenCardFallback({ i, children }: { i: number; children?: React.ReactNode }) {
 	return (
-		<article className="group relative flex flex-col w-full h-full min-h-[178px] border-b border-white border-opacity-[0.125] hover:bg-white/10 bg-background-100">
+		<article className="group relative flex flex-col w-full h-full min-h-[178px] border-b border-white/5 hover:bg-white/10 bg-background-100">
 			<div className="relative p-4 flex flex-col gap-4 ">
 				<div className="flex gap-4">
 					<div className="flex flex-col items-center gap-[4px]">
@@ -217,7 +217,7 @@ export function TokenCardFallback({ i, children }: { i: number; children?: React
 				</div>
 
 				<div className="flex gap-2 items-center flex-wrap sm:h-[32px]">
-					<div className="flex gap-1 items-center flex-wrap border border-white border-opacity-[0.05] rounded-full px-1 py-1">
+					<div className="flex gap-1 items-center flex-wrap border border-white/5  rounded-full px-1 py-1">
 						<Loading
 							className="w-[60px] h-[16px] cursor-pointer relative rounded-md overflow-hidden flex-shrink-0"
 							i={4}
