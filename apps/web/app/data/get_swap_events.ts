@@ -1,6 +1,7 @@
 import { cache } from 'react'
 import { prisma, selectSwapEvents as select } from '@repo/database'
 import type { Prisma, SwapEventRow } from '@repo/database'
+import Decimal from 'decimal.js'
 import 'server-only'
 
 export const getSwapEvents = cache(async (mint: string) => {
@@ -20,7 +21,19 @@ export const getSwapEvents = cache(async (mint: string) => {
 		},
 	})
 
-	return swapEvents
+	return swapEvents.map(toSwapEvent)
 })
 
-export function toSwapEvent(data: SwapEventRow) {}
+export function toSwapEvent(data: SwapEventRow) {
+	return {
+		id: data.id,
+		signer: data.id,
+		time: new Decimal(data.time.toString()).toNumber(),
+		price: data.price.toNumber(),
+		tokenAmount: data.tokenAmount.toString(),
+		swapType: data.swapType,
+		lamports: data.lamports.toString(),
+		rentAmount: data.rentAmount.toString(),
+		tokenId: data.tokenId,
+	}
+}
