@@ -3,6 +3,8 @@ import { SearchParamsSchema } from '@/app/utils/schemas'
 import type { SearchParams } from '@/app/utils/schemas'
 import { getTokenFeed } from '@/app/data/get_token_feed'
 import { notFound } from 'next/navigation'
+import { TokenFeed, TokenFeedFallback } from '@/app/comps/token_feed'
+import * as TokenCard from '@/app/comps/token_card'
 
 type Props = {
 	searchParams: Promise<SearchParams>
@@ -24,5 +26,33 @@ export default async function Page(props: Props) {
 
 	console.log(await tokenFeedPromise)
 
-	return <div className="w-full max-w-[600px] border-white border-x border-opacity-[0.125] bg-background-100"></div>
+	return (
+		<div className="w-full max-w-[600px] border-white border-x border-opacity-[0.125] bg-background-100">
+			{/* <Events /> */}
+
+			<div className="sticky top-0 h-[52px] flex items-center z-50 w-full bg-background-100/75 backdrop-blur-md  border-b border-white border-opacity-[0.125]  ">
+				{/* <ExploreNav searchParams={{ sortType }} /> */}
+			</div>
+
+			<div className="relative mx-auto flex max-w-[600px] flex-col pb-0">
+				<section className="p-0 ">
+					<Suspense
+						key={`${sortType}:${sortOrder}`}
+						fallback={
+							<ul className="mx-auto grid w-full grid-cols-1 gap-0">
+								<TokenFeedFallback />
+							</ul>
+						}
+					>
+						<TokenFeed
+							key={`${sortType}:${sortOrder}`}
+							tokenPromise={tokenFeedPromise}
+							Component={TokenCard.Home}
+							fallback={<TokenFeedFallback />}
+						/>
+					</Suspense>
+				</section>
+			</div>
+		</div>
+	)
 }
