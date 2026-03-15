@@ -18,7 +18,7 @@ import { prisma } from '@repo/database'
 import type { HarvestEvent } from '@repo/database'
 import { Account } from 'next-auth'
 import { type TokenCard } from '@/app/data/get_token_feed'
-import { TokenAlert } from '../data/get_token_alert'
+import type { TokenAlert } from '@/app/data/get_token_alert'
 
 const {
 	DISCORD_WEBHOOK_ALERT_URL,
