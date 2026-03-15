@@ -5,6 +5,7 @@ import { getTokenFeed } from '@/app/data/get_token_feed'
 import { notFound } from 'next/navigation'
 import { TokenFeed, TokenFeedFallback } from '@/app/comps/token_feed'
 import * as TokenCard from '@/app/comps/token_card'
+import { TokenNav } from '@/app/comps/token_nav'
 
 type Props = {
 	searchParams: Promise<SearchParams>
@@ -29,7 +30,7 @@ export default async function Page(props: Props) {
 			{/* <Events /> */}
 
 			<div className="sticky top-0 h-[52px] flex items-center z-50 w-full bg-background-100/75 backdrop-blur-md  border-b border-white/5">
-				{/* <ExploreNav searchParams={{ sortType }} /> */}
+				<TokenNav searchParams={{ sortType }} />
 			</div>
 
 			<div className="relative mx-auto flex max-w-[600px] flex-col pb-0">

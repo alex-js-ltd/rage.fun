@@ -3,7 +3,7 @@
 import { cn } from '@/app/utils/misc'
 import { NavLink } from '@/app/comps/ui/nav_link'
 
-export function ExploreNav({ searchParams }: { searchParams: { sortType: string } }) {
+export function TokenNav({ searchParams }: { searchParams: { sortType: string } }) {
 	const { sortType } = searchParams
 	return (
 		<div className="flex items-center w-full h-full overflow-x-scroll scrollbar-hide">
