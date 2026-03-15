@@ -27,10 +27,10 @@ export default async function Page(props: Props) {
 	console.log(await tokenFeedPromise)
 
 	return (
-		<div className="w-full max-w-[600px] border-white border-x border-opacity-[0.125] bg-background-100">
+		<div className="w-full max-w-[600px] border-white/5 border-x bg-background-100">
 			{/* <Events /> */}
 
-			<div className="sticky top-0 h-[52px] flex items-center z-50 w-full bg-background-100/75 backdrop-blur-md  border-b border-white border-opacity-[0.125]  ">
+			<div className="sticky top-0 h-[52px] flex items-center z-50 w-full bg-background-100/75 backdrop-blur-md  border-b border-white/5">
 				{/* <ExploreNav searchParams={{ sortType }} /> */}
 			</div>
 
