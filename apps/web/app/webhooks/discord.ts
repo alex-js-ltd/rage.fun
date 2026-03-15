@@ -3,7 +3,7 @@ import { getServerEnv } from '@/app/utils/env'
 import { type EventData, fromLamports, amountToUiAmount } from '@repo/rage'
 import { buyBlink, sellBlink } from '@/app/utils/dialect'
 
-import { SwapEventType } from '@/app/utils/schemas'
+import type { SwapEvent } from '@/app/data/get_swap_events'
 
 import { BN } from '@coral-xyz/anchor'
 import { formatNumberSmart, formatTokenAmount, shortAddress } from '@/app/utils/misc'
@@ -29,7 +29,7 @@ const {
 	DISCORD_CREATOR_ROLE_ID,
 } = getServerEnv()
 
-export async function publishSwapEvent(event: SwapEventType, token: TokenAlert, topHolders: TopHolder[]) {
+export async function publishSwapEvent(event: SwapEvent, token: TokenAlert, topHolders: TopHolder[]) {
 	const { symbol } = token.metadata
 	const { currentReserve, currentSupply, decimals, progress } = token.bondingCurve
 
@@ -110,7 +110,7 @@ export async function publishSwapEvent(event: SwapEventType, token: TokenAlert, 
 	console.log('✅ Webhook sent:', res)
 }
 
-async function getRefund(event: SwapEventType) {
+async function getRefund(event: SwapEvent) {
 	if (event.rentAmount === '0' || event.swapType === 'Buy') {
 		return ['']
 	}
@@ -288,7 +288,7 @@ export async function assignCreatorRole(discordUserId: string) {
 
 export async function addUserToGuild(discordUserId: string, userAccessToken: string) {
 	try {
-		const res = await client(`https://discord.com/api/v10/guilds/${DISCORD_GUILD_ID}/members/${discordUserId}`, {
+		await client(`https://discord.com/api/v10/guilds/${DISCORD_GUILD_ID}/members/${discordUserId}`, {
 			method: 'PUT',
 			headers: {
 				Authorization: `Bot ${DISCORD_BOT_TOKEN}`,

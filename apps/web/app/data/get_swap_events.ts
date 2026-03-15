@@ -1,6 +1,6 @@
 import { cache } from 'react'
 import { prisma, selectSwapEvents as select } from '@repo/database'
-import type { Prisma, SwapEventRow } from '@repo/database'
+import type { SwapEventRow } from '@repo/database'
 import Decimal from 'decimal.js'
 import 'server-only'
 
@@ -37,3 +37,5 @@ export function toSwapEvent(data: SwapEventRow) {
 		tokenId: data.tokenId,
 	}
 }
+
+export type SwapEvent = ReturnType<typeof toSwapEvent>
