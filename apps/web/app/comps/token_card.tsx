@@ -64,7 +64,7 @@ function TokenCard({ token, action, link }: TokenCardProps) {
 	const [src, setImgSrc] = useState(image)
 
 	return (
-		<article className="group relative flex flex-col w-full h-full min-h-[178px] border-b border-white border-opacity-[0.125] hover:bg-white/10 bg-background-100">
+		<article className="group relative flex flex-col w-full h-full min-h-[178px] border-b border-white/5  hover:bg-white/10 bg-background-100">
 			<div
 				onAnimationEnd={() => setAnimate(false)}
 				className={cn(
@@ -124,7 +124,7 @@ function TokenCard({ token, action, link }: TokenCardProps) {
 				</div>
 
 				<div className="flex gap-2 items-center flex-wrap sm:h-[32px]">
-					<div className="flex gap-0 items-center flex-wrap border border-white border-opacity-[0.05] rounded-full px-1 py-1">
+					<div className="flex gap-0 items-center flex-wrap border border-white/5 rounded-full px-1 py-1">
 						<Pill label="P" value={`$${formatNumberSmart(price)}`} tooltip="Price" />
 						<Pill label="L" value={`$${formatNumberSmart(liquidity)}`} tooltip="Liquidity" />
 						<Pill label="V" value={`$${formatNumberSmart(volume)}`} tooltip="Volume" />

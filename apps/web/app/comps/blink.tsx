@@ -20,7 +20,7 @@ export function Blink({ mint }: { mint: string }) {
 	return (
 		<button
 			onClick={handleClick}
-			className="w-fit min-w-[120px] h-7 rounded-full flex items-center justify-center px-4 gap-1.5 border border-white border-opacity-[0.05]"
+			className="w-fit min-w-[120px] h-7 rounded-full flex items-center justify-center px-4 gap-1.5 border border-white/5"
 		>
 			<Icon name="dialect" className="w-[15px] h-[14px] text-white" />
 			<span className="text-xs font-medium text-text-200 whitespace-nowrap">{copied ? 'Copied' : 'Share Blink'}</span>
