@@ -1,32 +1,34 @@
-'use client'
+"use client";
 
-import Link, { type LinkProps } from 'next/link'
-import { usePathname, useSearchParams } from 'next/navigation'
+import Link, { type LinkProps } from "next/link";
+import { usePathname, useSearchParams } from "next/navigation";
 
 export type NavLinkRenderProps = {
-	isActive: boolean
-}
+  isActive: boolean;
+};
 
-export interface NavLinkProps extends Omit<LinkProps, 'className' | 'style' | 'children'> {
-	children?: React.ReactNode | ((props: NavLinkRenderProps) => React.ReactNode)
-	className?: string
+export interface NavLinkProps
+  extends Omit<LinkProps, "className" | "style" | "children"> {
+  children?: React.ReactNode | ((props: NavLinkRenderProps) => React.ReactNode);
+  className?: string;
 }
 
 export function NavLink({ href, children, className, ...props }: NavLinkProps) {
-	const pathname = usePathname()
-	const searchParams = useSearchParams()
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
 
-	const url = searchParams.size === 0 ? pathname : `${pathname}?${searchParams}`
+  const url =
+    searchParams.size === 0 ? pathname : `${pathname}?${searchParams}`;
 
-	const isActive = url.startsWith(props.as as string)
+  const isActive = url.startsWith(props.as as string);
 
-	const renderProps = {
-		isActive,
-	}
+  const renderProps = {
+    isActive,
+  };
 
-	return (
-		<Link className={className} href={href} {...props}>
-			{typeof children === 'function' ? children(renderProps) : children}
-		</Link>
-	)
+  return (
+    <Link className={className} href={href} {...props}>
+      {typeof children === "function" ? children(renderProps) : children}
+    </Link>
+  );
 }

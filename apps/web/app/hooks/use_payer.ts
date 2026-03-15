@@ -1,6 +1,6 @@
-import { useWallet } from '@jup-ag/wallet-adapter'
+import { useWallet } from "@jup-ag/wallet-adapter";
 
 export function usePayer() {
-	const { publicKey } = useWallet()
-	return publicKey?.toBase58()
+  const { publicKey } = useWallet();
+  return publicKey?.toBase58();
 }

@@ -1,81 +1,83 @@
-@import 'tailwindcss';
+@import "tailwindcss";
 
 :root {
-	--background-100: 199, 28%, 9%;
-	--background-200: 200, 4%, 15%;
-	--background-300: 200, 2.5%, 23.7%;
-	--background-400: 240, 1%, 20.2%;
-	--background-500: 223, 5%, 71%;
-	--background-600: 0, 0%, 88%;
-	--text-100: 214, 14%, 90%;
-	--text-200: 218, 5%, 71%;
-	--text-300: 220, 12%, 90%;
-	--text-400: 240, 6%, 3%;
-	--text-500: 223, 5%, 71%;
-	/* Glimmer animation config */
-	--glimmer-stagger-time: 200ms;
-	--glimmer-animation-direction: alternate;
-	--glimmer-animation-duration: 1000ms;
-	--glimmer-animation-timing-function: steps(10, end);
-	--glimmer-opacity-min: 0.25;
-	--glimmer-opacity-max: 1;
-	--glimmer-base-opaque: #fff;
-	--glimmer-high-contrast-base-opaque: #fff;
-	--glimmer-opacity-max: 0.58;
-	--glimmer-opacity-min: 0.15;
-	--glimmer-opacity-high-contrast-max: 0.48;
-	--glimmer-opacity-high-contrast-min: 0.1;
-	--web-wash: #1c1c1d;
+  --background-100: 199, 28%, 9%;
+  --background-200: 200, 4%, 15%;
+  --background-300: 200, 2.5%, 23.7%;
+  --background-400: 240, 1%, 20.2%;
+  --background-500: 223, 5%, 71%;
+  --background-600: 0, 0%, 88%;
+  --text-100: 214, 14%, 90%;
+  --text-200: 218, 5%, 71%;
+  --text-300: 220, 12%, 90%;
+  --text-400: 240, 6%, 3%;
+  --text-500: 223, 5%, 71%;
+  /* Glimmer animation config */
+  --glimmer-stagger-time: 200ms;
+  --glimmer-animation-direction: alternate;
+  --glimmer-animation-duration: 1000ms;
+  --glimmer-animation-timing-function: steps(10, end);
+  --glimmer-opacity-min: 0.25;
+  --glimmer-opacity-max: 1;
+  --glimmer-base-opaque: #fff;
+  --glimmer-high-contrast-base-opaque: #fff;
+  --glimmer-opacity-max: 0.58;
+  --glimmer-opacity-min: 0.15;
+  --glimmer-opacity-high-contrast-max: 0.48;
+  --glimmer-opacity-high-contrast-min: 0.1;
+  --web-wash: #1c1c1d;
 
-	/* Buy / Bullish (lime green) */
-	--buy-100: 158, 77%, 75%; /* #7FFF00 (neon lime green) */
-	--buy-200: 95, 100%, 40%; /* darker lime for hover/active */
+  /* Buy / Bullish (lime green) */
+  --buy-100: 158, 77%, 75%; /* #7FFF00 (neon lime green) */
+  --buy-200: 95, 100%, 40%; /* darker lime for hover/active */
 
-	/* Sell / Bearish (orange) */
-	--sell-100: 358, 60%, 75%; /* #FF6B00 (vivid orange) */
-	--sell-200: 24, 100%, 40%; /* deeper orange for hover/active */
+  /* Sell / Bearish (orange) */
+  --sell-100: 358, 60%, 75%; /* #FF6B00 (vivid orange) */
+  --sell-200: 24, 100%, 40%; /* deeper orange for hover/active */
 
-	--rage-100: 136, 63%, 69%;
+  --rage-100: 136, 63%, 69%;
 }
 
 @theme inline {
-	--color-background: var(--background);
-	--color-foreground: var(--foreground);
-	--font-sans: var(--font-geist-sans);
-	--font-mono: var(--font-geist-mono);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
 }
 
 @theme {
-	--breakpoint-xxs: 480px;
-	--breakpoint-xs: 600px;
+  --breakpoint-xxs: 480px;
+  --breakpoint-xs: 600px;
 
-	--font-sans: var(--font-geist-sans);
-	--font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
 
-	--color-background-100: hsl(var(--background-100));
-	--color-background-200: hsl(var(--background-200));
-	--color-background-300: hsl(var(--background-300));
-	--color-background-400: hsl(var(--background-400));
-	--color-background-500: hsl(var(--background-500));
-	--color-background-600: hsl(var(--background-600));
+  --color-background-100: hsl(var(--background-100));
+  --color-background-200: hsl(var(--background-200));
+  --color-background-300: hsl(var(--background-300));
+  --color-background-400: hsl(var(--background-400));
+  --color-background-500: hsl(var(--background-500));
+  --color-background-600: hsl(var(--background-600));
 
-	--color-text-100: hsl(var(--text-100));
-	--color-text-200: hsl(var(--text-200));
-	--color-text-300: hsl(var(--text-300));
-	--color-text-400: hsl(var(--text-400));
-	--color-text-500: hsl(var(--text-500));
+  --color-text-100: hsl(var(--text-100));
+  --color-text-200: hsl(var(--text-200));
+  --color-text-300: hsl(var(--text-300));
+  --color-text-400: hsl(var(--text-400));
+  --color-text-500: hsl(var(--text-500));
 
-	--color-buy-100: hsl(var(--buy-100));
-	--color-buy-200: hsl(var(--buy-200));
-	--color-sell-100: hsl(var(--sell-100));
-	--color-sell-200: hsl(var(--sell-200));
-	--color-rage-100: hsl(var(--rage-100));
+  --color-buy-100: hsl(var(--buy-100));
+  --color-buy-200: hsl(var(--buy-200));
+  --color-sell-100: hsl(var(--sell-100));
+  --color-sell-200: hsl(var(--sell-200));
+  --color-rage-100: hsl(var(--rage-100));
 
-	--animate-slide-up-and-fade: slide-up-and-fade 400ms cubic-bezier(0.16, 1, 0.3, 1);
-	--animate-slide-down-and-fade: slide-down-and-fade 400ms cubic-bezier(0.16, 1, 0.3, 1);
+  --animate-slide-up-and-fade: slide-up-and-fade 400ms
+    cubic-bezier(0.16, 1, 0.3, 1);
+  --animate-slide-down-and-fade: slide-down-and-fade 400ms
+    cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 body {
-	background: var(--background-100);
-	scrollbar-gutter: stable;
+  background: var(--background-100);
+  scrollbar-gutter: stable;
 }
