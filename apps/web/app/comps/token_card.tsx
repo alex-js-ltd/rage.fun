@@ -1,19 +1,19 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
-import Link from "next/link";
 import Image from "next/image";
+import Link from "next/link";
 
-import { Loading } from "@/app/comps/ui/loading";
+import { Blink } from "@/app/comps/blink";
+import { SquareProgress } from "@/app/comps/square_progress";
 import { Icon } from "@/app/comps/ui/_icon";
+import { Loading } from "@/app/comps/ui/loading";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from "@/app/comps/ui/tooltip";
-import { SquareProgress } from "@/app/comps/square_progress";
-import { Blink } from "@/app/comps/blink";
 
 import { HarvestYieldForm } from "@/app/comps/harvest_yield_form";
 
@@ -244,7 +244,7 @@ export function TokenCardFallback({
             <div className="flex items-center gap-1">
               <span className="text-rage-100 font-mono text-[15px] font-medium">
                 <Loading
-                  className="relative h-[22px] w-[72px] flex-shrink-0 cursor-pointer overflow-hidden rounded-full"
+                  className="relative h-5.5 w-18 shrink-0 cursor-pointer overflow-hidden rounded-full"
                   i={3}
                 ></Loading>
               </span>
@@ -252,25 +252,25 @@ export function TokenCardFallback({
           </div>
         </div>
 
-        <div className="flex flex-wrap items-center gap-2 sm:h-[32px]">
+        <div className="flex flex-wrap items-center gap-2 sm:h-8">
           <div className="flex flex-wrap items-center gap-1 rounded-full border border-white/5 px-1 py-1">
             <Loading
-              className="relative h-[16px] w-[60px] flex-shrink-0 cursor-pointer overflow-hidden rounded-md"
+              className="relative h-4 w-15 shrink-0 cursor-pointer overflow-hidden rounded-md"
               i={4}
             ></Loading>
 
             <Loading
-              className="relative h-[16px] w-[60px] flex-shrink-0 cursor-pointer overflow-hidden rounded-md"
+              className="relative h-4 w-15 shrink-0 cursor-pointer overflow-hidden rounded-md"
               i={5}
             ></Loading>
 
             <Loading
-              className="relative h-[16px] w-[60px] flex-shrink-0 cursor-pointer overflow-hidden rounded-md"
+              className="relative h-4 w-15 shrink-0 cursor-pointer overflow-hidden rounded-md"
               i={6}
             ></Loading>
 
             <Loading
-              className="relative h-[16px] w-[60px] flex-shrink-0 cursor-pointer overflow-hidden rounded-md"
+              className="relative h-4 w-15 shrink-0 cursor-pointer overflow-hidden rounded-md"
               i={7}
             ></Loading>
           </div>
@@ -297,9 +297,9 @@ function Fallback({
         <li key={`loading-card-${i}`} className="w-full space-y-4">
           <TokenCardFallback i={i}>
             {isEarnPage ? (
-              <Loading className="h-[34px] w-[74px] rounded-full" i={i} />
+              <Loading className="h-8.5 w-18.5 rounded-full" i={i} />
             ) : (
-              <Loading className="h-6 w-[120px] rounded-full" i={i} />
+              <Loading className="h-6 w-30 rounded-full" i={i} />
             )}
           </TokenCardFallback>
         </li>
@@ -337,4 +337,4 @@ function Earn({ token }: { token: TokenCard }) {
 
 const Profile = TokenCard;
 
-export { Home, Earn, Profile, Fallback };
+export { Earn, Fallback, Home, Profile };
