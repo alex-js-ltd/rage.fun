@@ -15,7 +15,7 @@ export function Footer() {
         </li>
 
         <li>
-          <div className="h-3 w-[1px] bg-neutral-400" />
+          <div className="h-3 w-px bg-neutral-400" />
         </li>
 
         <li className="flex flex-1 justify-center">
@@ -45,7 +45,7 @@ export function Footer() {
         </li>
 
         <li>
-          <div className="h-3 w-[1px] bg-neutral-400" />
+          <div className="h-3 w-px bg-neutral-400" />
         </li>
 
         <li className="flex flex-1 justify-center">
