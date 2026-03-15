@@ -24,8 +24,6 @@ export default async function Page(props: Props) {
 
 	const tokenFeedPromise = getTokenFeed({ sortOrder, sortType })
 
-	console.log(await tokenFeedPromise)
-
 	return (
 		<div className="w-full max-w-[600px] border-white/5 border-x bg-background-100">
 			{/* <Events /> */}
