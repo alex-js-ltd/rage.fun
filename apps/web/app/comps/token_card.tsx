@@ -41,6 +41,7 @@ function TokenCard({ token, action, link }: TokenCardProps) {
 		if (updatedAt !== prevUpdatedAtRef.current) {
 			prevUpdatedAtRef.current = updatedAt
 			// restart animation even if previous one is mid-flight
+			// eslint-disable-next-line react-hooks/set-state-in-effect
 			setAnimate(false)
 			requestAnimationFrame(() => setAnimate(true))
 		}
