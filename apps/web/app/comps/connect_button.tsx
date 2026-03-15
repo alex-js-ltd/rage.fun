@@ -26,7 +26,7 @@ export function ConnectButton() {
     return (
       <UnifiedWalletButton
         overrideContent={
-          <button className="bg-background-100 relative h-auto sm:rounded-full xl:flex items-center p-3 xl:w-41.25 w-full justify-center font-semibold text-text-200 xl:border xl:border-white/5  hover:bg-white/10">
+          <button className="bg-background-100 relative h-fit sm:rounded-full xl:flex items-center p-3 xl:w-41.25 w-full justify-center font-semibold text-text-200 xl:border xl:border-white/5  hover:bg-white/10">
             <span className="hidden xl:block">Connect</span>
 
             <Icon name="connect" className="size-6 xl:hidden " />
