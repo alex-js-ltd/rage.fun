@@ -1,8 +1,8 @@
 'use client'
 
 import React, { type RefObject, type ReactNode, createContext, useMemo, use, useCallback, useRef } from 'react'
-import { type InputProps } from '@/app/comps/input'
-import invariant from 'tiny-invariant'
+import { type InputProps } from '@/app/comps/ui/input'
+
 import { useAsync } from '@/app/hooks/use_async'
 import { client } from '@/app/utils/client'
 import { PinataSDK } from 'pinata'
@@ -88,7 +88,9 @@ function ImageProvider({ children }: { children: ReactNode }) {
 
 function useImage() {
 	const context = use(ImageContext)
-	invariant(context, 'useImage must be used within a ImageProvider')
+	if (!context) {
+		throw new Error('useImage must be used within a ImageProvider')
+	}
 	return context
 }
 
