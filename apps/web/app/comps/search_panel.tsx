@@ -3,8 +3,9 @@
 import Form from "next/form";
 
 import { use, useState, useEffect, useRef } from "react";
-
 import { usePathname, useSearchParams } from "next/navigation";
+import Link from "next/link";
+
 import { type SearchResult } from "@/app/data/get_search_results";
 import {
   PopoverContent,
@@ -13,10 +14,9 @@ import {
   PopoverTrigger,
 } from "@/app/comps/ui/popover";
 import { TokenLogo, getTokenLogoProps } from "@/app/comps/token_logo";
-import Link from "next/link";
-import { Icon } from "./_icon";
+import { Icon } from "@/app/comps/ui/_icon";
 import { cn } from "@/app/utils/misc";
-import { useBackpressure } from "@/app/hooks/use_backpressure";
+import { useBackpressure } from "@/app/hooks/use_back_pressure";
 
 export function SearchResults({
   searchPromise,
@@ -31,6 +31,7 @@ export function SearchResults({
 
   useEffect(() => {
     if (tokens.length > 0) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setOpen(true);
     } else {
       setOpen(false);
@@ -38,28 +39,29 @@ export function SearchResults({
   }, [tokens]);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setOpen(false);
   }, [pathname]);
 
   return (
     <PopoverRoot open={open} onOpenChange={setOpen}>
-      <PopoverTrigger>
+      <PopoverTrigger asChild className="z-50 w-full">
         <div className="z-50 w-full"></div>
       </PopoverTrigger>
+
       <PopoverPortal>
         <PopoverContent
-          className="w-[--radix-popover-trigger-width] z-50 p-0 rounded-md border border-white/10 shadow-lg outline-none bg-background-100"
+          className="w-[var(--radix-popover-trigger-width)] z-50 rounded-md border border-white/10 bg-background-100 p-0 shadow-lg outline-none"
           side="bottom"
           align="start"
           sideOffset={0}
         >
-          {/* <-- make *this* the scroll container */}
-          <div className="w-full max-h-[50vh] overflow-y-auto overscroll-contain">
-            <ul className="">
+          <div className="max-h-[50vh] w-full overflow-y-auto overscroll-contain">
+            <ul className="w-full">
               {tokens.map((token) => (
                 <li
                   key={token.id}
-                  className="text-text-100 hover:bg-white/5 transition-colors p-3"
+                  className="p-3 text-text-100 transition-colors hover:bg-white/5"
                 >
                   <Link
                     className="flex items-center gap-2"
@@ -71,13 +73,11 @@ export function SearchResults({
                   >
                     <TokenLogo
                       {...getTokenLogoProps(token.metadata)}
-                      cons
-                      className="w-[40px] h-[40px] rounded-full"
+                      className="h-10 w-10 rounded-full"
                     />
-                    cons{" "}
-                    <span className="text-text-200 uppercase  text-xs text-nowrap">
-                      cons {token.metadata.symbol}
-                      cons{" "}
+
+                    <span className="text-nowrap text-xs uppercase text-text-200">
+                      {token.metadata.symbol}
                     </span>
                   </Link>
                 </li>
@@ -90,17 +90,17 @@ export function SearchResults({
   );
 }
 
-export function SearchBase({ initialQuery }: { initialQuery: string }) {
+export function SearchBase() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const initialQuery = searchParams.get("search") ?? "";
   const [inputValue, setInputValue] = useState(initialQuery);
   const inputRef = useRef<HTMLInputElement>(null);
-  const { triggerUpdate, shouldSuspend, formRef } = useBackpressure();
+  const { triggerUpdate, formRef } = useBackpressure();
 
   async function handleSubmit(formData: FormData) {
     const query = (formData.get("search") as string) ?? "";
 
-    // clone current params (useSearchParams is read-only)
     const next = new URLSearchParams(searchParams.toString());
 
     if (query.trim()) next.set("search", query.trim());
@@ -109,6 +109,7 @@ export function SearchBase({ initialQuery }: { initialQuery: string }) {
     const newUrl = `${pathname}?${next.toString()}`;
     await triggerUpdate(newUrl);
   }
+
   function handleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
     const newValue = e.target.value;
     setInputValue(newValue);
@@ -129,18 +130,19 @@ export function SearchBase({ initialQuery }: { initialQuery: string }) {
     <Form
       ref={formRef}
       action={handleSubmit}
-      className="h-[40px] w-full relative flex items-center"
+      className="relative flex h-10 w-full items-center"
     >
       <label htmlFor="search" className="sr-only">
         Search
       </label>
+
       <Icon name="search" className="absolute left-4 size-4 text-text-200" />
-      cons{" "}
+
       <input
         className={cn(
-          "w-full h-full rounded-full border border-white/10 bg-background-100 text-white",
+          "h-full w-full rounded-full border border-white/10 bg-background-100 text-white",
           "placeholder-text-200 focus:border-rage-100 focus:ring-1 focus:ring-rage-100/40",
-          "focus:outline-none caret-rage-100 transition-all duration-150 px-10",
+          "caret-rage-100 px-10 transition-all duration-150 focus:outline-none",
           inputValue && "border-rage-100",
         )}
         placeholder="Search symbol..."
@@ -156,11 +158,9 @@ export function SearchBase({ initialQuery }: { initialQuery: string }) {
 }
 
 export function SearchFallback() {
-  return <SearchBase initialQuery="" />;
+  return <SearchBase />;
 }
 
 export function SearchField() {
-  const query = useSearchParams().get("search") ?? "";
-
-  return <SearchBase initialQuery={query} />;
+  return <SearchBase />;
 }
