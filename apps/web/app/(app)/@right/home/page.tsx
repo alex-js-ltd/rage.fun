@@ -4,9 +4,9 @@ import { getSearchResults } from '@/app/data/get_search_results'
 import { type SearchParams } from '@/app/utils/schemas'
 import { getTrending } from '@/app/data/get_trending'
 import { Trending, TrendingFallBack } from '@/app/comps/trending'
-// import { Welcome } from '@/app/comps/welcome'
+import { LinkDiscord } from '@/app/comps/link_discord'
 import { auth } from '@/app/auth'
-// import { getDiscordId } from "@/app/data/get_discord_id";
+import { getDiscordId } from '@/app/data/get_discord_id'
 
 type Props = {
 	searchParams: Promise<SearchParams>
@@ -23,7 +23,7 @@ export default async function Page(props: Props) {
 
 	const trendingPromise = getTrending()
 
-	// const discordId = await getDiscordId(session?.user?.id)
+	const discordId = await getDiscordId(session?.user?.id)
 
 	return (
 		<div className="relative w-full">
@@ -43,11 +43,11 @@ export default async function Page(props: Props) {
 						<Trending trendingPromise={trendingPromise} />
 					</Suspense>
 
-					{/* {discordId || !session ? null : (
+					{discordId || !session ? null : (
 						<Suspense fallback={null}>
-							<Welcome discordId={discordId} />
+							<LinkDiscord discordId={discordId} />
 						</Suspense>
-					)} */}
+					)}
 				</div>
 			</div>
 		</div>
