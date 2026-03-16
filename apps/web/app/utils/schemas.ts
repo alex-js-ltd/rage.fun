@@ -33,10 +33,12 @@ export const SearchParamsSchema = z.object({
 
 export type SearchParams = z.infer<typeof SearchParamsSchema>
 
-export const HarvestYieldSchema = z.object({
-	creator: Wallet,
-	mint: Mint,
-})
+export const HarvestYieldSchema = coerceFormValue(
+	z.object({
+		creator: Wallet,
+		mint: Mint,
+	}),
+)
 
 export const AuthSchema = coerceFormValue(
 	z.object({

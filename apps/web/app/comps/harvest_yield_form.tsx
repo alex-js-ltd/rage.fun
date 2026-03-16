@@ -2,11 +2,10 @@
 
 import { useActionState, useEffect } from 'react'
 
-import { useForm, getFormProps } from '@conform-to/react'
-import { parseWithZod } from '@conform-to/zod'
+import { useForm } from '@conform-to/react/future'
 
 import { HarvestYieldSchema } from '@/app/utils/schemas'
-import { type State, harvestYield } from '@/app/actions/harvest_yield'
+import { harvestYield } from '@/app/actions/harvest_yield'
 import { usePayer } from '@/app/hooks/use_payer'
 
 import { Toast } from '@/app/comps/ui/toast'
@@ -17,34 +16,23 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '@/app/comps/ui/tooltip'
 import { formatNumberSmart } from '@/app/utils/misc'
 import { type TokenCard } from '@/app/data/get_token_feed'
 
-const initialState: State = {}
-
 interface HarvestYieldProps {
 	token: TokenCard
 }
 
 export function HarvestYieldForm({ token }: HarvestYieldProps) {
-	const [lastResult, formAction, isPending] = useActionState(harvestYield, initialState)
+	const [lastResult, formAction, isPending] = useActionState(harvestYield, null)
 
-	const [form, fields] = useForm({
-		// Reuse the validation logic on the client
-		onValidate({ formData }) {
-			return parseWithZod(formData, {
-				// client side validation
-				schema: HarvestYieldSchema,
-			})
-		},
-
-		// Validate the form on blur event triggered
+	const { form } = useForm(HarvestYieldSchema, {
+		lastResult,
 		shouldValidate: 'onBlur',
 		shouldRevalidate: 'onInput',
-		lastResult,
 	})
 
 	const { serializedTx, errMessage } = lastResult || {}
 
 	const harvest = useSignAndSendTx(serializedTx)
-	const { isSuccess, setError } = harvest
+	const { setError } = harvest
 
 	useEffect(() => {
 		if (errMessage) {
@@ -69,7 +57,7 @@ export function HarvestYieldForm({ token }: HarvestYieldProps) {
 
 	return (
 		<div className="">
-			<form className="ml-auto w-fit" key={form.key} action={formAction} {...getFormProps(form)}>
+			<form className="ml-auto w-fit" key={form.key} action={formAction} {...form.props}>
 				{/* hidden inputs */}
 				<input name="creator" type="hidden" defaultValue={payer} />
 				<input name="mint" type="hidden" defaultValue={token.id} />

@@ -1,44 +1,36 @@
 'use server'
 
-import { SubmissionResult } from '@conform-to/react'
-import { parseWithZod } from '@conform-to/zod'
+import { parseSubmission, report } from '@conform-to/react/future'
 import { HarvestYieldSchema } from '@/app/utils/schemas'
 import { program, connection } from '@/app/utils/setup'
 import { getHarvestYieldIx, buildTransaction } from '@repo/rage'
 
 import { auth } from '@/app/auth'
-
-import { PublicKey } from '@solana/web3.js'
 import { isInstructionError, getErrorMessage } from '@/app/utils/setup'
 
-export type State =
-	| (SubmissionResult<string[]> & {
-			serializedTx?: Uint8Array
-			errMessage?: string
-			requestId?: string
-	  })
-	| undefined
-
-export async function harvestYield(_prevState: State, formData: FormData) {
+export async function harvestYield(_prevState: unknown, formData: FormData) {
 	const requestId = crypto.randomUUID()
 	const session = await auth()
 
-	const submission = parseWithZod(formData, {
-		schema: HarvestYieldSchema,
-	})
+	const submission = parseSubmission(formData)
+	const result = HarvestYieldSchema.safeParse(submission.payload)
 
-	if (submission.status !== 'success' || !session?.user?.id) {
+	if (!result.success) {
 		return {
-			...submission.reply(),
+			...report(submission, {
+				error: {
+					issues: result.error.issues,
+				},
+			}),
 			serializedTx: undefined,
 			errMessage: undefined,
 			requestId,
 		}
 	}
 
-	const { creator, mint } = submission.value
+	const { creator, mint } = result.data
 
-	const payer = new PublicKey(session?.user?.id)
+	const payer = creator
 
 	const ix = await getHarvestYieldIx({
 		program,
@@ -46,20 +38,22 @@ export async function harvestYield(_prevState: State, formData: FormData) {
 		mint,
 	})
 
-	const transaction = await buildTransaction({
+	const tx = await buildTransaction({
 		connection,
 		payer,
 		instructions: [ix],
 		signers: [],
 	})
 
-	const sim = await connection.simulateTransaction(transaction)
+	const sim = await connection.simulateTransaction(tx)
 
 	if (sim.value.err !== null && !isInstructionError(sim.value.err)) {
 		return {
-			...submission.reply(),
+			...report(submission, {
+				reset: true,
+			}),
 			serializedTx: undefined,
-			errMessage: 'unknown error',
+			errMessage: 'Insufficient balance',
 			requestId,
 		}
 	} else if (sim.value.err !== null && isInstructionError(sim.value.err)) {
@@ -67,7 +61,9 @@ export async function harvestYield(_prevState: State, formData: FormData) {
 		const errMessage = getErrorMessage(code)
 
 		return {
-			...submission.reply(),
+			...report(submission, {
+				reset: true,
+			}),
 			serializedTx: undefined,
 			errMessage,
 			requestId,
@@ -75,8 +71,8 @@ export async function harvestYield(_prevState: State, formData: FormData) {
 	}
 
 	return {
-		...submission.reply(),
-		serializedTx: transaction.serialize(),
+		...report(submission, { reset: true }),
+		serializedTx: tx.serialize(),
 		errMessage: undefined,
 		requestId,
 	}
