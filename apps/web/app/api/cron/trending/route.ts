@@ -3,7 +3,7 @@ import { kv } from '@vercel/kv'
 import { getServerEnv } from '@/app/utils/env'
 import { prisma } from '@repo/database'
 import dayjs from 'dayjs'
-import { getTrendingTokens } from '@/app/data/get_trending_tokens'
+import { getTrending } from '@/app/data/get_trending'
 import { selectTrending as select } from '@repo/database'
 import type { TrendingRow } from '@repo/database'
 
@@ -27,7 +27,7 @@ export async function GET(req: NextRequest) {
 		return NextResponse.json('💩', { status: 401 })
 	}
 
-	const previous = await getTrendingTokens()
+	const previous = await getTrending()
 
 	const since = dayjs().subtract(5, 'minute').toDate()
 
