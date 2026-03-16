@@ -2,9 +2,9 @@ import { Suspense } from 'react'
 import { SearchField, SearchResults } from '@/app/comps/search_panel'
 import { getSearchResults } from '@/app/data/get_search_results'
 import { type SearchParams } from '@/app/utils/schemas'
-// import { getTrendingTokens } from "@/app/data/get_trending_tokens";
-// import { Trending, TrendingFallBack } from "@/app/comps/trending";
-// import { Welcome } from "@/app/comps/welcome";
+import { getTrending } from '@/app/data/get_trending'
+import { Trending, TrendingFallBack } from '@/app/comps/trending'
+// import { Welcome } from '@/app/comps/welcome'
 import { auth } from '@/app/auth'
 // import { getDiscordId } from "@/app/data/get_discord_id";
 
@@ -21,9 +21,9 @@ export default async function Page(props: Props) {
 
 	const searchPromise = getSearchResults(search)
 
-	//   const trendingPromise = getTrendingTokens();
+	const trendingPromise = getTrending()
 
-	//   const discordId = await getDiscordId(session?.user?.id);
+	// const discordId = await getDiscordId(session?.user?.id)
 
 	return (
 		<div className="relative w-full">
@@ -39,15 +39,15 @@ export default async function Page(props: Props) {
 
 					<div className="h-0.5 bg-white/12.5 py-0" />
 
-					{/* <Suspense fallback={<TrendingFallBack />}>
-            <Trending trendingPromise={trendingPromise} />
-          </Suspense>
+					<Suspense fallback={<TrendingFallBack />}>
+						<Trending trendingPromise={trendingPromise} />
+					</Suspense>
 
-          {discordId || !session ? null : (
-            <Suspense fallback={null}>
-              <Welcome discordId={discordId} />
-            </Suspense>
-          )} */}
+					{/* {discordId || !session ? null : (
+						<Suspense fallback={null}>
+							<Welcome discordId={discordId} />
+						</Suspense>
+					)} */}
 				</div>
 			</div>
 		</div>
