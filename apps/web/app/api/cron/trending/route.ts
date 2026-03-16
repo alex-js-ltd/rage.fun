@@ -1,13 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { kv } from '@vercel/kv'
 import { getServerEnv } from '@/app/utils/env'
-import { prisma } from '@/app/utils/db'
-import { Prisma } from '@prisma/client'
+import { prisma } from '@repo/database'
 import dayjs from 'dayjs'
 import { getTrendingTokens } from '@/app/data/get_trending_tokens'
+import { selectTrending as select } from '@repo/database'
+import type { TrendingRow } from '@repo/database'
 
 import * as Ably from 'ably'
-import * as AblyEvents from '@/app/webhook/ably'
+import * as AblyEvents from '@/app/webhooks/ably'
 
 import 'server-only'
 
@@ -66,39 +67,15 @@ export async function GET(req: NextRequest) {
 	)
 }
 
-const select = Prisma.validator<Prisma.TokenSelect>()({
-	id: true,
-
-	metadata: {
-		select: {
-			symbol: true,
-
-			image: true,
-			thumbhash: true,
-		},
-	},
-
-	marketData: {
-		select: {
-			volume: true,
-		},
-	},
-})
-
-type TokenPayload = Prisma.TokenGetPayload<{
-	select: typeof select
-}>
-
-function getMetadata(metadata: NonNullable<TokenPayload['metadata']>) {
-	return { ...metadata, thumbhash: Buffer.from(metadata.thumbhash).toString('base64') }
-}
-
-function toTrending(token: TokenPayload) {
+function toTrending(token: TrendingRow) {
 	if (!token.metadata || !token.marketData) {
 		throw new Error('Missing required relations')
 	}
 
-	return { id: token.id, metadata: getMetadata(token.metadata) }
+	return {
+		id: token.id,
+		metadata: { ...token.metadata, thumbhash: Buffer.from(token.metadata.thumbhash).toString('base64') },
+	}
 }
 
-export type TokenTrending = ReturnType<typeof toTrending>
+export type Trending = ReturnType<typeof toTrending>

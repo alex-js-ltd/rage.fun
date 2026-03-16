@@ -1,9 +1,9 @@
-import { type TokenTrending } from '@/app/api/cron/trending/route'
+import { type Trending } from '@/app/api/cron/trending/route'
 import { kv } from '@vercel/kv'
 import 'server-only'
 
-export async function getTrendingTokens(): Promise<TokenTrending[]> {
-	const res = await kv.get<TokenTrending[]>('trending_tokens')
+export async function getTrending(): Promise<Trending[]> {
+	const res = await kv.get<Trending[]>('trending_tokens')
 
 	if (!res) {
 		return []
