@@ -38,13 +38,15 @@ export const HarvestYieldSchema = z.object({
 	mint: Mint,
 })
 
-export const AuthSchema = z.object({
-	domain: z.string(),
-	publicKey: z.string(),
-	statement: z.string(),
-	nonce: z.string(),
-	signature: z.string(),
-})
+export const AuthSchema = coerceFormValue(
+	z.object({
+		domain: z.string(),
+		publicKey: z.string(),
+		statement: z.string(),
+		nonce: z.string(),
+		signature: z.string(),
+	}),
+)
 
 // Basic signup schema (without async validation)
 export const CreateTokenSchema = coerceFormValue(

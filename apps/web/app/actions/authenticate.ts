@@ -2,22 +2,26 @@
 
 import { signIn, signOut } from '@/app/auth'
 import { AuthError } from 'next-auth'
-import { parseWithZod } from '@conform-to/zod'
 import { AuthSchema } from '@/app/utils/schemas'
+import { parseSubmission, report } from '@conform-to/react/future'
 
 export async function authenticate(_prevState: unknown, formData: FormData) {
-	const submission = parseWithZod(formData, {
-		schema: AuthSchema,
-	})
+	const submission = parseSubmission(formData)
 
-	if (submission.status !== 'success') {
+	const result = AuthSchema.safeParse(submission.payload)
+
+	if (!result.success) {
 		return {
-			...submission.reply(),
+			...report(submission, {
+				error: {
+					issues: result.error.issues,
+				},
+			}),
 		}
 	}
 
 	try {
-		await signIn('credentials', { ...submission.value, redirect: true })
+		await signIn('credentials', { ...result.data, redirect: true })
 	} catch (error) {
 		if (error instanceof AuthError) {
 			switch (error.type) {
