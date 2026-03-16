@@ -52,7 +52,7 @@ export function HarvestYieldForm({ token }: HarvestYieldProps) {
 	const disabled = isPending || harvest.isLoading || token.bondingCurve.tradingFees === 0
 
 	if (typeof payer === 'string' && payer !== token.creatorId) {
-		throw new Error('only the token creator can harvestthe yield')
+		throw new Error('only the token creator can harvest yield')
 	}
 
 	return (
