@@ -5,7 +5,7 @@ import Form from "next/form";
 import { use, useState, useEffect, useRef } from "react";
 
 import { usePathname, useSearchParams } from "next/navigation";
-import { type Search } from "@/app/data/search_tokens";
+import { type SearchResult } from "@/app/data/get_search_results";
 import {
   PopoverContent,
   PopoverRoot,
@@ -21,7 +21,7 @@ import { useBackpressure } from "@/app/hooks/use_backpressure";
 export function SearchResults({
   searchPromise,
 }: {
-  searchPromise: Promise<Search[]>;
+  searchPromise: Promise<SearchResult[]>;
 }) {
   const tokens = use(searchPromise);
 

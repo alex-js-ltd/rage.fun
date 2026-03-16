@@ -1,12 +1,11 @@
-import { prisma } from "@repo/database";
-import { type Prisma } from "@repo/database";
-
+import { prisma, selectSearchResults as select } from "@repo/database";
+import type { SearchResultRow } from "@repo/database";
 import "server-only";
 
-export async function searchTokens(symbol: string) {
+export async function getSearchResults(symbol: string) {
   if (symbol === "") return [];
 
-  const query = Prisma.validator<Prisma.TokenFindManyArgs>()({
+  const data = await prisma.token.findMany({
     where: {
       bondingCurve: { isNot: null },
       metadata: { symbol: { contains: symbol, mode: "insensitive" } },
@@ -17,40 +16,21 @@ export async function searchTokens(symbol: string) {
     select,
   });
 
-  const data = await prisma.token.findMany(query);
-
-  return data.map(toSearch);
+  return data.map(toSearchResult);
 }
 
-const select = Prisma.validator<Prisma.TokenSelect>()({
-  id: true,
-
-  metadata: {
-    select: {
-      symbol: true,
-      image: true,
-      thumbhash: true,
-    },
-  },
-});
-
-type SearchPayload = Prisma.TokenGetPayload<{
-  select: typeof select;
-}>;
-
-function getMetadata(metadata: NonNullable<SearchPayload["metadata"]>) {
-  return {
-    ...metadata,
-    thumbhash: Buffer.from(metadata.thumbhash).toString("base64"),
-  };
-}
-
-function toSearch(search: SearchPayload) {
+function toSearchResult(search: SearchResultRow) {
   if (!search.metadata) {
     throw new Error("Missing required relations");
   }
 
-  return { id: search.id, metadata: getMetadata(search.metadata) };
+  return {
+    id: search.id,
+    metadata: {
+      ...search.metadata,
+      thumbhash: Buffer.from(search.metadata.thumbhash).toString("base64"),
+    },
+  };
 }
 
-export type Search = ReturnType<typeof toSearch>;
+export type SearchResult = ReturnType<typeof toSearchResult>;
