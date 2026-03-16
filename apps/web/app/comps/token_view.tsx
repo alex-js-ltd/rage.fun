@@ -8,16 +8,20 @@ import { Button } from '@/app/comps/ui/button'
 import { IntervalPanel } from '@/app/comps/interval_panel'
 
 import { getCandlstickData } from '@/app/data/get_candlestick_data'
+import { getTransactionTable } from '@/app/data/get_transaction_data'
+import { getComments } from '@/app/data/get_comments'
+import { getSwapConfig } from '@/app/data/get_swap_config'
+import { getTokenLogo } from '@/app/data/get_token_logo'
+
 import { CandlestickChart } from '@/app/comps/candlestick_chart'
 
 import { TransactionTable } from '@/app/comps/transaction_table'
-import { getTransactionTable } from '@/app/data/get_transaction_data'
+
 import { HoldersTable } from '@/app/comps/holders_table'
 import { getTopHolders } from '@/app/data/get_top_holders'
 
 import { TokenPair, TokenPairFallback } from '@/app/comps/token_pair'
 
-import { getComments } from '@/app/data/get_comments'
 import { Comments } from '@/app/comps/comments'
 import { ReplyForm } from '@/app/comps/reply_form'
 import { TokenSearchParamsSchema } from '@/app/utils/schemas'
@@ -28,15 +32,12 @@ import { Header } from '@/app/comps/header'
 import { getPnLForToken } from '@/app/data/get_pnl_for_token'
 import { PnLTable } from '@/app/comps/pnl_table'
 
-import { getSwapConfig } from '@/app/data/get_swap_config'
-import { getTokenLogo } from '@/app/data/get_token_logo'
-
 type Props = {
 	params: Promise<{ mint: string }>
 	searchParams: Promise<{ [key: string]: string }>
 }
 
-export async function Token(props: Props) {
+export async function TokenView(props: Props) {
 	const [{ mint }, searchParams] = await Promise.all([props.params, props.searchParams])
 
 	const parse = TokenSearchParamsSchema.safeParse(searchParams)
