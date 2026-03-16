@@ -1,10 +1,10 @@
 "use client";
 
-import { Icon } from "./_icon";
+import { Icon } from "@/app/comps/ui/_icon";
 import Image from "next/image";
 import { useField } from "@conform-to/react";
 import { useImage } from "@/app/context/image_context";
-import { Spinner } from "@/app/comps/spinner";
+import { Spinner } from "@/app/comps/ui/spinner";
 
 export function PreviewImage() {
   const [{ errors }] = useField("file");
