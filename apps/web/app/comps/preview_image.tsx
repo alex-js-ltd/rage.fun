@@ -11,13 +11,9 @@ export function PreviewImage() {
   const { data: image, isLoading, clearImage } = useImage();
 
   return (
-    <div className="h-[69px] w-full">
-      <div
-        className={
-          "flex w-full gap-2 border-b border-white border-opacity-[0.125] p-3"
-        }
-      >
-        <div className="group relative h-[44px] w-[48px] shrink-0 rounded-lg border border-white/10 transition-all duration-500 ease-in-out flex items-center justify-center">
+    <div className="h-17.25 w-full">
+      <div className={"flex w-full gap-2 border-b border-white/5 p-3"}>
+        <div className="group relative h-11 w-12 shrink-0 rounded-lg border border-white/10 transition-all duration-500 ease-in-out flex items-center justify-center">
           {image ? (
             <>
               <button
@@ -29,7 +25,7 @@ export function PreviewImage() {
               </button>
               <div className="overflow-hidden rounded-lg group-hover:opacity-80">
                 <Image
-                  className="relative aspect-[48/44] object-cover object-center rounded-lg"
+                  className="relative aspect-48/44 object-cover object-center rounded-lg"
                   fill={true}
                   src={image}
                   alt="preview"

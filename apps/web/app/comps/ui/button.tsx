@@ -20,7 +20,7 @@ const buttonVariants = cva(undefined, {
       ].join(" "),
 
       submit_1: [
-        "shrink-0 whitespace-nowrap text-sm text-white border border-white border-opacity-[0.125] flex items-center justify-center",
+        "shrink-0 whitespace-nowrap text-sm text-white border border-white/5 flex items-center justify-center",
         "font-medium transition-colors focus-visible:outline-none focus-visible:ring-ring",
         "disabled:cursor-not-allowed",
         "flex items-center justify-center bg-transparent hover:bg-background-300 text-gray-400",
@@ -28,7 +28,7 @@ const buttonVariants = cva(undefined, {
       ].join(" "),
 
       submit_2: [
-        "shrink-0 whitespace-nowrap text-sm text-gray-400 border border-white border-opacity-[0.125] flex items-center justify-center",
+        "shrink-0 whitespace-nowrap text-sm text-gray-400 border border-white/5 flex items-center justify-center",
         "font-medium transition-colors focus-visible:outline-none focus-visible:ring-ring",
         "disabled:cursor-not-allowed ",
         "flex items-center justify-center bg-transparent",
@@ -42,7 +42,7 @@ const buttonVariants = cva(undefined, {
         "focus-visible:ring-0 h-8 py-2 flex select-none gap-2 text-white/70",
         "sm:px-3 cursor-pointer relative",
         "bg-transparent hover:bg-background-300 hover:text-gray-100 text-gray-400",
-        "px-2 focus:outline-none border border-white border-opacity-[0.125]",
+        "px-2 focus:outline-none border border-white/5",
       ].join(" "),
 
       tab: [

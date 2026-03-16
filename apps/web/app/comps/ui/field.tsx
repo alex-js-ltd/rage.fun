@@ -16,7 +16,7 @@ export function Field({
   return (
     <div
       className={cn(
-        "border-opacity-[0.125] relative flex h-[69px] w-full items-end border-b border-white p-3 transition duration-500 ease-in-out",
+        "relative flex h-17.25 w-full items-end border-b border-white/5 p-3 transition duration-500 ease-in-out",
         inputProps.className,
       )}
     >
