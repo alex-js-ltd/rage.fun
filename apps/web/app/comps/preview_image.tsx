@@ -2,12 +2,12 @@
 
 import { Icon } from "@/app/comps/ui/_icon";
 import Image from "next/image";
-import { useField } from "@conform-to/react";
+import { useField } from "@conform-to/react/future";
 import { useImage } from "@/app/context/image_context";
 import { Spinner } from "@/app/comps/ui/spinner";
 
 export function PreviewImage() {
-  const [{ errors }] = useField("file");
+  const { errors } = useField("file");
   const { data: image, isLoading, clearImage } = useImage();
 
   return (

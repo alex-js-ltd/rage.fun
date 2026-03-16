@@ -1,3 +1,5 @@
+"use server";
+
 import { prisma } from "@repo/database";
 import { cache } from "react";
 
