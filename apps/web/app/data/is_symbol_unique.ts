@@ -1,16 +1,14 @@
-"use server";
+'use server'
 
-import { prisma } from "@repo/database";
-import { cache } from "react";
+import { prisma } from '@repo/database'
+import { cache } from 'react'
 
-export const isSymbolUnique = cache(
-  async (symbol: string): Promise<boolean> => {
-    const token = await prisma.metadata.findUnique({
-      where: {
-        symbol: symbol,
-      },
-    });
+export const isSymbolUnique = cache(async (symbol: string): Promise<boolean> => {
+	const token = await prisma.metadata.findUnique({
+		where: {
+			symbol: symbol,
+		},
+	})
 
-    return token ? false : true;
-  },
-);
+	return token ? false : true
+})

@@ -1,116 +1,98 @@
-"use client";
+'use client'
 
-import { useActionState, useEffect } from "react";
+import { useActionState, useEffect } from 'react'
 
-import { useForm, getFormProps } from "@conform-to/react";
-import { parseWithZod } from "@conform-to/zod";
+import { useForm, getFormProps } from '@conform-to/react'
+import { parseWithZod } from '@conform-to/zod'
 
-import { HarvestYieldSchema } from "@/app/utils/schemas";
-import { type State, harvestYield } from "@/app/actions/harvest_yield";
-import { usePayer } from "@/app/hooks/use_payer";
+import { HarvestYieldSchema } from '@/app/utils/schemas'
+import { type State, harvestYield } from '@/app/actions/harvest_yield'
+import { usePayer } from '@/app/hooks/use_payer'
 
-import { Toast } from "@/app/comps/ui/toast";
-import { useToast } from "@/app/hooks/use_toast";
-import { useSignAndSendTx } from "@/app/hooks/use_sign_and_send_tx";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/app/comps/ui/tooltip";
+import { Toast } from '@/app/comps/ui/toast'
+import { useToast } from '@/app/hooks/use_toast'
+import { useSignAndSendTx } from '@/app/hooks/use_sign_and_send_tx'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/app/comps/ui/tooltip'
 
-import { formatNumberSmart } from "@/app/utils/misc";
-import { type TokenCard } from "@/app/data/get_token_feed";
+import { formatNumberSmart } from '@/app/utils/misc'
+import { type TokenCard } from '@/app/data/get_token_feed'
 
-const initialState: State = {};
+const initialState: State = {}
 
 interface HarvestYieldProps {
-  token: TokenCard;
+	token: TokenCard
 }
 
 export function HarvestYieldForm({ token }: HarvestYieldProps) {
-  const [lastResult, formAction, isPending] = useActionState(
-    harvestYield,
-    initialState,
-  );
+	const [lastResult, formAction, isPending] = useActionState(harvestYield, initialState)
 
-  const [form, fields] = useForm({
-    // Reuse the validation logic on the client
-    onValidate({ formData }) {
-      return parseWithZod(formData, {
-        // client side validation
-        schema: HarvestYieldSchema,
-      });
-    },
+	const [form, fields] = useForm({
+		// Reuse the validation logic on the client
+		onValidate({ formData }) {
+			return parseWithZod(formData, {
+				// client side validation
+				schema: HarvestYieldSchema,
+			})
+		},
 
-    // Validate the form on blur event triggered
-    shouldValidate: "onBlur",
-    shouldRevalidate: "onInput",
-    lastResult,
-  });
+		// Validate the form on blur event triggered
+		shouldValidate: 'onBlur',
+		shouldRevalidate: 'onInput',
+		lastResult,
+	})
 
-  const { serializedTx, errMessage } = lastResult || {};
+	const { serializedTx, errMessage } = lastResult || {}
 
-  const harvest = useSignAndSendTx(serializedTx);
-  const { isSuccess, setError } = harvest;
+	const harvest = useSignAndSendTx(serializedTx)
+	const { isSuccess, setError } = harvest
 
-  useEffect(() => {
-    if (errMessage) {
-      setError(errMessage);
-    }
-  }, [errMessage, setError]);
+	useEffect(() => {
+		if (errMessage) {
+			setError(errMessage)
+		}
+	}, [errMessage, setError])
 
-  const { getToastProps } = useToast(harvest);
+	const { getToastProps } = useToast(harvest)
 
-  const payer = usePayer();
+	const payer = usePayer()
 
-  const config = {
-    loading: `Harvesting ${token.metadata.symbol}`,
-    success: `Harvest confirmed`,
-  };
+	const config = {
+		loading: `Harvesting ${token.metadata.symbol}`,
+		success: `Harvest confirmed`,
+	}
 
-  const disabled =
-    isPending || harvest.isLoading || token.bondingCurve.tradingFees === 0;
+	const disabled = isPending || harvest.isLoading || token.bondingCurve.tradingFees === 0
 
-  if (typeof payer === "string" && payer !== token.creatorId) {
-    throw new Error("only the token creator can harvestthe yield");
-  }
+	if (typeof payer === 'string' && payer !== token.creatorId) {
+		throw new Error('only the token creator can harvestthe yield')
+	}
 
-  return (
-    <div className="">
-      <form
-        className="ml-auto w-fit"
-        key={form.key}
-        action={formAction}
-        {...getFormProps(form)}
-      >
-        {/* hidden inputs */}
-        <input name="creator" type="hidden" defaultValue={payer} />
-        <input name="mint" type="hidden" defaultValue={token.id} />
+	return (
+		<div className="">
+			<form className="ml-auto w-fit" key={form.key} action={formAction} {...getFormProps(form)}>
+				{/* hidden inputs */}
+				<input name="creator" type="hidden" defaultValue={payer} />
+				<input name="mint" type="hidden" defaultValue={token.id} />
 
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <button
-              className="bg-background-500 hover:bg-background-600 flex h-7 items-center rounded-full p-4 font-semibold"
-              aria-label="Harvest Yield"
-              disabled={disabled}
-              type="submit"
-            >
-              ${formatNumberSmart(token.bondingCurve.tradingFees)}
-            </button>
-          </TooltipTrigger>
+				<Tooltip>
+					<TooltipTrigger asChild>
+						<button
+							className="bg-background-500 hover:bg-background-600 flex h-7 items-center rounded-full p-4 font-semibold"
+							aria-label="Harvest Yield"
+							disabled={disabled}
+							type="submit"
+						>
+							${formatNumberSmart(token.bondingCurve.tradingFees)}
+						</button>
+					</TooltipTrigger>
 
-          <TooltipContent
-            variant={"submit_3"}
-            side="bottom"
-            sideOffset={6}
-            className="bg-background-100"
-          >
-            Harvest Yield
-          </TooltipContent>
-        </Tooltip>
-      </form>
+					<TooltipContent variant={'submit_3'} side="bottom" sideOffset={6} className="bg-background-100">
+						Harvest Yield
+					</TooltipContent>
+				</Tooltip>
+			</form>
 
-      <Toast {...getToastProps(config)} />
-    </div>
-  );
+			<Toast {...getToastProps(config)} />
+		</div>
+	)
 }

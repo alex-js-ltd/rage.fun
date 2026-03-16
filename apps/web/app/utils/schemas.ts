@@ -1,90 +1,84 @@
-import type { Intent } from "@conform-to/react";
-import { conformZodMessage } from "@conform-to/zod";
+import type { Intent } from '@conform-to/react'
+import { conformZodMessage } from '@conform-to/zod'
 
-import { coerceFormValue } from "@conform-to/zod/v3/future";
-import { memoize } from "@conform-to/react/future";
-import { z } from "zod";
-import { PublicKey } from "@solana/web3.js";
+import { coerceFormValue } from '@conform-to/zod/v3/future'
+import { memoize } from '@conform-to/react/future'
+import { z } from 'zod'
+import { PublicKey } from '@solana/web3.js'
 
 const Wallet = z.preprocess(
-  (value) => {
-    try {
-      if (typeof value === "string") {
-        return new PublicKey(value);
-      }
-    } catch {
-      return undefined;
-    }
-  },
-  z
-    .instanceof(PublicKey, { message: "Invalid public key" })
-    .refine((pk) => PublicKey.isOnCurve(pk.toBytes()), {
-      message: "Not on the ed25519 curve",
-    }),
-);
+	value => {
+		try {
+			if (typeof value === 'string') {
+				return new PublicKey(value)
+			}
+		} catch {
+			return undefined
+		}
+	},
+	z.instanceof(PublicKey, { message: 'Invalid public key' }).refine(pk => PublicKey.isOnCurve(pk.toBytes()), {
+		message: 'Not on the ed25519 curve',
+	}),
+)
 
-const Mint = z.string().transform((val) => new PublicKey(val));
+const Mint = z.string().transform(val => new PublicKey(val))
 
 export const SearchParamsSchema = z.object({
-  sortType: z
-    .enum(["createdAt", "lastTrade", "marketCap", "volume"])
-    .default("createdAt"),
-  sortOrder: z.enum(["asc", "desc"]).default("desc"),
-  cursorId: z.string().optional(),
-  search: z.string().optional(),
-  creatorId: z.string().optional(),
-});
+	sortType: z.enum(['createdAt', 'lastTrade', 'marketCap', 'volume']).default('createdAt'),
+	sortOrder: z.enum(['asc', 'desc']).default('desc'),
+	cursorId: z.string().optional(),
+	search: z.string().optional(),
+	creatorId: z.string().optional(),
+})
 
-export type SearchParams = z.infer<typeof SearchParamsSchema>;
+export type SearchParams = z.infer<typeof SearchParamsSchema>
 
 export const HarvestYieldSchema = z.object({
-  creator: Wallet,
-  mint: Mint,
-});
+	creator: Wallet,
+	mint: Mint,
+})
 
 export const AuthSchema = z.object({
-  domain: z.string(),
-  publicKey: z.string(),
-  statement: z.string(),
-  nonce: z.string(),
-  signature: z.string(),
-});
+	domain: z.string(),
+	publicKey: z.string(),
+	statement: z.string(),
+	nonce: z.string(),
+	signature: z.string(),
+})
 
 // Basic signup schema (without async validation)
 export const CreateTokenSchema = coerceFormValue(
-  z.object({
-    creator: Wallet,
-    name: z.string(),
-    symbol: z
-      .string({ required_error: "Required" })
-      .max(11, { message: "Symbol is too long" })
-      .min(2, { message: "Symbol is too short" }),
+	z.object({
+		creator: Wallet,
+		name: z.string(),
+		symbol: z
+			.string({ required_error: 'Required' })
+			.max(11, { message: 'Symbol is too long' })
+			.min(2, { message: 'Symbol is too short' }),
 
-    description: z.string(),
+		description: z.string(),
 
-    image: z.string(),
-  }),
-);
+		image: z.string(),
+	}),
+)
 
 // Schema creator with async validation
-export function createTokenSchema(checks: {
-  isSymbolUnique: (symbol: string) => Promise<boolean>;
-}) {
-  const isSymbolUnique = memoize(checks.isSymbolUnique);
+export function createTokenSchema(checks: { isSymbolUnique: (symbol: string) => Promise<boolean> }) {
+	const isSymbolUnique = memoize(checks.isSymbolUnique)
 
-  return coerceFormValue(
-    z.object({
-      creator: Wallet,
+	return coerceFormValue(
+		z.object({
+			creator: Wallet,
 
-      symbol: z
-        .string({ required_error: "Required" })
-        .transform((val) => `$${val.trim().toUpperCase()}`)
-        .refine((symbol) => isSymbolUnique(symbol), {
-          message: "Symbol is already used",
-        }),
-      name: z.string({ required_error: "Required" }),
-      description: z.string({ required_error: "Required" }),
-      image: z.string({ required_error: "Required" }),
-    }),
-  );
+			symbol: z
+				.string({ required_error: 'Required' })
+				.transform(val => `$${val.trim().toUpperCase()}`)
+				.refine(symbol => isSymbolUnique(symbol), {
+					message: 'Symbol is already used',
+				}),
+			name: z.string({ required_error: 'Required' }),
+			description: z.string({ required_error: 'Required' }),
+			image: z.string({ required_error: 'Required' }),
+		}),
+	)
 }
