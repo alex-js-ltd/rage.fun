@@ -6,8 +6,6 @@ import { useAsync } from '@/app/hooks/use_async'
 import * as Ably from 'ably'
 import { useChannel } from 'ably/react'
 import { Loading } from '@/app/comps/ui/loading'
-import { parseWithZod } from '@conform-to/zod'
-import { SearchParamsSchema } from '@/app/utils/schemas'
 import { client } from '@/app/utils/client'
 import { useInView } from 'react-intersection-observer'
 import { type TokenCard } from '@/app/data/get_token_feed'
@@ -165,18 +163,9 @@ export function TokenFeed({
 
 					if (isLoading || isLastPage) return
 
-					const formData = new FormData(e.currentTarget)
-
-					const submission = parseWithZod(formData, {
-						schema: SearchParamsSchema,
-					})
-
-					if (submission.status !== 'success') {
-						console.error(submission.error)
-						return
-					}
-
-					const params = new URLSearchParams(submission.value)
+					const params = new URLSearchParams(
+						Object.fromEntries(new FormData(e.currentTarget)) as Record<string, string>,
+					)
 
 					const promise = loadMore(params)
 
