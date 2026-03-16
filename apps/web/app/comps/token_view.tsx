@@ -1,24 +1,25 @@
 import { Suspense } from 'react'
 import Image from 'next/image'
 
+import { getCandlstickData } from '@/app/data/get_candlestick_data'
+import { getTransactionTable } from '@/app/data/get_transaction_data'
+import { getComments } from '@/app/data/get_comments'
+import { getSwapConfig } from '@/app/data/get_swap_config'
+import { getTokenLogo } from '@/app/data/get_token_logo'
+import { getTopHolders } from '@/app/data/get_top_holders'
+import { getPnLForToken } from '@/app/data/get_pnl_for_token'
+
 import { Loading } from '@/app/comps/ui/loading'
 import { Tabs, List, Trigger, Content } from '@/app/comps/ui/tabs'
 import { Button } from '@/app/comps/ui/button'
 
 import { IntervalPanel } from '@/app/comps/interval_panel'
 
-import { getCandlstickData } from '@/app/data/get_candlestick_data'
-import { getTransactionTable } from '@/app/data/get_transaction_data'
-import { getComments } from '@/app/data/get_comments'
-import { getSwapConfig } from '@/app/data/get_swap_config'
-import { getTokenLogo } from '@/app/data/get_token_logo'
-
 import { CandlestickChart } from '@/app/comps/candlestick_chart'
 
 import { TransactionTable } from '@/app/comps/transaction_table'
 
 import { HoldersTable } from '@/app/comps/holders_table'
-import { getTopHolders } from '@/app/data/get_top_holders'
 
 import { TokenPair, TokenPairFallback } from '@/app/comps/token_pair'
 
@@ -29,7 +30,6 @@ import { MobileDrawer } from '@/app/comps/mobile_drawer'
 import { SwapForm, SwapFormFallback } from '@/app/comps/swap_form'
 import { Header } from '@/app/comps/header'
 
-import { getPnLForToken } from '@/app/data/get_pnl_for_token'
 import { PnLTable } from '@/app/comps/pnl_table'
 
 type Props = {
