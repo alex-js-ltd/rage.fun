@@ -40,6 +40,7 @@
     "dayjs": "^1.11.20",
     "decimal.js": "^10.4.3",
     "geist": "^1.7.0",
+    "lightweight-charts": "^5.1.0",
     "next": "16.1.6",
     "next-auth": "5.0.0-beta.29",
     "pinata": "^2.5.5",
