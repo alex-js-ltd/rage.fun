@@ -81,3 +81,7 @@ body {
   background: var(--background-100);
   scrollbar-gutter: stable;
 }
+
+.css-2z6k9u {
+  background: transparent !important;
+}

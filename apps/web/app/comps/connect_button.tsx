@@ -26,7 +26,7 @@ export function ConnectButton() {
     return (
       <UnifiedWalletButton
         overrideContent={
-          <button className="bg-background-100 relative h-fit sm:rounded-full xl:flex items-center p-3 xl:w-41.25 w-full justify-center font-semibold text-text-200 xl:border xl:border-white/5  hover:bg-white/10">
+          <button className="relative overflow-hidden bg-background-100 h-auto sm:rounded-full xl:flex items-center p-3 xl:w-41.25 w-full justify-center font-semibold text-text-200 xl:border xl:border-white/10  hover:bg-white/10 cursor-pointer">
             <span className="hidden xl:block">Connect</span>
 
             <Icon name="connect" className="size-6 xl:hidden " />
@@ -40,11 +40,16 @@ export function ConnectButton() {
     <PopoverRoot>
       <PopoverTrigger className="sm:w-fit w-full">
         <div className="relative h-auto  xl:h-[65.55px] sm:rounded-full hover:bg-white/10 sm:w-fit flex items-center p-3 gap-3 justify-center">
-          <img
-            src={walletIcon}
-            alt={walletName}
-            className="size-6 sm:size-10 rounded-full"
-          />
+          {walletIcon && walletName && (
+            <>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={walletIcon}
+                alt={walletName}
+                className="size-6 sm:size-10 rounded-full"
+              />
+            </>
+          )}
           <span className="hidden xl:block text-sm text-text-200">
             {shortAddress(publicKey?.toBase58())}
           </span>
