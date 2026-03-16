@@ -1,5 +1,8 @@
 import type { Intent } from "@conform-to/react";
 import { conformZodMessage } from "@conform-to/zod";
+
+import { coerceFormValue } from "@conform-to/zod/v3/future";
+import { memoize } from "@conform-to/react/future";
 import { z } from "zod";
 import { PublicKey } from "@solana/web3.js";
 
@@ -46,3 +49,42 @@ export const AuthSchema = z.object({
   nonce: z.string(),
   signature: z.string(),
 });
+
+// Basic signup schema (without async validation)
+export const CreateTokenSchema = coerceFormValue(
+  z.object({
+    creator: Wallet,
+    name: z.string(),
+    symbol: z
+      .string({ required_error: "Required" })
+      .max(11, { message: "Symbol is too long" })
+      .min(2, { message: "Symbol is too short" }),
+
+    description: z.string(),
+
+    image: z.string(),
+  }),
+);
+
+// Schema creator with async validation
+export function createTokenSchema(checks: {
+  isSymbolUnique: (symbol: string) => Promise<boolean>;
+}) {
+  const isSymbolUnique = memoize(checks.isSymbolUnique);
+
+  return coerceFormValue(
+    z.object({
+      creator: Wallet,
+
+      symbol: z
+        .string({ required_error: "Required" })
+        .transform((val) => `$${val.trim().toUpperCase()}`)
+        .refine((symbol) => isSymbolUnique(symbol), {
+          message: "Symbol is already used",
+        }),
+      name: z.string({ required_error: "Required" }),
+      description: z.string({ required_error: "Required" }),
+      image: z.string({ required_error: "Required" }),
+    }),
+  );
+}
