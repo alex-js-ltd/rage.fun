@@ -92,3 +92,17 @@ export const ReplySchema = coerceFormValue(
 		parentCommentId: z.string().optional(),
 	}),
 )
+
+export const SwapSchema = coerceFormValue(
+	z.object({
+		payer: Wallet,
+		mint: Mint,
+		amount: z.string(),
+		decimals: z
+			.number({
+				invalid_type_error: 'Expected Number',
+			})
+			.max(9, { message: 'Decimal is too high' })
+			.min(2, { message: 'Decimal is too low' }),
+	}),
+)
