@@ -7,31 +7,30 @@ import { Button } from '@/app/comps/ui/button'
 import { Input } from '@/app/comps/ui/input'
 import { Loading } from '@/app/comps/ui/loading'
 import { Toast } from '@/app/comps/ui/toast'
-
-import { usePayer } from '@/app/hooks/use_payer'
-
-import { buyAction, sellAction } from '@/app/actions/swap_action'
-
 import { type ImageProps, TokenLogo, getTokenLogoProps, solLogoProps } from '@/app/comps/token_logo'
-
-import { type ToastDescription as ToastConfig, useToast } from '@/app/hooks/use_toast'
-import { useSignAndSendTx } from '@/app/hooks/use_sign_and_send_tx'
-
-import { useDebounceValue } from 'usehooks-ts'
-import { useAsync } from '@/app/hooks/use_async'
-import { client } from '@/app/utils/client'
-
-import * as Ably from 'ably'
-import { useChannel } from 'ably/react'
+import { Progress } from '@/app/comps/progress'
 import { UnifiedWalletButton as ConnectWallet } from '@jup-ag/wallet-adapter'
 
-import { Progress } from '@/app/comps/progress'
-import { formatCompactNumber } from '@/app/utils/misc'
-import { fromLamports } from '@repo/rage'
-import { BN } from '@coral-xyz/anchor'
-import { amountToUiAmount } from '@repo/rage'
-import { calculateBuyAmount, calculateSellPrice } from '@/app/utils/wasm'
+import { buy, sell } from '@/app/actions/swap'
 import { type SwapConfig } from '@/app/data/get_swap_config'
+
+import { usePayer } from '@/app/hooks/use_payer'
+import { type ToastDescription as ToastConfig, useToast } from '@/app/hooks/use_toast'
+import { useSignAndSendTx } from '@/app/hooks/use_sign_and_send_tx'
+import { useDebounceValue } from 'usehooks-ts'
+import { useAsync } from '@/app/hooks/use_async'
+
+import { client } from '@/app/utils/client'
+import * as Ably from 'ably'
+import { useChannel } from 'ably/react'
+
+import { formatCompactNumber } from '@/app/utils/misc'
+import { fromLamports, amountToUiAmount } from '@repo/rage'
+import { BN } from '@coral-xyz/anchor'
+import { getEnv } from '@/app/utils/env'
+import { WasmType } from '@/app/utils/schemas'
+
+const { BASE_URL } = getEnv()
 
 export interface SwapFormProps {
 	swapConfigPromise: Promise<SwapConfig>
@@ -41,7 +40,7 @@ interface FormProps {
 	badge: ReactNode
 	mint: string
 	decimals: number
-	action: typeof buyAction | typeof sellAction
+	action: typeof buy | typeof sell
 
 	toastConfig: ToastConfig
 	receive: string
@@ -61,6 +60,28 @@ async function getQuickOptionForBuy(params: URLSearchParams): Promise<string> {
 async function getQuickOptionForSell(params: URLSearchParams): Promise<string> {
 	return client<string>(`/api/quick_option/sell?${params}`, {
 		method: 'GET',
+	})
+}
+
+async function calculateBuyAmount(params: WasmType): Promise<string> {
+	return client<string>(`${BASE_URL}/api/wasm/calculate_buy_amount`, {
+		method: 'POST',
+		body: JSON.stringify(params),
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		cache: 'no-store',
+	})
+}
+
+async function calculateSellPrice(params: WasmType): Promise<string> {
+	return client<string>(`${BASE_URL}/api/wasm/calculate_sell_price`, {
+		method: 'POST',
+		body: JSON.stringify(params),
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		cache: 'no-store',
 	})
 }
 
@@ -185,7 +206,7 @@ function Buy({ token }: { token: SwapConfig }) {
 			badge={<TokenBadge {...solLogoProps} />}
 			mint={mint}
 			decimals={9}
-			action={buyAction}
+			action={buy}
 			toastConfig={{ loading: `Minting ${symbol}`, success: `Mint confirmed` }}
 			receive={symbol}
 			getQuote={getQuote}
@@ -251,7 +272,7 @@ function Sell({ token }: { token: SwapConfig }) {
 			badge={<TokenBadge {...getTokenLogoProps(token.metadata)} className="size-8 rounded-full" />}
 			mint={mint}
 			decimals={decimals}
-			action={sellAction}
+			action={sell}
 			toastConfig={{ loading: `Burning ${symbol}`, success: `Burn confirmed` }}
 			receive="SOL"
 			getQuote={getQuote}
@@ -278,13 +299,13 @@ function Form({
 }: FormProps) {
 	const [lastResult, formAction, isPending] = useActionState(action, undefined)
 
-	const { serializedTx, errMessage, requestId, ...rest } = lastResult || {}
+	const { serializedTx, errMessage, requestId } = lastResult || {}
 
 	const [amount, setAmount] = useState('')
 
 	const swap = useSignAndSendTx(serializedTx)
 
-	const { setError, reset, isLoading, isSuccess } = swap
+	const { setError, isLoading, isSuccess } = swap
 
 	useEffect(() => {
 		if (errMessage) {
@@ -294,6 +315,7 @@ function Form({
 
 	useEffect(() => {
 		if (isSuccess) {
+			/* eslint-disable react-hooks/set-state-in-effect */
 			setAmount('')
 		}
 	}, [isSuccess])
@@ -302,7 +324,7 @@ function Form({
 
 	const payer = usePayer()
 
-	const { run, data: quote, setData } = useAsync<string | null>()
+	const { run, data: quote } = useAsync<string | null>()
 
 	const [uiAmount] = useDebounceValue(amount, 300)
 
