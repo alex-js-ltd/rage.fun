@@ -1,3 +1,4 @@
+'use server'
 import { parseSubmission, report } from '@conform-to/react/future'
 import { SwapSchema } from '@/app/utils/schemas'
 import { program, connection, isInstructionError, getErrorMessage } from '@/app/utils/setup'
