@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { SwapOptionSchema } from '@/app/utils/schemas'
-import { parseWithZod } from '@conform-to/zod'
 import { BN } from '@coral-xyz/anchor'
 import { fromLamports } from '@repo/rage'
 import { getDecimals } from '@/app/data/get_decimals'
@@ -8,6 +7,9 @@ import { auth } from '@/app/auth'
 import { PublicKey } from '@solana/web3.js'
 import { takePercentage } from '@/app/utils/misc'
 import { getTokenBalance } from '@/app/data/get_token_balance'
+
+import { parseSubmission, report } from '@conform-to/react/future'
+
 import 'server-only'
 
 export async function GET(req: NextRequest) {
@@ -21,15 +23,24 @@ export async function GET(req: NextRequest) {
 
 	const searchParams = req.nextUrl.searchParams
 
-	const submission = parseWithZod(searchParams, {
-		schema: SwapOptionSchema,
-	})
+	const submission = parseSubmission(searchParams)
 
-	if (submission.status !== 'success') {
-		return NextResponse.json(submission.reply(), { status: 404 })
+	const result = SwapOptionSchema.safeParse(submission.payload)
+
+	if (!result.success) {
+		return NextResponse.json(
+			{
+				...report(submission, {
+					error: {
+						issues: result.error.issues,
+					},
+				}),
+			},
+			{ status: 404 },
+		)
 	}
 
-	const { percent, mint } = submission.value
+	const { percent, mint } = result.data
 
 	const balance = await getTokenBalance(mint, signer)
 
@@ -45,10 +56,10 @@ export async function GET(req: NextRequest) {
 
 	const decimals = await getDecimals(mint.toBase58())
 
-	const result = fromLamports(amount, decimals).toFixed(decimals)
+	const res = fromLamports(amount, decimals).toFixed(decimals)
 
 	return NextResponse.json(
-		result,
+		res,
 
 		{ status: 200 },
 	)

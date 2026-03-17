@@ -1,13 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { SwapOptionSchema } from '@/app/utils/schemas'
-import { parseWithZod } from '@conform-to/zod'
 import { connection } from '@/app/utils/setup'
 import { BN } from '@coral-xyz/anchor'
 import { fromLamports } from '@repo/rage'
 import { auth } from '@/app/auth'
 import { PublicKey } from '@solana/web3.js'
 import { takePercentage } from '@/app/utils/misc'
-
+import { parseSubmission, report } from '@conform-to/react/future'
 const TX_FEE_BUFFER = BigInt(5_000_000)
 
 export async function GET(req: NextRequest) {
@@ -21,15 +20,24 @@ export async function GET(req: NextRequest) {
 
 	const searchParams = req.nextUrl.searchParams
 
-	const submission = parseWithZod(searchParams, {
-		schema: SwapOptionSchema,
-	})
+	const submission = parseSubmission(searchParams)
 
-	if (submission.status !== 'success') {
-		return NextResponse.json(submission.reply(), { status: 404 })
+	const result = SwapOptionSchema.safeParse(submission.payload)
+
+	if (!result.success) {
+		return NextResponse.json(
+			{
+				...report(submission, {
+					error: {
+						issues: result.error.issues,
+					},
+				}),
+			},
+			{ status: 404 },
+		)
 	}
 
-	const { percent } = submission.value
+	const { percent } = result.data
 
 	const lamports = await connection.getBalance(signer, 'confirmed')
 
@@ -47,10 +55,10 @@ export async function GET(req: NextRequest) {
 
 	const amount = takePercentage(new BN(effective.toString()), percent)
 
-	const result = fromLamports(amount, 9).toFixed(9)
+	const res = fromLamports(amount, 9).toFixed(9)
 
 	return NextResponse.json(
-		result,
+		res,
 
 		{ status: 200 },
 	)
