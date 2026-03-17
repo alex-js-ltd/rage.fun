@@ -1,6 +1,11 @@
 import Decimal from 'decimal.js'
 import { clsx, type ClassValue } from 'clsx'
 import { twMerge } from 'tailwind-merge'
+import { BN } from '@coral-xyz/anchor'
+import dayjs from 'dayjs'
+import relativeTime from 'dayjs/plugin/relativeTime'
+
+dayjs.extend(relativeTime)
 
 export function calculatePercentage(current: bigint, target: bigint) {
 	return new Decimal(current.toString()).div(target.toString()).mul(100).toNumber()
@@ -79,4 +84,10 @@ export function formatTinyNumber(num: number, precision = 3): string {
 	const subscript = [...leadingZeros.toString()].map(d => String.fromCharCode(0x2080 + Number(d))).join('')
 
 	return `0.0${subscript}${significant}`
+}
+
+export function timeFromNow(time: string) {
+	const millis = new BN(time).toNumber() * 1000
+	const date = new Date(millis)
+	return dayjs(date).fromNow()
 }
