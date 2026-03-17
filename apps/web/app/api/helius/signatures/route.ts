@@ -2,8 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { Connection } from '@solana/web3.js'
 import { getServerEnv } from '@/app/utils/env'
 import * as Ably from 'ably'
-
-import * as AblyEvents from '@/app/webhook/ably'
+import * as AblyEvents from '@/app/webhooks/ably'
 
 const { HELIUS_SECRET, RPC_URL, ABLY_API_KEY } = getServerEnv()
 
