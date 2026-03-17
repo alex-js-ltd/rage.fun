@@ -26,7 +26,7 @@ import { MobileDrawer } from '@/app/comps/mobile_drawer'
 
 import { SwapForm, SwapFormFallback } from '@/app/comps/swap_form'
 
-import { Header } from '@/app/comps/header'
+import { PageHeader } from '@/app/comps/page_header'
 import { TokenSearchParamsSchema } from '@/app/utils/schemas'
 
 type Props = {
@@ -57,7 +57,7 @@ export async function TokenView(props: Props) {
 
 	return (
 		<div className="flex flex-col w-full min-h-[100vh] border-x border-white border-opacity-[0.125] bg-background-100 relative max-w-[600px]">
-			<Header />
+			<PageHeader />
 
 			<div className="relative overflow-y-hidden flex-1 overflow-x-hidden pb-40 w-full">
 				<div className="border-t border-white border-opacity-[0.125] h-fit min-h-[255px] w-full">
