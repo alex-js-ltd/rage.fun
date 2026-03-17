@@ -3,9 +3,7 @@
 import { UnifiedWalletButton, useUnifiedWallet } from '@jup-ag/wallet-adapter'
 import { shortAddress } from '@/app/utils/misc'
 import { Icon } from '@/app/comps/ui/_icon'
-
 import { PopoverRoot, PopoverTrigger, PopoverPortal, PopoverContent, PopoverArrow } from '@/app/comps/ui/popover'
-
 import { useAsync } from '@/app/hooks/use_async'
 
 export function ConnectButton() {

@@ -86,3 +86,12 @@ export function createTokenSchema(checks: { isSymbolUnique: (symbol: string) => 
 		}),
 	)
 }
+
+export const ReplySchema = coerceFormValue(
+	z.object({
+		publicKey: Wallet,
+		content: z.string().max(280, 'Comment cannot exceed 280 characters'),
+		mint: Mint,
+		parentCommentId: z.string().optional(),
+	}),
+)

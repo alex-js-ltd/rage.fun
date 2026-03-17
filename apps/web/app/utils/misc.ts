@@ -91,3 +91,7 @@ export function timeFromNow(time: string) {
 	const date = new Date(millis)
 	return dayjs(date).fromNow()
 }
+
+export function timeAgo(date: Date): string {
+	return dayjs(date).fromNow()
+}

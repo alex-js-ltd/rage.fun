@@ -5,7 +5,7 @@ import { useCopyToClipboard } from 'usehooks-ts'
 
 export function Blink({ mint }: { mint: string }) {
 	const [copied, setCopied] = useState(false)
-	const [_, copy] = useCopyToClipboard()
+	const [, copy] = useCopyToClipboard()
 
 	function handleClick() {
 		copy(buyBlink(mint))
