@@ -11,7 +11,7 @@ export default async function Page(props: Props) {
 	return <TokenView {...props} />
 }
 
-export async function generateMetadata({ params, searchParams }: Props, parent: ResolvingMetadata): Promise<Metadata> {
+export async function generateMetadata({ params }: Props, parent: ResolvingMetadata): Promise<Metadata> {
 	const id = (await params).mint
 
 	// fetch post information
