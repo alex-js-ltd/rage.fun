@@ -48,6 +48,7 @@
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "react-intersection-observer": "^10.0.3",
+    "react-swipeable": "^7.0.2",
     "sharp": "^0.34.5",
     "tailwind-merge": "^3.5.0",
     "thumbhash": "^0.1.1",
