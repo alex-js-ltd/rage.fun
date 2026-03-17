@@ -105,7 +105,7 @@ export function SwapForm({ swapConfigPromise }: SwapFormProps) {
 	return (
 		<>
 			<Tabs value={tab} onValueChange={v => setTab(v as 'buy' | 'sell')} className="relative flex flex-col gap-4 ">
-				<List className="relative flex items-center gap-2 justify-between border border-white border-opacity-[0.125] rounded-full h-[40px]">
+				<List className="relative flex items-center gap-2 justify-between border border-white/10 rounded-full h-[40px]">
 					<Trigger value="buy" asChild className="flex-1">
 						<button className="data-[state=active]:text-buy-100 font-semibold text-white/70 cursor-pointer ">
 							Buy
@@ -145,7 +145,7 @@ export function SwapForm({ swapConfigPromise }: SwapFormProps) {
 			</Tabs>
 
 			<div className="py-8">
-				<div className="h-[2px] w-full border-b-[2px] border-white opacity-[0.125]" />
+				<div className="h-[2px] w-full border-b-[2px] border-white/10" />
 			</div>
 
 			<Progress mint={mint} progress={state.bondingCurve.progress} />
@@ -369,7 +369,7 @@ function Form({
 					<input name="mint" type="hidden" defaultValue={mint} />
 					<input name="decimals" type="hidden" defaultValue={decimals} />
 					{quote && <input name="quote" type="hidden" defaultValue={quote} />}
-					<div className="relative transition-colors flex gap-2 items-center rounded-full border border-white border-opacity-[0.125] cursor-default">
+					<div className="relative transition-colors flex gap-2 items-center rounded-full border border-white/10 cursor-default">
 						<Input
 							variant="amount"
 							{...getPlaceholder(decimals)}
@@ -485,7 +485,7 @@ export function SwapFormFallback() {
 	return (
 		<>
 			<Tabs value={tab} className="relative flex flex-col gap-4 ">
-				<List className="relative flex items-center gap-2 justify-between border border-white border-opacity-[0.125] rounded-full h-[40px]">
+				<List className="relative flex items-center gap-2 justify-between border border-white/10 rounded-full h-[40px]">
 					<Trigger value="buy" asChild className="flex-1">
 						<button className="data-[state=active]:text-emerald-400 font-semibold text-white/70 cursor-pointer pointer-events-none ">
 							Buy
@@ -501,7 +501,7 @@ export function SwapFormFallback() {
 					{/* Sliding pill (50% width) */}
 					<div
 						aria-hidden
-						className={`absolute top-1 bottom-1 w-[calc(50%-0.25rem)] rounded-full bg-white/[0.08]
+						className={`absolute top-1 bottom-1 w-[calc(50%-0.25rem)] rounded-full bg-white/8
                       transition-all duration-300 ease-out
                       ${tab === 'buy' ? 'left-1' : 'left-[calc(50%)]'}`}
 					/>
@@ -514,7 +514,7 @@ export function SwapFormFallback() {
 				>
 					<div className="relative z-10 flex w-full flex-col divide-zinc-600 ">
 						<form className="relative transition-colors flex w-full flex-col gap-4">
-							<div className="relative transition-colors flex gap-2 items-center rounded-full border border-white border-opacity-[0.125] cursor-default">
+							<div className="relative transition-colors flex gap-2 items-center rounded-full border border-white/10 cursor-default">
 								<Input variant="amount" {...getPlaceholder(9)} type="number" name="amount" inputMode="numeric" />
 
 								<Loading i={0} className="size-6 rounded-full mr-2" />
@@ -538,7 +538,7 @@ export function SwapFormFallback() {
 				>
 					<div className="relative z-10 flex w-full flex-col divide-zinc-600 ">
 						<form className="relative transition-colors flex w-full flex-col gap-4">
-							<div className="relative transition-colors flex gap-2 items-center rounded-full border border-white border-opacity-[0.125] cursor-default">
+							<div className="relative transition-colors flex gap-2 items-center rounded-full border border-white/10 cursor-default">
 								<Input variant="amount" {...getPlaceholder(9)} type="number" name="amount" inputMode="numeric" />
 
 								<Loading i={0} className="size-6 rounded-full mr-2" />
@@ -555,10 +555,10 @@ export function SwapFormFallback() {
 			</Tabs>
 
 			<div className="py-8">
-				<div className="h-[2px] w-full border-b-[2px] border-white opacity-[0.125]" />
+				<div className="h-[2px] w-full border-b-[2px] border-white/10" />
 			</div>
 
-			<div className="h-[40px] p-2 border border-white border-opacity-[0.125] rounded-full">
+			<div className="h-[40px] p-2 border border-white/10 rounded-full">
 				<Loading i={0} className="h-full rounded-full w-full" />
 			</div>
 		</>
