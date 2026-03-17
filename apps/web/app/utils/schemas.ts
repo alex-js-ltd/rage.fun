@@ -168,3 +168,9 @@ export const TokenSearchParamsSchema = z
 				return { interval: 300 } // fallback to 5m
 		}
 	})
+
+export const HeliusSchema = z.array(
+	z.object({
+		signature: z.string(),
+	}),
+)
