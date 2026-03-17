@@ -124,10 +124,12 @@ export const WasmSchema = z.object({
 
 export type WasmType = z.infer<typeof WasmSchema>
 
-export const SwapOptionSchema = z.object({
-	mint: Mint,
-	percent: z.number(),
-})
+export const SwapOptionSchema = coerceFormValue(
+	z.object({
+		mint: Mint,
+		percent: z.number(),
+	}),
+)
 
 export const TokenSearchParamsSchema = z
 	.object({
