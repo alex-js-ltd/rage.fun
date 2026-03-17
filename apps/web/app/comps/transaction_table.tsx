@@ -13,12 +13,12 @@ import { type TransactionData } from '@/app/data/get_transaction_data'
 
 export type TransactionTableProps = {
 	transactionPromise: Promise<TransactionData[]>
-	tokenLogoPromise: Promise<TokenMetadata>
+	metadataPromise: Promise<TokenMetadata>
 }
 
-export function TransactionTable({ transactionPromise, tokenLogoPromise }: TransactionTableProps) {
+export function TransactionTable({ transactionPromise, metadataPromise }: TransactionTableProps) {
 	const initial = use(transactionPromise)
-	const metadata = use(tokenLogoPromise)
+	const metadata = use(metadataPromise)
 
 	const [rows, setRows] = useState<(TransactionData & { animate: boolean })[]>(() =>
 		initial.map(r => ({ ...r, animate: false })),

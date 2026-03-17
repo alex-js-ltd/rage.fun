@@ -7,7 +7,6 @@ import { auth } from '@/app/auth'
 import { PublicKey } from '@solana/web3.js'
 import { takePercentage } from '@/app/utils/misc'
 import { getTokenBalance } from '@/app/data/get_token_balance'
-
 import { parseSubmission, report } from '@conform-to/react/future'
 
 import 'server-only'

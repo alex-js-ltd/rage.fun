@@ -103,7 +103,7 @@ export async function TokenView(props: Props) {
 						className="data-[state=inactive]:absolute data-[state=inactive]:opacity-0 data-[state=inactive]:pointer-events-none max-h-[172px]"
 					>
 						<Suspense fallback={<Loading i={1} className="w-full h-[172px] " />}>
-							<TransactionTable transactionPromise={transactionPromise} tokenLogoPromise={tokenLogoPromise} />
+							<TransactionTable transactionPromise={transactionPromise} metadataPromise={metadataPromise} />
 						</Suspense>
 					</Content>
 
