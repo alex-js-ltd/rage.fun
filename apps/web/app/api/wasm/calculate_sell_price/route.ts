@@ -2,12 +2,14 @@ import { NextRequest, NextResponse } from 'next/server'
 import { WasmSchema } from '@/app/utils/schemas'
 
 import type * as calculateWasmModule from '../../../../calculate.wasm'
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import calculateWasm from '../../../../calculate.wasm?module'
 
 const module$ = WebAssembly.instantiate(calculateWasm)
 
 export async function POST(req: NextRequest) {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	const instance = (await module$) as any
 	const exports = instance.exports as typeof calculateWasmModule
 	const { calculate_sell_price, ui_amount_to_amount } = exports
