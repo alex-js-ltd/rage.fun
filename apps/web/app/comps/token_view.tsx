@@ -56,12 +56,12 @@ export async function TokenView(props: Props) {
 	const metadataPromise = getTokenMetadata(mint)
 
 	return (
-		<div className="flex flex-col w-full min-h-[100vh] border-x border-white border-opacity-[0.125] bg-background-100 relative max-w-[600px]">
+		<div className="flex flex-col w-full min-h-[100vh] border-x border-white/10 bg-background-100 relative max-w-[600px]">
 			<PageHeader />
 
 			<div className="relative overflow-y-hidden flex-1 overflow-x-hidden pb-40 w-full">
-				<div className="border-t border-white border-opacity-[0.125] h-fit min-h-[255px] w-full">
-					<div className="flex items-center justify-between h-[52px] border-b border-white border-opacity-[0.125] pl-3">
+				<div className="border-t border-white/10  h-fit min-h-[255px] w-full">
+					<div className="flex items-center justify-between h-[52px] border-b border-white/10 pl-3">
 						<Suspense fallback={<TokenPairFallback />}>
 							<TokenPair metadataPromise={metadataPromise} />
 						</Suspense>
@@ -77,7 +77,7 @@ export async function TokenView(props: Props) {
 				</div>
 
 				<Tabs className="relative z-0 flex flex-col">
-					<List className="flex items-center px-2 h-[40px] border-white border-b border-opacity-[0.125]">
+					<List className="flex items-center px-2 h-[40px] border-white/10 border-b ">
 						<Trigger value="tab1" asChild>
 							<Button className="data-[state=active]:border-white border-b border-transparent" variant="chart">
 								Transactions
@@ -139,7 +139,7 @@ export async function TokenView(props: Props) {
 				trigger={
 					<div className="z-50 sticky bottom-[calc(52px+16px)] sm:bottom-4 w-full lg:hidden">
 						<div className="flex justify-end pr-4">
-							<Button className="ml-auto pointer-events-auto rounded-full border border-white border-opacity-[0.125] bg-rage-100">
+							<Button className="ml-auto pointer-events-auto rounded-full border border-white/10 bg-rage-100">
 								<Image src="/rage.png" alt="logo" width={56} height={56} />
 							</Button>
 						</div>

@@ -10,6 +10,7 @@ import { getServerEnv } from '@/app/utils/env'
 import { linkDiscordAccount, assignCreatorRole, addUserToGuild } from '@/app/webhooks/discord'
 import { PrismaAdapter } from '@auth/prisma-adapter'
 import { prisma } from '@repo/database'
+import 'server-only'
 
 const { AUTH_DISCORD_ID, AUTH_DISCORD_SECRET } = getServerEnv()
 

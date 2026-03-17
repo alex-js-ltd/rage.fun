@@ -28,7 +28,7 @@ export function Comments({ mint, commentsPromise }: { mint: string; commentsProm
 		<ul>
 			{state.map(c => (
 				<li key={c.id}>
-					<article className="group relative flex flex-col w-full min-h-[100px] overflow-hidden border-b border-white border-opacity-[0.125] hover:bg-white/5 p-4">
+					<article className="group relative flex flex-col w-full min-h-[100px] overflow-hidden border-b border-white/10 hover:bg-white/5 p-4">
 						<div className="flex gap-2">
 							<div className="flex flex-col gap-2">
 								<div className="flex gap-2 items-center">

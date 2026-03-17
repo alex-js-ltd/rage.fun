@@ -19,7 +19,7 @@ export function ReplyForm({ mint }: { mint: string }) {
 	const publicKey = usePayer()
 
 	return (
-		<div className="self-start relative z-10 flex w-full flex-col divide-zinc-600 overflow-hidden  border-b border-white border-opacity-[0.125] cursor-default">
+		<div className="self-start relative z-10 flex w-full flex-col divide-zinc-600 overflow-hidden  border-b border-white/10 cursor-default">
 			<form className="relative rounded-xl transition-colors" action={formAction} {...form.props}>
 				{/* hidden inputs */}
 				<input name="publicKey" type="hidden" defaultValue={publicKey} />
