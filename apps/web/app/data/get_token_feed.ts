@@ -198,7 +198,7 @@ function getMarketData(marketData: NonNullable<TokenFeedRow['marketData']>, solP
 	}
 }
 
-function toTokenCard(token: TokenFeedRow, solPrice: number) {
+export function toTokenCard(token: TokenFeedRow, solPrice: number) {
 	if (!token.metadata || !token.bondingCurve || !token.marketData) {
 		throw new Error('Missing required relations')
 	}
@@ -216,3 +216,14 @@ function toTokenCard(token: TokenFeedRow, solPrice: number) {
 type UpdateType = 'Buy' | 'Sell' | 'Create' | 'Harvest' | undefined
 
 export type TokenCard = ReturnType<typeof toTokenCard>
+
+export async function getTokenCard(mint: string) {
+	const token = await prisma.token.findUniqueOrThrow({
+		where: { id: mint },
+		select,
+	})
+
+	const solPrice = await getSolPrice()
+
+	return toTokenCard(token, solPrice)
+}
