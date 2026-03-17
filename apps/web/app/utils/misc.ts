@@ -61,3 +61,22 @@ export function getErrorMessage(error: unknown) {
 	console.error('unable to get error message for error', error)
 	return 'unexpected error'
 }
+
+export function formatTinyNumber(num: number, precision = 3): string {
+	if (num === 0) return '0.0₀000'
+
+	// force a fixed-point string so we keep the leading zeros
+	const fixed = num.toFixed(precision + 12) // pad extra digits
+	const [, decimals = ''] = fixed.split('.')
+
+	// count zeros *after* the decimal
+	const leadingZeros = decimals.match(/^0+/)?.[0]?.length ?? 0
+
+	// slice the significant digits right after those zeros
+	const significant = decimals.slice(leadingZeros, leadingZeros + precision)
+
+	// build unicode subscript
+	const subscript = [...leadingZeros.toString()].map(d => String.fromCharCode(0x2080 + Number(d))).join('')
+
+	return `0.0${subscript}${significant}`
+}

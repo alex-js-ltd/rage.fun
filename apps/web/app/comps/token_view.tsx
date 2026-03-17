@@ -5,9 +5,9 @@ import { getCandlstickData } from '@/app/data/get_candlestick_data'
 import { getTransactionTable } from '@/app/data/get_transaction_data'
 import { getComments } from '@/app/data/get_comments'
 import { getSwapConfig } from '@/app/data/get_swap_config'
-import { getTokenLogo } from '@/app/data/get_token_logo'
+import { getTokenMetadata } from '@/app/data/get_token_metadata'
 import { getTopHolders } from '@/app/data/get_top_holders'
-import { getPnLForToken } from '@/app/data/get_pnl_for_token'
+import { getTokenPnl } from '@/app/data/get_token_pnl'
 
 import { Loading } from '@/app/comps/ui/loading'
 import { Tabs, List, Trigger, Content } from '@/app/comps/ui/tabs'
@@ -54,9 +54,9 @@ export async function TokenView(props: Props) {
 
 	const commentsPromise = getComments(mint)
 
-	const pnlPromise = getPnLForToken(mint)
+	const pnlPromise = getTokenPnl(mint)
 
-	const tokenLogoPromise = getTokenLogo(mint)
+	const metadataPromise = getTokenMetadata(mint)
 
 	return (
 		<div className="flex flex-col w-full min-h-[100vh] border-x border-white border-opacity-[0.125] bg-background-100 relative max-w-[600px]">
@@ -66,7 +66,7 @@ export async function TokenView(props: Props) {
 				<div className="border-t border-white border-opacity-[0.125] h-fit min-h-[255px] w-full">
 					<div className="flex items-center justify-between h-[52px] border-b border-white border-opacity-[0.125] pl-3">
 						<Suspense fallback={<TokenPairFallback />}>
-							<TokenPair tokenLogoPromise={tokenLogoPromise} />
+							<TokenPair metadataPromise={metadataPromise} />
 						</Suspense>
 
 						<Suspense fallback={null}>
