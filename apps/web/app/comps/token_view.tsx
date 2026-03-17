@@ -13,24 +13,21 @@ import { Loading } from '@/app/comps/ui/loading'
 import { Tabs, List, Trigger, Content } from '@/app/comps/ui/tabs'
 import { Button } from '@/app/comps/ui/button'
 
-import { IntervalPanel } from '@/app/comps/interval_panel'
-
-import { CandlestickChart } from '@/app/comps/candlestick_chart'
-
-import { TransactionTable } from '@/app/comps/transaction_table'
-
-import { HoldersTable } from '@/app/comps/holders_table'
-
 import { TokenPair, TokenPairFallback } from '@/app/comps/token_pair'
-
+import { IntervalPanel } from '@/app/comps/interval_panel'
+import { CandlestickChart } from '@/app/comps/candlestick_chart'
+import { TransactionTable } from '@/app/comps/transaction_table'
+import { HoldersTable } from '@/app/comps/holders_table'
 import { Comments } from '@/app/comps/comments'
 import { ReplyForm } from '@/app/comps/reply_form'
-import { TokenSearchParamsSchema } from '@/app/utils/schemas'
-import { MobileDrawer } from '@/app/comps/mobile_drawer'
-import { SwapForm, SwapFormFallback } from '@/app/comps/swap_form'
-import { Header } from '@/app/comps/header'
-
 import { PnLTable } from '@/app/comps/pnl_table'
+
+import { MobileDrawer } from '@/app/comps/mobile_drawer'
+
+import { SwapForm, SwapFormFallback } from '@/app/comps/swap_form'
+
+import { Header } from '@/app/comps/header'
+import { TokenSearchParamsSchema } from '@/app/utils/schemas'
 
 type Props = {
 	params: Promise<{ mint: string }>
