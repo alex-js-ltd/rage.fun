@@ -201,7 +201,7 @@ export async function processSwapEvents(swapEvents: EventData<'swapEvent'>[]) {
 	const pnlChannel = client.channels.get('pnlEvent')
 	const payer = getSigner(PROXY_PRIVATE_KEY)
 
-	const socialAlerts: Array<{ swapEvent: SwapEventType; token: TokenAlert; topHolders: TopHolder[] }> = []
+	const socialAlerts: Array<{ swapEvent: SwapEvent; token: TokenAlert; topHolders: TopHolder[] }> = []
 
 	for await (const event of swapEvents) {
 		try {
@@ -273,7 +273,7 @@ export async function processSwapEvents(swapEvents: EventData<'swapEvent'>[]) {
 	for await (const alert of socialAlerts) {
 		try {
 			await DiscordAlerts.publishSwapEvent(alert.swapEvent, alert.token, alert.topHolders)
-			await TelegramAlerts.publishSwapEvent(alert.swapEvent, alert.token, alert.topHolders)
+			// await TelegramAlerts.publishSwapEvent(alert.swapEvent, alert.token, alert.topHolders)
 		} catch (err) {
 			console.error(`🔥 Error processing social alert for ${alert.swapEvent.tokenId}:`, err)
 		}
