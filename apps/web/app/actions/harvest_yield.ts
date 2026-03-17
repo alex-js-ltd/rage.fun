@@ -12,6 +12,10 @@ export async function harvestYield(_prevState: unknown, formData: FormData) {
 	const requestId = crypto.randomUUID()
 	const session = await auth()
 
+	if (!session) {
+		return null
+	}
+
 	const submission = parseSubmission(formData)
 	const result = HarvestYieldSchema.safeParse(submission.payload)
 

@@ -18,7 +18,6 @@ import { PinataSDK } from 'pinata'
 import { isInstructionError, getErrorMessage } from '@/app/utils/setup'
 import sharp from 'sharp'
 import * as ThumbHash from 'thumbhash'
-import { serialize } from 'v8'
 
 const { PINATA_JWT } = getServerEnv()
 
