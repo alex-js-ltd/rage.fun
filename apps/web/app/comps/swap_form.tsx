@@ -27,10 +27,8 @@ import { useChannel } from 'ably/react'
 import { formatCompactNumber } from '@/app/utils/misc'
 import { fromLamports, amountToUiAmount } from '@repo/rage'
 import { BN } from '@coral-xyz/anchor'
-import { getEnv } from '@/app/utils/env'
-import { WasmType } from '@/app/utils/schemas'
 
-const { BASE_URL } = getEnv()
+import { calculateBuyAmount, calculateSellPrice } from '@/app/utils/wasm'
 
 export interface SwapFormProps {
 	swapConfigPromise: Promise<SwapConfig>
@@ -60,28 +58,6 @@ async function getQuickOptionForBuy(params: URLSearchParams): Promise<string> {
 async function getQuickOptionForSell(params: URLSearchParams): Promise<string> {
 	return client<string>(`/api/quick_option/sell?${params}`, {
 		method: 'GET',
-	})
-}
-
-async function calculateBuyAmount(params: WasmType): Promise<string> {
-	return client<string>(`${BASE_URL}/api/wasm/calculate_buy_amount`, {
-		method: 'POST',
-		body: JSON.stringify(params),
-		headers: {
-			'Content-Type': 'application/json',
-		},
-		cache: 'no-store',
-	})
-}
-
-async function calculateSellPrice(params: WasmType): Promise<string> {
-	return client<string>(`${BASE_URL}/api/wasm/calculate_sell_price`, {
-		method: 'POST',
-		body: JSON.stringify(params),
-		headers: {
-			'Content-Type': 'application/json',
-		},
-		cache: 'no-store',
 	})
 }
 
