@@ -4,6 +4,7 @@ import { twMerge } from 'tailwind-merge'
 import { BN } from '@coral-xyz/anchor'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
+import { Keypair } from '@solana/web3.js'
 
 dayjs.extend(relativeTime)
 
@@ -102,4 +103,16 @@ export function takePercentage(balance: BN, percent: number): BN {
 	// Convert the percent (which can be a float) to a scaled integer
 	const scaledPercent = new BN(Math.round(percent * 1_000_000_000)) // keep 9 decimals
 	return balance.mul(scaledPercent).div(PERCENTAGE_SCALE.mul(new BN(100)))
+}
+
+export function getSigner(privateKey: string): Keypair {
+	const secretKeyArray = JSON.parse(privateKey)
+
+	// Convert the array into a Uint8Array:
+	const secretKeyUint8Array = new Uint8Array(secretKeyArray)
+
+	// Create the keypair using the secret key:
+	const keypair = Keypair.fromSecretKey(secretKeyUint8Array)
+
+	return keypair
 }
