@@ -1,8 +1,6 @@
 'use server'
 
 import { parseSubmission, report } from '@conform-to/react/future'
-import type { SubmissionResult } from '@conform-to/react/future'
-
 import { CreateTokenSchema } from '@/app/utils/schemas'
 import { prisma } from '@repo/database'
 import type { Prisma } from '@repo/database'
