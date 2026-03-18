@@ -11,6 +11,8 @@ import { type TransactionData } from '@/app/data/get_transaction_data'
 import { type TokenPnl } from '@/app/data/get_token_pnl'
 import { type TopHolder } from '@/app/data/get_top_holders'
 
+import { type UpdateEnumType } from '@/app/utils/schemas'
+
 import 'server-only'
 
 export async function publishSignatureEvent(
