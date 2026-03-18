@@ -154,6 +154,7 @@ input[type='number'] {
 
 .css-2z6k9u {
 	background: transparent !important;
+	z-index: -1 !important;
 }
 
 .frost {

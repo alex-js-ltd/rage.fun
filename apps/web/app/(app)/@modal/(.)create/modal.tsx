@@ -19,7 +19,7 @@ export function Modal(props: { children: React.ReactNode }) {
 	return (
 		<DialogPrimitive.Root defaultOpen={true} onOpenChange={onOpenChange}>
 			<DialogPrimitive.Portal>
-				<DialogPrimitive.Overlay className="fixed inset-0 bg-white/20 data-[state=open]:animate-overlayShow" />
+				<DialogPrimitive.Overlay className="fixed inset-0 bg-white/20 data-[state=open]:animate-overlayShow z-50" />
 				<DialogPrimitive.Content className="z-50 fixed left-1/2 top-0 max-h-[85vh] w-[90vw] max-w-[600px] -translate-x-1/2 -translate-y-0 rounded-md bg-gray1 pt-[52px] shadow-[var(--shadow-6)] focus:outline-none data-[state=open]:animate-contentShow">
 					<DialogPrimitive.Title className="sr-only">Create</DialogPrimitive.Title>
 
