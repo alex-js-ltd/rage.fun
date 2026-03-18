@@ -85,6 +85,19 @@
 			opacity: var(--glimmer-opacity-max);
 		}
 	}
+
+	--animate-wave: wave 2s linear infinite;
+	--animate-wave-once: wave 2s linear forwards;
+
+	/* keyframes */
+	@keyframes wave {
+		0% {
+			transform: translateX(-100%);
+		}
+		100% {
+			transform: translateX(100%);
+		}
+	}
 }
 
 body {
