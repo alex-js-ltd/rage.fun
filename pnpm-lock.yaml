@@ -81,6 +81,9 @@ importers:
       '@repo/rage':
         specifier: workspace:*
         version: link:../../packages/rage
+      '@solana/actions':
+        specifier: ^1.6.6
+        version: 1.6.6(typescript@5.5.2)
       '@solana/spl-token':
         specifier: ^0.4.0
         version: 0.4.14(@solana/web3.js@1.98.4)(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.5.2)
@@ -5229,6 +5232,28 @@ packages:
     dev: false
     optional: true
 
+  /@solana/actions-spec@2.4.2:
+    resolution: {integrity: sha512-phdlA+JqIrsWw3rmhDynddv9/ZQONPqzYCpPoxN3VMR/2bECsdPWyBgLQpjqk4hgdn7VWQXWzEJtdeFMKxn78g==}
+    dev: false
+
+  /@solana/actions@1.6.6(typescript@5.5.2):
+    resolution: {integrity: sha512-LkXsXr2NFVgo74ZO8WS1Vli68oJhFBvr7pwh6u6Zb//HJKoG8eHIz24E7Q9gBumWRkduLcLrqtpIgL5SbfO59g==}
+    engines: {node: '>=16'}
+    dependencies:
+      '@solana/actions-spec': 2.4.2
+      '@solana/qr-code-styling': 1.6.0
+      '@solana/web3.js': 1.98.4(typescript@5.5.2)
+      bs58: 5.0.0
+      cross-fetch: 3.2.0
+      js-base64: 3.7.8
+      tweetnacl: 1.0.3
+    transitivePeerDependencies:
+      - bufferutil
+      - encoding
+      - typescript
+      - utf-8-validate
+    dev: false
+
   /@solana/addresses@2.3.0(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.5.2):
     resolution: {integrity: sha512-ypTNkY2ZaRFpHLnHAgaW8a83N0/WoqdFvCqf4CQmnMdFsZSdC7qOwcbd7YzdaQn9dy+P2hybewzB+KP7LutxGA==}
     engines: {node: '>=20.18.0'}
@@ -6012,6 +6037,12 @@ packages:
       typescript: 5.5.2
     dev: false
     optional: true
+
+  /@solana/qr-code-styling@1.6.0:
+    resolution: {integrity: sha512-KyBmyFKPxQPhUkP0jjnxV2ZeF1R1guTD8Hrd0YvHvMnhtrNEoEEdv4Jpp4W0GN4qCGG2KYOM5d3TgoLD+CNf9Q==}
+    dependencies:
+      qrcode-generator: 1.5.2
+    dev: false
 
   /@solana/rpc-api@2.3.0(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.5.2):
     resolution: {integrity: sha512-UUdiRfWoyYhJL9PPvFeJr4aJ554ob2jXcpn4vKmRVn9ire0sCbpQKYx6K8eEKHZWXKrDW8IDspgTl0gT/aJWVg==}
@@ -17432,6 +17463,10 @@ packages:
 
   /qr.js@0.0.0:
     resolution: {integrity: sha512-c4iYnWb+k2E+vYpRimHqSu575b1/wKl4XFeJGpFmrJQz5I88v9aY2czh7s0w36srfCM1sXgC/xpoJz5dJfq+OQ==}
+    dev: false
+
+  /qrcode-generator@1.5.2:
+    resolution: {integrity: sha512-pItrW0Z9HnDBnFmgiNrY1uxRdri32Uh9EjNYLPVC2zZ3ZRIIEqBoDgm4DkvDwNNDHTK7FNkmr8zAa77BYc9xNw==}
     dev: false
 
   /qrcode.react@1.0.1(react@19.2.3):

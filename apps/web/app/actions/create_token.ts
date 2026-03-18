@@ -148,7 +148,7 @@ interface UploadMetadataParams {
 	name: string
 	symbol: string
 	image: string
-	thumbhash: Uint8Array<ArrayBuffer>
+	thumbhash: Uint8Array
 	description: string
 }
 
