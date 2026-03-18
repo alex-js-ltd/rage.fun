@@ -38,14 +38,9 @@ export function Progress({ progress, mint, className }: ProgressProps) {
 			</TooltipContent>
 
 			<TooltipTrigger asChild>
-				<div
-					className={cn(
-						'border border-white border-opacity-[0.125] h-[40px] flex items-center rounded-full mt-auto p-2',
-						className,
-					)}
-				>
+				<div className={cn('border border-white/10 h-[40px] flex items-center rounded-full mt-auto p-2', className)}>
 					<RadixProgress.Root
-						className="relative overflow-hidden bg-transparent rounded-full w-full h-full border border-white border-opacity-[0.125]"
+						className="relative overflow-hidden bg-transparent rounded-full w-full h-full border border-white/10"
 						style={{
 							// Fix overflow clipping in Safari
 							// https://gist.github.com/domske/b66047671c780a238b51c51ffde8d3a0
