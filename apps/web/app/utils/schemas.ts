@@ -178,3 +178,12 @@ export const HeliusSchema = z.array(
 export const UpdateEnumSchema = z.enum(['Buy', 'Sell', 'Create', 'Harvest'])
 
 export type UpdateEnumType = z.infer<typeof UpdateEnumSchema>
+
+export const DialectMetadataSchema = z.object({
+	mint: z.string(),
+})
+
+export const DialectSwapSchema = z.object({
+	mint: Mint,
+	amount: z.string(),
+})

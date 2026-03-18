@@ -66,13 +66,6 @@ export default auth(async function proxy(req: NextRequest & { auth: Session | nu
 	}
 
 	if (authorization !== HELIUS_SECRET && req.nextUrl.pathname.startsWith('/api/helius')) {
-		await kv.set(`blocked_ip:${ip}`, {
-			reason: 'Invalid Helius authorization',
-			time: Date.now(),
-		})
-
-		console.warn(`🚨 PERMA-BLOCKED IP: ${ip} tried /api/helius`)
-
 		return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 	}
 
