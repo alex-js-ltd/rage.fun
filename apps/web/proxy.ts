@@ -47,7 +47,6 @@ export default auth(async function proxy(req: NextRequest & { auth: Session | nu
 
 	const isApiBucket = path.startsWith('/api/wasm') || path.startsWith('/api/quick_option') // token bucket
 	const isApiWindow = path.startsWith('/api') && !isApiBucket // sliding window
-	const isApi = isApiBucket || isApiWindow
 
 	const ratelimit = isApiBucket ? apiBucket : isApiWindow ? apiWindow : pageLimit
 
@@ -95,22 +94,8 @@ export default auth(async function proxy(req: NextRequest & { auth: Session | nu
 		id: req.auth?.user?.id,
 	})
 
-	if (!success && isApi) {
+	if (!success) {
 		const res = NextResponse.json(null, { status: 429 })
-
-		res.headers.set('X-RateLimit-Success', success.toString())
-		res.headers.set('X-RateLimit-Limit', limit.toString())
-		res.headers.set('X-RateLimit-Remaining', remaining.toString())
-
-		return res
-	}
-
-	if (!success && !isApi) {
-		console.error(`🚨 ABUSIVE IP BLOCKED: ${ip}`)
-
-		const blockedUrl = new NextURL('/blocked', req.nextUrl)
-
-		const res = NextResponse.redirect(blockedUrl)
 
 		res.headers.set('X-RateLimit-Success', success.toString())
 		res.headers.set('X-RateLimit-Limit', limit.toString())
