@@ -1,5 +1,7 @@
 @import 'tailwindcss';
 
+@plugin "@tailwindcss/typography";
+
 :root {
 	--background-100: 199, 28%, 9%;
 	--background-200: 200, 4%, 15%;
