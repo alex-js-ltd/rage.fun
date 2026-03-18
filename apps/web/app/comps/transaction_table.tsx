@@ -43,7 +43,7 @@ export function TransactionTable({ transactionPromise, metadataPromise }: Transa
 	if (rows.length === 0) return null
 
 	return (
-		<div className="flex-1 sm:block sm:col-span-2 border-b border-white border-opacity-[0.125] overflow-hidden">
+		<div className="flex-1 sm:block sm:col-span-2 border-b border-white/10 overflow-hidden">
 			<div className="max-h-[172px] overflow-y-scroll w-full scrollbar-hide">
 				<table className="w-full text-xs caption-bottom sm:table-auto ">
 					<thead className="sticky top-0 z-10  whitespace-nowrap after:absolute after:inset-x-0 after:-bottom-px after:h-px after:bg-white/10 bg-background-100 ">
