@@ -15,6 +15,7 @@ export const config = { matcher: ['/((?!api/auth|_next/static|_next/image|.*\\.w
 const apiWindow = new Ratelimit({
 	redis: kv,
 	limiter: Ratelimit.slidingWindow(10, '10 s'),
+	enableProtection: true,
 })
 
 export const apiBucket = new Ratelimit({
@@ -25,12 +26,14 @@ export const apiBucket = new Ratelimit({
 		'10 s', // interval: every 10 seconds
 		30, // maxTokens: bucket can hold up to 30 for bursts
 	),
+	enableProtection: true,
 })
 
 // Rate limiter for pages (looser)
 const pageLimit = new Ratelimit({
 	redis: kv,
 	limiter: Ratelimit.slidingWindow(20, '10 s'),
+	enableProtection: true,
 })
 
 // 2. Wrapped middleware option
@@ -42,7 +45,7 @@ export default auth(async function proxy(req: NextRequest & { auth: Session | nu
 	const requestHeaders = new Headers(req.headers)
 	const authorization = requestHeaders.get('authorization')
 	const ip = ipAddress(req) || '127.0.0.1'
-	console.log('authorization', authorization)
+
 	const path = req.nextUrl.pathname
 
 	const isApiBucket = path.startsWith('/api/wasm') || path.startsWith('/api/quick_option') // token bucket
@@ -79,10 +82,6 @@ export default auth(async function proxy(req: NextRequest & { auth: Session | nu
 
 	if (!req.auth?.user?.id && req.nextUrl.pathname.startsWith('/api/quick_option')) {
 		return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-	}
-
-	if (req.nextUrl.pathname.startsWith('/blocked')) {
-		return NextResponse.next()
 	}
 
 	const { success, pending, limit, reset, remaining } = await ratelimit.limit(`${ip}:${req.nextUrl.pathname}`)
