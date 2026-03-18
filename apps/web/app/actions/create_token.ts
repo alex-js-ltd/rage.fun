@@ -26,14 +26,6 @@ const pinata = new PinataSDK({
 	pinataGateway: 'indigo-adverse-vicuna-777.mypinata.cloud',
 })
 
-export type State =
-	| (SubmissionResult<string[]> & {
-			serializedTx?: Uint8Array
-			errMessage?: string
-			requestId?: string
-	  })
-	| undefined
-
 export async function createToken(_prevState: unknown, formData: FormData) {
 	const requestId = crypto.randomUUID()
 	const session = await auth()
@@ -148,7 +140,7 @@ interface UploadMetadataParams {
 	name: string
 	symbol: string
 	image: string
-	thumbhash: Uint8Array
+	thumbhash: Prisma.Bytes
 	description: string
 }
 
