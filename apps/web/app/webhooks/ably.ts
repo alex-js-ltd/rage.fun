@@ -8,7 +8,7 @@ import { type SwapConfig } from '@/app/data/get_swap_config'
 import { type Trending } from '@/app/api/cron/trending/route'
 import { type Comment } from '@/app/data/get_comments'
 import { type TransactionData } from '@/app/data/get_transaction_data'
-import { type Pnl } from '@/app/data/get_pnl_for_token'
+import { type TokenPnl } from '@/app/data/get_token_pnl'
 import { type TopHolder } from '@/app/data/get_top_holders'
 
 import 'server-only'
@@ -80,7 +80,7 @@ export async function publishTrendingEvent(channel: Ably.Channel, tokens: Trendi
 	}
 }
 
-export async function publishPnLEvent(channel: Ably.Channel, pnl: Pnl) {
+export async function publishPnLEvent(channel: Ably.Channel, pnl: TokenPnl) {
 	try {
 		await channel.publish('pnlEvent', { ...pnl })
 	} catch (error) {
