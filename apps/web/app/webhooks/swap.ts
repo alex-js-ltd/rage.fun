@@ -32,7 +32,7 @@ import { getVolume } from '@/app/data/get_volume'
 import { calculatePrice, calculateMarketCap } from './create'
 import { getTransactionCount } from '@/app/data/get_transaction_count'
 import { getSolPrice } from '@/app/data/get_sol_price'
-import { upsertUserPnL } from '@/app/webhook/user'
+import { upsertUserPnL } from '@/app/webhooks/user'
 
 import * as Ably from 'ably'
 import * as AblyEvents from '@/app/webhooks/ably'
