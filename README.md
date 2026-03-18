@@ -1,39 +1,22 @@
-# Turborepo rage.fun
+## 🌐 **letsrage.fun:** https://www.letsrage.fun/
 
-solana-test-validator --reset \
---clone CPMMoo8L3F4NbTegBCKVNunggL7H1ZpdTHKxQB5qKP1C \
---clone DNXgeM9EiiaAbaWvwjHj9fQQLAX5ZsfHyvmYUNRAdNC8 \
---clone D4FPEruKEHrG5TenZ2mpDGEfu1iUvTiqBxvpU8HLBvC2 \
---url https://api.mainnet-beta.solana.com
+Open-source, zero-extraction token launcher on Solana — creators earn 100% of transaction fees.
 
-solana config set --url localhost
+## 🏗️ Architecture
 
-solana config set --url https://api.devnet.solana.com
+```bash
+apps/
+  web/        # Next.js frontend
 
-solana config set --url https://api.mainnet-beta.solana.com
+packages/
+  rage/       # Anchor program (bonding curve)
+  db/         # Prisma + PostgreSQL
+```
 
-solana-keygen recover -o recover.json --force
+## ⚙️ Stack
 
-solana program deploy --buffer recover.json target/deploy/magicmint.so
+Solana · Anchor · Next.js · Prisma · PostgreSQL · Ably · Turborepo
 
-anchor build -- --features devnet
+## 🚀 Getting Started
 
-"resolutions": { "@solana/wallet-standard-wallet-adapter-base": "1.0.1" }
-
-anchor upgrade target/deploy/rage.so --program-id rageM7X7HTzpPgcQwVJbVr47GBQKgpPqnQZZ7YMkkPv
-
-du -h target/deploy/rage.so
-
-solana program extend rageM7X7HTzpPgcQwVJbVr47GBQKgpPqnQZZ7YMkkPv 200000
-
-solana program deploy --buffer recover.json target/deploy/rage.so --program-id
-rageM7X7HTzpPgcQwVJbVr47GBQKgpPqnQZZ7YMkkPv
-
-
-
-
-
-
-
-
-
+git clone https://github.com/your-username/lets-rage.fun.git cd lets-rage.fun pnpm install && pnpm dev
