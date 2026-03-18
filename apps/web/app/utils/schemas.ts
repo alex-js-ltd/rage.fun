@@ -174,3 +174,7 @@ export const HeliusSchema = z.array(
 		signature: z.string(),
 	}),
 )
+
+export const UpdateEnumSchema = z.enum(['Buy', 'Sell', 'Create', 'Harvest'])
+
+export type UpdateEnumType = z.infer<typeof UpdateEnumSchema>
