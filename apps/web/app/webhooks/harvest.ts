@@ -32,19 +32,19 @@ export async function upsertHarvestEvent(eventData: EventData<'harvestEvent'>): 
 
 	const tokenId = data.mint.toBase58()
 
-	const create = Prisma.validator<Prisma.HarvestEventCreateInput>()({
+	const create = {
 		id,
 		signer,
 		time,
 		lamports,
 		token: { connect: { id: tokenId } },
-	})
+	} satisfies Prisma.HarvestEventCreateInput
 
-	const upsert = Prisma.validator<Prisma.HarvestEventUpsertArgs>()({
+	const upsert = {
 		where: { id: signature }, // this is your unique identifier
 		create,
 		update: {}, // Do nothing if it already exists
-	})
+	} satisfies Prisma.HarvestEventUpsertArgs
 
 	const harvestEvent = await prisma.harvestEvent.upsert(upsert)
 
