@@ -4,11 +4,11 @@ import { program } from '@/app/utils/setup'
 import { Connection } from '@solana/web3.js'
 import { fetchAllEvents, groupEvents } from '@repo/rage'
 import { getServerEnv } from '@/app/utils/env'
-import { processSwapEvents } from '@/app/webhook/swap'
-import { processCreateEvents } from '@/app/webhook/create'
 
-import { processHarvestEvents } from '@/app/webhook/harvest'
-import { processRaydiumEvents } from '@/app/webhook/raydium'
+import { processSwapEvents } from '@/app/webhooks/swap'
+import { processCreateEvents } from '@/app/webhooks/create'
+import { processHarvestEvents } from '@/app/webhooks/harvest'
+import { processRaydiumEvents } from '@/app/webhooks/raydium'
 
 const { HELIUS_SECRET, RPC_URL } = getServerEnv()
 
