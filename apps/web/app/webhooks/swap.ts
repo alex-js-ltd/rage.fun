@@ -37,7 +37,7 @@ import { upsertUserPnL } from '@/app/webhooks/user'
 import * as Ably from 'ably'
 import * as AblyEvents from '@/app/webhooks/ably'
 import * as DiscordAlerts from '@/app/webhooks/discord'
-// import * as TelegramAlerts from '@/app/webhooks/telegram'
+import * as TelegramAlerts from '@/app/webhooks/telegram'
 
 import { getTokenCard } from '@/app/data/get_token_feed'
 
@@ -273,7 +273,7 @@ export async function processSwapEvents(swapEvents: EventData<'swapEvent'>[]) {
 	for await (const alert of socialAlerts) {
 		try {
 			await DiscordAlerts.publishSwapEvent(alert.swapEvent, alert.token, alert.topHolders)
-			// await TelegramAlerts.publishSwapEvent(alert.swapEvent, alert.token, alert.topHolders)
+			await TelegramAlerts.publishSwapEvent(alert.swapEvent, alert.token, alert.topHolders)
 		} catch (err) {
 			console.error(`🔥 Error processing social alert for ${alert.swapEvent.tokenId}:`, err)
 		}

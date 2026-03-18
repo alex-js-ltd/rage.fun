@@ -6,13 +6,12 @@ import { buyBlink, sellBlink } from '@/app/utils/dialect'
 import type { SwapEvent } from '@/app/data/get_swap_events'
 
 import { BN } from '@coral-xyz/anchor'
-import { formatNumberSmart, formatTokenAmount, shortAddress } from '@/app/utils/misc'
+import { formatNumberSmart, formatTokenAmount, shortAddress, solToUsd } from '@/app/utils/misc'
 import { type TopHolder } from '@/app/data/get_top_holders'
 import { getSolPrice } from '@/app/data/get_sol_price'
 
 import { client } from '@/app/utils/client'
 
-import { solToUsd } from '@/app/utils/misc'
 import Decimal from 'decimal.js'
 import { prisma } from '@repo/database'
 import type { HarvestEvent } from '@repo/database'
@@ -271,7 +270,7 @@ export async function linkDiscordAccount(account: Account, userId: string) {
 
 export async function assignCreatorRole(discordUserId: string) {
 	try {
-		const res = await client(
+		await client(
 			`https://discord.com/api/guilds/${DISCORD_GUILD_ID}/members/${discordUserId}/roles/${DISCORD_CREATOR_ROLE_ID}`,
 			{
 				method: 'PUT',
