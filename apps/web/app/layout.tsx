@@ -6,7 +6,6 @@ import { GeistMono } from 'geist/font/mono'
 import { Analytics } from '@vercel/analytics/next'
 import { auth } from '@/app/auth'
 import Head from 'next/head'
-
 import './globals.css'
 
 export const metadata: Metadata = {
@@ -25,9 +24,6 @@ export default function RootLayout(props: { children: ReactNode }) {
 
 	return (
 		<html className={`${GeistSans.variable} ${GeistMono.variable}`} lang="en">
-			<Head>
-				<link rel="preload" href="/icons.svg" as="image" type="image/svg+xml" />
-			</Head>
 			<body className="dark scrollbar-hide max-h-[100vh] cursor-default font-sans">
 				<div className="min-h-screen-patched bg-background-100 scrollbar-hide flex w-full flex-col">
 					<Suspense fallback={null}>

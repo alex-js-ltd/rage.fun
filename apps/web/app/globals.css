@@ -73,6 +73,18 @@
 
 	--animate-slide-up-and-fade: slide-up-and-fade 400ms cubic-bezier(0.16, 1, 0.3, 1);
 	--animate-slide-down-and-fade: slide-down-and-fade 400ms cubic-bezier(0.16, 1, 0.3, 1);
+
+	--animate-glimmer: glimmer var(--glimmer-animation-duration) var(--glimmer-animation-timing-function)
+		var(--animationDelay, 0ms) infinite;
+
+	@keyframes glimmer {
+		0% {
+			opacity: var(--glimmer-opacity-min);
+		}
+		100% {
+			opacity: var(--glimmer-opacity-max);
+		}
+	}
 }
 
 body {
