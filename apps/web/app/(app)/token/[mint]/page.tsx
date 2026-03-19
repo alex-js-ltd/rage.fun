@@ -7,6 +7,8 @@ type Props = {
 	searchParams: Promise<{ [key: string]: string }>
 }
 
+export const dynamic = 'force-dynamic'
+
 export default async function Page(props: Props) {
 	return <TokenView {...props} />
 }
