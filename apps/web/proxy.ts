@@ -2,7 +2,8 @@ import { ipAddress } from '@vercel/edge'
 import { Ratelimit } from '@upstash/ratelimit'
 import { kv } from '@vercel/kv'
 
-import { type NextRequest, NextResponse } from 'next/server'
+import type { NextRequest, NextFetchEvent } from 'next/server'
+import { NextResponse } from 'next/server'
 import { NextURL } from 'next/dist/server/web/next-url'
 import NextAuth, { type Session } from 'next-auth'
 import { authConfig } from '@/app/auth.config'
@@ -10,15 +11,7 @@ import { getServerEnv } from '@/app/utils/env'
 
 const { HELIUS_SECRET } = getServerEnv()
 
-export const config = { matcher: ['/((?!api/auth|_next/static|_next/image|.*\\.webp$).*)'] }
-// Rate limiter for APIs (tighter)
-const apiWindow = new Ratelimit({
-	redis: kv,
-	limiter: Ratelimit.slidingWindow(10, '10 s'),
-	enableProtection: true,
-})
-
-export const apiBucket = new Ratelimit({
+const ratelimit = new Ratelimit({
 	redis: kv,
 	prefix: 'rl:w:',
 	limiter: Ratelimit.tokenBucket(
@@ -29,17 +22,10 @@ export const apiBucket = new Ratelimit({
 	enableProtection: true,
 })
 
-// Rate limiter for pages (looser)
-const pageLimit = new Ratelimit({
-	redis: kv,
-	limiter: Ratelimit.slidingWindow(20, '10 s'),
-	enableProtection: true,
-})
-
 // 2. Wrapped middleware option
 const { auth } = NextAuth(authConfig)
 
-export default auth(async function proxy(req: NextRequest & { auth: Session | null }) {
+export default auth(async function proxy(req: NextRequest & { auth: Session | null }, context: NextFetchEvent) {
 	console.log('[Middleware] Triggered for:', req.nextUrl.pathname)
 
 	const requestHeaders = new Headers(req.headers)
@@ -48,11 +34,6 @@ export default auth(async function proxy(req: NextRequest & { auth: Session | nu
 
 	const path = req.nextUrl.pathname
 
-	const isApiBucket = path.startsWith('/api/wasm') || path.startsWith('/api/quick_option') // token bucket
-	const isApiWindow = path.startsWith('/api') && !isApiBucket // sliding window
-
-	const ratelimit = isApiBucket ? apiBucket : isApiWindow ? apiWindow : pageLimit
-
 	const blockedIp = await getBlockedIp<{ reason: string; time: number }>(ip)
 
 	if (blockedIp && ip != '127.0.0.1') {
@@ -60,24 +41,26 @@ export default auth(async function proxy(req: NextRequest & { auth: Session | nu
 		return NextResponse.redirect('https://www.fbi.gov')
 	}
 
-	if (authorization === HELIUS_SECRET && req.nextUrl.pathname.startsWith('/api/helius')) {
+	if (authorization === HELIUS_SECRET && path.startsWith('/api/helius')) {
 		const res = NextResponse.next()
 		return res
 	}
 
-	if (authorization !== HELIUS_SECRET && req.nextUrl.pathname.startsWith('/api/helius')) {
+	if (authorization !== HELIUS_SECRET && path.startsWith('/api/helius')) {
 		return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 	}
 
-	if (req.nextUrl.pathname.startsWith('/api/pinata') && !req.auth) {
+	if (path.startsWith('/api/pinata') && !req.auth) {
 		return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 	}
 
-	if (!req.auth?.user?.id && req.nextUrl.pathname.startsWith('/api/quick_option')) {
+	if (path.startsWith('/api/quick_option') && !!req.auth) {
 		return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 	}
 
-	const { success, pending, limit, reset, remaining } = await ratelimit.limit(`${ip}:${req.nextUrl.pathname}`)
+	const { success, pending, limit, reset, remaining } = await ratelimit.limit(`${ip}`)
+
+	context.waitUntil(pending)
 
 	console.log('[RateLimit]', {
 		ip,
@@ -87,7 +70,7 @@ export default auth(async function proxy(req: NextRequest & { auth: Session | nu
 	})
 
 	if (!success) {
-		const res = NextResponse.json(null, { status: 429 })
+		const res = NextResponse.redirect(new URL('/api/blocked', req.url))
 
 		res.headers.set('X-RateLimit-Success', success.toString())
 		res.headers.set('X-RateLimit-Limit', limit.toString())
