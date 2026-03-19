@@ -83,6 +83,8 @@ export default auth(async function proxy(req: NextRequest & { auth: Session | nu
 	})
 
 	if (!success) {
+		await blockIp(ip, '💩', 60)
+
 		const res = NextResponse.redirect(new URL('/api/blocked', req.url))
 
 		res.headers.set('X-RateLimit-Success', success.toString())
@@ -119,5 +121,17 @@ async function getBlockedIp<DataType>(ip: string): Promise<DataType | null> {
 	} catch (err) {
 		console.error(`❌ Failed to fetch blocked IP: ${ip}`, err)
 		return null
+	}
+}
+
+async function blockIp(ip: string, reason: string, ttlSeconds = 300) {
+	try {
+		await kv.set(
+			`blocked_ip:${ip}`,
+			{ reason, time: Date.now() },
+			{ ex: ttlSeconds }, // expires automatically
+		)
+	} catch (err) {
+		console.error(`❌ Failed to block IP: ${ip}`, err)
 	}
 }
