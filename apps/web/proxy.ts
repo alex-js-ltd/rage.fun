@@ -71,7 +71,7 @@ export default auth(async function proxy(req: NextRequest & { auth: Session | nu
 		return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 	}
 
-	const { success, pending, limit, reset, remaining } = await ratelimit.limit(`${ip}:${path}`)
+	const { success, pending, limit, reset, remaining } = await ratelimit.limit(`${ip}`)
 
 	context.waitUntil(pending)
 
