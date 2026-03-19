@@ -20,9 +20,9 @@ const ratelimit = new Ratelimit({
 	redis: kv,
 	prefix: 'rl:w:',
 	limiter: Ratelimit.tokenBucket(
-		5, // refillRate: 3 tokens per interval
+		10, // refillRate: 10 tokens per interval
 		'10 s', // interval: every 10 seconds
-		50, // maxTokens: bucket can hold up to 30 for bursts
+		60, // maxTokens: bucket can hold up to 60 for bursts
 	),
 	enableProtection: true,
 })
