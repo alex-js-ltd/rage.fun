@@ -27,7 +27,7 @@ export const getSwapEvents = cache(async (mint: string) => {
 export function toSwapEvent(data: SwapEventRow) {
 	return {
 		id: data.id,
-		signer: data.id,
+		signer: data.signer,
 		time: new Decimal(data.time.toString()).toNumber(),
 		price: data.price.toNumber(),
 		tokenAmount: data.tokenAmount.toString(),
