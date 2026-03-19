@@ -82,7 +82,7 @@ export default auth(async function proxy(req: NextRequest & { auth: Session | nu
 	})
 
 	if (!success) {
-		await blockIp(ip, '💩', 60)
+		await blockIp(ip, '💩', 30)
 
 		const res = NextResponse.redirect(new URL('/api/blocked', req.url))
 
