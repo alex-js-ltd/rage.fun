@@ -30,7 +30,7 @@ const ratelimit = new Ratelimit({
 	limiter: Ratelimit.tokenBucket(
 		5, // refillRate: 3 tokens per interval
 		'10 s', // interval: every 10 seconds
-		30, // maxTokens: bucket can hold up to 30 for bursts
+		50, // maxTokens: bucket can hold up to 30 for bursts
 	),
 	enableProtection: true,
 })
