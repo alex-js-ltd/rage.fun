@@ -50,8 +50,7 @@ export default auth(async function proxy(req: NextRequest & { auth: Session | nu
 	const blockedIp = await getBlockedIp<{ reason: string; time: number }>(ip)
 
 	if (blockedIp && ip != '127.0.0.1') {
-		console.warn(`🚨 BLOCKED IP DETECTED: ${ip}`)
-		return NextResponse.redirect('https://www.fbi.gov')
+		return NextResponse.json({ error: 'Too many requests' }, { status: 429 })
 	}
 
 	if (authorization === HELIUS_SECRET && path.startsWith('/api/helius')) {
