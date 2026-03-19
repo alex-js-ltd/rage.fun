@@ -24,6 +24,8 @@ export function TransactionTable({ transactionPromise, metadataPromise }: Transa
 		initial.map(r => ({ ...r, animate: false })),
 	)
 
+	console.log(rows)
+
 	useChannel('transactionEvent', (message: Ably.Message) => {
 		const transactionEvent: TransactionData = message.data
 

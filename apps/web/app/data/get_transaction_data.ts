@@ -34,6 +34,8 @@ function toTransactionData(swapEvent: SwapEvent, decimals: number, solPrice: num
 
 	const price = solToUsd(avg, solPrice).toNumber()
 
+	console.log('swap event', swapEvent)
+
 	return {
 		id: swapEvent.id,
 		time: swapEvent.time.toString(),

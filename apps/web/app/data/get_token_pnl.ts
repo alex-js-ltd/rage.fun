@@ -21,6 +21,8 @@ export async function getTokenPnl(mint: string) {
 		},
 	})
 
+	console.log('token pnl', data)
+
 	const solPrice = await getSolPrice()
 
 	return data.map(pnl => toPnl(pnl, solPrice))

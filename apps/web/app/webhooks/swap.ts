@@ -207,6 +207,8 @@ export async function processSwapEvents(swapEvents: EventData<'swapEvent'>[]) {
 		try {
 			const mint = event.data.mint
 
+			console.log('raw event', event)
+
 			const [swapEvent, state] = await Promise.all([
 				upsertSwapEvent(event),
 				fetchBondingCurveState({
