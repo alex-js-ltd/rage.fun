@@ -10,6 +10,7 @@ import { parseSubmission, report } from '@conform-to/react/future'
 const TX_FEE_BUFFER = BigInt(5_000_000)
 
 export async function GET(req: NextRequest) {
+	console.log(req)
 	const session = await auth()
 
 	if (!session?.user?.id) {
@@ -23,7 +24,7 @@ export async function GET(req: NextRequest) {
 	const submission = parseSubmission(searchParams)
 
 	const result = SwapOptionSchema.safeParse(submission.payload)
-
+	console.log(result)
 	if (!result.success) {
 		return NextResponse.json(
 			{

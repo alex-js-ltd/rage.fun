@@ -67,7 +67,7 @@ export default auth(async function proxy(req: NextRequest & { auth: Session | nu
 		return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 	}
 
-	if (path.startsWith('/api/quick_option') && !!req.auth) {
+	if (path.startsWith('/api/quick_option') && !req.auth) {
 		return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 	}
 
