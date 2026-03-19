@@ -40,6 +40,8 @@ export default auth(async function proxy(req: NextRequest & { auth: Session | nu
 	const path = req.nextUrl.pathname
 
 	if (authorization === HELIUS_SECRET && path.startsWith('/api/helius')) {
+		console.log(`🟣 [HELIUS WEBHOOK] ${new Date().toISOString()} | ${req.method} ${path}`)
+
 		const res = NextResponse.next()
 		return res
 	}
