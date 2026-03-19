@@ -8,14 +8,27 @@ import { NextURL } from 'next/dist/server/web/next-url'
 import NextAuth, { type Session } from 'next-auth'
 import { authConfig } from '@/app/auth.config'
 import { getServerEnv } from '@/app/utils/env'
+import 'server-only'
 
 const { HELIUS_SECRET } = getServerEnv()
+
+export const config = {
+	matcher: [
+		/*
+		 * Match all request paths except:
+		 * - _next/static (static files)
+		 * - _next/image (image optimization files)
+		 * - favicon.ico (favicon file)
+		 */
+		'/((?!_next/static|_next/image|favicon.ico).*)',
+	],
+}
 
 const ratelimit = new Ratelimit({
 	redis: kv,
 	prefix: 'rl:w:',
 	limiter: Ratelimit.tokenBucket(
-		3, // refillRate: 3 tokens per interval
+		5, // refillRate: 3 tokens per interval
 		'10 s', // interval: every 10 seconds
 		30, // maxTokens: bucket can hold up to 30 for bursts
 	),
@@ -58,7 +71,7 @@ export default auth(async function proxy(req: NextRequest & { auth: Session | nu
 		return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 	}
 
-	const { success, pending, limit, reset, remaining } = await ratelimit.limit(`${ip}`)
+	const { success, pending, limit, reset, remaining } = await ratelimit.limit(`${ip}:${path}`)
 
 	context.waitUntil(pending)
 
