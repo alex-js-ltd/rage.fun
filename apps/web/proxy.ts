@@ -39,12 +39,6 @@ export default auth(async function proxy(req: NextRequest & { auth: Session | nu
 
 	const path = req.nextUrl.pathname
 
-	const blockedIp = await getBlockedIp<{ reason: string; time: number }>(ip)
-
-	if (blockedIp && ip != '127.0.0.1') {
-		return NextResponse.json({ error: 'Too many requests' }, { status: 429 })
-	}
-
 	if (authorization === HELIUS_SECRET && path.startsWith('/api/helius')) {
 		const res = NextResponse.next()
 		return res

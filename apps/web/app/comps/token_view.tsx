@@ -53,6 +53,8 @@ export async function TokenView(props: Props) {
 
 	const pnlPromise = getTokenPnl(mint)
 
+	console.log(await pnlPromise)
+
 	const metadataPromise = getTokenMetadata(mint)
 
 	return (
