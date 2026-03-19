@@ -56,43 +56,41 @@ export async function upsertUserPnL(userId: string) {
 }
 
 export async function getUserPosition(userId: string) {
-	const wallet = await getRageWallet(userId) // RageWallet = Record<mint, TokenAmount>
+	console.log(`📦 [getUserPosition] userId=${userId}`)
 
-	const entries = Object.entries(wallet) // [mint, tokenAmount][]
+	const wallet = await getRageWallet(userId)
+	console.log('👛 wallet:', wallet)
+
+	const entries = Object.entries(wallet)
+	console.log('📊 entries:', entries.length)
 
 	const results = await Promise.all(
 		entries.map(async ([mint, tokenAmount]) => {
-			const { bondingCurve } = await getSwapConfig(mint)
+			try {
+				console.log(`🔄 processing mint=${mint}`)
 
-			const {
-				virtualReserve,
-				currentReserve,
-				targetReserve,
-				virtualSupply,
-				currentSupply,
-				targetSupply,
-				connectorWeight,
-				decimals,
-			} = bondingCurve
+				const { bondingCurve } = await getSwapConfig(mint)
 
-			const uiAmount = tokenAmount.uiAmountString
+				console.log('📈 bondingCurve:', bondingCurve)
 
-			const position = await calculateSellPrice({
-				uiAmount,
-				virtualReserve,
-				currentReserve,
-				targetReserve,
-				virtualSupply,
-				currentSupply,
-				targetSupply,
-				connectorWeight,
-				decimals,
-			})
+				const position = await calculateSellPrice({
+					uiAmount: tokenAmount.uiAmountString,
+					...bondingCurve,
+				})
 
-			return position
+				console.log(`💵 position for ${mint}:`, position)
+
+				return Number(position)
+			} catch (err) {
+				console.error(`❌ failed mint=${mint}`, err)
+				return 0 // don't crash whole thing
+			}
 		}),
 	)
 
-	const total = results.reduce((acc, pos) => acc + Number(pos), 0)
+	const total = results.reduce((acc, pos) => acc + pos, 0)
+
+	console.log('🧮 total position:', total)
+
 	return total
 }
