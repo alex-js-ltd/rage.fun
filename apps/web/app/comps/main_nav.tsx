@@ -92,7 +92,7 @@ function Desktop() {
 
 function Mobile() {
 	return (
-		<nav className="sm:hidden h-13 fixed bottom-0 left-1/2 -translate-x-1/2 max-w-150 w-full z-40 bg-background-100/75 backdrop-blur-md border-t border-white border-opacity-[0.125]">
+		<nav className="sm:hidden h-13 fixed bottom-0 left-1/2 -translate-x-1/2 max-w-150 w-full z-40 bg-background-100/75 backdrop-blur-md border-t border-white/20">
 			<div className="flex gap-1 w-full items-center justify-between">
 				{NAV_ITEMS.map(l => (
 					<Link
